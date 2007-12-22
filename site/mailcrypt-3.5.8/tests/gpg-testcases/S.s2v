@@ -1,0 +1,17 @@
+(
+(crypttext . "
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v1.2.0 (GNU/Linux)
+
+owGbwMvMwCQYuXxiQ+SZjHOMp5WSGGwnMquFZGQWKwBRokJBTmJmXklqRYlCbmpx
+cWJ6KleHPTMrWBFMlyDTn68MC1bsuLBQ+8Wc0+YcTXzfF5t+TPq4T5Vhwf551468
+s5jidD++LZM5c9F+v//LgwE=
+=ynpu
+-----END PGP MESSAGE-----
+")
+(error . nil)
+(name . "S.s2v")
+(plaintext . "This is a plaintext message
+")
+(signature_status . "Good signature from 'trusted <trusted@test>' TRUST_MARGINAL made 2002-09-25")
+)

@@ -1,0 +1,75 @@
+nethack-el installation instructions (roughly) -*- outline -*-
+
+* Installing the nethack binary with the lisp window port
+
+Please note that these instructions are in addition to the
+installation instructions that come with the Nethack sources.  Please
+read the instructions specific to your system.  These instructions are
+known to work on a unix system.
+
+** Download nethack-343.tgz from ftp.nethack.org or your closest mirror.
+
+*** Untar the package and apply the enh-343.patch (found in nethack-el-VERSION.tar.gz)
+with the command "patch -p 1 < enh-343.patch"
+
+*** Follow the instructions in nethack/sys/*/Install.* 
+This may be as simple as running "sys/unix/setup.sh" to copy the
+Makefiles.
+
+The patch automatically configures the nethack source to build the lisp
+windowing system.
+
+*** compile (from the toplevel)
+make
+make install
+
+* Installing the emacs lisp sources
+Edit the Makefile to set the value of EMACS to the location of your
+favourite emacs version.
+
+** byte compile (not strictly necessary)
+make all
+
+** ensure that the *.elc files can be found in your load-path in your load-path
+TODO: should we have a make install target?  What IS the Right Way to
+install elisp code?
+
+** add to your .emacs:
+(autoload 'nethack "nethack" "Play Nethack." t)
+(setq nethack-program "/PATH/TO/nethack")
+
+** M-x nethack RET
+
+* Playing nethack over a network
+Because nethack-el communicates with nethack over a text stream, that
+stream can be either a subprocess or a TCP stream. Follow these steps
+to play nethack-el over the internet:
+
+** on the server
+
+Edit the Config values USER_FILE, CHROOT_DIR, SHED_UID, and SHED_GID
+in nhlaunch.c. Compile nhlaunch.c (instructions are at the top of the
+file).
+
+USER_FILE is the file that will store the users and passwords
+
+CHROOT_DIR is the root directory that contains a fakeroot installation
+of nethack and any libraries required.
+
+SHED_UID is the UID that nhlaunch will change to when loaded.
+
+SHED_GID is the GID that nhlaunch with change to when loaded.
+
+** on the client (in emacs)
+
+M-x nethack-connect-to-server RET
+
+Type the server and the port. Enjoy! Now everyone can play on the same
+server using their own Emacs.
+
+* Notes
+
+** SlashEM
+I have created a patch for SlashEM Version 0.0.7E7. The patch is
+called enh-007e7.patch. To play SlashEM inside emacs, do the same as
+above, but use the SlashEM patch and SlashEM source.

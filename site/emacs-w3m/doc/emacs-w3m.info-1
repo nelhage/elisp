@@ -1,0 +1,1292 @@
+Info file: emacs-w3m.info,    -*-Text-*-
+produced by `texinfo-format-buffer'
+from file `emacs-w3m.texi'
+using `texinfmt.el' version 2.42 of  7 Jul 2006.
+
+INFO-DIR-SECTION GNU Emacs Lisp
+START-INFO-DIR-ENTRY
+* Emacs-w3m: (emacs-w3m).  An Emacs interface to w3m
+END-INFO-DIR-ENTRY
+
+
+This file documents emacs-w3m, an Emacs interface to w3m.
+
+Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006
+TSUCHIYA Masatoshi
+
+This edition is for emacs-w3m version 1.4.147.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU General Public License, Version 2 or any
+later version published by the Free Software Foundation.
+
+This document is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this document; if not, you can either send email to this
+document's maintainer or write to: The Free Software Foundation, Inc.;
+51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+
+
+
+
+
+File: emacs-w3m.info, Node: Top, Next: Introduction, Prev: (dir), Up: (dir)
+
+Emacs-w3m User's Manual
+***********************
+
+                                        The emacs-w3m development team
+
+This manual corresponds to emacs-w3m version 1.4.147.
+
+
+
+* Menu:
+
+* Introduction::                Preliminary remarks
+* Getting Started::             It's so easy to begin to use emacs-w3m
+* Basic Usage::                 Basic usage
+* Pretty Good Features::        Pretty good features
+* Customizable Variables::      Customizable variables
+* Hooking into MUAs::           Hooking emacs-w3m into mail/newsreaders
+* Frequently Asked Questions::  There isn't always an answer
+* Known Problems::              You can surely solve it
+* Shimbun Library::             A tool for reading a web newspaper
+* Tips::                        Some knick-knacks using emacs-w3m
+* Mailing List::                Mailing list and submitting bug reports
+* Emacs-w3m Functions::         Details of some emacs-w3m functions
+* External Packages::           Companion packages you might need
+* Authors::                     People who wrote this manual
+* Index::                       Index
+
+ -- The Detailed Node Listing ---
+
+Getting Started
+
+* Required Emacs Version::      What version of Emacs can be used?
+* You Need w3m::                Using w3m: the reason why emacs-w3m is fast
+* Other Requirements::          Things required to run emacs-w3m
+* Installing Emacs-w3m::        Installing emacs-w3m
+* Non-UNIX-like systems::       Installing on non-UNIX-like systems
+* Minimal Settings::            Minimal settings to run emacs-w3m
+
+Basic Usage
+
+* Browsing Web Pages::          Let's go netsurfing!
+* Inline Images::               Toggle displaying inline images
+* Tracing History::             Going back through time and space
+* Managing Bookmarks::          That's a favorite with me!
+* Using Tabs::                  Everybody likes tabs
+* Working with buffers::        Creating, killing and moving across buffers
+* Downloading::                 Downloading a file
+* Submitting Forms::            Filling in HTML forms
+* HTML File Information::       Support for web page editing and hacking
+
+Pretty Good Features
+
+* Using Search Engines::        A convenient way to search the web
+* Grouping URLs::               Visiting several web pages in one URL
+* Weather Information::         It will be fine tomorrow
+* Using Antenna::               Raise your antenna
+* Showing Directory Tree::      Showing the tree structure of local directories
+* Viewing Perl Documents::      Viewing Perl Documents
+* Using Namazu::                Searching files with Namazu
+* Octet::                       Viewing data in various octal form
+* Frame Local Buffers::         Grouping sessions into separate frames
+
+Customizable Variables
+
+* General Variables::           General variables
+* Image Variables::             Variables related to images
+* Form Variables::              Variables related to forms
+* Cookie Variables::            Variables related to cookies
+* Bookmark Variables::          Variables related to bookmarks
+* Search Variables::            Variables related to searching the web
+* Weather Variables::           Variables related to weather information
+* Dtree Variables::             Variables related to the dtree feature
+* Antenna Variables::           Variables related to antenna
+* Perldoc Variables::           Variables related to perldoc
+* Namazu Variables::            Variables related to namazu
+* Octet Variables::             Variables related to the octet feature
+* Hooks::                       Hooks
+* Other Variables::             Other variables
+
+Hooking into MUAs
+
+* Gnus::                        Reading HTML mails in Gnus
+* Mew::                         Reading HTML mails in Mew
+* SEMI MUAs::                   Reading HTML mails in SEMI MUAs
+* VM::                          VM (vieW maiL) is not Wanderlust
+
+Frequently Asked Questions
+
+* General FAQ::                 General Questions
+* Trouble FAQ::                 Troubleshooting
+* Shimbun FAQ::                 Questions of Shimbun Library
+
+Known Problems
+
+Shimbun Library
+
+* Nnshimbun::                   Turning Gnus into a web browser!
+* Mew Shimbun::                 Reading web newspapers with Mew
+* Shimbun with Wanderlust::     Reading web newspapers with Wanderlust
+* Shimbun Sites::               Sites supported by Shimbun
+* Shimbun Basics::              How to make a new shimbun module
+
+Tips
+
+Mailing List
+
+Emacs-w3m Functions
+
+
+
+
+File: emacs-w3m.info, Node: Introduction, Next: Getting Started, Prev: Top, Up: Top
+
+Preliminary remarks
+*******************
+
+Emacs/W3 (http://www.cs.indiana.edu/elisp/w3/docs.html) once was the
+most popular web browser on Emacs.  However, it worked so slowly that
+we wanted a speedy alternative.  On the other hand, w3m
+(http://w3m.sourceforge.net/) was a pager with WWW capability,
+developed by Akinori ITO.  Although it was a pager, it was possible to
+use it as a text-mode WWW browser, so we started developing an Emacs
+interface to w3m.
+
+Our special thanks go to Akinori ITO and the w3m team for the
+excellent w3m program.  We would also like to thank everybody who has
+submitted comments, suggestions, and bug fixes.  Even though we're not
+aware of any problems, all responsibility for this program is ours
+(the emacs-w3m development team), but there is absolutely no warranty.
+The emacs-w3m program was first created by TSUCHIYA Masatoshi in June
+2000.
+
+See also the emacs-w3m official page (http://emacs-w3m.namazu.org/).
+
+
+
+File: emacs-w3m.info, Node: Getting Started, Next: Basic Usage, Prev: Introduction, Up: Top
+
+It's so easy to begin to use emacs-w3m
+**************************************
+
+Emacs-w3m may have already been installed on your system, in which
+case you can skip this section and begin to use the program at once.
+If you're not that lucky, read on to learn how to install emacs-w3m.
+
+* Menu:
+
+* Required Emacs Version::      What version of Emacs can be used?
+* You Need w3m::                Using w3m: the reason why emacs-w3m is fast
+* Other Requirements::          Things required to run emacs-w3m
+* Installing Emacs-w3m::        Installing emacs-w3m
+* Non-UNIX-like systems::       Installing on non-UNIX-like systems
+* Minimal Settings::            Minimal settings to run emacs-w3m
+
+
+
+File: emacs-w3m.info, Node: Required Emacs Version, Next: You Need w3m, Prev: Getting Started, Up: Getting Started
+
+What version of Emacs can be used?
+==================================
+
+You can run emacs-w3m in various versions of Emacsen listed below:
+
+
+`Emacs 21.x'
+     No additional packages are required.
+
+
+`XEmacs 21.x'
+     First of all, you should note that emacs-w3m supports only XEmacs
+     21.4.17 and later and XEmacs 21.5-b19 and later.  In addition, you need
+     to have installed the latest xemacs-base package including the
+     `timer-funcs.el' module.
+
+     The APEL package and the `gifsicle' program are required.  In
+     addition, it would be better to have installed the `rfc2368.el'
+     module which parses `mailto' urls (*Note Other Requirements::).
+
+`Emacs 20.x, Emacs 19.34 (including Mule 2.3)'
+     Emacs-w3m no longer supports those Emacs versions.
+
+
+If you use the development version of GNU Emacs ("Emacs 22"), perhaps
+you should run the CVS version of emacs-w3m on it.  In that case, it
+is strongly recommended that you join the *Note Mailing List::.
+
+
+
+File: emacs-w3m.info, Node: You Need w3m, Next: Other Requirements, Prev: Required Emacs Version, Up: Getting Started
+
+Using w3m: the reason why emacs-w3m is fast
+===========================================
+
+Emacs-w3m uses the external w3m program as a back-end to retrieve web
+contents and as an HTML rendering engine; that's how we could create
+an accelerated Emacs web browser with asynchronous operation.
+
+You must install the latest w3m, it is available at:
+
+`http://prdownloads.sourceforge.net/w3m/'
+
+
+
+File: emacs-w3m.info, Node: Other Requirements, Next: Installing Emacs-w3m, Prev: You Need w3m, Up: Getting Started
+
+Things required to run emacs-w3m
+================================
+
+Depending on the Emacs version you're using, third party packages may
+be required.  This section provides resources to help you find and
+install them.
+
+
+`APEL'
+     Indispensable to XEmacs.  You should install APEL before building
+     emacs-w3m.  APEL is available at:
+
+     `ftp://ftp.m17n.org/pub/mule/apel/apel-10.6.tar.gz'
+
+     Note that you must not use the APEL XEmacs package (which is
+     contained in SUMO) of the versions older than 1.32.  If you have already
+     installed such a version, you should upgrade it or use the following
+     directives to replace it with APEL which is linked above (you
+     can also use the same directives in order to newly install
+     APEL):
+
+          % rm -fr /usr/local/lib/xemacs/xemacs-packages/lisp/apel
+          % cd apel-10.6
+          % make install-package XEMACS=xemacs-21.4.x\
+            PACKAGEDIR=/usr/local/lib/xemacs/xemacs-packages
+
+`gifsicle'
+     Indispensable to XEmacs.  There is a known bug in all XEmacs 21.x
+     series that won't let it display optimized animated gifs
+     correctly or may make it crash when some kind of an interlaced
+     gif image is displayed.  Emacs-w3m uses the `gifsicle' program to
+     convert gif data in order to make it possible to be handled by
+     XEmacs 21.x.  It is available at:
+
+     `http://www.lcdf.org/gifsicle/'
+
+`ImageMagick'
+     If the `convert' program bundled with the ImageMagick package is
+     available on your system, emacs-w3m will use it to resize images
+     or to convert `favicon' images into a format Emacs can handle.
+     Emacs-w3m will work without ImageMagick, but installing it will
+     improve your surfing experience.  You can get the ImageMagick
+     package from:
+
+     `ftp://ftp.imagemagick.org/pub/ImageMagick/'
+
+     To manipulate `favicon' images, we recommend version 5.4.0-5 and
+     later, previous versions may work but we didn't check them
+     thoroughly.
+
+`FLIM'
+     The FLIM package is required to use the `shimbun' library.  The
+     `shimbun' library is a collection of tools for reading web
+     newspapers, you can use it with Gnus, Mew, Nana-gnus, T-gnus,
+     Wanderlust, etc. *Note Shimbun Library::.
+
+     Note that the FLIM package requires the APEL package even if you
+     are using Emacs 21.x or Emacs 22.x.  Therefore, you must install
+     both APEL and FLIM if you would like to use the `shimbun'
+     library.  The FLIM package is available at:
+
+     `ftp://ftp.m17n.org/pub/mule/flim/flim-1.14/'
+
+`Mule-UCS'
+     If you use XEmacs, or need to read Chinese text, Japanese text,
+     Korean text, etc. using Emacs 21, we recommend you install the
+     Mule-UCS Emacs Lisp package so as to enable emacs-w3m to display
+     pages encoded by UTF-8, which is the typical coding system of the
+     Unicode system.  Note that Emacs 21 supports the Unicode system
+     partially (e.g., for Latin text) and Emacs 22 or greater fully
+     supports it.  The Mule-UCS Emacs Lisp package is available at:
+
+     `ftp://ftp.m17n.org/pub/mule/Mule-UCS/Mule-UCS-0.84.tar.gz'
+
+     If you use it with Emacs 21.2, it is necessary to apply this
+     patch (http://www.m17n.org/mlarchive/mule/200203/msg00000.html)
+     before installation.
+
+     If you are an XEmacs user, the compiled package is here:
+
+     `ftp://ftp.xemacs.org/packages/mule-ucs-1.11-pkg.tar.gz'
+
+`codepage-ex'
+     Some web sites in Europe specify a `charset=ISO-8859-1' encoding,
+     but really use `windows-1252'.  Since `iso-8859-1' is
+     insufficient to decode that, emacs-w3m uses `windows-1252' as a
+     superset of `iso-8859-1' if it is available.  The
+     `windows-1252' coding system is built-in since Emacs 22.  Even in
+     Emacs 21, you can enable to use it using the module called
+     `codepage-ex'.  See the following page:
+
+     `http://www.nijino.com/ari/emacs/codepage-ex.html'
+
+`rfc2368.el'
+     Install it if you'd like to enable emacs-w3m running with XEmacs
+     to parse `mailto' urls properly.  You can find the `rfc2368.el'
+     module which can be used with XEmacs in the `attic' directory in
+     the emacs-w3m distribution.  To install it, copy the `rfc2368.el'
+     file to the directory belonging to the `load-path', and perform
+     the following command:
+
+          % xemacs -batch -vanilla -f batch-byte-compile rfc2368.el
+
+
+
+File: emacs-w3m.info, Node: Installing Emacs-w3m, Next: Non-UNIX-like systems, Prev: Other Requirements, Up: Getting Started
+
+Installing emacs-w3m
+====================
+
+See the official page `http://emacs-w3m.namazu.org/' for instructions
+on how to get the latest emacs-w3m.  Is everything ready?  Now, let's
+begin.
+
+In order to install emacs-w3m on non-UNIX-like systems (or any system
+lacking the ability to execute the `configure' script or has no
+`make' command), skip this section and go to the next section
+*Note Non-UNIX-like systems::.
+
+  1. First, extract a tarball of the emacs-w3m distribution and enter
+     the top directory as follows:
+
+          % tar zxf emacs-w3m-1.4.147.tar.gz
+          % cd emacs-w3m-1.4.147
+
+     If you've checked out emacs-w3m from CVS, you have to run
+     `autoconf' with no argument to generate the `configure' script.
+
+  2. Run the `configure' script.
+
+          % ./configure
+
+     *Important notice to Gnus users*:
+
+     If multiple versions of Gnus are installed on your system (it is
+     likely that there are the released version and the development
+     version of Gnus), make sure that the `load-path' contains the
+     directory where the version you use is installed (check for the
+     `gnus.elc' file).  You can ensure that with the `--with-addpath'
+     option as follows:
+
+          % ./configure --with-addpath=/usr/local/share/emacs/site-lisp/gnus
+
+     If you've installed APEL, FLIM or something in non-standard
+     directories other than the default `load-path', you must specify
+     them using the `--with-addpath' option as follows (you may also
+     include the Gnus directory in it separated with `:'):
+
+          % ./configure --with-addpath=/opt/share/apel:/opt/share/flim
+
+  3. Just run `make' and `make install'.  See also the next step if
+     you are using XEmacs.
+
+          % make
+          % make install
+
+     All Lisp and info files will be installed in the appropriate
+     directories.  Now, how do you know what files will go where?  To
+     know it beforehand, use this:
+
+          % make what-where
+
+     If you are using Emacs 21, 22 or XEmacs, you had better install
+     icon image files.  To do this:
+
+          % make install-icons
+
+     or
+
+          % make install-icons30
+
+     The later is for using the slightly larger icon images.
+
+  4. You can also install emacs-w3m as an XEmacs package using `make
+     install-package' instead of `make install' as follows:
+
+          % make
+          % make install-package
+
+     In this case, you don't have to execute `make install-icons' nor
+     `make install-icons30'.
+
+     If you need to specify the package directory, there are two ways
+     to do that:
+
+
+        * Use the `configure' option `--with-packagedir='.  For
+          example:
+
+               % ./configure --with-packagedir=/opt/xemacs/xemacs-packages
+               % make what-where
+               % make
+               % make install-package
+
+        * Use the `PACKAGEDIR' variable.  For example:
+
+               % ./configure
+               % make what-where PACKAGEDIR=/opt/xemacs/xemacs-packages
+               % make
+               % make install-package PACKAGEDIR=/opt/xemacs/xemacs-packages
+
+
+
+
+
+File: emacs-w3m.info, Node: Non-UNIX-like systems, Next: Minimal Settings, Prev: Installing Emacs-w3m, Up: Getting Started
+
+Installing on non-UNIX-like systems
+===================================
+
+If you cannot execute the `configure' script on your system, or if no
+`make' command is available, cast the following spell:
+
+     % emacs -batch -q -no-site-file -l w3mhack.el NONE -f w3mhack-nonunix-install
+
+If APEL, FLIM (or any other library) aren't installed in the ordinary
+places, the installer will leave them out.  In such a case, it is
+necessary to tell those places to the installer as shown below:
+
+     % emacs -batch -q -no-site-file -l w3mhack.el //c/share/apel://c/share/flim -f w3mhack-nonunix-install
+
+
+
+File: emacs-w3m.info, Node: Minimal Settings, Prev: Non-UNIX-like systems, Up: Getting Started
+
+Minimal settings to run emacs-w3m
+=================================
+
+This section mentions some fundamental settings for emacs-w3m.  If you
+want to fine-tune your installation, you'll find many customizable
+variables in *Note Customizable Variables::.
+
+
+`Autoloads'
+
+     You don't need this if you've installed emacs-w3m as an XEmacs
+     package (*Note Installing Emacs-w3m::) because the
+     `w3m/auto-autoloads.el' takes care of setting up autoloads.
+
+     In all other cases, put the following line in your `~/.emacs'
+     file:
+
+          (require 'w3m-load)
+
+`Startup File'
+
+     We recommend using the `~/.emacs-w3m' file (which is the default
+     value of `w3m-init-file') if you need to twiddle some emacs-w3m
+     variables.  This file is similar to `~/.emacs', but is read when
+     emacs-w3m starts.  Note that some options shouldn't be modified
+     there, for example, `w3m-command'.
+
+`Proxy Gateway'
+
+     If you are behind a firewall and access the Internet through a
+     proxy gateway, you need to instruct w3m to use it.
+
+     There are several ways to do this, one is to set the `http_proxy'
+     environment variable globally in the shell something like:
+
+          setenv http_proxy http://proxy.hogege.com:8000/
+
+     Another way is to customize the `w3m-command-arguments' variable to
+     add the options `-o' and
+     `http_proxy=http://PROXY_SERVER_NAME:PORT/'.
+
+     This can also be done in your `~/.emacs-w3m' file as shown below:
+
+          (setq w3m-command-arguments
+                (nconc w3m-command-arguments
+                       '("-o" "http_proxy=http://proxy.hogege.com:8000/")))
+
+     To specify hosts for which the proxy shouldn't be used (Intranet
+     sites and the like), set the `no_proxy' (note that it is not
+     `no-proxy') environment variable to a comma-separated list of
+     hostnames.  Alternatively, you can set the `w3m-no-proxy-domains'
+     variable to a list of domain names (not host names) as follows:
+
+          (setq w3m-no-proxy-domains '("local.com" "neighbor.com"))
+
+     See also the documentation of the `w3m-command-arguments-alist'
+     variable for instructions on how to use regexps to specify
+     `no_proxy' hosts.
+
+
+
+
+File: emacs-w3m.info, Node: Basic Usage, Next: Pretty Good Features, Prev: Getting Started, Up: Top
+
+Basic usage
+***********
+
+* Menu:
+
+* Browsing Web Pages::          Let's go netsurfing!
+* Inline Images::               Toggle displaying inline images
+* Tracing History::             Going back through time and space
+* Managing Bookmarks::          That's a favorite with me!
+* Using Tabs::                  Everybody likes tabs
+* Working with buffers::        Creating, killing and moving across buffers
+* Downloading::                 Downloading a file
+* Submitting Forms::            Filling in HTML forms
+* HTML File Information::       Support for web page editing and hacking
+
+
+
+File: emacs-w3m.info, Node: Browsing Web Pages, Next: Inline Images, Prev: Basic Usage, Up: Basic Usage
+
+Let's go netsurfing!
+====================
+
+* Menu:
+
+* Launching and Jumping::       Go ahead, just try it
+* Moving in a page::            Moving from place to place in a page
+* Moving over pages::           Moving from page to page
+* Browsing with Mouse Operations::   Surfing using the mouse
+* Going Back to Daily Hacking and/or Daily Writing::    Return to an Ordinary Life
+
+
+
+File: emacs-w3m.info, Node: Launching and Jumping, Next: Moving in a page, Prev: Browsing Web Pages, Up: Browsing Web Pages
+
+Go ahead, just try it
+---------------------
+
+You can invoke emacs-w3m using three different commands, listed below.
+Try one of these commands: a web page is displayed in an Emacs buffer
+named "*w3m*", meaning that it is an emacs-w3m buffer.  As you will
+probably notice, the major mode for an emacs-w3m buffer is `w3m-mode',
+there are also minor modes (*Note Managing Bookmarks::).
+
+This section explains the most fundamental usage of these commands,
+see *Note Emacs-w3m Functions:: for more information on them.  See
+also *Note Customizable Variables:: for variables you can use to
+customize emacs-w3m's behavior.
+
+`w3m'
+     Start emacs-w3m, displaying the homepage specified in the
+     `w3m-home-page' variable.  The default value for `w3m-home-page'
+     is "about:".  Set the `w3m-quick-start' variable to `nil' if you
+     want to input a target URL every time you start emacs-w3m.
+
+     You can also use this as an Emacs batch command.  Here's an
+     example:
+
+          % emacs -f w3m
+
+     To specify a URL, you could also use:
+
+          % emacs -f w3m http://emacs-w3m.namazu.org/
+
+`w3m-find-file'
+     Prompt for a local file name in the minibuffer, and display it in
+     emacs-w3m.
+
+`w3m-browse-url'
+     Prompt for a URL in the minibuffer, and display it in emacs-w3m.
+     This command is provided, if anything, in order to start
+     emacs-w3m from other application programs.
+
+Moving in an emacs-w3m buffer won't be painful if you're an Emacs user
+already, since many of the standard keys work as intended.  For
+instance, `C-n', `C-v' and `C-s' (which are commonly used to move down
+one line, one page, or search downwards for a word) are valid keys in
+an emacs-w3m buffer.
+
+To follow a link, use the `RET' key.  You have to move the point to a
+link to do this; links are easily recognizable in a buffer because
+they are not displayed like ordinary text: they can be underlined, or
+have a different color.  The face `w3m-anchor-face' controls how they
+are to be displayed (*Note Customizable Variables::).
+
+`RET'
+     Display the page pointed by the link under point
+     (`w3m-view-this-url').
+
+     The exact behavior of this command depends on the properties of the link
+     under point, and on whether you give it a prefix argument or not.  See
+     *Note Emacs-w3m Functions:: for details.
+
+As mentioned above, you can be prompted for a URL when you use the
+command `M-x w3m', by setting the `w3m-quick-start' variable to `nil'.
+In an emacs-w3m buffer, there are also two popular ways to go to new
+pages by entering their URLs, see below.
+
+`RET'
+     In an emacs-w3m buffer, you can be prompted for a URL in the minibuffer
+     and make emacs-w3m display the corresponding page by hitting RET
+     after moving the point to the URL displayed in the `header-line'.
+     This feature will feel familiar to you if you are used to GUI-based web
+     browsers like Mozilla.  Detailed explanations about this can be found in
+     *Note Emacs-w3m Functions:: (`w3m-view-this-url').
+
+`g'
+     Prompt for a URL in the minibuffer and make emacs-w3m display the
+     corresponding page (independently of the position of the point)
+     in an emacs-w3m buffer.  This binding will be familiar to you if
+     you already use Gnus or Mew (`w3m-goto-url').
+
+`G'
+     Prompt for a URL in the minibuffer, and display it in a new
+     session.  This function works just like `g'(M-x w3m-goto-url),
+     except that it opens a new session.  When you use emacs-w3m on
+     Emacs 21, 22 or XEmacs, opening a new session means displaying
+     the page in a new tab.  For more information about tabs, please
+     refer to *Note Using Tabs:: (`w3m-goto-url-new-session').
+
+`c'
+     Display the URL of the page being displayed in the echo area and
+     put it in the `kill-ring' (`w3m-print-current-url').
+
+`u'
+     Display the target URL of the link under point in the echo area
+     and put it in the `kill-ring' (`w3m-print-this-url').
+
+If the page you're reading is today's news or someone's diary, it may
+have been updated since you loaded it.  You can refresh the page using
+the following command.  (This command can also be useful to force a
+full redisplay of the page if it looks broken.)
+
+`R'
+     Reload the page (`w3m-reload-this-page').
+
+
+
+File: emacs-w3m.info, Node: Moving in a page, Next: Moving over pages, Prev: Launching and Jumping, Up: Browsing Web Pages
+
+Moving from place to place in a page
+------------------------------------
+
+Being able to use familiar Emacs movement bindings while browsing a
+web page probably fascinates you already.  Believe it or not, there is
+more!  Since we value your time, we have added keys to move the point,
+scroll the page or find links in a very fast way.  When you master
+them, you will understand how handy they are.
+
+The keys are assigned so that scroll commands can be called using
+shorter keystrokes than standard Emacs key bindings.  And since places
+where you can input text are pretty specific in web pages (*Note
+Submitting Forms::), most keys have special meanings and aren't
+assigned to `self-insert-command' anymore.
+
+`SPC'
+     Scroll downwards.  You may be used to this binding if you use the
+     `more' or `less' commands, or Emacs's `view-mode'
+     (`w3m-scroll-up-or-next-url').
+
+`DEL'
+     Scroll upwards.  You may be used to this binding if you use the
+     `less' command or Emacs's `view-mode'
+     (`w3m-scroll-down-or-previous-url').
+
+`>'
+     Scroll to the left.  The scroll step is given by the
+     `w3m-horizontal-scroll-columns' variable, default 10
+     (`w3m-scroll-left').
+
+`<'
+     Scroll to the right.  The scroll step is given by the
+     `w3m-horizontal-scroll-columns' variable, default 10
+     (`w3m-scroll-right').
+
+`.'
+     Shift to the left (a fine level horizontal scrolling).  The shift
+     step is given by the `w3m-horizontal-shift-columns' variable,
+     default 2 (`w3m-shift-left').
+
+`,'
+     Shift to the right (a fine level horizontal scrolling).  The
+     shift step is given by the `w3m-horizontal-shift-columns'
+     variable, default 2 (`w3m-shift-right').
+
+`M-l'
+     Scroll horizontally so that the current position is centered
+     (`w3m-horizontal-recenter').
+
+The `w3m-mode' major mode defines commands to move to various kinds of
+things; namely links, forms, and images (whether they are displayed or
+not).
+
+Let's consider this simple example: suppose we want to search for a
+word on the widely-known Google search engine.  Step one: open
+`http://www.google.com' in emacs-w3m.  Step two: once the page is
+loaded, hit `]'.  Tadaa!  The point has moved to the first form input
+in the page, you can now hit `RET' to enter something in it, and then
+`C-c C-c' to submit.  Without this command, you would have had to move
+into the page using `C-n', `C-f' and so forth, it would have been a
+real pain.
+
+TAB
+     Move the point to the next link (an "anchor" in emacs-w3m lingo).
+     More strictly speaking, move the point forwards to the nearest
+     anchor.
+
+`M-TAB'
+`S-TAB'
+     Move the point to the previous anchor.  More strictly speaking,
+     move the point backwards to the nearest anchor
+     (`w3m-previous-anchor').
+
+`]'
+     Move the point to the next form.  More strictly speaking, move
+     the point forwards to the nearest form (`w3m-next-form').
+
+`['
+     Move the point to the previous form.  More strictly speaking,
+     move the point backwards to the nearest form
+     (`w3m-previous-form').
+
+`}'
+     Move the point to the next image.  More strictly speaking, move
+     the point forwards to the nearest image (`w3m-next-image').
+
+`{'
+     Move the point to the previous image.  More strictly speaking,
+     move the point backwards to the nearest image
+     (`w3m-previous-image').
+
+
+
+File: emacs-w3m.info, Node: Moving over pages, Next: Browsing with Mouse Operations, Prev: Moving in a page, Up: Browsing Web Pages
+
+Moving from page to page
+------------------------
+
+This section explains how to move from page to page, but not by
+following links or inputing URLs (these ways of moving are explained in
+*Note Launching and Jumping::).
+
+This includes commands to move backwards and forwards in history (the
+familiar "Back" and "Forward" from other browsers), and the obligatory
+Go to the home page" feature.  You will probably understand this
+better after reading the *Note Tracing History:: section.
+
+`B'
+     Move back one page in history (`w3m-view-previous-page').  With a
+     numeric argument ARG, move back ARG pages.  This is the preferred
+     way to go back in time.
+
+`N'
+     Move forward one page in history (`w3m-view-next-page').  Of
+     course, this will work only if you've used `B' to move back in
+     history.  If called with a numeric argument ARG, move forward ARG
+     pages.  This command actually allows you to go back to the
+     future!
+
+`H'
+     Move to the home page (`w3m-gohome').  You can specify the URL of
+     the home page by customizing the `w3m-home-page' variable
+     ("about:" by default).
+
+These commands are exclusive features of emacs-w3m, we were able to
+obtain patents on them, so you won't find them anywhere else.  That's
+why you must learn to use them today!  (Just kidding.)
+
+`^'
+     Attempt to move to the parent directory of the page currently
+     displayed.  For instance, it will attempt to move to
+     http://foo/bar/" when "http://foo/bar/baz" is displayed.  This
+     function has been implemented because of the following
+     observation: users of web browsers often have to move up one
+     level of directories because the information they're looking for
+     isn't displayed on the current page (either because it has been
+     deleted, or because a search engine took them to the wrong page).
+
+     When you use another web browser, you usually need to remove the
+     last component from the URL by using the DEL key, etc. several
+     times manually.  In emacs-w3m, this operation can be performed in
+     only one keystroke, by typing `^'!
+
+     Also, you type this command with prefix as "C-u ^", you visit the
+     top of this site.
+
+SPC
+     When the current point is located at the end of the buffer and
+     you cannot scroll down further, hit the SPC key to go on to the
+     next page" (`w3m-scroll-up-or-next-url').  Here, "next page"
+     means the page referred to in the special "next" header of the
+     current page (read on).  This feature has nothing to do with the
+     history.
+
+     You probably noticed that some websites split their contents over
+     several small pages, partly because it's not comfortable for
+     users to wait for huge contents to transfer in one go.  For
+     example, search results of search engines often appear like that.
+     On such sites, users often need to follow links manually from one
+     page to the next in order the access all the information.
+
+     Hopefully emacs-w3m attempts to enable you to browse a series of
+     contents over pages as if you were viewing them as a single page,
+     by combining two operations: explicitly following links and
+     scrolling.
+
+     That's how it works: these kinds of websites often have fields
+     such as "next", "prev" or "previous" in the headers of their web
+     pages.  These fields contain information about links between
+     divided pages.  Emacs-w3m uses these fields to know what to
+     follow.
+
+     Let's take an example with Google again to explain how the two
+     operations (following links and scrolling) are combined.  Open
+     `http://www.google.com' and search for a word.  If you search for
+     a very common word (e.g. "hamburger"), you will get tons of
+     search results.  Google returns the first page of search results,
+     after having sorted them using its own algorithm and divided them
+     into several pages.  Use SPC to scroll through this first page.
+     Keep scrolling until you see the end of the web page in the
+     window.  Here, a surprise is waiting for you.  If you use a web
+     browser other than emacs-w3m and want to see the rest of the
+     search results, you would have to click on any of the numbers
+     listed under
+
+          Gooooooogle
+
+
+          1 2 3 4 5 6 7 8...
+
+
+     to follow the link.  But with emacs-w3m, you can follow the link
+     by just typing SPC, just as if you were scrolling!
+
+
+DEL
+     When the point is located at the beginning of the buffer and you
+     cannot scroll upward, hit the DEL to go to the "previous" page
+     (`w3m-scroll-down-or-previous-url').  Here, the "previous" page
+     means the page which is assigned to the "prev" or "previous"
+     fields in the header of the current page.  This function has
+     nothing to do with the history, and works like
+     SPC(w3m-scroll-up-or-next-url).
+
+
+
+
+File: emacs-w3m.info, Node: Browsing with Mouse Operations, Next: Going Back to Daily Hacking and/or Daily Writing, Prev: Moving over pages, Up: Browsing Web Pages
+
+Surfing using the mouse
+-----------------------
+
+The emacs-w3m developers went to some trouble to ensure that normal
+people who aren't Emacs otaku can also use emacs-w3m.  You can perform
+most web browsing operations using only the mouse except for entering
+text, e.g. URL, forms, etc.  Note that sometimes you might still need
+to use modifier keys since the emacs-w3m developers are all Emacs
+otaku...
+
+Use `mouse-2' to "follow links" (the first basic of web browsing).
+Under Emacs 22.1 and newer, you can also follow links using
+`mouse-1', depending of the value of
+`mouse-1-click-follows-link'.
+
+`mouse-2'
+     Follow the link under the mouse pointer
+     (`w3m-mouse-view-this-url').
+
+`S-mouse-2'
+     Follow the link under the mouse pointer in a new session
+     (`w3m-mouse-view-this-url-new-session').
+
+Scrollbar, menubar and toolbar are helpful in emacs-w3m when you use a
+mouse (your Emacs must support them, and you must have enabled them).
+You can scroll an emacs-w3m window using the scrollbar.  You can
+invoke many emacs-w3m commands described in this manual from the "W3M"
+menu which appears in the leftmost menubar next to the "File" menu.
+Note: it's not necessary to use the menubar for most emacs-w3m
+commands, you can use the toolbar icons instead.
+
+To switch between buffers in an emacs-w3m window using "Tabs" (*Note
+Using Tabs::), click on the topmost line in an emacs-w3m window
+directory using `mouse-2' or choose one from the "TAB" menu which
+appears next to the "W3M" menu.
+
+
+
+File: emacs-w3m.info, Node: Going Back to Daily Hacking and/or Daily Writing, Prev: Browsing with Mouse Operations, Up: Browsing Web Pages
+
+Return to an Ordinary Life
+--------------------------
+
+Think back.  You probably didn't start Emacs to browse the web, but
+to, say, replace some editor's built-in interpreter with scheme, write
+Info documentation or put into print your opinion on software
+patents...  who knows?  While you were using Emacs, you ran into the
+need to browse the web for your work.  But you happened to be able to
+see the web page without leaving Emacs at all.  Wow.
+
+Now the time has come to return to work.  Keep it up or the world
+won't change!  Type `q' if you think you might need to browse the web
+again.  Type `Q' if you don't have any intention to go back to
+emacs-w3m for a while.
+
+`q'
+     Close an emacs-w3m window and select the other buffer
+     (`w3m-close-window').
+
+`Q'
+     Save the "arrived URLs" list to disk (*Note Tracing History::),
+     save cookies (*Note Cookie Variables::) and really quit emacs-w3m
+     (`w3m-quit').
+
+
+
+File: emacs-w3m.info, Node: Inline Images, Next: Tracing History, Prev: Browsing Web Pages, Up: Basic Usage
+
+Toggle displaying inline images
+===============================
+
+If the Emacs version you're using is capable of displaying images in
+buffers, then emacs-w3m can display them in web pages, just like
+graphical" browsers like Mozilla do.  You should make sure your Emacs
+is correctly setup for images before trying to use any of the
+following commands (*Note Required Emacs Version::).
+
+To toggle displaying of images in the current buffer, use `T'.  It
+makes emacs-w3m fetch the images from the server, then display them in
+the buffer, at the position they would have in a "graphical" browser.
+If you hit the key again, images will disappear from the buffer.
+
+By default, emacs-w3m won't display images, but you can change its
+behavior and choose to always display images, for this you need to
+customize the `w3m-default-display-inline-images' variable and change
+its value from `nil' to `t'.  *Note Customizable Variables::.
+
+Emacs-w3m also comes with nifty features that let you zoom an image in
+or out, save it to a file, or view it in a external viewer.  See also
+*Note Moving in a page:: for instructions on how to move from image to
+image in an emacs-w3m buffer.
+
+`T'
+     Toggle displaying of inline images in this buffer and buffers
+     created from this buffer, later on (`w3m-toggle-inline-images').
+
+`I'
+     View the image under point in an external viewer
+     (`w3m-view-image').
+
+`M-i'
+     Save the image under point to an external file.  The default name
+     will be the original name of the image, so most of the time `M-i
+     RET' will save the image with the right name (`w3m-save-image').
+
+`M-['
+     Zoom out the image under point (`w3m-zoom-out-image').
+
+`M-]'
+     Zoom in the image under point (`w3m-zoom-in-image').
+
+
+
+File: emacs-w3m.info, Node: Tracing History, Next: Managing Bookmarks, Prev: Inline Images, Up: Basic Usage
+
+Going back through time and space
+=================================
+
+Emacs-w3m has several ways to present you with a list of all the pages
+you visited before.  The first way is simply called the "emacs-w3m
+history", it is a list of the pages you visited in this session,
+presented hierarchically, that is: when you follow a link, the page
+you're leaving becomes the "parent" of the page you're going to.  It
+is a very nice to keep track of the pages you visited, and remember
+from where you came if the history gets too long.
+
+Here is an example of this feature in action, after a short visit to
+the GNU Project's homepage:
+
+     GNU's Not Unix! - the GNU Project and the Free Software Foundation (FSF)
+       Philosophy of the GNU Project - Free Software Foundation (FSF)
+         GNU Emacs - GNU Project - Free Software Foundation (FSF)
+          Order from the Free Software Foundation (FSF)
+       Links to Other Free Software Sites - GNU Project - Free Software Fo...
+         EFF: Homepage
+
+(In fact, this example is slightly edited to fit in 72 columns; the
+URLs won't be cut in the actual emacs-w3m buffer.)
+
+You can get this kind of history using the `s' key in any emacs-w3m
+buffer.
+
+Please note that this history is buffer-local, i.e. specific to an
+emacs-w3m buffer.  But emacs-w3m has a unique feature: when you visit
+a new page, the history is copied over to the new buffer, so that you
+can still access the pages you visited so far.  This is different from
+the way Mozilla and others work; in these browsers the history always
+starts from scratch in new buffers.
+
+Emacs-w3m can do more than just record which pages you visited, it can
+also save specific locations in those pages, in case you want to go
+back to the exact same place in the page.  Press `C-c C-@', and the
+location of the cursor will be stored in history.  In order to go back
+to that particular location within the page, press `C-c C-v' in the
+emacs-w3m buffer visiting the page.
+
+`s'
+     Display the list of visited URLs in this session.
+
+`C-c C-@'
+     Record the position of the cursor in the page in history.
+
+`C-c C-v'
+     Move to the position which has been marked with `C-c C-@'
+     (`w3m-history-store-position') in the currently displayed page.
+
+The other way to have information about past pages is the "arrived
+URLs" list: it is a list of the last 500 URLs you have visited in
+emacs-w3m.  The list is ordered by date, the most recent coming first,
+and for each page the time of visit is displayed.  Here's an example
+(edited):
+
+     Order from the Free Software Foundation (FSF)             22:53:25
+     GNU Emacs - GNU Project - Free Software Foundation (FS    22:53:05
+     Philosophy of the GNU Project - Free Software Foundati... 22:52:46
+     Philosophy of the GNU Project - Free Software Foundati... 22:52:39
+     EFF: Homepage                                             22:52:18
+     Links to Other Free Software Sites - GNU Project - Fre... 22:52:07
+     Links to Other Free Software Sites - GNU Project - Fre... 22:52:07
+     GNU's Not Unix! - the GNU Project and the Free Softwar... 22:51:32
+     Bookmarks                                                 22:51:02
+     The DICT Development Group- upwards                       2003-01-08
+     the monkey puzzle: new debian packages as an rss feed     2003-01-08
+     new-debian-packages.rss                                   2003-01-07
+     it's a miracle                                            2003-01-06
+
+You can get this history by passing a prefix argument to the previous
+command, i.e. using `C-u s'.  The number of URLs showed in this page
+is customizable, see the `w3m-keep-arrived-urls' variable.  It cannot
+exceed 500 by default.  *Note Customizable Variables::.
+
+Of course, in all cases all the lines showed in the examples are
+links, you can go to any of the pages you visited previously just like
+if you were visiting a regular page, by following the link.
+
+`s'
+`C-u s'
+     Display the list of URLs visited in this session.  If called with
+     a prefix argument, show the list of arrived URLs instead
+     (`w3m-history').
+
+Also see the *Note Moving over pages:: section, it explains how to
+move in the history with simple keybindings, i.e. the "Back" and
+Next" features.
+
+
+
+File: emacs-w3m.info, Node: Managing Bookmarks, Next: Using Tabs, Prev: Tracing History, Up: Basic Usage
+
+That's a favorite with me!
+==========================
+
+Like all modern browsers, emacs-w3m has advanced features related to
+bookmarks: it lets you classify them in categories, edit them and of
+course, browse them easily.
+
+* Menu:
+
+* Adding Bookmarks::            Adding a URL to your favorites
+* Consulting Bookmarks::        Browse your bookmarks
+* Editing Bookmarks::           How to change your bookmarks
+
+
+
+File: emacs-w3m.info, Node: Adding Bookmarks, Next: Consulting Bookmarks, Prev: Managing Bookmarks, Up: Managing Bookmarks
+
+Adding a URL to your favorites
+------------------------------
+
+There are several ways to add a URL to your bookmarks.  The first one
+is to use the `a' key (or call the `w3m-bookmark-add-current-url'
+command) to add the page you're currently browsing: it will prompt you
+for a section to where the bookmark should go (completion is available
+with the TAB key) and will let you edit the title of the bookmark (the
+default being the title of the current page).  Complete these two
+steps, validating each with `RET', and you will see the message
+Added" in the minibuffer, which means (surprise!) that the page has
+been added to your bookmarks.
+
+Another way to add a bookmark is to use the `M-a' key (or call the
+`w3m-bookmark-add-this-url' command): it adds the URL under point
+(that means, the URL you would be taken to if you followed the link)
+to the bookmarks.  As before, you will have to input the section for
+this bookmark and its title, the default being this time the name of
+the link itself.
+
+The third and final way to do this is to use `C-u a', this time you
+will be prompted for the URL to add, its section, and the title to use
+for it in the bookmarks.
+
+`a'
+     Add the current page to the bookmarks, or if called with a prefix
+     argument, prompt for a URL and add it
+     (`w3m-bookmark-add-current-url').
+
+`M-a'
+     Add the URL under point to the bookmarks
+     (`w3m-bookmark-add-this-url').
+
+
+
+File: emacs-w3m.info, Node: Consulting Bookmarks, Next: Editing Bookmarks, Prev: Adding Bookmarks, Up: Managing Bookmarks
+
+Browse your bookmarks
+---------------------
+
+The easiest way to see the bookmarks is to use the `v' key in an
+emacs-w3m buffer; another possibility is to go to the special URL
+`about://bookmark/'.  You will see your bookmarks, organized by
+section, each line being one bookmark.  You can browse them exactly
+like you would browse any other page.
+
+On the bookmarks page a w3m minor mode is activated, the bookmark
+mode.  It adds key bindings to edit the bookmarks.  *Note Editing
+Bookmarks::.
+
+`v'
+     Visit the bookmarks page (`w3m-bookmark-view').
+
+
+
+File: emacs-w3m.info, Node: Editing Bookmarks, Prev: Consulting Bookmarks, Up: Managing Bookmarks
+
+How to change your bookmarks
+----------------------------
+
+The bookmark minor mode (*Note Consulting Bookmarks::) offers several
+key bindings related to bookmark edition, most noticeably `C-k' to
+kill (i.e. delete) a bookmark, and `E' to edit the bookmark file.
+
+Bookmarks are kept in an HTML file, so you can edit the file by hand,
+but be very careful: if you erase the comments emacs-w3m needs to
+recognize section names, things can break easily.  If you know the
+basics of HTML, the file should otherwise be quite self-explanatory.
+
+`C-k'
+     Kill the bookmark under point (`w3m-bookmark-kill-entry').
+
+`E'
+     Visit the bookmarks file (`w3m-bookmark-edit').
+
+`C-_'
+     Undo the last changes (`w3m-bookmark-undo').
+
+
+
+File: emacs-w3m.info, Node: Using Tabs, Next: Working with buffers, Prev: Managing Bookmarks, Up: Basic Usage
+
+Everybody likes tabs
+====================
+
+Unlike most other text-based browsers, emacs-w3m has support for
+tabbed browsing.  What is tabbed browsing, you might ask?  It's very
+simple: it is a way to represent all active emacs-w3m buffers in a
+single window, by showing a line at the top which shows all the
+buffers in a simple and self-explaining way, each buffer being shown
+as a "tab".  This line stays visible all the time and does not scroll
+with the rest of the buffer, so that you can switch to another buffer,
+or use the feedback it provides at any moment.
+
+The easiest way to get the feeling of it is to just try, so go on and
+open an emacs-w3m session.  If you didn't change anything to the
+configuration, the tabs line is active by default, it is this bright
+line at the top with a smaller rectangle that shows the title of the
+current page.  Now create another w3m buffer (with `G', for example):
+now you have two of these rectangles.  These are tabs.
+
+The most obvious use of tabs is switching: by clicking with the
+`mouse-1' button on a tab, you make the buffer it represents active.
+It also works with the `mouse-2' button.  It's a very quick and easy
+way to work with several emacs-w3m buffers, you just have to point and
+click.  (Yeah yeah, I hear you.  You want to switch using the
+keyboard.  Don't worry, it's also possible.  It's explained in the
+next section.  Now keep quiet and read on!)
+
+Another nifty feature is the feedback it provides.  If you are on a
+color terminal or window system, emacs-w3m shows the text in the tab
+in different colors to show the status of the page (1) (*Note Using
+Tabs-Footnotes::).  For example, when the page is being loaded, the
+text is in red, and goes back to its default color (usually black)
+when the loading is complete.  This way you can tell with a single
+glance at the tabs line if the page you're waiting for has arrived or
+not.
+
+Finally, if the web page provides a favicon, it will be shown in the
+tab as well (2) (*Note Using Tabs-Footnotes::).  More eye-candy for
+the emacs-w3m user!
+
+User options:
+
+`w3m-use-tab'
+     Whether to activate tabbed browsing or not.
+
+
+File: emacs-w3m.info  Node: Using Tabs-Footnotes, Up: Using Tabs
+
+(1) Although XEmacs shows all tabs in the same colors at every moment,
+you can easily distinguish the selected tab and others and see the
+status of the current page in the modeline.
+
+(2) Under XEmacs, favicons will currently not be shown in the tabs
+line.
+
+
+
+File: emacs-w3m.info, Node: Working with buffers, Next: Downloading, Prev: Using Tabs, Up: Basic Usage
+
+Creating, killing and moving across buffers
+===========================================
+
+Sooner or later, you will be addicted to emacs-w3m, and you'll have to
+manage all your browsing needs with it.  To help you with this
+daunting task, we have imagined many different ways to work with
+emacs-w3m buffers.
+
+* Menu:
+
+* Creating and killing buffers:: Creating and killing buffers
+* Moving across buffers::        Moving across buffers
+* Selecting buffers::            Selecting buffers from a list
+
+
+
+File: emacs-w3m.info, Node: Creating and killing buffers, Next: Moving across buffers, Prev: Working with buffers, Up: Working with buffers
+
+Creating and killing buffers
+----------------------------
+
+It is sometimes useful to just create a new buffer without opening a
+web page in it.  This operation is called "creating a twin copy" of a
+buffer, in emacs-w3m lingo.  It will simply create a new buffer whose
+contents are identical to the currently active buffer.
+
+The opposite of this is closing buffers: you can just close one buffer
+(because you're not interested in its contents anymore) or you can
+decide to close all buffers but the current one.  Emacs-w3m lets you
+do this with the following commands:
+
+`C-c C-t'
+     Create an identical copy of the currently active buffer, under a
+     new name.  This is used to start a new session without loading a
+     web page in the new buffer (`w3m-copy-buffer').
+
+`C-c C-w'
+     Close the current emacs-w3m buffer (`w3m-delete-buffer').
+
+`C-c M-w'
+     Close all emacs-w3m buffers, but the active one
+     (`w3m-delete-other-buffers').
+
+
+

@@ -1,0 +1,64 @@
+#!/bin/sh
+
+# the nethack source tarball
+src=$1
+# should be a clean version of the Nethack sources
+ref=$2
+# your working directory, with your changes
+work=$3
+
+echo $0: cd .. >&2
+cd ..
+
+[ -e $src ]  || { echo $0: $src is missing >&2; exit 1; } 
+[ -d $work ] || { echo $0: $work/ is missing >&2; exit 1; }
+[ -e $ref ] && { echo $0: $ref/ is in the way >&2; exit 1; }
+
+echo $0: untarring $src >&2
+tar -xzf $src
+
+echo $0: generating patch >&2
+
+# the patch is distributed under a modified BSD license
+cat <<EOF
+Redistribution and use in source and binary forms, with or without modification, are permitted
+provided that the following conditions are met:
+
+ 1. Redistributions of source code must retain the above copyright notice, this list of conditions
+    and the following disclaimer.
+ 2. Redistributions in binary form must reproduce the above copyright notice, this list of
+    conditions and the following disclaimer in the documentation and/or other materials provided
+    with the distribution.
+ 3. The name of the author may not be used to endorse or promote products derived from this
+    software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR \`\`AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES,
+INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT,
+INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+EOF
+
+# generate the diffs 
+for n in `cat <<EOF
+include/config.h
+include/winlisp.h
+src/windows.c
+sys/unix/Makefile.src
+util/makedefs.c
+win/tty/termcap.c
+win/lisp/ChangeLog
+win/lisp/winlisp.c
+EOF
+`; do
+  s=$ref/$n
+  if [ ! -f $s ]; then s=/dev/null; fi
+  echo diff -u $s $work/$n >&2
+  diff -u $s $work/$n
+done
+
+echo $0: removing $ref/ >&2
+rm -r $ref

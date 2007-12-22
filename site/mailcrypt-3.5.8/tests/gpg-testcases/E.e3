@@ -1,0 +1,22 @@
+(
+(crypttext . "
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v1.2.0 (GNU/Linux)
+
+hM4Dx24S4PfiwlAQAvsHeAql4tT0jTB5QXdZeyD7EhPmgK0FiJwTQiWiC9oe0T8/
+o5SDa2YzyyL9N28kJhJikEVkkLRlBqL00jnpuQg8zOJ1Ndm/KZ4red4YQ3eWVYR2
+re/fos+/biyYzBCdXNYC/1sruq6h4GzzHVmE3J/jmUS6qsTcgWnvuWlC3BsNY9kM
+Nzn5U7Spj3txIJ1hyy/Vi7YTsPOZvHbGP8GPjSjjyMOY8vNFCacSjG1HwK6hmurE
+KsvaIXvgi9IpC3EfJB1gttJVAaKQZ1rPHS4F+bQ1VhAt3Af3Erjyl8JUX9djcSrT
+6LXDMpgE+ZN3PAm0nu9alMjjlfxqj4Y+oE/3VC+MfPPv+UV/MdhlkkXk9IC/hTnE
+ake42i4qnw==
+=t9Vz
+-----END PGP MESSAGE-----
+")
+(encryption_id . "0x8D5D85F6729C0B44")
+(error . "This message is not addressed to you")
+(name . "E.e3")
+(passphrase . "other")
+(plaintext . nil)
+(signature_status . nil)
+)

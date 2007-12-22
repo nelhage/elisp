@@ -1,0 +1,4051 @@
+\input texinfo  @comment -*-Text-*-
+@setfilename vm.info
+@settitle VM User's Manual
+@direntry
+* VM::			A mail reader.
+@end direntry
+@iftex
+@finalout
+@end iftex
+@c @setchapternewpage odd		% For book style double sided manual.
+@c      @smallbook
+@tex
+\overfullrule=0pt
+%\global\baselineskip 30pt      % For printing in double spaces
+@end tex
+@ifinfo
+This file documents the VM mail reader.
+
+Copyright (C) 1989, 1991, 1999 Kyle E. Jones
+
+Permission is granted to make and distribute verbatim copies of
+this manual provided the copyright notice and this permission notice
+are preserved on all copies.
+
+@ignore
+Permission is granted to process this file through Tex and print the
+results, provided the printed document carries copying permission
+notice identical to this one except for the removal of this paragraph
+(this paragraph not being relevant to the printed manual).
+
+@end ignore
+@end ifinfo
+@c
+@titlepage
+@sp 6
+@center @titlefont{VM User's Manual}
+@sp 4
+@center VM Version 7.19
+@sp 5
+@center Kyle E. Jones
+@center @t{kyle_jones@@wonderworks.com}
+@page
+@vskip 0pt plus 1filll
+Copyright @copyright{} 1989, 1991, 1999, 2002, 2003 Kyle E. Jones
+
+Permission is granted to make and distribute verbatim copies of
+this manual provided the copyright notice and this permission notice
+are preserved on all copies.
+
+@end titlepage
+@page
+@ifinfo
+@node Top, Introduction,, (DIR)
+
+This manual documents the VM mail reader, a Lisp program which runs as a
+subsystem under Emacs.  The manual is divided into the following
+chapters.
+
+@menu
+* Introduction::	Overview of the VM interface.
+* Starting Up::		What happens when you start VM.
+* Selecting Messages::	How to select messages for reading.
+* Reading Messages::	Previewing and paging through a message.
+* Sending Messages::	How to send messages from within VM.
+* Saving Messages::	How to save messages.
+* Deleting Messages::	How to delete, undelete and expunge messages.
+* Editing Messages::    How to alter the text and headers of a message.
+* Message Marks::	Running VM commands on arbitrary sets of messages.
+* Message Attributes::	How to change and undo changes to message attributes.
+* Sorting Messages::	How to make VM present similar messages together.
+* Reading Digests::	How to read digests under VM.
+* Summaries::		How to view and customize the summary of a folder.
+* Virtual Folders::	Blurring the boundaries of different physical folders.
+* Frames and Windows::	How to customize VM's use of windows and frames.
+* Toolbar::		How to configure VM's toolbar.
+* Menus::		How to configure VM's menus.
+* Faces::		How to configure VM's use of faces.
+* Using the Mouse::	Understanding the VM mouse interface.
+* Hooks::		How you can make VM run your code at certain times.
+* License::		Copying and distribution terms for VM.
+
+Indices:
+
+* Key Index::		Menus of command keys and their references.
+* Command Index::	Menus of commands and their references.
+* Variable Index::	Menus of variables and their references.
+@end menu
+@end ifinfo
+
+@node Introduction, Starting Up, Top, Top
+@unnumbered Introduction
+
+VM (View Mail) is an Emacs subsystem that allows UNIX mail to be read
+and disposed of within Emacs.  Commands exist to do the normal things
+expected of a mail user agent, such as generating replies, saving
+messages to folders, deleting messages and so on.  There are other more
+advanced commands that do tasks like bursting and creating digests,
+message forwarding, and organizing message presentation according to
+various criteria.
+
+To invoke VM, type @kbd{M-x vm}.  VM gathers any mail that has
+arrived in your system mailbox and appends it to a file known as your
+@dfn{primary inbox}, and visits that file for reading.  @xref{Starting Up}.
+A file visited for reading by VM is called the @dfn{current folder}.
+
+@findex vm-scroll-forward
+@findex vm-scroll-backward
+@kindex SPC
+@kindex b
+@kindex DEL
+If there are any messages in the primary inbox, VM selects the first new
+or unread message, and previews it.  @dfn{Previewing} is VM's way of
+showing you part of a message and allowing you to decide whether you want
+to read it.  @xref{Previewing}.  By default VM shows you the message's
+sender, recipient, subject and date headers.  Typing @key{SPC}
+(@code{vm-scroll-forward}) exposes the body of the message and flags the
+message as read.  Subsequent @key{SPC}'s scroll forward through the
+message, @kbd{b} or @key{DEL} scrolls backward.  When you reach the end
+of a message, typing @key{SPC} or @kbd{n} moves you forward to preview
+the next message.  @xref{Paging}.
+
+If you do not want to read a message that's being previewed, type
+@kbd{n} and VM will move to the next message (if there is one).
+@xref{Selecting Messages}.
+
+To save a message to a mail folder use @kbd{s} (@code{vm-save-message}).
+VM will prompt you for the folder name in the minibuffer.
+@xref{Saving Messages}.
+
+Messages are deleted by typing @kbd{d} (@code{vm-delete-message}) while
+previewing or reading them.  The message is not removed right away; VM
+makes a note that you want the message to be removed later.  If you
+change your mind about deleting a message, select it and type @kbd{u}
+(@code{vm-undelete-message}), and the message will be undeleted.
+@xref{Deleting Messages}.  The actual removal of deleted messages from
+the current folder is called @dfn{expunging} and it is accomplished by
+typing @kbd{###} (@code{vm-expunge-folder}).  The message is still present
+in the on-disk version of the folder until the folder is saved.
+
+Typing @kbd{h} (@code{vm-summarize}) causes VM to display a window
+containing a summary of the contents of the current folder.  The summary is
+presented one line per message, by message number, listing each message's
+author, date sent, line and byte count, and subject.  Also, various
+letters appear beside the message number to indicate that a message is
+new, unread, flagged for deletion, etc.  An arrow @samp{->} appears to
+the left of the line summarizing the current message.  The summary
+format is user configurable, @pxref{Summaries}.
+
+@findex vm-save-folder
+@kindex S
+When you are finished reading mail the current folder must be saved, so
+that the next time the folder is visited VM will know which messages
+have been already read, replied to and so on.  Typing @kbd{S}
+(@code{vm-save-folder}) saves the folder.  Note that deleted messages are
+@emph{not} expunged automatically when you save a folder; this is a change from
+version 4 of VM.  The next time you visit the folder any deleted
+messages will still be flagged for deletion.
+
+@vindex vm-folder-file-precious-flag
+When a folder is first visited, the value of the variable
+@code{vm-folder-file-precious-flag} is used to initialize a
+buffer-local instance of @code{file-precious-flag}, which
+determines how folders are saved.  A non-nil value causes
+folders to be saved by writing to a temporary file and then
+replacing the folder with that file.  A nil value causes
+folders to be saved by writing directly to the folder without
+the use of a temporary file.
+
+@vindex vm-delete-empty-folders
+If the folder is empty at the time you save it and the variable
+@code{vm-delete-empty-folders} is non-@code{nil}, VM will remove
+the zero length folder after saving it.
+
+@findex vm-quit
+@findex vm-quit-no-change
+@kindex q
+@kindex x
+To quit visiting a folder you can type @kbd{q} (@code{vm-quit}) or
+@kbd{x} (@code{vm-quit-no-change}).  Typing @kbd{q} saves the current
+folder before quitting.  Also, any messages flagged new are changed to
+be flagged as old and unread, before saving.  The @kbd{x} command quits
+a folder without changing the status of new messages, saving or
+otherwise modifying the current folder.
+
+@vindex vm-confirm-quit
+If the variable @code{vm-confirm-quit} is set to @code{t}
+VM will always ask for confirmation before ending a VM
+visit of a folder.  A @code{nil} value means VM will ask only
+when messages will be lost unwittingly by quitting, i.e. not
+removed by intentional delete and expunge.  A value that is
+neither @code{nil} nor @code{t} causes VM to ask only when
+there are unsaved changes to message attributes or when messages
+will be lost.
+
+@findex vm-quit-just-bury
+You do not have to quit a folder to continue using Emacs for other
+purposes.  (@code{vm-quit-just-bury}) buries the buffers associated with
+the current folder deep in Emacs' stack of buffers, but otherwise leaves
+the folder visited so that you can resume reading messages quickly.  You
+can locate the folder's buffers again by using @code{list-buffers},
+which is normally bound to @kbd{C-x C-b}.
+
+@findex vm-quit-just-iconify
+Another command you can use if you are using a window system like X
+Windows is @code{vm-quit-just-iconify}.  This command buries the
+folder's buffers like @code{vm-quit-just-bury} and also iconifies the
+current frame.
+
+@findex vm-get-new-mail
+@kindex g
+At any time while reading mail in any folder you can type @kbd{g}
+(@code{vm-get-new-mail}) to check to see if new mail for that folder has
+arrived.  If new mail has arrived it will be moved from the spool file
+or spool files associated with the current folder and merged into the
+folder.  If you are not in the middle of another message, VM will also
+move to the first new or unread message.
+
+If @code{vm-get-new-mail} is given a prefix argument, it will prompt for
+another file from which to gather messages instead of the usual spool
+files.  In this case the source folder is copied but no messages are
+deleted from it as they would be for a spool file.
+
+By default your primary inbox has your system mailbox associated with
+it, e.g. @file{/var/spool/mail/kyle}, and so typing @kbd{g} will retrieve
+mail from this file.  Your system mailbox is one example of a @dfn{spool
+file}, a file that the mail transport system delivers messages into.
+You can associate other spool files with your primary inbox and spool
+files with other folders by setting the variable
+@code{vm-spool-files}.  @xref{Spool Files}.
+
+@node Starting Up, Selecting Messages, Introduction, Top
+@chapter Starting Up
+
+@findex vm-load-init-file
+@vindex vm-init-file
+@kindex L
+The first time VM is started in an Emacs session, it attempts to load
+the file specified by the variable @code{vm-init-file}, normally
+@file{~/.vm}.  If present this file should contain Lisp code, much like
+the @file{.emacs} file.  Since VM has well over one hundred
+configuration variables, use of the @file{~/.vm} can considerably reduce
+clutter in the @file{.emacs} file.  You can reload this file
+by typing @kbd{L} (@code{vm-load-init-file}) from within VM.
+
+@findex vm
+@vindex vm-primary-inbox
+@vindex vm-auto-get-new-mail
+@kbd{M-x vm} causes VM to visit a file known as your @dfn{primary
+inbox}.  If the variable @code{vm-auto-get-new-mail} is set
+non-@code{nil}, VM will gather any mail present in your system mailbox
+and integrate it into your primary inbox.  The default name of your
+primary inbox is @file{~/INBOX}, but VM will use whatever file is named
+by the variable @code{vm-primary-inbox}.
+
+@vindex vm-crash-box
+VM transfers the mail from the system mailbox to the primary inbox via a
+temporary file known as the @dfn{crash box}.  The variable
+@code{vm-crash-box} names the crash box file.  VM first copies the mail
+to the crash box, truncates the system mailbox to zero messages, merges
+the crash box contents into the primary inbox, and then deletes the
+crash box.  If the system or Emacs should crash in the midst of this
+activity, any message not present in the primary inbox will be either in
+the system mailbox or the crash box.  Some messages may be duplicated
+but no mail will be lost.
+
+If the file named by @code{vm-crash-box} already exists when VM is
+started up, VM will merge that file with the primary inbox before
+retrieving any new messages from the system mailbox.
+
+@findex vm-visit-folder
+@kindex v
+@kbd{M-x vm-visit-folder} (@kbd{v} from within VM) allows you to visit
+some other mail folder than the primary inbox.  The folder name will be
+prompted for in the minibuffer.
+
+Once VM has read the folder, any spool files associated with the folder
+are checked for new messages if @code{vm-auto-get-new-mail} is
+non-@code{nil}.  @xref{Spool Files}.  After this, the first new or
+unread message will be selected, if any.  If there is no such message,
+VM will select whatever the selected message was when this folder was last
+saved.  If this folder has never been visited and saved by VM, then the
+first message in the folder is selected.
+
+@findex vm-mode
+@kbd{M-x vm-mode} can be used on a buffer already loaded into Emacs
+to put it into the VM major mode so that VM commands can be executed
+on it.  This command is suitable for use in Lisp programs, and for
+inclusion in @code{auto-mode-alist} to automatically start VM on a
+file based on a particular filename suffix.  @code{vm-mode} skips
+some of VM's startup procedures (e.g. starting up a summary) to make
+non-interactive use easier.
+
+@vindex vm-startup-with-summary
+The variable @code{vm-startup-with-summary} controls whether VM
+automatically displays a summary of the folder's contents at startup.  A
+value of @code{nil} gives no summary; a value of @code{t} always gives a
+summary.  A value that is a positive integer @var{n} means that VM
+should generate a summary on if there are @var{n} or more messages in
+the folder.  A negative value @var{-n} means generate a summary only if
+there are @var{n} or fewer messages.  The default value of
+@code{vm-startup-with-summary} is @code{t}.
+
+@menu
+* Spool Files::  Linking folders and mailboxes.
+* Getting New Mail::  Retrieving mail from spool files.
+* Crash Recovery::  Recovering changes after Emacs or your system dies.
+@end menu
+
+@node Spool Files, Getting New Mail, Starting Up, Starting Up
+@section Spool Files
+@vindex vm-spool-files
+A @dfn{spool file} is a file where the mail transport system delivers
+messages intended for you.  Typically a program called @file{/bin/mail}
+or @file{/bin/mail.local} does this delivery, although agents such as
+@file{procmail}, @file{filter} and @file{slocal} can be invoked from a
+user's @file{~/.forward} or @file{~/.qmail} files.  No matter what the
+delivery agent, what all spool files have in common is that mail is
+delivered into them by one or more entities apart from VM and that all
+access to spool files must therefore be accompanied by the use of
+some file locking protocol.
+
+@vindex vm-movemail-program
+@vindex vm-movemail-program-switches
+VM leaves the task of accessing spool files to @file{movemail}, a
+program distributed with Emacs that is written for this purpose.
+The variable @code{vm-movemail-program} specifies the name of the
+movemail program and defaults to @samp{"movemail"}.  The variable
+@code{vm-movemail-program-switches} lets you specify some initial
+command line argument to pass to the movemail program.
+
+Every folder, including the primary inbox, can have one or more spool
+files associated with it.  You make these associations known to VM by
+setting the variable @code{vm-spool-files}.
+
+If you only want to associate spool files with your primary inbox, you
+can set @code{vm-spool-files} to a list of strings.  By default, the location
+of your system mailbox (the spool file that is associated with your
+primary inbox) is determined heuristically based on what type of system
+you're using.  VM can be told explicitly where the system mailbox is by
+setting @code{vm-spool-files} like this:
+
+@example
+(setq vm-spool-files '("/var/spool/mail/kyle" "~/Mailbox"))
+@end example
+
+With this setting, VM will retrieve mail for the primary inbox from
+first @file{/var/spool/mail/kyle} and then @file{~/Mailbox}.
+
+If the value of @code{vm-spool-files} is @code{nil}, a default value for
+@code{vm-spool-files} will be inherited from the shell environmental
+variables MAILPATH or MAIL if either of these variables are defined.
+This inheritance happens before your init file is loaded, so setting
+@code{vm-spool-files} in your init file will override any environmental
+variables.
+
+If you want to associate spool files with folders other than or in
+addition to the primary inbox, the value of @code{vm-spool-files} must be a
+list of lists.  Each sublist specifies three entities, a folder, a spool
+file and a crash box.  When retrieving mail for a particular folder, VM
+will scan @code{vm-spool-files} for folder names that match the current
+folder's name.  The spool file and crash box found in any matching
+entries will be used to gather mail for that folder.
+
+For example, you can set @code{vm-spool-files} like this
+
+@example
+@group
+(setq vm-spool-files
+      '(
+        ("~/INBOX"      "/var/spool/mail/kyle"      "~/INBOX.CRASH")
+        ("~/INBOX"      "~/Mailbox"                 "~/INBOX.CRASH")
+        ("~/Mail/bugs"  "/var/spool/mail/answerman" "~/Mail/bugs.crash")
+       )
+)
+@end group
+@end example
+
+The folder @file{~/INBOX} has two spool files associated with it in this
+example, @file{/var/spool/mail/kyle} and @file{~/Mailbox}.  Another
+folder, @file{"~/Mail/bugs"} has one folder
+@file{/var/spool/mail/answerman} associated with it.  Note that both of
+the @file{~/INBOX} entries used the same crash box.  The crash box can be
+the same if the folder name is the same.  Different folders should use
+different crashboxes.
+
+@vindex vm-crash-box-suffix
+@vindex vm-spool-file-suffixes
+An alternate way of specifying folder/spool file associations
+is to use the variables @code{vm-spool-file-suffixes} and
+@code{vm-crash-box-suffix}.
+
+The value of @code{vm-spool-file-suffixes} should be a list of string suffixes
+to be used to create possible spool file names for folders.  Example:
+
+@example
+@group
+(setq vm-spool-file-suffixes '(".spool" "-"))
+@end group
+@end example
+
+With @code{vm-spool-file-suffixes} set this way, if you visit a
+folder @file{~/mail/beekeeping}, when VM attempts to retrieve new mail for
+that folder it will look for mail in @file{~/mail/beekeeping.spool}
+and @file{~/mail/beekeeping-} in addition to scanning @code{vm-spool-files}
+for matches.  The value of @code{vm-spool-files-suffixes} will not be used
+unless @code{vm-crash-box-suffix} is also defined, since a crash box is
+required for all mail retrieval from spool files.
+
+The value of @code{vm-crash-box-suffix} should be a string suffix used to
+create possible crash box file names for folders.  When VM uses
+@code{vm-spool-file-suffixes} to create a spool file name, it will append
+the value of @code{vm-crash-box-suffix} to the folder's file name to
+create a crash box name.  If the value of @code{vm-spool-files-suffixes}
+is @code{nil}, then the value of @code{vm-crash-box-suffix} is not used
+by VM.
+
+@vindex vm-make-crash-box-name
+@vindex vm-make-spool-file-name
+The idea behind @code{vm-spool-file-suffixes} and
+@code{vm-crash-box-suffix} is to give you a way to have many
+folders with individual spool files associated with them, without
+having to list them all in @code{vm-spool-files}.  If you need
+even more control of spool file and crash box names, use
+@code{vm-make-spool-file-name} and @code{vm-make-crash-box-name}.
+The value of both of these should be a function or the name of a
+function.  When VM visits a folder, it will call the function
+with the name of the folder as an argument, and the function
+should return the spool file name or crash box name to be used
+for that folder.
+
+@ifinfo
+If your spool file is on another host, VM supports accessing
+spool files on remote hosts using the POP and IMAP protocols.
+@end ifinfo
+
+@menu
+* POP Spool Files::	How to use a POP maildrop as a spool file
+* IMAP Spool Files::	How to use an IMAP maildrop as a spool file
+* POP Folders::		How to use a POP maildrop as a folder
+* IMAP Folders::	How to use a IMAP maildrop as a folder
+@end menu
+
+@node POP Spool Files,,, Spool Files
+@section POP Spool Files
+@cindex POP
+VM supports accessing spool files on remote hosts via the Post
+Office Protocol (POP).  Instead of a spool file name as in the
+examples above, you would use a string that tells VM how to
+access the POP mailbox.  The format of this string is:
+
+@example
+``pop:@var{HOST}:@var{PORT}:@var{AUTH}:@var{USER}:@var{PASSWORD}''
+@end example
+
+Replace @samp{pop} in the example with @samp{pop-ssl} to have
+VM speak POP over an SSL connection.  Use @samp{pop-ssh} to use
+POP over an SSH connection.  
+
+For SSL, you must have the stunnel program installed and the
+variable @code{vm-stunnel-program} must name it in order for
+POP over SSL to work.  The default value of this variable,
+@samp{"stunnel"}, should be sufficient if the program is
+installed in your normal command search path.
+
+For SSH, you must have the ssh program installed and the variable
+@code{vm-ssh-program} must name it in order for POP over SSH to
+work.  When VM makes the SSH connection it must run a command on
+the remote host so that the SSH session is maintained long enough
+for the POP connection to be established.  By default that command
+is @samp{"echo ready; sleep 10"}, but you can specify another
+command by setting @code{vm-ssh-remote-command}.  Whatever
+command you use must produce some output and hold the connection
+open long enough for VM to establish a port-forwarded connection
+to the POP server.
+
+@var{HOST} is the host name of the POP server.  @var{PORT} is the
+TCP port number to connect to (should normally be 110).  For POP
+over SSL connections the standard port is 995.  @var{USER}
+is the user name sent to the server.  @var{PASSWORD} is the secret
+shared by you and the server for authentication purposes.  How it is
+used depends on the value of the @var{AUTH} parameter.  If the
+@var{PASSWORD} is @samp{*}, VM will prompt you for the password the
+first time you try to retrieve mail from the maildrop.  If the password
+is valid, VM will not ask you for the password again during this
+Emacs session.
+
+@vindex vm-pop-md5-program
+@var{AUTH} is the authentication method used to convince the
+server you should have access to the maildrop.  Acceptable
+values are @samp{pass}, @samp{rpop} and @samp{apop}.  For
+@samp{pass}, the @var{PASSWORD} is sent to the server with
+the POP PASS command.  For @samp{rpop}, the @var{PASSWORD}
+should be the string to be sent to the server via the RPOP
+command.  In this case the string is not really a secret;
+authentication is done by other means.  For @samp{apop}, an
+MD5 digest of the @var{PASSWORD} appended to the server
+timestamp will be sent to the server with the APOP command.
+If Emacs does not have bulit in MD5 support, you will have
+to set the value of @code{vm-pop-md5-program} appropriately
+to point at the program that will generate the MD5 digest
+that VM needs.
+
+@vindex vm-pop-max-message-size
+By default VM will retrieve all the messages from a POP maildrop
+before returning control of Emacs to you.  If the maildrop is
+large, the wait could be considerable.  If you set
+@code{vm-pop-max-message-size} to a positive numeric value, VM will not 
+automatically retrieve messages larger than this size.  If VM is
+retrieving messages because you invoked @code{vm-get-new-mail}
+interactively, then VM will ask whether it should retrieve the
+large message.  If VM is retrieving messages automatically
+(e.g. @code{vm-auto-get-new-mail} is set non-@code{nil}) then VM will skip the
+large message and you can retrieve it later.
+
+@vindex vm-pop-bytes-per-session
+@vindex vm-pop-messages-per-session
+The variable @code{vm-pop-messages-per-session} controls how many messages
+VM will retrieve from a POP maildrop before returning control to
+you.  Similarly, the variable @code{vm-pop-bytes-per-session} limits the
+number of bytes VM will retrieve from a POP maildrop before returning
+control to you.  By default, the value of both variables is nil, which
+tells VM to retrieve all the messages in the POP maildrop regardless
+of how many messages there are and how large the maildrop is.
+
+@vindex vm-pop-expunge-after-retrieving
+After VM retrieves messages from the maildrop, the default action
+is to delete the messages from there.  If you want VM to leave
+messages in the remote maildrop until you explicitly request
+their removal, set @code{vm-pop-expunge-after-retrieving} to
+@code{nil}.  Messages will not be removed from the maildrop until you
+run @code{vm-expunge-pop-messages}; only those messages that VM has
+retrieved into the current folder will be expunged.
+
+@vindex vm-pop-auto-expunge-alist
+The variable @code{vm-pop-auto-expunge-alist} gives you a way to specify
+on a per-maildrop basis which POP maildrops have messages
+automatically removed when retrieved and which ones leave the
+messages on the POP server.  The value of
+@code{vm-pop-auto-expunge-alist} should be a list of POP mailboxes and
+values specifying whether messages should be automatically
+deleted from the mailbox after retrieval.  The format of the list
+is:
+
+@example
+((@var{MAILBOX} . @var{VAL}) (@var{MAILBOX} . @var{VAL}) ...)
+@end example
+
+@var{MAILBOX} should be an POP maildrop specification as described
+in the documentation for the variable @code{vm-spool-files}.  If
+you have the POP password specified in the @code{vm-spool-files}
+entry, you do not have to specify it here as well.  Use @samp{*}
+instead; VM will still understand that this mailbox is the same as
+the one in @code{vm-spool-files} that contains the password.
+
+@var{VAL} should be @code{nil} if retrieved messages should be left in the
+corresponding POP mailbox, @code{t} if retrieved messages should be
+removed from the mailbox immediately after retrieval.
+
+Here is an example:
+
+@example
+(setq vm-pop-auto-expunge-alist
+   '(
+     ("odin.croc.net:110:pass:kyle:*" . nil)  ;; leave message on the server
+     ("hilo.harkie.org:110:pass:kyle:*" . t)  ;; expunge immediately
+    )
+)
+@end example
+
+@node IMAP Spool Files,,, Spool Files
+@section IMAP Spool Files
+@cindex IMAP
+VM can also use the IMAP protocol to access a mailbox on a remote 
+host.  As with POP, instead of specifying a spool file name in
+the @code{vm-spool-files} definition, you would give a string that tells 
+VM how to access to remote maildrop.
+
+An IMAP maildrop specification has the following format:
+
+@example
+``imap:@var{HOST}:@var{PORT}:@var{MAILBOX}:@var{AUTH}:@var{USER}:@var{PASSWORD}''
+@end example
+
+Replace @samp{imap} in the example with @samp{imap-ssl} to have
+VM speak IMAP over an SSL connection.  Use @samp{imap-ssh} to use
+IMAP over an SSH connection.  
+
+For SSL, you must have the stunnel program installed and the
+variable @code{vm-stunnel-program} must name it in order for
+IMAP over SSL to work.  The default value of this variable,
+@samp{"stunnel"}, should be sufficient if the program is
+installed in your normal command search path.
+
+For SSH, you must have the ssh program installed and the variable
+@code{vm-ssh-program} must name it in order for IMAP over SSH to
+work.  When VM makes the SSH connection it must run a command on
+the remote host so that the SSH session is maintained long
+enough for the IMAP connection to be established.  By default that command
+is @samp{"echo ready; sleep 10"}, but you can specify another
+command by setting @code{vm-ssh-remote-command}.  Whatever
+command you use must produce some output and hold the connection
+open long enough for VM to establish a port-forwarded connection
+to the IMAP server.  SSH must be able to authenticate without a password,
+which means you must be using .shosts authentication or RSA.
+
+@var{HOST} is the host name of the IMAP server.
+
+@var{PORT} is the TCP port number to connect to (should normally be 143).
+For IMAP over SSL connections the standard port is 993.
+
+@var{MAILBOX} is the name of the mailbox on the IMAP server.  This should
+be @samp{"inbox"}, to access your default IMAP maildrop on the
+server.
+
+@var{AUTH} is the authentication method used to convince the
+server you should have access to the maildrop.  Acceptable values
+are @samp{"preauth"}, @samp{"cram-md5"}, and @samp{"login"}.
+@samp{"preauth"} causes VM to skip the authentication stage of
+the protocol with the assumption that the session was
+authenticated in some way external to VM.  The hook
+@code{vm-imap-session-preauth-hook} is run, and it is expected to
+return a process connected to an authenticated IMAP session.
+@samp{"cram-md5} tells VM to use the CRAM-MD5 authentication
+method as specificed in RFC 2195.  The advantage of this method
+over the @samp{"login"} method is that it avoids sending your
+password over the net unencrypted.  Not all IMAP servers support
+@samp{"cram-md5"}; if you're not sure, ask your mail
+administrator or just try it.  The other value, @samp{"login"},
+tells VM to use the IMAP LOGIN command for authentication, which
+sends your username and password in cleartext to the server.
+
+@var{USER} is the user name used in authentication methods that
+require such an identifier.  @samp{"login"} and @samp{"cram-md5"}
+use it currently.
+
+@var{PASSWORD} is the secret shared by you and the server for
+authentication purposes.  If the @var{PASSWORD} is @samp{*}, VM
+will prompt you for the password the first time you try to
+retrieve mail from the maildrop.  If the password is valid, VM
+will not ask you for the password again during this Emacs
+session.
+
+@vindex vm-imap-max-message-size
+By default VM will retrieve all the messages from an IMAP maildrop
+before returning control of Emacs to you.  If the maildrop is
+large, the wait could be considerable.  If you set
+@code{vm-imap-max-message-size} to a positive numeric value, VM will not 
+automatically retrieve messages larger than this size.  If VM is
+retrieving messages because you invoked @code{vm-get-new-mail}
+interactively, then VM will ask whether it should retrieve the
+large message.  If VM is retrieving messages automatically
+(e.g. @code{vm-auto-get-new-mail} is set non-@code{nil}) then VM will skip the
+large message and you can retrieve it later.
+
+@vindex vm-imap-bytes-per-session
+@vindex vm-imap-messages-per-session
+The variable @code{vm-imap-messages-per-session} controls how many messages
+VM will retrieve from an IMAP maildrop before returning control to
+you.  Similarly, the variable @code{vm-imap-bytes-per-session} limits the
+number of bytes VM will retrieve from an IMAP maildrop before returning
+control to you.  By default, the value of both variables is nil, which
+tells VM to retrieve all the messages in the IMAP maildrop regardless
+of how many messages there are and how large the maildrop is.
+
+@vindex vm-imap-expunge-after-retrieving
+After VM retrieves messages from the maildrop, the default action
+is to delete the messages from there.  If you want VM to leave
+messages in the remote maildrop until you explicitly request
+their removal, set @code{vm-imap-expunge-after-retrieving} to
+@code{nil}.  Messages will not be removed from the maildrop until you
+run @code{vm-expunge-imap-messages}; only those messages that VM has
+retrieved into the current folder will be expunged.
+
+@vindex vm-imap-auto-expunge-alist
+The variable @code{vm-imap-auto-expunge-alist} gives you a way to specify
+on a per-maildrop basis which IMAP maildrops have message
+automatically removed when retrieved and which ones leave the
+messages on the IMAP server.  The value of
+@code{vm-imap-auto-expunge-alist} should be a list of IMAP mailboxes and
+values specifying whether messages should be automatically
+deleted from the mailbox after retrieval.  The format of the list
+is:
+
+@example
+((@var{MAILBOX} . @var{VAL}) (@var{MAILBOX} . @var{VAL}) ...)
+@end example
+
+@var{MAILBOX} should be an IMAP maildrop specification as described
+in the documentation for the variable @code{vm-spool-files}.  If
+you have the IMAP password specified in the @code{vm-spool-files}
+entry, you do not have to specify it here as well.  Use @samp{*}
+instead; VM will still understand that this mailbox is the same as
+the one in @code{vm-spool-files} that contains the password.
+
+@var{VAL} should be @code{nil} if retrieved messages should be left in the
+corresponding IMAP mailbox, @code{t} if retrieved messages should be
+removed from the mailbox immediately after retrieval.
+
+Here is an example:
+
+@example
+(setq vm-imap-auto-expunge-alist
+   '(
+     ;; leave message on the server
+     ("imap:odin.croc.net:143:inbox:login:kyle:*" . nil)
+     ;; expunge immediately
+     ("imap:hilo.harkie.org:143:inbox:login:kyle:*" . t)
+    )
+)
+@end example
+
+@node POP Folders,,, Spool Files
+@section POP Folders
+@cindex POP
+
+@findex vm-visit-pop-folder
+VM's traditional mode of operation is to treat all remote mail
+sources as spool files, pulling all mail down from remote sources
+into local folders and deleting the remote copies.  But sometimes
+it is more convenient to treat a remote mail source as a folder
+instead of a spool file, manipulating the remote source as if it
+were a folder instead of just a holding area for incoming messages.
+
+The command @code{vm-visit-pop-folder} allows you to visit a POP
+mailbox as if it were a folder.  When you visit a POP folder, VM
+will download copies of the messages that it finds there for you
+to read.  If you delete and expunge messages in the folder, the
+corresponding messages on the POP server will be removed when you
+save the changes with @code{vm-save-folder}.
+
+Message attributes (new, replied, filed, etc.) and labels cannot
+be stored on the POP server but they will be maintained locally,
+just as they are for ordinary folders.
+
+@vindex vm-pop-folder-alist
+In order for VM to know about POP folders that you can access, you
+must declare them by setting the variable @code{vm-pop-folder-alist}.
+The variable's value should be an associative list of the form:
+
+@example
+ ((@var{POPDROP} @var{NAME}) ...)
+@end example
+
+@var{POPDROP} is a POP maildrop specification in the same format used
+by @code{vm-spool-files}.
+
+@var{NAME} is a string that should give a less cumbersome name that you
+will use to refer to this maildrop when using @code{vm-visit-pop-folder}.
+
+For example:
+
+@example
+(setq vm-pop-folder-alist
+      '(
+         ("pop:pop.mail.yahoo.com:110:pass:someuser:*" "Yahoo! mail")
+         ("pop:localhost:110:pass:someuser:*" "local mail")
+       )
+)
+@end example
+
+@samp{Yahoo! mail} and @samp{local mail} are what you would type
+when @code{vm-visit-pop-folder} asks for a folder name.
+
+@node IMAP Folders,,, Spool Files
+@section IMAP Folders
+@cindex IMAP
+
+@findex vm-visit-imap-folder
+VM's traditional mode of operation is to treat all remote mail
+sources as spool files, pulling all mail down from remote sources
+into local folders and deleting the remote copies.  But sometimes
+it is more convenient to treat a remote mail source as a folder
+instead of a spool file, manipulating the remote source as if it
+were a folder instead of just a holding area for incoming messages.
+
+The command @code{vm-visit-imap-folder} allows you to visit a IMAP
+mailbox as if it were a folder.  When you visit a IMAP folder, VM
+will download copies of the messages that it finds there for you
+to read.  If you delete and expunge messages in the local copy of
+the folder, the corresponding messages on the IMAP server will be
+removed when you save the changes with @code{vm-save-folder}.
+
+Message attributes (new, replied, filed, etc.) are stored on the
+IMAP server and are also cached locally.  Labels cannot be stored
+on the IMAP server but you can use them lcoally.
+
+@vindex vm-imap-server-list
+In order for VM to know about IMAP servers that you can access, you
+must declare them by setting the variable @code{vm-imap-server-list}.
+The variable's value should be a list of the form:
+
+@example
+ (@var{IMAPDROP} @var{IMAPDROP} ...)
+@end example
+
+@var{IMAPDROP} is a IMAP maildrop specification in the same format used
+by @code{vm-spool-files}.
+
+For example:
+
+@example
+(setq vm-imap-server-list
+      '(
+         "imap-ssl:mail.foocorp.com:993:inbox:login:becky:*"
+         "imap:crickle.lex.ky.us:143:inbox:login:becky:*"
+       )
+)
+@end example
+
+The mailbox (@samp{inbox} in the example) is ignored; when
+when @code{vm-visit-imap-folder} asks for a folder name you can
+enter any folder that is acessible to you on the IMAP server.
+
+@node Getting New Mail, Crash Recovery, Spool Files, Starting Up
+@section Getting New Mail
+
+@findex vm-get-new-mail
+Pressing @kbd{g} runs @code{vm-get-new-mail}, which will retrieve
+mail from all the spool files associated with the current folder.
+@xref{Spool Files}.  For POP folders, any newly arrived messages
+at the POP server will be incorporated into the local copy of the
+POP folder.
+
+@vindex vm-auto-get-new-mail
+If the value of the variable @code{vm-auto-get-new-mail} is non-@code{nil} VM
+will retrieve mail for a folder whenever the folder is visited.  If the
+value is a positive integer @var{n}, VM will also check for new mail
+every @var{n} seconds for all folders currently being visited.  If new
+mail is present, VM will retrieve it.
+
+@vindex vm-mail-check-interval
+If the value of the variable @code{vm-mail-check-interval} is a
+positive integer @var{n}, VM will check for new mail every @var{n}
+seconds, but instead of retrieving mail, the word ``Mail'' will
+appear on the Emacs mode line of folders that have mail waiting.
+
+@node Crash Recovery,, Getting New Mail, Starting Up
+@section Crash Recovery
+
+When Emacs crashes, its last action before dying is to try to
+write out an autosave file that contains changes to files that
+you were editing.  VM folders are file buffers inside Emacs, so
+folders are autosaved also.  Changes, with regard to VM folders,
+means attribute changes, label additions and deletions, message
+edits, and expunges.  VM keeps track of whether a message is new
+or old, whether it has been replied to, whether it is flagged
+for deletion and so on, by writing special headers into the
+folder buffer.  These headers are saved to disk when you save
+the folder.  If Emacs crashes before the folder has been saved,
+VM may forget some attribute changes unless they were written to
+the autosave file.
+
+Note that when VM retrieves mail from spool files it @emph{always}
+writes them to disk immediately and at least one copy of the message is
+on disk at all times.  So while you can lose attribute changes from
+crashes, you should not lose messages unless the disk itself is
+compromised.
+
+When you visit a folder, VM checks for the existence of an
+autosave file that has been modified more recently than the
+folder file.  If such an autosave file exists, there is a good
+chance that Emacs or your operating system crashed while VM
+was visiting a folder.  VM will then write a message to the echo
+area informing you of the existence of the autosave file and
+visit the folder in read-only mode.  Visiting the folder in
+read-only mode prevents you from modifying the folder, which
+in turn prevents Emacs from wanting to write new changes to
+the autosave file.  VM will not retrieve new mail for a folder
+that is in read-only mode.  VM also skips summary
+generation and MIME decoding to help catch your attention.
+
+If you want to recover the lost changes, run @kbd{M-x recover-file} or
+use the Recover toolbar button.  At the
+@samp{Recover File: } prompt press @kbd{RET}.  Emacs will then
+display a detailed directory listing showing the folder file and the
+autosave file and ask if you want to recover from the autosave file.  A
+good rule of thumb is to answer ``yes'' if the autosave file is larger
+than the folder file.  If the autosave file is significantly smaller,
+Emacs may not have completed writing the autosave file.  Or it could be
+that the smaller autosave file reflects the results of an expunge that
+you had not yet committed to disk before the crash.  If so, answering
+``no'' means you might have to do that expunge again, but this is better
+than not knowing whether the autosave file was truncated.
+
+Assuming you answered ``yes'', the folder buffer's contents will be
+replaced by the contents of the autosave file and VM will reparse the
+folder.  At this point the contents of the folder buffer and the disk
+copy of the folder are different.  Therefore VM will not get new mail
+for this folder until the two copies of the folder are synchronized.
+When you are satisfied that the recovered folder is whole and intact,
+type @kbd{S} to save it to disk.  After you do this, VM will allow you
+to use @kbd{g} to retrieve any new mail that has arrived in the spool
+files for the folder.
+
+Assuming you answered ``no'' to the recovery question, you should type
+@kbd{C-x C-q}, which is bound to @code{vm-toggle-read-only} in VM folder
+buffers.  The folder will be taken out of read-only mode and you can
+read and retrieve your mail normally.
+
+@node Selecting Messages, Reading Messages, Starting Up, Top
+@chapter Selecting Messages
+
+@findex vm-next-message
+@findex vm-previous-message
+@kindex n
+@kindex p
+@vindex vm-skip-deleted-messages
+@vindex vm-skip-read-messages
+In order to read, delete, or do anything to a message, you need to
+select it.  In other words, make the message the @dfn{current message}.
+
+The primary commands for selecting messages in VM are @kbd{n}
+(@code{vm-next-message}) and @kbd{p}
+(@code{vm-previous-message}).  These commands move forward and
+backward through the current folder.  By default, these commands
+skip messages flagged for deletion.  This behavior can be
+disabled by setting the value of the variable
+@code{vm-skip-deleted-messages} to @code{nil}.  These commands
+can also be made to skip messages that have been read; set
+@code{vm-skip-read-messages} to @code{t} to do this.
+
+The commands @kbd{n} and @kbd{p} also take prefix arguments that
+specify the number of messages to move forward or backward.  If
+the magnitude of the prefix argument is greater than 1, no
+message skipping will be done regardless of the settings of the
+skip variables.
+
+@vindex vm-circular-folders
+The variable @code{vm-circular-folders} determines whether VM folders
+will be considered circular by various commands.  @dfn{Circular} means VM
+will wrap from the end of the folder to the start and vice versa when
+moving the message pointer, deleting, undeleting or saving messages
+before or after the current message.
+
+A value of @code{t} causes all VM commands to consider folders circular.
+A value of @code{nil} causes all VM commands to signal an error if
+the start or end of the folder would have to be passed to complete the
+command.  For movement commands, this occurs after the message pointer
+has been moved as far as it can go.  For other commands the error occurs
+before any part of the command has been executed, i.e. no deletions, saves,
+etc. will be done unless they can be done in their entirety.  A value
+other than @code{nil} or @code{t} causes only VM's movement
+commands to consider folders circular.  Saves, deletes and undeletes
+will behave as if the value is @code{nil}.  The default value of
+@code{vm-circular-folders} is @code{nil}.
+
+@vindex vm-follow-summary-cursor
+You can also select messages by using the summary window.
+@xref{Summaries}.  Move the cursor to the summary line for the message
+you want to select and press @kbd{RET}.  VM will select this message.
+Instead of pressing @kbd{RET} you could run some other VM command that
+operates based on the notion of a `current message'.  VM will select the
+message under the cursor in the summary window before executing such
+commands.  Example, if you type @kbd{d}, VM will select the message
+under the cursor and then delete it.  Note that this occurs @emph{only}
+when you execute a command when the cursor is in the summary buffer
+window and only if the variable @code{vm-follow-summary-cursor} is
+non-@code{nil}.
+
+@vindex vm-jump-to-unread-messages
+@vindex vm-jump-to-new-messages
+When a folder is visited or when you type @kbd{g} and VM retrieves some
+mail, the default action is to move to the first new or unread message
+in the folder.  New messages are favored over old but unread messages.
+If you set @code{vm-jump-to-new-messages} to @code{nil}, VM will favor old,
+unread messages over new messages if the old, unread message appears
+earlier in the folder.  If you set @code{vm-jump-to-unread-messages} to
+@code{nil} also, VM will not search for new or unread messages.
+
+Other commands to select messages:
+
+@table @kbd
+@findex vm-goto-message
+@kindex RET
+@item RET (@code{vm-goto-message})
+Go to message number @var{n}.  @var{n} is the prefix argument, if
+provided, otherwise it is prompted for in the minibuffer.
+@findex vm-goto-message
+@kindex TAB
+@item TAB (@code{vm-goto-message-last-seen})
+Go to message last previewed or read.
+@findex vm-next-message-no-skip
+@findex vm-previous-message-no-skip
+@kindex N
+@kindex P
+@item N (@code{vm-next-message-no-skip})
+@itemx P (@code{vm-previous-message-no-skip})
+Go to the next (previous) message, ignoring the settings of the skip
+control variables.
+@findex vm-next-unread-message
+@findex vm-previous-unread-message
+@kindex M-n
+@kindex M-p
+@item M-n (@code{vm-next-unread-message})
+@itemx M-p (@code{vm-previous-unread-message})
+Move forward (backward) to the nearest new or unread message.
+@findex vm-isearch-forward
+@findex vm-isearch-backward
+@kindex M-s
+@comment @kindex M-r
+@vindex vm-search-using-regexps
+@item M-s (@code{vm-isearch-forward})
+@item M-x vm-isearch-backward
+These work just like Emacs' normal forward and backward incremental
+search commands, except that when the search ends, VM selects the
+message containing point.  If the value of the variable
+@code{vm-search-using-regexps} is non-@code{nil}, a regular expression
+may be used instead of a fixed string for the search pattern; VM
+defaults to the fixed string search.  If a prefix argument is given,
+the value of @code{vm-search-using-regexps} is temporarily reversed for
+the search.
+@xref{Incremental Search,,,emacs, the GNU Emacs Manual}.
+@end table
+
+@node Reading Messages, Sending Messages, Selecting Messages, Top
+@chapter Reading Messages
+
+Once a message has been selected, VM will show it to you.  By default,
+presentation is done in two stages: @dfn{previewing} and @dfn{paging}.
+
+@menu
+* Previewing::	                Customizing message previews.
+* Paging::              	Scrolling through the current message.
+* Reading MIME Messages::	Using VM's MIME display features.
+@end menu
+
+@node Previewing, Paging, Reading Messages, Reading Messages
+@section Previewing
+
+@dfn{Previewing} means showing you a small portion of a message
+and allowing you to decide whether you want to read it.  Typing
+@key{SPC} exposes the body of the message, and from there you can
+repeatedly type @key{SPC} to page through the message.
+
+By default, the sender, recipient, subject and date headers are shown
+when previewing; the rest of the message is hidden.  This behavior may
+be altered by changing the settings of three variables:
+@code{vm-visible-headers}, @code{vm-invisible-header-regexp} and
+@code{vm-preview-lines}.
+
+@vindex vm-preview-lines
+If the value of @code{vm-preview-lines} is a number, it tells VM how
+many lines of the text of the message should be visible.  The default
+value of this variable is 0.  If @code{vm-preview-lines} is @code{nil},
+then previewing is not done at all; when a message is first presented it
+is immediately exposed in its entirety and is flagged as read.  If
+@code{vm-preview-lines} is @code{t}, the message body is displayed fully
+but the message is not flagged as read until you type @key{SPC}.
+
+@vindex vm-visible-headers
+The value of @code{vm-visible-headers} should be a list of regular
+expressions matching the beginnings of headers that should be made
+visible when a message is presented.  The regexps should be listed in
+the preferred presentation order of the headers they match.
+
+@vindex vm-invisible-header-regexp
+If non-@code{nil}, the variable @code{vm-invisible-header-regexp}
+specifies what headers should @emph{not} be displayed.  Its value should
+be a string containing a regular expression that matches all headers you
+do not want to see.  Setting this variable non-@code{nil} implies that
+you want to see all headers not matched by it; therefore the value of
+@code{vm-visible-headers} is only used to determine the order of the
+visible headers in this case.  Headers not matched by
+@code{vm-invisible-header-regexp} or @code{vm-visible-headers} are
+displayed last.
+
+If you change the value of either @code{vm-visible-headers} or
+@code{vm-invisible-header-regexp} in the middle of a VM session the
+effects will not be immediate.  You will need to use the command
+@code{vm-discard-cached-data} on each message (bound to @kbd{j} by
+default) to force VM to rearrange the message headers.  A good way to do
+this is to mark all the messages in the folder and apply
+@code{vm-discard-cached-data} to the marked messages.  @xref{Message
+Marks}.
+
+@vindex vm-highlighted-header-regexp
+@vindex vm-highlighted-header-face
+Another variable of interest is @code{vm-highlighted-header-regexp}.
+The value of this variable should be a single regular expression that
+matches the beginnings of any header that should be presented in inverse
+video when previewing.  For example, a value of
+@samp{"^From\\|^Subject"} causes the From and Subject headers to be
+highlighted.  Highlighted headers will be displayed using the face
+specified by @code{vm-highlighted-header-face}, which defaults to
+'bold.
+
+@vindex vm-preview-read-messages
+By default, VM will not preview messages that are flagged as read.  To
+have VM preview all messages, set the value of
+@code{vm-preview-read-messages} to @code{t}.
+
+@findex vm-expose-hidden-headers
+Typing @kbd{t} (@code{vm-expose-hidden-headers}) makes VM toggle
+between exposing and hiding headers that would ordinarily be hidden.
+
+@node Paging, Reading MIME Messages, Previewing, Reading Messages
+@section Paging
+
+@vindex vm-auto-next-message
+Typing @key{SPC} during a message preview exposes the body of the
+message.  If the message was new or previously unread, it will be
+flagged ``read''.  At this point you can use @key{SPC} to scroll
+forward, and @kbd{b} or @key{DEL} to scroll backward a windowful of
+text at a time.  A prefix argument @var{n} applied to these commands
+causes VM to scroll forward or backward @var{n} lines.  Typing space
+at the end of a message moves you to the next message.  If the value
+of @code{vm-auto-next-message} is @code{nil}, @key{SPC} will not
+move to the next message; you must type @kbd{n} explicitly.
+
+If the value of @code{vm-honor-page-delimiters} is non-@code{nil}, VM
+will recognize and honor page delimiters.  This means that when you
+scroll through a document, VM will display text only up to the next page
+delimiter.  Text after the delimiter will be hidden until you type
+another @key{SPC}, at which point the text preceding the delimiter will
+become hidden.  The Emacs variable @code{page-delimiter} determines what
+VM will consider to be a page delimiter.
+
+You can ``unread'' a message (so to speak) by typing @kbd{U}
+(@code{vm-unread-message}).  The current message will be flagged
+unread.
+
+@vindex vm-paragraph-fill-column
+@vindex vm-fill-paragraphs-containing-long-lines
+Sometimes you will receive messages that contain lines that are
+too long to fit on your screen without wrapping.  If you set
+@code{vm-fill-paragraphs-containing-long-lines} to a positive
+numeric value @var{N}, VM will call @code{fill-paragraph} on all
+paragraphs that contain lines spanning @var{N} columns or more.
+As with other things VM does that modifies the way the
+message looks on the screen, this does not change message
+contents.  VM copies the message contents to a ``presentation''
+buffer before altering them.  The fill column that VM uses is
+controlled by @code{vm-paragraph-fill-column}.  Unlike the Emacs
+variable @code{fill-column}, this variable is not buffer-local
+by default.
+
+@node Reading MIME Messages,, Paging, Reading Messages
+@chapter Reading MIME Messages
+
+@vindex vm-display-using-mime
+If the variable @code{vm-display-using-mime} is non-@code{nil} VM will display
+messages using Multipurpose Internet Mail Extensions (MIME).  @dfn{MIME}
+is a set of extensions to the standard Internet message format that
+allows reliable transmission of arbitrary data including
+images, audio and video, as well as ordinary text.  A non-@code{nil} value for
+this variable means that VM will recognize MIME encoded messages and
+display them as specified by the various MIME standards specifications.
+A nil value means VM will display MIME messages as plain text messages.
+
+@vindex vm-mime-base64-decoder-program
+@vindex vm-mime-base64-encoder-program
+@vindex vm-mime-base64-decoder-switches
+@vindex vm-mime-base64-encoder-switches
+@vindex vm-mime-qp-decoder-program
+@vindex vm-mime-qp-decoder-switches
+@vindex vm-mime-qp-encoder-program
+@vindex vm-mime-qp-encoder-switches
+@vindex vm-mime-uuencode-decoder-program
+@vindex vm-mime-uuencode-decoder-switches
+At its most basic MIME is a set of transfer encodings used to ensure
+error free transport, and a set of content types.  VM understands the
+two standard MIME transport encodings, Quoted-Printable and BASE64, and
+will decode messages that use them as necessary.  VM also will
+try to recognize and decode messages using the UNIX ``uuencode''
+encoding system.  While this is not an official MIME transfer
+encoding and never will be, enough old mailers still use it
+that it is worthwile to attempt to decode it.
+VM has Emacs-Lisp based Quoted-Printable and BASE64 encoders and
+decoders, but you can have VM use external programs to perform
+these tasks and the process will almost certainly be faster.
+The variables @code{vm-mime-qp-decoder-program},
+@code{vm-mime-qp-decoder-switches},
+@code{vm-mime-qp-encoder-program},
+@code{vm-mime-qp-encoder-switches},
+@code{vm-mime-base64-decoder-switches},
+@code{vm-mime-base64-encoder-switches},
+@code{vm-mime-base64-decoder-program},
+@code{vm-mime-base64-encoder-program},
+tell VM which programs to use
+and what command line switches to pass to them.  There are C
+programs at VM's distribution sites on the Internet to handle BASE64
+and Quoted-Printable.  VM does not have a builtin ``uuencode''
+decoder, so @code{vm-mime-uuencode-decoder-program} must be set
+non-@code{nil} for VM to decode uuencoded MIME objects.
+
+By default VM will display as many content types as possible
+within Emacs.  Images and audio are also supported if
+support for images and audio has been compiled in.  Types that
+cannot be displayed internally within Emacs can be converted to a
+type that can, or be displayed using an external viewer.
+
+@vindex vm-auto-decode-mime-messages
+@vindex vm-mime-decode-for-preview
+The first step in displaying a MIME message is decoding it to
+determine what object types it contains.  The variable
+@code{vm-auto-decode-mime-messages} controls when this happens.
+A value of @code{t} means VM should decode the message as soon as
+the message body is exposed, or during previewing if
+@code{vm-mime-decode-for-preview} is also set non-@code{nil}.  A
+@code{nil} value means wait until decoding is explicitly
+requested.  Type @kbd{D} (@code{vm-decode-mime-message}) to
+manually initiate MIME decoding.
+
+@kindex $ |
+@kindex $ d
+@kindex $ RET
+@kindex $ s
+@kindex $ w
+@kindex $ p
+@kindex $ d
+@kindex $ e
+@vindex vm-auto-displayed-mime-content-types
+After decoding you will see either the decoded MIME objects or
+button lines that must be activated to attempt display of the
+MIME object.  The variable
+@code{vm-auto-displayed-mime-content-types} specifies the types
+that are displayed immediately.  Its value should be a list of
+MIME content types that should be displayed immediately after
+decoding.  Other types will be displayed as a button that you
+must activate to display the object.  To activate a button,
+either click the middle mouse button over it, or move the cursor
+to the line and press RET.  If you are running under a window
+system, you can use the right mouse button over a MIME button to
+display a menu of actions you can take on the MIME object.  If
+you prefer using keyboard commands, you can save the MIME object
+with @kbd{$ w}, print it with @kbd{$ p}, or pipe it to a shell
+command with @kbd{$ |}.  Use @kbd{$ s} to append an encapsulated
+message or USENET news article to a folder.  If you want to
+display the object with its characters displayed using Emacs'
+default face, use @kbd{$ RET}.  To display the object using an
+external viewer, type @kbd{$ e}.
+
+@vindex vm-mime-confirm-delete
+Sometimes MIME objects are large and you may not want to save
+them along with the message that contains them.  If so, use
+@kbd{$ d} (@code{vm-delete-mime-object}) while the cursor is on
+the MIME button.  The object will be deleted and replaced with
+an object that indicates what the old object was and the fact
+that it is gone.  This is not an undoable operation, so use this
+command with care.  If you inadvertently delete an object, the
+only way to get it back is to quit visiting the current folder
+without saving and then revisit the folder.  This works because
+the object isn't removed from the disk copy of the folder until
+you save the folder.  By default VM will ask if you're sure
+about deleting an object before doing the deletion.  You can
+make VM not ask this question by setting
+@code{vm-mime-confirm-delete} to @code{nil}.
+
+@vindex vm-auto-displayed-mime-content-types
+A value of t for @code{vm-auto-displayed-mime-content-types} means that
+all types should be displayed immediately.  A nil value means
+never display MIME objects immediately; only use buttons.  If
+the value of @code{vm-auto-displayed-mime-content-types} is a list, it
+should be a list of strings, which should all be MIME types or
+type/subtype pairs.  Example:
+
+@example
+(setq vm-auto-displayed-mime-content-types '("text" "image/jpeg"))
+@end example
+
+If a top-level type is listed without a subtype, all subtypes of that
+type are assumed to be included.  The example above specifies that all
+text types are displayed immediately, but only JPEG images are displayed
+this way.
+
+@vindex vm-auto-displayed-mime-content-type-exceptions
+The variable @code{vm-auto-displayed-mime-content-type-exceptions}
+should be a list of MIME content types that should not be
+displayed immediately after decoding.  This variable acts as
+an exception list for @code{vm-auto-displayed-mime-content-types};
+all types listed there will be auto-displayed except those in
+the exception list.
+
+The value of @code{vm-auto-displayed-mime-content-type-exceptions}
+should be either nil or a list of strings.  The strings should
+all be types or type/subtype pairs.  Example:
+
+@example
+(setq vm-auto-displayed-mime-content-type-exceptions '("text/html"))
+@end example
+
+Again, if a top-level type is listed without a subtype, all subtypes of
+that type are assumed to be included.
+
+@vindex vm-mime-internal-content-types
+The variable @code{vm-mime-internal-content-types} specifies
+which types should be displayed internally within Emacs.  Like
+@code{vm-auto-displayed-mime-content-types} its value should be a
+list of MIME content types.  A value of t means that VM
+should always display an object internally if possible.  VM
+knows which object types can be displayed internally, so you
+can specify the types you want without worrying about errors
+if Emacs can't handle them.  A @code{nil} value means never
+display MIME objects internally, which means VM will have to
+run an external viewer to display all MIME objects.
+
+If the value is a list, it should be a list of strings.  Example:
+
+@example
+(setq vm-mime-internal-content-types '("text" "image/jpeg"))
+@end example
+
+If a top-level type is listed without a subtype, all subtypes of that
+type are assumed to be included.  Note that multipart types are always
+handled internally regardless of the setting of this variable.
+
+@vindex vm-mime-internal-content-type-exceptions
+The variable @code{vm-mime-internal-content-type-exceptions} serves as
+the exception list for @code{vm-mime-internal-content-types}.  Its value 
+should be a list of types that should not be displayed internally.
+
+@vindex vm-mime-external-content-types-alist
+For types that you want displayed externally, set the value
+of @code{vm-mime-external-content-types-alist} to specify external
+viewers for the types.  The value of this variable should be an
+associative list of MIME content types and the external programs
+used to display them.  If VM cannot display a type internally or
+a type is not listed in @code{vm-mime-internal-content-types} VM will
+try to launch an external program to display that type.
+
+The alist format is a list of lists, each sublist having the form
+
+@example
+(@var{TYPE} @var{PROGRAM} @var{ARG} @var{ARG} ... )
+@end example
+
+or
+
+@example
+(@var{TYPE} @var{COMMAND-LINE})
+@end example
+
+@var{TYPE} is a string specifying a MIME type or type/subtype pair.
+For example ``text'' or ``image/jpeg''.  If a top-level type is
+listed without a subtype, all subtypes of that type are assumed
+to be included.
+
+In the first form, @var{PROGRAM} is a string naming a program to
+run to display an object.  Any @var{ARG}s will be passed to the
+program as arguments.  The octets that compose the object will be
+written into a temporary file and the name of the file can be
+inserted into an @var{ARG} string by writing @samp{%f} in the
+@var{ARG} string.  In earlier versions of VM the filename was
+always added as the last argument; as of VM 6.49 this is only done
+if @samp{%f} does not appear in any of the @var{ARG} strings.
+
+If the @var{COMMAND-LINE} form is used, the program and its
+arguments are specified as a single string and that string is
+passed to the shell ("sh -c" typically) for execution.  Since
+the command line will be passed to the shell, you can use shell
+variables and input/output redirection if needed.  As with the
+@var{PROGRAM/ARGS} form, the name of the temporary file that
+contains the MIME object will be appended to the command line if
+@samp{%f} does not appear in the command line string.
+
+In either the @var{PROGRAM/ARG} or @var{COMMAND-LINE} forms, all the
+program and argument strings will have any %-specifiers in
+them expanded as described in the documentation for the
+variable @code{vm-mime-button-format-alist}.  The only difference
+is that @samp{%f} refers to the temporary file VM creates to store
+the object to be displayed, not the filename that the sender
+may have associated with the attachment.
+
+Example:
+
+@example
+(setq vm-mime-external-content-types-alist
+      '(
+	 ("text/html" 	"netscape")
+	 ("image/gif" 	"xv")
+	 ("image/jpeg" 	"xv")
+	 ("video/mpeg" 	"mpeg_play")
+	 ("video" 	"xanim")
+       )
+)
+@end example
+
+The first matching list element will be used.
+
+No multipart message will ever be sent to an external viewer.
+
+External viewer processes are normally killed when you select a
+a new message in the current folder.  If you want viewer
+processes to not be killed, set
+@code{vm-mime-delete-viewer-processes} to a @code{nil} value.
+
+Any type that cannot be displayed internally or externally or
+converted to a type that can be displayed, will be displayed as a
+button that allows you to save the body to a file.
+
+@vindex vm-mime-external-content-type-exceptions
+As with the internal type list, there is an exception list that
+you can use to specify types that you do not want displayed
+externally.  When VM is considering whether it should
+automatically launch an external viewer, it will consult the
+variable @code{vm-mime-external-content-type-exceptions}.  If the 
+type to be displayed is listed, VM will not launch a viewer.
+This allows you to setup viewers for types that ordinarily you
+would not want VM to display or for types that you norally want
+to convert to some other type using @code{vm-mime-type-converter-alist}.
+You can still display such a type with anexternal viewer by using 
+@kbd{$ e}.
+
+@vindex vm-mime-attachment-auto-suffix-alist
+
+When a MIME object is displayed using an external viewer VM must
+first write the object to a temporary file.  The external viewer
+thne opens and displays that file.  Some viewers will not open a
+file unless the filename ends with some extention that it
+recognizes such as @samp{.html} or @samp{.jpg}.  You can use the
+variable @code{vm-mime-attachment-auto-suffix-alist} to map MIME
+types to extensions that your external viewers will recognize.
+The value of this variable should be a list of type and suffix
+pairs.  The list format is:
+
+@example
+((@var{TYPE} . @var{SUFFIX}) ...)
+@end example
+
+@var{TYPE} is a string specifying a MIME top-level type or a type/subtype pair.
+If a top-level type is listed without a subtype, all subtypes of
+that type are matched.
+
+@var{SUFFIX} is a string specifying the suffix that shoul be used for
+the accompanying type.
+
+Example:
+
+@example
+(setq vm-mime-attachment-auto-suffix-alist
+      '(
+        ("image/jpeg"		.	".jpg")
+        ("image/gif"		.	".gif")
+        ("image/png"		.	".png")
+        ("text"			.	".txt")
+       )
+)
+@end example
+
+VM will search the list for a matching type.  The suffix
+associated with the first type that matches will be used for the
+temporary filename.
+
+@vindex vm-mime-type-converter-alist
+Types that cannot be displayed internally or externally are
+checked against an associative list of types that can be converted to other
+types.  If an object can be converted to a type that VM can
+display, then the conversion is done and the new object is
+subject to the auto-display rules which determine whether the
+object is displayed immediately or a button is displayed in its
+place.  The conversion list is stored in the variable
+@code{vm-mime-type-converter-alist}.
+
+The alist format is
+
+@example
+( (START-TYPE END-TYPE COMMAND-LINE ) ... )
+@end example
+
+@var{START-TYPE} is a string specifying a MIME type or type/subtype pair.
+Example @samp{"text"} or @samp{"image/jpeg"}.  If a top-level type is
+listed without a subtype, all subtypes of that type are assumed
+to be included.
+
+@var{END-TYPE} must be an exact type/subtype pair.  This is the type
+to which @var{START-TYPE} will be converted.
+
+@var{COMMAND-LINE} is a string giving a command line to be passed to
+the shell.  The octets that compose the object will be written to
+the standard input of the shell command.
+
+Example:
+
+@example
+(setq vm-mime-type-converter-alist
+       '(
+	 ("image/jpeg"	"image/gif"	"jpeg2gif")
+	 ("text/html"	"text/plain"	"striptags")
+	)
+)
+@end example
+
+The first matching list element will be used.
+
+For text type messages, MIME also requires that a character set
+be specified, so that the recipient's mail reader knows what
+character glyphs to use to display each character code.  To
+display a message properly VM needs to know how to choose a font
+for a given character set.
+
+@vindex vm-mime-default-face-charsets
+The variable @code{vm-mime-default-face-charsets} tells VM what character
+sets your default face can display.  For most American and European
+users using X Windows, Emacs' default face displays the ISO-8859-1
+and US-ASCII characters, US-ASCII being a subset of ISO-8859-1.  The
+value of @code{vm-mime-default-face-charsets} must be a list of strings
+specifying the character sets that your default face can display.
+This variable is useful for making bogus, unregistered character sets
+that are slight variants of ISO-8859-1 visible.
+Example:
+
+@example
+(add-to-list 'vm-mime-default-face-charsets "Windows-1251")
+(add-to-list 'vm-mime-default-face-charsets "Windows-1252")
+(add-to-list 'vm-mime-default-face-charsets "Windows-1257")
+@end example
+
+Messages sent using such character sets would normally be
+considered undisplayable by VM, and a button would be displayed
+that offers to save the message body to a file.
+
+@vindex vm-mime-charset-converter-alist
+Sometimes a charset that VM cannot display can be converted to a
+one that VM can display.  An example would be a message encoded
+using UTF-8 but in fact only contains Japanese characters.  In
+that case the message text could probably be converted to
+iso-2022-jp which VM running on a MULE-enabled Emacs could
+display.
+
+VM offers a way to do such conversions.  The variable
+@code{vm-mime-charset-converter-alist} is an associative list of MIME
+charsets and programs that can convert between them.  If VM
+cannot display a particular character set, it will scan this list
+to see if the charset can be converted into a charset that it can
+display.
+
+The alist format is:
+
+@example
+ ( ( START-CHARSET END-CHARSET COMMAND-LINE ) ... )
+@end example
+
+@var{START-CHARSET} is a string specifying a MIME charset.
+Example @samp{"iso-8859-1"} or @samp{"utf-8"}.
+
+@var{END-CHARSET} is a string specifying the charset to which
+@var{START-CHARSET} will be converted.
+
+@var{COMMAND-LINE} is a string giving a command line to be passed to
+the shell.  The characters in @var{START-CHARSET} will be written to the
+standard input of the shell command and VM expects characters
+encoded in @var{END-CHARSET} to appear at the standard output of the
+@var{COMMAND-LINE}.  @var{COMMAND-LINE} is passed to the shell, so you can
+use pipelines, shell variables and redirections.
+
+Example:
+
+@example
+(setq vm-mime-charset-converter-alist
+      '(
+	 ("utf-8" "iso-2022-jp" "iconv -f utf-8 -t iso-2022-jp")
+       )
+)
+@end example
+
+The first matching list element will be used.
+
+@vindex vm-mime-charset-font-alist
+The variable @code{vm-mime-charset-font-alist} tells VM what font to use 
+to display a character set that cannot be displayed using
+the default face.  The value of this variable should be an
+assoc list of character sets and fonts that can be used to display
+them.  The format of the list is:
+ 
+( (@var{CHARSET} . @var{FONT}) ...) 
+ 
+@var{CHARSET} is a string naming a MIME registered character set such 
+as @samp{"iso-8859-5"}.
+ 
+@var{FONT} is a string naming a font that can be used to display
+@var{CHARSET}.
+ 
+An example setup might be: 
+ 
+@example
+(setq vm-mime-charset-font-alist
+  '(
+    ("iso-8859-5" . "-*-*-medium-r-normal-*-16-160-72-72-c-80-iso8859-5")
+   )
+)
+@end example
+
+This variable is only useful for character sets whose characters
+can all be encoded in single 8-bit bytes.  Also multiple fonts
+can only be displayed if you're running under a window system
+e.g. X Windows.  So this variable will have no effect if you're
+running Emacs on a tty.
+
+Note that under FSF Emacs 19 any fonts you use must be the
+same height as your default font.  XEmacs and Emacs 21 do not
+have this limitation.  Under Emacs 20 and beyond, and under
+any XEmacs version compiled with MULE support, the value of
+@code{vm-mime-charset-font-alist} has no effect.  This is
+because all characters are displayed using fonts discovered by
+MULE and VM has no control over them.
+
+MIME allows a message to be sent with its content encoded in multiple
+formats, simultaneously, in the same message.  Such messages have a
+content type of multipart/alternative.  The idea is that the sender
+might have different MIME decoding or display capabilities than some
+of his recipients.  For instance, the sender may be able to compose a
+message using fancy text formatting constructs like tables, italics
+and equations but some of the recipients may only be able to display
+plain text.  The multipart/alternative type message is the solution
+to this dilemma.  Such a message would contain at least two text
+subparts, one in plaintext and the other in the full featured text
+formatting language that the sender used.
+
+@vindex vm-mime-alternative-select-method
+To control how VM displays multipart/alternative messages, you must
+set the variable @code{vm-mime-alternative-select-method}.  Its value must be
+a symbol.  A value of @code{best} tells VM to display the message
+using the subpart closest in appearance to what the sender used to
+compose the message.  In the example above this would mean displaying
+the fully featured text subpart, if VM knows how to display that type.
+VM will display the type either internally or externally.  A
+value of @code{best-internal} tells VM to use the closest subpart that
+it can display internally.  External viewers won't be used in this
+case.
+
+@vindex vm-infer-mime-types
+Some mailers incorrectly use the generic
+@samp{application/octet-stream} type when sending files that
+really have a specific MIME type.  For example, a JPEG image
+might be sent using @samp{application/octet-stream} type instead
+of @samp{image/jpeg}, which would be the correct type.  In many
+cases the filename sent along with the mistyped file
+(e.g. @file{foo.jpg}) suggests the correct type.  If the variable
+@code{vm-infer-mime-types} is set non-@code{nil}, VM will attempt to use 
+the filename sent with a MIME attachment to guess an attachment's 
+type if the attachment is of type @samp{application/octet-stream}.
+
+@node Sending Messages, Saving Messages, Reading Messages, Top
+@chapter Sending Messages
+
+When sending messages from within VM, you will be using the
+standard Mail major mode provided with GNU Emacs, plus some
+extensions added by VM.  @xref{Mail Mode,,,emacs, the GNU Emacs
+Manual}.  However, mail composition buffers created by VM have some
+extra command keys.
+
+@table @kbd
+@findex vm-yank-message
+@findex vm-yank-message-other-folder
+@kindex C-c C-y
+@item C-c C-y (@code{vm-yank-message})
+Copies a message from the folder that is the parent of this
+composition into the mail composition buffer.
+The message number is read from the minibuffer.  By default, each line of
+the copy is prepended with the value of the variable
+@code{vm-included-text-prefix}.  All message headers are yanked along
+with the text.  Point is left before the inserted text, the mark after.
+Any hook functions bound to @code{mail-yank-hooks} are run, after inserting
+the text and setting point and mark.  If a prefix argument is given,
+this tells VM to ignore @code{mail-yank-hooks}, don't set the mark, don't prepend the
+value of @code{vm-included-text-prefix} to every yanked line, and don't yank
+any headers other than those specified in
+@code{vm-visible-headers} and @code{vm-invisible-headers}.  To yank a message from
+a different folder than the parent of this composition, use
+@key{M-x vm-yank-message-other-buffer}.
+@kindex C-c C-v
+@item C-c C-v <Any VM command key>
+All VM commands may be accessed in a VM Mail mode buffer by prefixing them
+with C-c C-v.
+@kindex C-c C-a
+@vindex vm-send-using-mime
+@item C-c C-a (@code{vm-mime-attach-file})
+Attaches a file to the composition.  When you send the message, VM 
+will insert the file and MIME encode it.  The variable
+@code{vm-send-using-mime} must be set non-@code{nil} for this command to work.
+You will be asked for the file's type, and a brief description of 
+the attachment.  The description is optional.  If the file's type
+is a text type, you will also be asked for the character set
+in which the text should be displayed.
+The new attachment will appear as a highlighted tag in the
+composition buffer.  You can use mouse button 3 on this tag
+to set the default content disposition of the attachment.  The
+content disposition gives a hint to the recipient's mailer how to 
+treat the attachment.  Specifically the disposition will indicate 
+whether the attachment should be displayed along with the message 
+or saved to a file.  Any text in the composition that appears
+before the tag will appear in a MIME text part before the
+attachment when the message is encoded and sent.  Similarly, any
+text after the tag will appear after the attachment in the
+encoded message.  If you change your mind about using the
+attachment, you can remove it from the composition with @key{C-k}.
+If you want to move the attachment to some other part of the message,
+you can kill it @key{C-k} and yank it back with @key{C-y}.
+@kindex C-c C-m
+@item C-c C-m (@code{vm-mime-attach-message})
+Attaches a mail message to the composition.  If invoked with a
+prefix arg, the name of a folder read from the minibuffer and
+the message or messages to be attached are copied from that
+folder.  You will be prompted for the message number of the
+message to be attached.  If you invoke the command on marked
+messages by running
+@code{vm-next-command-uses-marks} first, the marked messages in
+the selected folder will be attached as a MIME digest.
+@kindex C-c C-b
+@item C-c C-b (@code{vm-mime-attach-buffer})
+Attaches an Emacs buffer to the composition.
+@findex vm-mime-encode-composition
+@kindex C-c C-e
+@item C-c C-e (@code{vm-mime-encode-composition})
+Encodes the composition using MIME, but does not send it.  This
+is useful if you want to use PGP to sign a message before sending
+it.  After signing the message, you would use C-c C-c as usual to
+send the message.  Emacs' @code{undo} command can be used to undo
+the encoding, so that you can continue composing the unencoded
+message.
+@findex vm-preview-composition
+@kindex C-c C-p
+@item C-c C-p (@code{vm-preview-composition})
+Previews the current composition.  The message is copied into a
+temporary folder and you can read the message and interact with
+it using normal VM mode commands to see how it might look to a
+recipient.  Type @key{q} to quit the temporary folder and resume
+composing your message.
+@end table
+
+@findex vm-mail
+@kindex m
+The simplest command is @kbd{m} (@code{vm-mail}) which sends a mail
+message much as @kbd{M-x mail} does but allows the added commands
+described above.
+
+@code{vm-mail} can be invoked outside of VM by typing @kbd{M-x vm-mail}.
+However, only (@code{vm-yank-message-other-folder}) will work; all the
+other commands require a parent folder.
+
+If you send a message and it is returned by the mail system
+because it was undeliverable, you can resend the message by
+typing @kbd{M-r} (@code{vm-resend-bounced-message}).  VM will
+extract the old message and its pertinent headers from the
+returned message, and place you in a VM Mail mode buffer.  A
+Resent-To header will be added, which you can fill in with
+the corrected addresses of the recipients that bounced.  You
+can also added a Resent-Cc header, which has the same meaning
+as a Cc header in a normal message.  Mail will only be sent to
+the addresses in the Resent-To and Resent-Cc headers unless
+you delete both of those headers.  In that case the To and Cc
+headers will be used.
+
+@menu
+* MIME Composition::	Sending a message using MIME attachments.
+* Replying::		Describes the various ways to reply to a message.
+* Forwarding Messages::	How to forward a message to a third party.
+@end menu
+
+@node MIME Composition, Replying, Sending Messages, Sending Messages
+@section MIME Composition
+
+@vindex vm-send-using-mime
+To use VM's MIME composition features, you must have
+@code{vm-send-using-mime} set to a non-@code{nil} value.  With MIME composition
+enabled, VM will allow you to add file attachments to your
+composition and will analyze your message when you send it and
+MIME encode it as necessary.
+
+@kindex C-c C-a
+To attach a file to your composition, use @kbd{C-c C-a}
+(@code{vm-mime-attach-file}).  VM will ask you for the name of the file, 
+its type, a brief description and its character set if it is a
+text attachment.  The attachment will be represented in the
+composition as a tag line like this
+
+  [ATTACHMENT ~/sounds/chronophasia_scream.au, audio/basic]
+
+You can type text before and after this tag and it will appear
+before or after the text in the final MIME message when VM encodes
+it.  You can kill the tag with @kbd{C-k} and yank it back with
+@kbd{C-y} to move it to another place in the message.  You can
+yank back the tag multiple times to duplicate the attachment in
+the message.  Or you can leave the tag killed and the attachment
+won't appear in the message when it is sent.
+
+If you click the right mouse button on the attachment tag, a menu
+will appear that allows you to change the content disposition of
+the attachment.  The @dfn{content disposition} of a MIME object
+gives a mail reader a hint as to whether an object should be
+displayed inline or as an inert tag or button that you must
+activate in some fashion.  @dfn{Inline} display usually means
+that the object will be display within or alongside the message
+text, if that is possible.  @dfn{Attachment}, when used as a
+content disposition, means that the object will likely be
+displayed as a tag.  By default, VM specifies an inline
+disposition for all MIME types except @samp{application} and
+@samp{model} types.
+
+@kindex C-c C-b
+To attach a buffer instead of a file, use @kbd{C-c C-b} (normally 
+bound to @code{vm-mime-attach-buffer}.  You must not kill the
+buffer that you attach until after the message has been sent.
+
+@kindex C-c C-p
+To preview what a MIME message will look like to a recipient,
+use @kbd{C-c C-p} (@code{vm-mime-preview-composition}).  VM
+will encode a copy of the message and present it to you in a
+temporary mail folder.  You can scroll through the message
+using normal VM mail reading commands.  Typing @kbd{q} in this
+folder will return you to your composition where you can make
+further changes.
+
+@kindex C-c C-e
+To encode a MIME message without sending it, use @kbd{C-c C-e}
+(@code{vm-mime-encode-composition}).  This is useful if you use
+PGP and want to sign a message before sending it.  VM will encode
+the message for transport, inserting all necessary headers and
+boundary markers.  You can then sign the message and send it with
+C-c C-c and be confident that VM won't invalidate the signature
+by making further modifications to the message.  Or if you want
+to resume editing the message you can run the Emacs @code{undo}
+(normally bound to @kbd{C-x u}) command which will revert the
+encoded MIME bodies back to tags and you can continue entering
+your composition.
+
+@vindex vm-mime-7bit-composition-charset
+By default, when you type text into a composition buffer VM
+assumes that if all the character codes are less than 128, you
+are using the US-ASCII character set and that is the character
+set declared in the encoding of the message when it is sent.  If
+you are using some other character set, you must specify it by
+setting the variable @code{vm-mime-7bit-composition-charset}.  The
+value of this variable should be a string specifying the character
+set.
+
+@vindex vm-mime-8bit-composition-charset
+If there are character codes in the composition greater than 128, the
+variable @code{vm-mime-8bit-composition-charset} tells VM what character 
+set to assume when encoding the message.  The default is
+@samp{iso-8859-1}.
+
+Character codes greater than 128 may not be transported reliably
+across the Internet in mail messages.  Some machines will refuse
+to accept messages containing such characters and some will accept
+them but zero the eighth bit, garbling the message.  To avoid
+these problems, VM transfer encodes 8-bit text by default.
+
+MIME has two transfer encodings that convert 8-bit data to 7-bit data
+for safe transport.  @dfn{Quoted-printable} leaves the text mostly
+readable even if the recipient does not have a MIME-capable mail
+reader.  @dfn{BASE64} is unreadable without a MIME-capable mail
+reader.
+
+@vindex vm-mime-8bit-text-transfer-encoding
+VM's text transfer encoding behavior is controlled by the
+variable @code{vm-mime-8bit-text-transfer-encoding}.  Its value should
+be a symbol that specifies what kind of transfer encoding to do
+for 8-bit text.  A value of @samp{quoted-printable}, means to use
+quoted-printable encoding.  A value of @samp{base64} means to use
+BASE64 encoding.  A value of @samp{8bit} means to send the message as
+is.  Note that this variable usually only applies to textual MIME
+content types.  Images, audio, video, etc. typically will have
+some attribute that makes VM consider them to be ``binary'',
+which moves them outside the scope of this variable.  For
+example, messages with line lengths of 1000 characters or more
+are considered binary, as are messages that contain carriage
+returns (ASCII code 13) or NULs (ASCII code 0).
+
+@node Replying, Forwarding Messages, MIME Composition, Sending Messages
+@section Replying
+
+@vindex vm-reply-subject-prefix
+VM has special commands that make it easy to reply to a message.  When a
+reply command is invoked, VM fills in the subject and recipient headers
+for you, since it is apparent to whom the message should be sent and
+what the subject should be.  There is an old convention of prepending
+the string @samp{``Re: ''} to the subject of replies if the string isn't
+present already.  VM supports this indirectly by providing the variable
+@code{vm-reply-subject-prefix}.  Its value should be a string to prepend
+to the subject of replies, if the string isn't present already.  A
+@code{nil} value means don't prepend anything to the subject (this is
+the default).  In any case you can edit any of the message headers
+manually, if you wish.
+
+@vindex vm-included-text-prefix
+VM also helps you quote material from a message to which you are
+replying by providing @dfn{included text} as a feature of some of the
+commands.  @dfn{Included text} is a copy of the message being replied to with
+some fixed string prepended to each line so that included text can be
+distinguished from the text of the reply.  The variable
+@code{vm-included-text-prefix} specifies what the prepended string will
+be.
+
+@vindex vm-included-text-attribution-format
+The variable @code{vm-included-text-attribution-format} specifies the
+format for the attribution of included text.  This attribution is a line
+of text that tells who wrote the text that is to be included; it will be
+inserted before the included text.  If non-@code{nil}, the value of
+@code{vm-included-text-attribution-format} should be a string format
+specification similar to @code{vm-summary-format}.  @xref{Summaries}.  A
+@code{nil} value causes the attribution to be omitted.
+
+@vindex vm-in-reply-to-format
+The variable @code{vm-in-reply-to-format} specifies the format of the
+In-Reply-To header that is inserted into the header section of the reply
+buffer.  Like @code{vm-included-text-attribution-format},
+@code{vm-in-reply-to-format} should be a string similar to that of
+@code{vm-summary-format}.  A @code{nil} value causes the In-Reply-To
+header to be omitted.
+
+@vindex vm-strip-reply-headers
+The recipient headers generated for reply messages are created by
+copying the appropriate headers from the message to which you are
+replying.  This includes any full name information, comments, etc. in
+these headers.  If the variable @code{vm-strip-reply-headers} is
+non-@code{nil}, the recipient headers will be stripped of all information
+except the actual addresses.
+
+The reply commands are:
+
+@table @kbd
+@findex vm-reply
+@kindex r
+@item r (@code{vm-reply})
+Replies to the author of the current message.
+@findex vm-reply-include-text
+@kindex R
+@item R (@code{vm-reply-include-text})
+Replies to the author of the current message and provides included text.
+@findex vm-followup
+@kindex f
+@item f (@code{vm-followup})
+Replies to the all recipients of the current message.
+@findex vm-followup-include-text
+@kindex F
+@item F (@code{vm-followup-include-text})
+Replies to the all recipients of the current message and provides
+included text.
+@end table
+
+These commands all accept a numeric prefix argument @var{n}, which if
+present, causes VM to reply to the next (or previous if the argument is
+negative) @var{n-1} messages as well as the current message.  Also, all
+the reply commands set the ``replied'' attribute of the messages to
+which you are responding, but only when the reply is actually sent.  The
+reply commands can also be applied to marked messages,
+@pxref{Message Marks}.
+
+@vindex vm-reply-ignored-addresses
+If you are one of multiple recipients of a message and you use @kbd{f}
+and @kbd{F}, your address will be included in the recipients of the
+reply.  You can avoid this by judicious use of the variable
+@code{vm-reply-ignored-addresses}.  Its value should be a list of
+regular expressions that match addresses that VM should automatically
+remove from the recipient headers of replies.
+
+@node Forwarding Messages,, Replying, Sending Messages
+@section Forwarding Messages
+
+VM has three commands to forward messages: @kbd{z}
+(@code{vm-forward-message}), @key{@@} (@code{vm-send-digest}) and
+@kbd{B} (@code{vm-resend-message}).
+
+@findex vm-forward-message
+@kindex z
+@vindex vm-forwarding-digest-type
+@vindex vm-forwarding-subject-format
+Typing @kbd{z} puts you into a VM Mail mode buffer just like @kbd{m},
+except the current message appears as the body of the message in the VM
+Mail mode buffer. The forwarded message encapsulated as specified by the
+variable @code{vm-forwarding-digest-type}.  Recognized values are
+@samp{"rfc934"}, @samp{"rfc1153"} and @samp{"mime"}.  If the variable
+@code{vm-forwarding-subject-format} is non-@code{nil} it should specify
+the format of the Subject header of the forwarded message.  A @code{nil}
+value causes the Subject header to be left blank.  The forwarded message
+is flagged ``forwarded'' when the message is sent.
+@findex vm-send-digest
+@vindex vm-digest-send-type
+@kindex @@
+The command @key{@@} (@code{vm-send-digest}) works like @kbd{z} except
+that a digest of all the messages in the current folder is made and
+inserted into the VM Mail mode buffer.  Also, @code{vm-send-digest} can
+be applied to just marked messages.  @xref{Message Marks}.  When applied
+to marked messages, @code{vm-send-digest} will only bundle marked
+messages, as opposed to the usual bundling of all messages in the
+current folder.  The message encapsulation method is specified by the
+variable @code{vm-digest-send-type}, which accepts the same values as
+@code{vm-forwarding-digest-type}.  All the messages included in the digest will
+be flagged ``forwarded'' when the digest message is sent.
+
+@vindex vm-digest-preamble-format
+@vindex vm-digest-center-preamble
+If you give @code{vm-send-digest} a prefix argument, VM will insert a
+list of preamble lines at the beginning of the digest, one line per
+digestified message.  The variable @code{vm-digest-preamble-format}
+determines the format of the preamble lines.  If the value of
+@code{vm-digest-center-preamble} is non-@code{nil}, the preamble lines
+will be centered.
+
+@findex vm-resend-message
+@kindex B
+If you wish to forward a message and want to send it without the
+encapsulation used by @code{vm-forward-message}, use @kbd{B}
+(@code{vm-resend-message}).  Instead of encapsulating the message, VM
+will use essentially the same message and headers and add a Resent-To
+header that you should fill in with the new recipients.  Use @kbd{C-c
+C-c} as usual to send the message.  The resent message will be flagged
+as ``redistributed''.
+
+@node Saving Messages, Deleting Messages, Sending Messages, Top
+@chapter Saving Messages
+
+Mail messages are normally saved to files that contain only mail
+messages.  Such files are called @dfn{folders}.  Folders are
+distinguished from spool files in that VM does not expect other
+programs to modify them while VM is visiting them.  This is
+important to remember.  VM does no locking of folders when
+visiting them.  If the disk copy of a folder is modified behind
+VM's back, Emacs will complain with the dreaded ``File changed
+on disk'' message when you try to save the folder.
+
+@findex vm-save-message
+@kindex s
+The VM command to save a message to a folder is @kbd{s}
+(@code{vm-save-message}); invoking this command causes the current
+message to be saved to a folder whose name you specify in the
+minibuffer.  If @code{vm-save-message} is given a prefix argument
+@var{n}, the current message plus the next @var{n-1} messages are saved.
+If @var{n} is negative, the current message and the previous @var{n-1}
+messages are saved.  Messages saved with @code{vm-save-message} are
+flagged ``filed''.
+
+@vindex vm-confirm-new-folders
+If the value of the variable @code{vm-confirm-new-folders} is
+non-@code{nil}, VM will ask for confirmation before creating a new
+folder on interactive saves.
+
+@vindex vm-folder-directory
+If you have a directory where you keep all your mail folders, you should
+set the variable @code{vm-folder-directory} to point to it.  If this
+variable is set, @code{vm-save-message} will insert this directory name
+into the minibuffer before prompting you for a folder name; this will save
+you some typing.
+
+@vindex vm-auto-folder-alist
+Another aid to selecting folders in which to save mail is the variable
+@code{vm-auto-folder-alist}.  The value of this variable should be a
+list of the form:
+
+@display
+((@var{header-name}
+   (@var{regexp} . @var{folder-name}) ...)
+  ...)
+@end display
+
+where @var{header-name} and @var{regexp} are strings, and
+@var{folder-name} is a string or an s-expression that evaluates to a
+string.
+
+If any part of the contents of the message header named by
+@var{header-name} is matched by the regular expression
+@var{regexp}, VM will evaluate the corresponding
+@var{folder-name} and use the result as the default when
+prompting for a folder to save the message in.  If the resulting
+folder name is a relative pathname it resolves to the directory
+named by @code{vm-folder-directory}, or the
+@code{default-directory} of the currently visited folder if
+@code{vm-folder-directory} is @code{nil}.
+
+When @var{folder-name} is evaluated, the current buffer will contain only
+the contents of the header named by @var{header-name}.  It is safe to
+modify this buffer.  You can use the match data from any @samp{\( @dots{}
+\)} grouping constructs in @var{regexp} along with the function
+@code{buffer-substring} to build a folder name based on the header information.
+If the result of evaluating @var{folder-name} is a list, then the list will
+be treated as another auto-folder-alist and will be descended
+recursively.
+
+@vindex vm-auto-folder-case-fold-search
+Whether matching is case sensitive depends on the value of the variable
+@code{vm-auto-folder-case-fold-search}.  A non-@code{nil} value makes
+matching case insensitive.  The default value is @code{t}, which means
+matching is case insensitive.  Note that the matching of header names is
+always case insensitive because the Internet message standard RFC 822
+specifies that header names are case indistinct.
+
+@vindex vm-visit-when-saving
+VM can save messages to a folder in two distinct ways.  The message can be
+appended directly to the folder on disk, or the folder can be visited as
+Emacs would visit any other file and the message appended to that
+buffer.  In the latter method you must save the buffer yourself to change
+the on-disk copy of the folder.  The variable @code{vm-visit-when-saving}
+controls which method is used.  A value of @code{t} causes VM to always
+visit a folder before saving message to it.  A @code{nil} value causes VM
+to always append directly to the folder file.  In this case VM will not
+save messages to the disk copy of a folder that is being visited.  This
+restriction is necessary to insure that the buffer and on-disk copies of
+the folder are consistent. If the value of @var{vm-visit-when-saving} is
+not @code{nil} and not @code{t} (e.g. 0, the default), VM will append to
+the folder's buffer if the buffer is currently being visited, otherwise VM
+will append to the file itself.
+
+@vindex vm-delete-after-saving
+@vindex vm-delete-after-archiving
+After a message is saved to a folder, the usual thing to do next is to
+delete it.  If the variable @code{vm-delete-after-saving} is
+non-@code{nil}, VM will flag messages for deletion automatically after
+saving them.  This applies only to saves to folders, not for the @kbd{w}
+or @kbd{A} commands (see below).  The variable @code{vm-delete-after-archiving}
+works like @code{vm-delete-after-saving} but applies to the @kbd{A}
+(@code{vm-auto-archive-messages}) command instead.
+
+Other commands:
+
+@table @kbd
+@findex vm-save-message-sans-headers
+@kindex w
+@item w (@code{vm-save-message-sans-headers})
+Saves a message or messages to a file without their headers.  This
+command responds to a prefix argument exactly as @code{vm-save-message}
+does.  Messages saved this way are flagged ``written''.
+@findex vm-auto-archive-messages
+@kindex A
+@item A (@code{vm-auto-archive-messages})
+Save all unfiled messages that auto-match a folder via
+@code{vm-auto-folder-alist} to their appropriate folders.  Messages that
+are flagged for deletion are not saved by this command.  If invoked with a
+prefix argument, confirmation will be requested for each save.
+@findex vm-pipe-message-to-command
+@kindex |
+@item | (@code{vm-pipe-message-to-command})
+Runs a shell command with some or all of the current message as input.
+By default, the entire message is used.@*
+@*
+If invoked with one @t{C-u} the text portion of the message is used.@*
+If invoked with two @t{C-u}'s the header portion of the message is used.@*
+@*
+If the shell command generates any output, it is displayed in a
+@samp{*Shell Command Output*} buffer.  The message itself is not altered.
+@end table
+
+@vindex vm-berkeley-mail-compatibility
+A non-@code{nil} value of @var{vm-berkeley-mail-compatibility}
+means to read and write BSD @i{Mail(1)} style Status: headers.
+This makes sense if you plan to use VM to read mail archives
+created by @i{Mail}.
+
+@node Deleting Messages, Editing Messages, Saving Messages, Top
+@chapter Deleting Messages
+
+In VM, messages are flagged for deletion, and then are subsequently
+@dfn{expunged} or removed from the folder.  The messages are not removed
+from the on-disk copy of the folder until the folder is saved.
+
+@table @kbd
+@findex vm-delete-message
+@kindex d
+@item d (@code{vm-delete-message})
+Flags the current message for deletion.  A prefix argument @var{n}
+causes the current message and the next @var{n-1} messages to be flagged.
+A negative @var{n} causes the current message and the previous @var{n-1}
+messages to be flagged.
+@findex vm-undelete-message
+@kindex u
+@item u (@code{vm-undelete-message})
+Removes the deletion flag from the current message.  A prefix argument @var{n}
+causes the current message and the next @var{n-1} messages to be undeleted.
+A negative @var{n} causes the current message and the previous @var{n-1}
+messages to be undeleted.
+@findex vm-kill-subject
+@kindex k
+@item k (@code{vm-kill-subject})
+Flags all messages with the same subject as the current message (ignoring
+``Re:'') for deletion.
+@findex vm-expunge-folder
+@kindex ###
+@item ### (@code{vm-expunge-folder})
+Does the actual removal of messages flagged for deletion in the current
+folder.
+@end table
+
+@vindex vm-move-after-deleting
+@vindex vm-move-after-killing
+@vindex vm-move-after-undeleting
+Setting the variable @code{vm-move-after-deleting} non-@code{nil} causes
+VM to move past the messages after flagging them for deletion.  Setting
+@code{vm-move-after-undeleting} non-@code{nil} causes similar movement
+after undeletes.  Setting @code{vm-move-after-killing} non-@code{nil}
+causes VM to move after killing messages with @code{vm-kill-subject}.
+Note that the movement is done by calling @code{vm-next-message} which
+means that the value of @code{vm-circular-folders} applies to the
+post-command motion as for a motion command, not as for a non-motion
+command.
+
+@node Editing Messages, Message Marks, Deleting Messages, Top
+@chapter Editing Messages
+
+To edit a message, type @kbd{e} (@code{vm-edit-message}).  The current
+message is copied into a temporary buffer, and this buffer is selected
+for editing.  The major mode of this buffer is controlled by the
+variable @code{vm-edit-message-mode}.  The default is Text mode.
+
+Use @kbd{C-c ESC} (@code{vm-edit-message-end}) when you have finished
+editing the message.  The message will be inserted into its folder,
+replacing the old version of the message.  If you want to quit the edit
+without your edited version replacing the original, use @kbd{C-c C-]}
+(@code{vm-edit-message-abort}), or you can just kill the edit buffer
+with @kbd{C-x k} (@code{kill-buffer}).
+
+If you give a prefix argument to @code{vm-edit-message}, then the
+current message will be flagged unedited.
+
+As with VM Mail mode buffers, all VM commands can be accessed from
+the edit buffer through the command prefix @kbd{C-c C-v}.
+
+@node Message Marks, Message Attributes, Editing Messages, Top
+@chapter Message Marks
+
+VM provides general purpose @dfn{marks} that may be applied to any and
+all messages within a given folder.  Certain VM commands can be
+subsequently invoked only on those messages that are marked.
+
+To mark the current message, type @kbd{M M}
+(@code{vm-mark-message}).  If you give a numeric prefix argument
+@var{n}, the next @var{n-1} messages will be marked as well.  A negative
+prefix argument means mark the previous @var{n-1}.  An asterisk
+(@samp{*}) will appear to the right of the message numbers of all marked
+messages in the summary window.
+
+To remove a mark from the current message, use @kbd{M U}
+(@code{vm-unmark-message}).  Prefix arguments work as with
+@code{vm-mark-message}.
+
+Use @kbd{M m} to mark all messages in the current folder; @kbd{M u}
+removes marks from all messages.
+
+Other marking commands:
+
+@table @kbd
+@findex vm-mark-matching-messages
+@kindex M C
+@item M C (@code{vm-mark-matching-messages})
+Mark all messages matched by a virtual folder selector.
+@xref{Virtual Folders}.
+@findex vm-unmark-matching-messages
+@kindex M c
+@item M c (@code{vm-unmark-matching-messages})
+Unmark all messages matched by a virtual folder selector.
+@findex vm-mark-thread-subtree
+@kindex M T
+@item M T (@code{vm-mark-thread-subtree})
+Mark all messages in the thread tree rooted at current message.
+@xref{Threading}.
+@findex vm-unmark-thread-subtree
+@kindex M t
+@item M t (@code{vm-unmark-thread-subtree})
+Unmark all messages in the thread tree rooted at current message.
+@findex vm-mark-messages-same-subject
+@kindex M S
+@item M S (@code{vm-mark-same-subject})
+Mark messages with the same subject as the current message.
+@findex vm-unmark-messages-same-subject
+@kindex M s
+@item M s (@code{vm-unmark-same-subject})
+Unmark messages with the same subject as the current message.
+@findex vm-mark-messages-same-author
+@kindex M A
+@item M A (@code{vm-mark-same-author})
+Mark messages with the same author as the current message.
+@findex vm-unmark-messages-same-author
+@kindex M a
+@item M a (@code{vm-unmark-same-author})
+Unmark messages with the same author as the current message.
+@end table
+
+To apply a VM command to all marked messages you must prefix it with the
+key sequence @kbd{M N} (@code{vm-next-command-uses-marks}).  The next VM
+command will apply to all marked messages, provided the command can be
+applied to such messages in a meaningful and useful way.
+
+@node Message Attributes, Sorting Messages, Message Marks, Top
+@chapter Message Attributes
+
+Each message in a folder has a set of attributes that VM will remember
+from session to session.  Various VM commands set and unset these
+attributes.  Here are the attributes maintained by VM.
+
+@table @code
+@item new
+The message was retrieved from a spool file during this
+visit of the current folder.
+@item unread
+The message was retrieved from a spool file during some
+past visit of the folder but is still unread.
+@item filed
+The message has been saved to some folder.
+@item written
+The body of the message has been saved to a file.
+@item edited
+The message has been altered (with @code{vm-edit-message}) since it arrived.
+@item deleted
+The message is deleted and will be removed from the folder
+at the next expunge.
+@item forwarded
+The message has been forwarded with either
+@code{vm-forward-message} or @code{vm-send-digest}.
+@item redistributed
+The message has been forwarded with the
+@code{vm-resend-message} command.
+@item replied
+The message has been replied to.
+@end table
+
+You can set and unset these attributes directly by using @kbd{a}
+(@code{vm-set-message-attributes}).  You will be prompted in the
+minibuffer for names of the attributes and you can enter them with
+completion.  Every attribute has an ``un-'' prefixed name you can use
+to unset the attribute, excepting ``new'' and ``unread'', which are both
+negated by ``read''.  You can use a prefix argument with this command to
+affect multiple messages, and you can apply this command to marked
+messages with @kbd{M N}.
+
+@findex vm-undo
+@kindex C-x u
+@kindex C-_
+@cindex undo
+VM provides a special form of undo which allows changes to message
+attributes to be undone.  Typing @kbd{C-x u} or @key{C-_}
+(@code{vm-undo}) undoes the last attribute change.  Consecutive
+@code{vm-undo}'s undo further and further back.  Any intervening command
+breaks the undo chain, after which the undo's themselves become undoable
+by subsequent invocations of @code{vm-undo}.
+
+Note that expunges, saves and message edits are @emph{not} undoable.
+
+@findex vm-add-message-labels
+@findex vm-delete-message-labels
+@kindex l a
+@kindex l d
+@cindex labels
+@dfn{Labels} are user-defined message attributes.  They can have any
+name and be assigned any meaning by you.  Labels are added with
+@kbd{l a} (@code{vm-add-message-labels} and @kbd{l e}
+(@code{vm-add-existing-message-labels}, and are removed by @kbd{l d}
+(@code{vm-delete-message-labels}).  BABYL format folders use labels to
+store basic attributed like ``deleted'' and ``unread''.  When visiting a
+BABYL folder VM uses these labels also in order to be compatible with
+other BABYL mailers.  The labels used are ``recent'', ``unseen'',
+``deleted'', ``answered'', ``forwarded'', ``redistributed'', ``filed'',
+``edited'' and ``written''.  If (and only if) you are using BABYL format
+folders, you should not use these label names for your own purposes.
+
+@vindex vm-flush-interval
+All message attributes are stored in the folder.  In order for
+attribute changes to be saved to disk, they must be written to
+the folder's buffer prior to the buffer being saved.  The
+variable @code{vm-flush-interval} controls how often that is done.  A
+value of @code{t} means write the new attributes to the folder
+buffer whenever a change occurs.  A value of @code{nil} means
+wait until just before the folder is saved before writing out the
+attributes.  VM will work faster with this setting, but if Emacs
+or your system crashes, the autosave file will contain no useful
+data pertaining to message attribute changes.  The autosave file
+will still reflect message edits and expunges.  @xref{Crash
+Recovery}.  A positive integer value @var{n} instructs VM to write
+out attribute changes every @var{n} seconds.  The default value
+of this variable is @code{t}.
+
+@node Sorting Messages, Reading Digests, Message Attributes, Top
+@chapter Sorting Messages
+
+@cindex sorting
+@findex vm-sort-messages
+@vindex vm-move-messages-physically
+@kindex G
+In order to make numerous related messages easier to cope with, VM
+provides the command @kbd{G} (@code{vm-sort-messages}), which sorts
+all messages in a folder using one or more sort keys.
+By default the actual order of the messages in the folder is not
+altered; that is, if you looked at the folder file outside of VM the
+message order would be unchanged.  VM numbers and presents the messages
+in a different order internally.  If you want the message order to be
+changed in the folder so that other programs can see the change, you
+can either invoke @code{vm-sort-messages} with a prefix argument, or
+you can set @code{vm-move-message-physically} non-@code{nil} before
+sorting.  Either way, VM will shift the actual messages around in the
+folder buffer, and when you save the folder, the order change will be
+visible to other programs.
+
+Valid sort keys are: ``date'', ``reversed-date'', ``author'',
+``reversed-author'', ``subject'', ``reversed-subject'', ``recipients'',
+``reversed-recipients'', ``line-count'', ``reversed-line-count'',
+``byte-count'', ``reversed-byte-count'', ``physical-order'', and
+``reversed-physical-order''.
+
+@vindex vm-subject-ignored-prefix
+@vindex vm-subject-ignored-suffix
+When sorting by subject (or threading using subjects, or killing
+messages by subject) the subject of the message is
+@dfn{normalized} before comparisons are done.  A @dfn{normalized}
+subject has uninteresting prefixes and suffixes stripped off, and
+multiple consecutive whitespace characters are collapsed to a single
+space.  The variable @code{vm-subject-ignored-prefix} should be
+a regular expression that matches all strings at the beginning of
+a subject that you do not want to be considered when message
+subjects are compared.  A @code{nil} value means VM should not ignore
+any prefixes.  The analogous variable for subject suffixes is
+@code{vm-subject-ignored-suffix}.
+
+@vindex vm-subject-significant-chars
+Once the subject has been normalized, the variable
+@code{vm-subject-significant-chars} controls how much of what
+remains is considered significant for matching purposes.  The
+first @code{vm-subject-significant-chars} will be considered
+significant.  Characters beyond this point in the subject string
+will be ignored.  A @code{nil} value for this variable means all
+characters in the subject are significant.
+
+If you want to move messages around by hand, use @kbd{C-M-n}
+(@code{vm-move-message-forward}) and @kbd{C-M-p}
+(@code{vm-move-message-backward}).  The default is to move the current
+message forward or backward by one message in the message list.  A
+prefix argument @var{n} can specify a longer move.  The value of
+@code{vm-move-messages-physically} applies to these commands.
+
+@menu
+* Threading::	Using subjects and message IDs to group messages.
+@end menu
+
+@node Threading,,, Sorting Messages
+@section Threading
+@cindex threading
+A @dfn{thread} is a group of messages that are either related by subject
+or that have a common ancestor.  @dfn{Threading} is the process of
+determining the relationship between such messages and displaying them so
+that those relationships are evident.
+
+@findex vm-toggle-threads-display
+@vindex vm-summary-thread-indent-level
+To enable and disable threading, type @kbd{C-t}
+(@code{vm-toggle-threads-display}.  In the summary buffer related
+messages are grouped together and the subject part of the summary
+listings of messages are indented to show hierarchical relationships.
+Parent messages are displayed before their children and children are
+indented a default two spaces to the right for each level of descendence
+from their ancestors.  The amount of indentation per level is controlled by the
+variable @code{vm-summary-thread-indent-level}.
+
+@vindex vm-thread-using-subject
+Message relationships are discovered by examining References,
+In-Reply-To, and Subject headers.  The first two headers are more
+reliable sources of information but not all mailers provide them.
+If you don't want VM to use Subject headers, set the variable
+@code{vm-thread-using-subject} to @code{nil}.
+
+If you want VM to always display messages using threads, you should set
+the default value of the variable @code{vm-summary-show-threads}
+non-@code{nil} in your VM init file.  Exmaple:
+
+@example
+(setq-default vm-summary-show-threads t)
+@end example
+
+Do not use @code{setq}, as this will only set the value of the variable in
+a single buffer.  Once you've started VM you should not change the value
+of this variable.  Rather you should use @kbd{C-t} to control the thread
+display.
+
+Note that threading is really a specialized form of sorting, and so the
+value of the variable @code{vm-move-messages-physically} applies.
+
+@node Reading Digests, Summaries, Sorting Messages, Top
+@chapter Reading Digests
+
+A @dfn{digest} is one or more mail messages encapsulated within another
+message.
+
+VM supports digests by providing a command to ``burst'' them into their
+individual messages.  These messages can then be handled like any other
+messages under VM.
+
+@findex vm-burst-digest
+@kindex *
+The command @kbd{*} (@code{vm-burst-digest}) bursts a digest into its
+individual messages and appends them to the current folder.  These
+messages are then assimilated into the current folder as new messages.
+The original digest message is not altered, and the messages extracted
+from it are not part of the on-disk copy of the folder until a save is
+done.  You will be prompted for the type of digest to burst.  VM
+understands three formats, ``rfc934'', ``rfc1154'' and ``mime''.  If you
+don't know what kind of digest you've received, type ``guess'' and VM
+will try to figure out the digest type on its own.  VM is pretty smart
+about digests and will usually make the correct choice if the digest is
+properly formatted.
+
+@node Summaries, Virtual Folders, Reading Digests, Top
+@chapter Summaries
+
+@findex vm-summarize
+@vindex vm-auto-center-summary
+@vindex vm-summary-arrow
+@kindex h
+Typing @kbd{h} (@code{vm-summarize}) causes VM to display a summary of
+contents of the current folder.  The information in the summary is
+automatically updated as changes are made to the current folder.  An
+arrow @samp{->} appears to the left of the line summarizing the current
+message.  The variable @code{vm-auto-center-summary} controls whether VM
+will keep the summary arrow vertically centered within the summary
+window.  A value of @code{t} causes VM to always keep the arrow
+centered.  A value of @code{nil} (the default) means VM will never
+bother centering the arrow.  A value that is not @code{nil} and not
+@code{t} causes VM to center the arrow only if the summary window is not
+the only existing window.  You can change what the summary arrow looks
+like by setting vm-summary-arrow to a string depicting the new arrow.
+You should set this variable before VM creates the summary buffer.
+
+@vindex vm-summary-format
+The variable @code{vm-summary-format} controls the format of each
+message's summary.  Its value should be a string.  This string should
+contain printf-like ``%'' conversion specifiers which substitute
+information about the message into the final summary.
+
+Recognized specifiers are:
+@table @code
+@item a
+attribute indicators (always four characters wide)
+@*
+The first char is  `D', `N', `U' or ` ' for deleted, new, unread
+and read messages respectively.
+@*
+The second char is `F', `W' or ` ' for filed (saved) or written
+messages.
+@*
+The third char is `R', `Z' or ` ' for messages replied to,
+and forwarded messages.
+@*
+The fourth char is `E' if the message has been edited, ` ' otherwise.
+@item A
+longer version of attributes indicators (seven characters
+wide).@*
+@*
+The first char is  `D', `N', `U' or ` ' for deleted, new, unread
+and read messages respectively.
+@*
+The second is `r' or ` ', for message replied to.
+@*
+The third is `z' or ` ', for messages forwarded.
+@*
+The fourth is `b' or ` ', for messages redistributed.
+@*
+The fifth is `f' or ` ', for messages filed.
+@*
+The sixth is `w' or ` ', for messages written.
+@*
+The seventh is `e' or ` ', for messages that have been edited.
+@item c
+number of characters in message (ignoring headers)
+@item d
+numeric day of month message sent
+@item f
+author's address
+@item F
+author's full name (same as f if full name not found)
+@item h
+hour:min:sec message sent
+@item H
+hour:min message sent
+@item i
+message ID
+@item I
+thread indentation
+@item l
+number of lines in message (ignoring headers)
+@item L
+labels (as a comma list)
+@item m
+month message sent
+@item M
+numeric month message sent (January = 1)
+@item n
+message number
+@item s
+message subject
+@item t
+addresses of the recipients of the message, in a comma-separated list
+@item T
+full names of the recipients of the message, in a comma-separated list
+If a full name cannot be found, the corresponding address is used
+instead.
+@item U
+user defined specifier.  The next character in the format
+string should be a letter.  VM will call the function
+vm-summary-function-<letter> (e.g. vm-summary-function-A for
+``%UA'') in the folder buffer with the message being summarized
+bracketed by (point-min) and (point-max).  The function
+will be passed a message struct as an argument.
+The function should return a string, which VM will insert into
+the summary as it would for information from any other summary
+specifier.
+@item w
+day of the week message sent
+@item y
+year message sent
+@item z
+timezone of date when the message was sent
+@item *
+`*' if the message is marked, ` ' otherwise
+@item (
+starts a group, terminated by %).  Useful for specifying
+the field width and precision for the concatentation of
+group of format specifiers.  Example: \"%.35(%I%s%)\"
+specifies a maximum display width of 35 characters for the
+concatenation of the thread indentation and the subject.
+@item )
+ends a group.
+@end table
+
+Use ``%%'' to get a single ``%''.
+
+A numeric field width may be specified between the ``%'' and the
+specifier; this causes right justification of the substituted string.  A
+negative field width causes left justification.  The field width may be
+followed by a ``.'' and a number specifying the maximum allowed length
+of the substituted string.  If the string is longer than this value, it
+is truncated.
+
+@vindex vm-summary-uninteresting-senders
+@vindex vm-summary-uninteresting-senders-arrow
+If you save copies of all your outbound messages in a folder and
+later visit that folder, the @samp{%F} format specifier will normally
+display your own name.  If you would rather see the recipient
+addresses in this case, set the variable
+@code{vm-summary-uninteresting-senders}. This variable's value,
+if non-@code{nil}, should be a regular expression that matches
+addresses that you don't consider interesting enough to appear in
+the summary.  When such senders would be displayed by the @samp{%F} or
+@samp{%f} summary format specifiers VM will substitute the value of
+@code{vm-summary-uninteresting-senders-arrow} (default "To: ")
+followed by what would be shown by the @samp{%T} and @samp{%t} specifiers
+respectively.
+
+The summary format need not be one line per message but it must end with
+a newline, otherwise the message pointer will not be displayed correctly
+in the summary window.
+
+You can have a summary generated automatically at VM startup
+by setting the variable @code{vm-startup-with-summary} non-nil.
+@xref{Starting Up}.
+
+@vindex vm-follow-summary-cursor
+All VM commands are available in the summary buffer just as they are in
+the folder buffer itself.  If you set @code{vm-follow-summary-cursor}
+non-@code{nil}, VM will select the message under the cursor in the
+summary window before executing commands that operate on the current
+message.  Note that this occurs @emph{only} when executing a command
+from the summary buffer window.
+
+@vindex vm-gargle-uucp
+A non-@code{nil} value of @var{vm-gargle-uucp} means to use a crufty
+regular expression that does surprisingly well at beautifying UUCP
+addresses that are substituted for @samp{%f} and @samp{%t} as part
+of summary and attribution formats.
+
+@node Virtual Folders, Frames and Windows, Summaries, Top
+@chapter Virtual Folders
+
+A @dfn{virtual folder} is a mapping of messages from one or more
+real folders into a container that in most ways acts like a
+real folder but has no real existence outside of VM.  You can have a
+virtual folder that contains a subset of messages in a real folder
+or several real folders.  A virtual folder can also contain a
+subset of messages from another virtual folder.
+
+A virtual folder is defined by its name, the folders that it contains
+and its selectors.  The variable @code{vm-virtual-folder-alist} is a list of
+the definitions of all named virtual folders.  In order to visit a
+virtual folder with the @code{vm-visit-virtual-folder} (@kbd{V V}) command,
+a virtual folder must have an entry in vm-virtual-folder-alist.
+
+Each virtual folder definition should have the following form:
+
+@example
+(@var{VIRTUAL-FOLDER-NAME}
+  ( (@var{FOLDER-NAME} ...)
+    (@var{SELECTOR} [@var{ARG} ...]) ... )
+  ... )
+@end example
+
+@var{VIRTUAL-FOLDER-NAME} is the name of the virtual folder being defined.
+This is the name by which you and VM will refer to this folder.
+
+@var{FOLDER-NAME} should be the name of a real folder.  There may
+be more than one @var{FOLDER-NAME} listed, the @var{SELECTOR}s within
+that sublist will apply to them all.  If @var{FOLDER-NAME} is a
+directory, VM will assume this to mean that all the folders in
+that directory should be searched.
+
+The @var{SELECTOR} is a Lisp symbol that tells VM how to
+decide whether a message from one of the folders specified by
+the @var{FOLDER-NAME}s should be included in the virtual
+folder.  Some @var{SELECTOR}s require an argument @var{ARG};
+unless otherwise noted @var{ARG} may be omitted.
+
+@table @code
+@item author
+matches message if @var{ARG} matches the author; @var{ARG} should be a
+regular expression.
+@item author-or-recipient
+matches message if @var{ARG} matches the author of
+the message or any of its recipients; @var{ARG}
+should be a regular expression.
+@item and
+matches the message if all its argument
+selectors match the message.  Example:
+@example
+(and (author "Derek McGinty") (new))
+@end example
+matches all new messages from Derek McGinty.
+@code{and} takes any number of arguments.
+@item any
+matches any message.
+@item deleted
+matches message if it is flagged for deletion.
+@item edited
+matches message if it has been edited.
+@item filed
+matches message if it has been saved with its headers.
+@item forwarded
+matches message if it has been forwarded using
+a variant of @code{vm-forward-message} or @code{vm-send-digest}.
+@item header
+matches message if @var{ARG} matches any part of the header
+portion of the message; @var{ARG} should be a
+regular expression.
+@item header-or-text
+matches message if @var{ARG} matches any part of the
+headers or the text portion of the message;
+@var{ARG} should be a regular expression.
+@item label
+matches message if message has a label named @var{ARG}.
+@item less-chars-than
+matches message if message has less than @var{ARG}
+characters.  @var{ARG} should be a number.
+@item less-lines-than
+matches message if message has less than @var{ARG}
+lines.  @var{ARG} should be a number.
+@item more-chars-than
+matches message if message has more than @var{ARG}
+characters.  @var{ARG} should be a number.
+@item more-lines-than
+matches message if message has more than @var{ARG}
+lines.  @var{ARG} should be a number.
+@item marked
+matches message if it is marked, as with
+@code{vm-mark-message}.
+@item new
+matches message if it is new.
+@item not
+matches message only if its selector argument
+does NOT match the message.  Example:
+@example
+(not (deleted))
+@end example
+matches messages that are not deleted.
+@item or
+matches the message if any of its argument
+selectors match the message.  Example:
+@example
+(or (author "Dave Weckl") (subject "drum"))
+@end example
+matches messages from Dave Weckl or messages
+with the string ``drum'' in their Subject header.
+@code{or} takes any number of arguments.
+@item read
+matches message if it is neither new nor unread.
+@item recent
+matches message if it is new.
+@item recipient
+matches message if @var{ARG} matches any part of the recipient
+list of the message.  @var{ARG} should be a regular expression.
+@item redistributed
+matches message if it has been redistributed using
+@code{vm-resend-message}.
+@item replied
+matches message if it has been replied to.
+@item sent-after
+matches message if it was sent after the date @var{ARG}.
+A fully specified date looks like this:
+@example
+``31 Dec 1999 23:59:59 GMT''
+@end example
+although the parts can appear in any order.
+You can leave out any part and it will
+default to the current date's value for that
+part, with the exception of the @samp{hh:mm:ss}
+part which defaults to midnight.
+@item sent-before
+matches message if it was sent before the date @var{ARG}.
+A fully specified date looks like this:
+@example
+``31 Dec 1999 23:59:59 GMT''
+@end example
+although the parts can appear in any order.
+You can leave out any part and it will
+default to the current date's value for that
+part, with the exception of the hh:mm:ss
+part which defaults to midnight.
+@item subject
+matches message if @var{ARG} matches any part of the message's
+subject; @var{ARG} should be a regular expression.
+@item text
+matches message if @var{ARG} matches any part of the text
+portion of the message; @var{ARG} should be a
+regular expression.
+@item unanswered
+matches message if it has not been replied to.
+Same as the @code{unreplied} selector.
+@item undeleted
+matches message if it has not been deleted.
+@item unedited
+matches message if it has not been edited.
+@item unfiled
+matches message if it has not been saved with its
+headers.
+@item unforwarded
+matches message if it has not been forwarded using
+@code{vm-forward-message} or @code{vm-send-digest} or one
+of their variants.
+@item unread
+matches message if it is not new and hasn't been read.
+@item unseen
+matches message if it is not new and hasn't been read.
+Same as the @code{unread} selector.
+@item unredistributed
+matches message if it has not been redistributed using
+@code{vm-resend-message}.
+@item unreplied
+matches message if it has not been replied to.
+@item virtual-folder-member
+matches message if the message is already a
+member of some virtual folder currently
+being visited.
+@item written
+matches message if it has been saved without its headers.
+@end table
+
+Here is an example that you may find useful as a template to
+create virtual folder definitions.
+
+@example
+(setq vm-virtual-folder-alist
+   '(
+     ;; start virtual folder definition
+     ("virtual-folder-name"
+      (("/path/to/folder" "/path/to/folder2")
+       (header "foo")
+       (header "bar")
+      )
+      (("/path/to/folder3" "/path/to/folder4")
+       (and (header "baz") (header "woof"))
+      )
+     )
+     ;; end of virtual folder definition
+   )
+)
+@end example
+
+Again, you visit virtual folders you have defined in
+@code{vm-virtual-folder-alist} with @kbd{V V}.  Once you've
+visited a virtual folder most VM commands work as they do in a
+normal folder.  There are exceptions.  If you use @kbd{S}
+(@code{vm-save-folder}, the folder save command will be invoked
+on each real folder in turn.  Similarly if you use @kbd{g}
+(@code{vm-get-new-mail} in a virtual folder, mail is retrieved
+from the spool files associated with each of the real folders.
+If any of the retrieved messages are matched by the virtual
+folder's selector, they will be added to the virtual folder.
+
+These commands will signal an error when invoked if the current
+folder is a virtual folder:
+
+@display
+    vm-save-buffer
+    vm-write-file
+    vm-change-folder-type
+    vm-expunge-imap-messages
+    vm-expunge-pop-messages
+@end display
+
+Normally messages in a virtual folder share attributes with the
+underlying real messages.  For example, if you delete a message
+in a virtual folder, it is also flagged as deleted in the real
+folder.  If you then run @code{vm-expunge-folder} in the virtual folder,
+the deleted message is expunged from the virtual folder and from
+the real folder.  Labels are shared between virtual and real
+messages.  However virtual folders have their own set of message
+marks.
+
+To make virtual folders not share message attributes with real
+folders by default, set the variable @code{vm-virtual-mirror} to nil.
+This should be done in your VM init file and you should use
+@code{setq-default}, as this variable is automatically local to all
+buffers.
+
+@example
+(setq-default vm-virtual-mirror nil)
+@end example
+
+If you want to change whether the currently visited virtual
+folder shares attributes with the underlying real folders, use the 
+command @code{vm-toggle-virtual-mirror} (bound to @kbd{V M}).  If the
+virtual folder is currently sharing attributes it will no longer
+be.  If it is not sharing attributes with the underlying folders
+then it will be.
+
+The command @code{vm-create-virtual-folder} (bound to @kbd{V C}) lets
+you interactively create a virtual folder from the messages of
+the current folder, using exactly one selector to choose the
+messages.  If you type @kbd{V C header RET pigs}, VM will create
+a folder containing only those messages that contain the string
+@samp{pigs} in the header.
+
+The command @code{vm-apply-virtual-folder} (bound to @kbd{V X}) tries
+the selectors of a named virtual folder against the messages of
+the current folder and creates a virtual folder containing the
+matching messages.
+
+The keys @kbd{V S} and @kbd{V A} invoke
+@code{vm-create-virtual-folder-same-subject} and
+@code{vm-create-virtual-folder-same-author} which create virtual folders
+containing all the messages in the current folder with the same
+subject or author as the current message.
+
+@node Frames and Windows, Toolbar, Virtual Folders, Top
+@chapter Frames and Windows
+
+VM uses Emacs frames and windows to display messages and summaries
+and to provide a place for you to compose messages.  Using VM's
+frame configuration facilities you can control when VM creates new
+frames and the size and attributes associated with new frames.
+Inside each frame you can associate different window setups with
+commands and classes of commands by using VM's window configuration
+facilities.
+
+@vindex vm-mutable-frames
+To use VM's frame configuration features, the variable
+@code{vm-mutable-frames} must be set non-@code{nil}.  This is the default.  If
+@code{vm-mutable-frames} is set to nil VM will only use the current
+frame, and VM will not create, delete or resize frames.
+
+@vindex vm-mutable-windows
+To use window configurations, the variable @code{vm-mutable-windows}
+must be set non-@code{nil}.  If @code{vm-mutable-windows} is set to nil, VM
+will only use the selected window, and will not create, delete or
+resize windows.
+
+@menu
+* Frame Configuration::		How to configure frame use and appearance.
+* Window Configuration::	How to configure window use and appearance.
+@end menu
+
+@node Frame Configuration, Window Configuration, Frames and Windows, Frames and Windows
+@section Frame Configuration
+
+VM has a set of variables that let you specify when VM creates
+frames and what attributes the new frames will have.
+
+@vindex vm-frame-per-folder
+If @code{vm-frame-per-folder} is set non-@code{nil}, when you visit a folder,
+VM will create a new frame and display that folder in the new
+frame.  When you quit the folder, VM will delete the frame.
+
+@vindex vm-frame-per-summary
+If @code{vm-frame-per-summary} is set non-@code{nil}, the @code{vm-summarize}
+command will create a new frame in which to display a folder's summary
+buffer.  This works best if a full-screen window configuration has
+been assigned to the @code{vm-summarize} command.  When you quit the folder
+or kill the summary, VM will delete the frame.
+
+@vindex vm-frame-per-composition
+Setting @code{vm-frame-per-composition} non-@code{nil} causes VM to create a
+new frame for the composition buffer when you run any of VM's
+message composition commands.  E.g. @code{vm-reply-include-text},
+@code{vm-mail}, @code{vm-forward-message}.  When you finish editing the
+composition and send it, or when you kill the composition buffer, 
+the frame will be deleted.
+
+@vindex vm-frame-per-edit
+The variable @code{vm-frame-per-edit}, if non-@code{nil}, tells VM to create a
+new frame when the vm-edit-message command is run.  When you
+finish editing the message, or abort the edit, the frame will be
+deleted.
+
+@vindex vm-frame-per-help
+If @code{vm-frame-per-help} is set non-@code{nil}, VM will create a new frame
+to display any help buffer produced by the vm-help command.
+
+@vindex vm-frame-per-completion
+If @code{vm-frame-per-completion} is set non-@code{nil}, VM will create a new
+frame on mouse initiated completing reads.  A mouse initiated
+completing read occurs when you invoke a VM command using the
+mouse, either with a menu or a toolbar button.  That command
+must then prompt you for information, and there must be a
+limited set of valid responses.  If these conditions are met
+and @code{vm-frame-per-completion}'s value is non-@code{nil}, VM will
+create a new frame containing a list of responses that you can
+select with the mouse.
+
+@vindex vm-search-other-frames
+When VM is deciding whether to create a new frame, it checks
+other existing frames to see if a buffer that it wants to display in a
+frame is already being displayed somewhere.  If so, then VM will
+not create a new frame.  If you don't want VM to search other
+frames, set the variable @code{vm-search-other-frames} to @code{nil}.  VM will 
+still search the currently selected frame and will not create a
+new frame if the buffer that it wants to display is visible there.
+
+@vindex vm-frame-parameter-alist
+The variable @code{vm-frame-parameter-alist} allows you to specify the
+frame parameters for newly created frames.
+
+The value of @code{vm-frame-parameter-alist} should be of this form
+
+@example
+((@var{SYMBOL} @var{PARAMLIST}) (@var{SYMBOL2} @var{PARAMLIST2}) ...)
+@end example
+
+@var{SYMBOL} must be one of ``completion'', ``composition'', ``edit'',
+``folder'', ``primary-folder'' or ``summary''.  It specifies the type
+of frame that the following @var{PARAMLIST} applies to.
+
+@table @code
+@item completion
+specifies parameters for frames that display lists of
+choices generated by a mouse-initiated completing read.
+(See @code{vm-frame-per-completion}.)
+@item composition
+specifies parameters for mail composition frames.
+@item edit
+specifies parameters for message edit frames
+(e.g. created by @code{vm-edit-message-other-frame})
+@item folder
+specifies parameters for frames created by `vm' and the
+@code{vm-visit-} commands.
+@item primary-folder
+specifies parameters for the frame created by running
+@code{vm} without any arguments.
+@item summary
+specifies parameters for frames that display a summary buffer
+(e.g. created by @code{vm-summarize-other-frame})
+@end table
+@var{PARAMLIST} is a list of pairs as described in the documentation for
+the function @code{make-frame}.
+
+@node Window Configuration,, Frame Configuration, Frames and Windows
+@section Window Configuration
+
+Window configurations allow you to specify how the windows within
+a frame should look for a particular command or class of
+commands.  Each command can have a configuration associated with
+it and you can also associate a configuration with command
+classes like ``reading-message'' or ``composing-message''.  To
+setup a window configuration, first use Emacs' window management
+commands (@code{split-window}, @code{enlarge-window}, etc.)  to make the
+windows in the frame look the way you want.  Then use the
+switch-to-buffer command to put the buffers you want to see into
+the windows.  Next type @kbd{W S}, which invokes the
+@code{vm-save-window-configuration} command.  Type the name of the
+command or class of commands to which you want the configuration
+to apply.  Nearly all VM commands can be entered here.  Valid
+classes are:
+
+@display
+    default
+    startup
+    quitting
+    reading-message
+    composing-message
+    marking-message
+    searching-message
+@end display
+
+When a VM command is executed, window configurations are searched 
+for as follows.  First, a command specific configuration is
+searched for.  If one is found, it is used.  Next a class
+configuration is searched for.  Not all commands are in command
+classes.  Message composition commands are in the
+``composing-message'' class.  All the @code{vm-quit*} commands are in the
+``quitting'' class.  All the VM commands that set and clear
+message marks are in the ``marking-message'' class, and so on.
+If such a class configuration is found it is used.  If no
+matching class configuration is found, the ``default'' class
+configuration is used, if it is defined.
+
+Note that when a window configuration is saved the selected
+window at that time will be the selected window when that window
+configuration is used.  So if you prefer for the cursor to be in
+a particular window, make sure you invoke
+@code{vm-save-window-configuration} window from that window.  Remember
+that you can invoke the command with @kbd{M-x} if VM's normal
+keymap is not in effect.
+
+To delete a window configuration, use @kbd{W D} which is bound to
+@code{vm-delete-window-configuration}.  You will be prompted for the
+name of the configuration to delete.
+
+To see what an existing configuration looks like, type @kbd{W W}
+which invokes @code{vm-apply-window-configuration}.
+
+@vindex vm-window-configuration-file
+VM saves information about your window configurations in the file
+named by the variable @code{vm-window-configuration-file}.  The default
+location of the configuration file is @samp{"~/.vm.windows"}.
+Do not make @code{vm-window-configuration-file} point to the same
+location as @code{vm-init-file}, as the window configuration save
+commands will then overwrite the content of your init file.
+
+@node Toolbar, Menus, Frames and Windows, Top
+@chapter Toolbar
+
+VM can display a toolbar that allows you to run VM commands with
+a single mouse click.  By default the toolbar is displayed on the
+left of the Emacs frame and is only visible if you're running
+under a window system like X Windows or Microsoft Windows.
+
+@vindex vm-use-toolbar
+To make VM not display the toolbar, set @code{vm-use-toolbar} to nil.
+To configure what buttons are displayed on the toolbar, you must
+change the value of @code{vm-use-toolbar}.  If non-@code{nil}, the value of
+@code{vm-use-toolbar} should be a list of symbols and integers, which
+specify which buttons appear on the toolbar and the layout of the
+buttons.  These are the allowed symbols along with the buttons
+they represent.
+
+@table @code
+@item autofile
+The AutoFile button.  Clicking on this button runs the command
+@code{vm-toolbar-autofile-message}.  This command will save the current
+message into the folder matched by @code{vm-auto-folder-alist}, if there
+is a match.
+@item compose
+The Compose button.  Clicking on this button runs the command
+@code{vm-toolbar-compose-command}.  This command is normally just an
+alias for the @code{vm-mail} command.  If you want the Compose button to 
+do something else, redefine @code{vm-toolbar-compose-command} using
+either @code{fset} or @code{defun}.
+@item delete/undelete
+The Delete/Undelete button.  If the current message is marked for 
+deletion, this button displays as an Undelete button.  Otherwise
+it displays as a Delete button.
+@item file
+The File button.  Clicking on this button runs the command
+@code{vm-toolbar-file-command}.  This command is normally just an
+alias for the @code{vm-mail} command.  If you want the File button to 
+do something else, redefine @code{vm-toolbar-file-command} using
+either @code{fset} or @code{defun}.
+@item getmail
+The Get Mail button.  Clicking on this button runs the command
+@code{vm-toolbar-getmail-command}.  This command is normally just an
+alias for the @code{vm-get-new-mail} command.  If you want the
+Get Mail button to 
+do something else, redefine @code{vm-toolbar-getmail-command} using
+either @code{fset} or @code{defun}.
+@item help
+The Helper button.  Clicking on this button runs the command
+@code{vm-toolbar-helper-command}.  This command normally just runs
+@code{vm-help}, but it also does context specific things under certain
+conditions.  If the current message is a MIME message that needs
+decoding, the Helper button becomes the Decode MIME button.  If the 
+current folder has an autosave file that appears to be the result 
+of an Emacs or system crash, the Helper button becomes the Recover 
+button.  Clicking on the Recover button runs @code{recover-file}, 
+so you can recover your folder from an existing autosave file.
+@item mime
+The Decode MIME button.  Clicking on this button runs the command
+@code{vm-toolbar-mime-command}.  This command is normally just an
+alias for the @code{vm-decode-mime-message} command.
+@item next
+The Next button.  Clicking on this button runs the command
+@code{vm-toolbar-next-command}.  This command is normally just an
+alias for the @code{vm-next-message} command.  If you want the Next button to 
+do something else, redefine @code{vm-toolbar-next-command} using
+either @code{fset} or @code{defun}.
+@item previous
+The Previous button.  Clicking on this button runs the command
+@code{vm-toolbar-previous-command}.  This command is normally just an
+alias for the @code{vm-previous-message} command.  If you want the Previous button to 
+do something else, redefine @code{vm-toolbar-previous-command} using
+either @code{fset} or @code{defun}.
+@item print
+The Print button.  Clicking on this button runs the command
+@code{vm-toolbar-print-command}.  This command is normally just an
+alias for the @code{vm-print-message} command.  If you want the
+Print button to 
+do something else, redefine @code{vm-toolbar-print-command} using
+either @code{fset} or @code{defun}.
+@item quit
+The Quit button.  Clicking on this button runs the command
+@code{vm-toolbar-quit-command}.  This command is normally just an
+alias for the @code{vm-quit} command.  If you want the Quit button to 
+do something else, redefine @code{vm-toolbar-quit-command} using
+either @code{fset} or @code{defun}.
+@item reply
+The Reply button.  Clicking on this button runs the command
+@code{vm-toolbar-reply-command}.  This command is normally just an
+alias for the @code{vm-reply-include-text} command.  If you want
+the Reply button to
+do something else, redefine @code{vm-toolbar-reply-command} using
+either @code{fset} or @code{defun}.
+@item visit
+The Visit button.  Clicking on this button runs the command
+@code{vm-toolbar-visit-command}.  This command is normally just an
+alias for the @code{vm-visit-folder} command.  If you want the Visit button to 
+do something else, redefine @code{vm-toolbar-visit-command} using
+either @code{fset} or @code{defun}.
+@item nil
+If nil appears in the list, it must appear exactly once.  The
+buttons associated with symbols that appear after nil in the
+list will be display flushright for top and bottom toolbars, and
+flushbottom for left and right toolbars.
+@end table
+
+If an positive integer appears in the the @code{vm-use-toolbar} list, it
+specifies the number of pixels of blank space to display between
+the button that comes before and the button that comes after the
+integer.
+
+@vindex vm-toolbar-orientation
+The variable @code{vm-toolbar-orientation} controls on which side of the 
+frame the toolbar is displayed.  E.g.
+
+@example
+(setq vm-toolbar-orientation 'top)
+@end example
+
+causes the toolbar to be displayed at the top of the frame.  The
+@code{top} in the example can be replaced with @code{bottom},
+@code{right} and @code{left} to make the toolbar appear in those
+places instead.
+
+@vindex vm-toolbar-pixmap-directory
+VM finds the images for the toolbar in the directory specified by
+@code{vm-toolbar-pixmap-directory}.  This variable should already be set
+properly by whoever installed VM on your system, so you should
+not need to set it.
+
+@node Menus, Faces, Toolbar, Top
+@chapter Menus
+
+@vindex vm-popup-menu-on-mouse-3
+VM uses Emacs' menubar and popup menus when they are available to 
+give you access to more of VM's commands.  By default VM puts a
+context sensitive popup menu on mouse button 3 (usually the
+rightmost mouse button).  If you don't want this menu, set the
+variable @code{vm-popup-menu-on-mouse-3} to nil.
+
+@vindex vm-use-menus
+If you set @code{vm-use-menus} to nil, VM will not generate a menubar
+for VM folder buffers and VM won't use popup menus either.  If
+you set @code{vm-use-menus} to @samp{1}, VM will add a single @samp{VM}
+entry to the existing menubar instead of using the whole menubar
+for its purposes.  That single entry will have all the VM command
+submenus under it.
+
+To make VM use the whole menubar, you must set variable @code{vm-use-menus}
+to a list of symbols.  The symbols and the order in which they are listed
+determine which menus will be in the menubar and how they are ordered.
+Valid symbol values are:
+@table @code
+@item dispose
+This is menu of commands that are commonly used to dispose of a
+message.  E.g. reply, print, save, delete.
+@item emacs
+This is actually a menu button that causes the menubar to change
+to the global Emacs menubar.  On that menubar you will find
+a VM button that will return you to the VM menubar.
+@item folder
+This is a menu of folder related commands.  You can visit a
+folder, save a folder, quit a folder and so on.
+@item help
+This is a menu of commands that provide information for you if
+you don't know what to do next.
+@item label
+This is a menu of commands that let you add and remove message
+labels from messages.
+@item mark
+This is a menu of commands that you can use to mark and unmark
+messages based on various criteria.  @xref{Message Marks}.
+@item motion
+This is a menu of commands to move around inside messages and
+inside folders.
+@item send
+This is a menu of commands you use to compose and send messages.
+@item sort
+This is a menu of commands to sort a folder by various criteria.
+@item undo
+This is a menu button that invokes the @code{vm-undo} command.
+@item virtual
+This is a menu of commands that let you visit and create virtual
+folders.
+@item nil
+If nil appears in the list, it should appear exactly once.  All
+menus after nil in the list will be displayed flushright in
+the menubar.
+@end table
+
+@node Faces, Using the Mouse, Menus, Top
+@chapter Faces
+
+VM uses Emacs faces to emphasize text in the folder and summary
+buffers.  Instead of defining VM specific faces, VM's face usage
+is controlled by customization variables that can point to faces.
+This allows you to use standard Emacs faces, or to create your
+own.  So when you want to change which face is used, write code
+like this:
+
+@example
+(setq vm-summary-highlight-face 'bold-italic)
+@end example
+
+In the summary buffer, VM displays the summary entry for the current
+message using the face specified by the @code{vm-summary-highlight-face}
+variable.  The value of this variable should be a symbol that names a
+face, or nil which means don't display the summary entry of the
+current message in a special way.
+
+@vindex vm-mouse-track-summary
+The variable @code{vm-mouse-track-summary} controls whether summary
+entries are highlighted when the mouse pointer passes over
+them.  The highlighting is done using the standard Emacs
+@code{highlight} face.
+
+@vindex vm-highlighted-header-regexp
+@vindex vm-highlighted-header-face
+In the folder buffer, the header contents of headers matched by
+the @code{vm-highlighted-header-regexp} variable are displayed using
+the face named by @code{vm-highlighted-header-face}.  This variable is
+ignored under XEmacs if @code{vm-use-lucid-highlighting} is non-@code{nil}.
+The XEmacs @code{highlight-headers} package is used instead.  See the
+documentation for the function @code{highlight-headers} to find out
+how to customize header highlighting using this package.
+
+@vindex vm-highlight-url-face
+@vindex vm-url-search-limit
+URL's that occur in message bodies are displayed using the face
+named by @code{vm-highlight-url-face}.  Searching for URLs in a
+large message can take a long time.  Since URLs often occur near
+the beginning and near the end of messages, VM offers a way to
+search just those parts of a message for URLs.  The variable
+@code{vm-url-search-limit} specifies how much of a message to search.
+If @code{vm-url-search-limit} has a positive numeric value @var{N}, VM 
+will search the first @math{@var{N} / 2} characters and the last
+@math{@var{N} / 2} characters in the message for URLs.
+
+@vindex vm-mime-button-face
+The face named by @code{vm-mime-button-face} is used to display the
+textual buttons that trigger the display of MIME objects.
+
+@node Using the Mouse, Hooks, Faces, Top
+@chapter Using the Mouse
+
+VM uses the following layout for the mouse buttons in the folder
+and summary buffers.
+
+@table @asis
+@item button-1 (left button usually)
+Unchanged.
+@item button-2 (middle button usually)
+Activate.  If you click on a summary entry, that message will be
+selected and become the current message.  If you click on a
+highlighted URL in the body of a message, that URL will be sent
+to the browser specified by @code{vm-url-browser}.
+@item button-3 (right button usually)
+Context Menu.  If the mouse pointer is over the contents of the
+From header, button-3 pops up a menu of actions that can be taken 
+using the author of the message as a parameter.  For instance,
+you may want to create a virtual folder containing all the
+messages in the current folder written by this author.  If the
+mouse pointer is over the contents of the Subject header, a menu
+of actions to be performed on the current message's subject is
+produced.  If button-3 is clicked over a highlighted URL, a menu
+of Web browsers is produced.  Otherwise the normal VM mode
+specific menu is produced.
+@end table
+
+In mail composition buffers only mouse button-3 is affected.
+Context sensitive menus are produced when that button is clicked.
+
+@node Hooks, Key Index, Using the Mouse, Top
+@chapter Hooks
+
+VM has many hook variables that allow you to run functions when
+certain events occur.  Here is a list of the hooks and when they
+are run.  (If you don't write Emacs-Lisp programs you 
+can skip this chapter.)
+
+@table @code
+@vindex vm-select-new-message-hook
+@item vm-select-new-message-hook
+List of hook functions called every time a message with the ``new''
+attribute is made to be the current message.  When the hooks are run, the
+current buffer will be the folder containing the message and the
+start and end of the message will be bracketed by (point-min) and
+(point-max).
+
+@item vm-select-unread-message-hook
+@vindex vm-select-unread-message-hook
+List of hook functions called every time a message with the ``unread''
+attribute is made to be the current message.  When the hooks are run, the
+current buffer will be the folder containing the message and the
+start and end of the message will be bracketed by (point-min) and
+(point-max).
+
+@item vm-select-message-hook
+@vindex vm-select-message-hook
+List of hook functions called every time a message
+is made to be the current message.  When the hooks are run, the
+current buffer will be the folder containing the message and the
+start and end of the message will be bracketed by (point-min) and
+(point-max).
+
+@item vm-arrived-message-hook
+@vindex vm-arrived-message-hook
+List of hook functions called once for each message gathered from the
+system mail spool, or from another folder with @code{vm-get-new-mail},
+or from a digest with @code{vm-burst-digest}.  When the hooks are run,
+the current buffer will be the folder containing the message and the
+start and end of the message will be bracketed by (point-min) and
+(point-max).
+
+@item vm-spooled-mail-waiting-hook
+@vindex vm-spooled-mail-waiting-hook
+List of functions called when VM first notices mail is spooled
+for a folder.  The folder buffer will be current when the hooks are
+run.
+
+@item vm-arrived-messages-hook
+@vindex vm-arrived-messages-hook
+List of hook functions called after VM has gathered a group
+of messages from the system mail spool, or from another
+folder with @code{vm-get-new-mail}, or from a digest with
+@code{vm-burst-digest}.  When the hooks are run, the new
+messages will have already been added to the message list
+but may not yet appear in the summary.  When the hooks are
+run the current buffer will be the folder containing the
+messages.
+
+@item vm-reply-hook
+@vindex vm-reply-hook
+List of hook functions to be run after a Mail mode composition
+buffer has been created for a reply.  VM runs this hook and then
+runs @code{vm-mail-mode-hook} before leaving you in the Mail
+mode buffer.
+
+@item vm-forward-message-hook
+@vindex vm-forward-message-hook
+List of hook functions to be run after a Mail mode
+composition buffer has been created to forward a message.  VM
+runs this hook and then runs @code{vm-mail-mode-hook} before leaving the
+user in the Mail mode buffer.
+
+@item vm-resend-bounced-message-hook
+@vindex vm-resend-bounced-message-hook
+List of hook functions to be run after a Mail mode
+composition buffer has been created to resend a bounced message.
+VM runs this hook and then runs @code{vm-mail-mode-hook} before leaving
+you in the Mail mode buffer.
+
+@item vm-resend-message-hook
+@vindex vm-resend-message-hook
+List of hook functions to be run after a Mail mode composition
+buffer has been created to resend a message.  VM runs this hook
+and then runs @code{vm-mail-mode-hook} before leaving you in
+the Mail mode buffer.
+
+@item vm-send-digest-hook
+@vindex vm-send-digest-hook
+List of hook functions to be run after a Mail mode composition
+buffer has been created to send a digest.  VM runs this hook and
+then runs @code{m-mail-mode-hook} before leaving you in the Mail
+mode buffer.
+
+@item vm-mail-hook
+@vindex vm-mail-hook
+List of hook functions to be run after a Mail mode
+composition buffer has been created to send a non specialized
+message, i.e. a message that is not a reply, forward, digest,
+etc.  VM runs this hook and then runs @code{vm-mail-mode-hook} before
+leaving you in the Mail mode buffer.
+
+@item vm-summary-update-hook
+@vindex vm-summary-update-hook
+List of hook functions called just after VM updates an existing
+entry in a folder summary buffer.
+
+@item vm-summary-redo-hook
+@vindex vm-summary-redo-hook
+List of hook functions called just after VM adds or deletes
+entries from a folder summary buffer.
+
+@item vm-visit-folder-hook
+@vindex vm-visit-folder-hook
+List of hook functions called just after VM visits a folder.
+It doesn't matter if the folder buffer already exists, this hook
+is run each time @code{vm} or @code{vm-visit-folder} is called interactively.
+It is @emph{not} run after @code{vm-mode} is called.
+
+@item vm-retrieved-spooled-mail-hook
+@vindex vm-retrieved-spooled-mail-hook
+List of hook functions called just after VM has retrieved
+a group of messages from your system mailbox(es).  When these
+hooks are run, the messages have been added to the folder buffer
+but not the message list or summary.  When the hooks are run, the
+current buffer will be the folder where the messages were
+incorporated.
+
+@item vm-edit-message-hook
+@vindex vm-edit-message-hook
+List of hook functions to be run just before a message is edited.
+This is the last thing @code{vm-edit-message} does before leaving you
+in the edit buffer.
+
+@item vm-mail-mode-hook
+@vindex vm-mail-mode-hook
+List of hook functions to be run after a Mail mode
+composition buffer has been created.  This is the last thing VM
+does before leaving you in the Mail mode buffer.
+
+@item vm-mode-hook
+@vindex vm-mode-hook
+List of hook functions to run when a buffer enters @code{vm-mode}.
+These hook functions should generally be used to set key bindings
+and local variables.
+
+@item vm-mode-hooks
+@vindex vm-mode-hooks
+Old name for @code{vm-mode-hook}.
+Supported for backward compatibility.
+You should use the new name.
+
+@item vm-summary-mode-hook
+@vindex vm-summary-mode-hook
+List of hook functions to run when a VM summary buffer is created.
+The current buffer will be that buffer when the hooks are run.
+
+@item vm-summary-mode-hooks
+@vindex vm-summary-mode-hooks
+Old name for @code{vm-summary-mode-hook}.
+Supported for backward compatibility.
+You should use the new name.
+
+@item vm-virtual-mode-hook
+@vindex vm-virtual-mode-hook
+List of hook functions to run when a VM virtual folder buffer is created.
+The current buffer will be that buffer when the hooks are run.
+
+@item vm-presentation-mode-hook
+@vindex vm-presentation-mode-hook
+List of hook functions to run when a VM presentation buffer is
+created.  The current buffer will be the new presentation buffer
+when the hooks are run.  Presentation buffers are used to display
+messages when some type of decoding must be done to the message
+to make it presentable.  E.g. MIME decoding.
+
+@item vm-quit-hook
+@vindex vm-quit-hook
+List of hook functions to run when you quit VM.
+This applies to any VM quit command.
+
+@item vm-summary-pointer-update-hook
+@vindex vm-summary-pointer-update-hook
+List of hook functions to run when the VM summary pointer is updated.
+When the hooks are run, the current buffer will be the summary buffer.
+
+@item vm-display-buffer-hook
+@vindex vm-display-buffer-hook
+List of hook functions that are run every time VM wants to
+display a buffer.  When the hooks are run, the current buffer will
+be the buffer that VM wants to display.  The hooks are expected
+to select a window and VM will display the buffer in that
+window.
+
+If you use display hooks, you should not use VM's builtin window
+configuration system as the result is likely to be confusing.
+
+@item vm-undisplay-buffer-hook
+@vindex vm-undisplay-buffer-hook
+List of hook functions that are run every time VM wants to
+remove a buffer from the display.  When the hooks are run, the
+current buffer will be the buffer that VM wants to disappear.
+The hooks are expected to do the work of removing the buffer from
+the display.  The hook functions should not kill the buffer.
+
+If you use undisplay hooks, you should not use VM's builtin
+window configuration system as the result is likely to be
+confusing.
+
+@item vm-iconify-frame-hook
+@vindex vm-iconify-frame-hook
+List of hook functions that are run whenever VM iconifies a frame.
+
+@item vm-menu-setup-hook
+@vindex vm-menu-setup-hook
+List of hook functions that are run just after all menus are initialized.
+
+@item vm-mime-display-function
+@vindex vm-mime-display-function
+If non-@code{nil}, this should name a function to be called inside 
+@code{vm-decode-mime-message} to do the MIME display of the current
+message.  The function is called with no arguments, and at the
+time of the call the current buffer will be the @dfn{presentation
+buffer} for the folder, which is a temporary buffer that VM uses
+for the display of MIME messages.  A copy of the current message
+will be in the presentation buffer at that time.  The normal work
+that @code{vm-decode-mime-message} would do is not done, because this
+function is expected to subsume all of it.
+
+@item vm-mail-send-hook
+@vindex vm-mail-send-hook
+List of hook functions to call just before sending a message.
+The hooks are run after confirming that you want to send the
+message (see @code{vm-confirm-mail-send} but before MIME encoding
+and FCC processing.
+
+@item mail-yank-hooks
+@vindex mail-yank-hooks
+Hooks called after a message is yanked into a mail composition buffer.
+
+(This hook is deprecated, you should use mail-citation-hook instead.)
+
+The value of this hook is a list of functions to be run.  Each
+hook function can find the newly yanked message between point
+and mark.  Each hook function should return with point and mark
+around the yanked message.
+
+See the documentation for @code{vm-yank-message} to see when VM will run
+these hooks.
+
+@item mail-citation-hook
+@vindex mail-citation-hook
+Hook for modifying a citation just inserted in the mail buffer.
+Each hook function can find the citation between (point) and (mark t).
+And each hook function should leave point and mark around the citation
+text as modified.
+
+If this hook is entirely empty, i.e. @code{nil}, a default action is taken
+instead of no action.
+@end table
+
+@node Key Index, Command Index, Hooks, Top
+@unnumbered Key Index
+@printindex ky
+
+@node Command Index, Variable Index, Key Index, Top
+@unnumbered Command Index
+@printindex fn
+
+@node Variable Index, License, Command Index, Top
+@unnumbered Variable Index
+@printindex vr
+
+@node License,, Variable Index, Top
+@unnumbered GNU GENERAL PUBLIC LICENSE
+@center Version 2, June 1991
+
+@display
+Copyright @copyright{} 1989, 1991 Free Software Foundation, Inc.
+675 Mass Ave, Cambridge, MA 02139, USA
+
+Everyone is permitted to copy and distribute verbatim copies
+of this license document, but changing it is not allowed.
+@end display
+
+@unnumberedsec Preamble
+
+  The licenses for most software are designed to take away your
+freedom to share and change it.  By contrast, the GNU General Public
+License is intended to guarantee your freedom to share and change free
+software---to make sure the software is free for all its users.  This
+General Public License applies to most of the Free Software
+Foundation's software and to any other program whose authors commit to
+using it.  (Some other Free Software Foundation software is covered by
+the GNU Library General Public License instead.)  You can apply it to
+your programs, too.
+
+  When we speak of free software, we are referring to freedom, not
+price.  Our General Public Licenses are designed to make sure that you
+have the freedom to distribute copies of free software (and charge for
+this service if you wish), that you receive source code or can get it
+if you want it, that you can change the software or use pieces of it
+in new free programs; and that you know you can do these things.
+
+  To protect your rights, we need to make restrictions that forbid
+anyone to deny you these rights or to ask you to surrender the rights.
+These restrictions translate to certain responsibilities for you if you
+distribute copies of the software, or if you modify it.
+
+  For example, if you distribute copies of such a program, whether
+gratis or for a fee, you must give the recipients all the rights that
+you have.  You must make sure that they, too, receive or can get the
+source code.  And you must show them these terms so they know their
+rights.
+
+  We protect your rights with two steps: (1) copyright the software, and
+(2) offer you this license which gives you legal permission to copy,
+distribute and/or modify the software.
+
+  Also, for each author's protection and ours, we want to make certain
+that everyone understands that there is no warranty for this free
+software.  If the software is modified by someone else and passed on, we
+want its recipients to know that what they have is not the original, so
+that any problems introduced by others will not reflect on the original
+authors' reputations.
+
+  Finally, any free program is threatened constantly by software
+patents.  We wish to avoid the danger that redistributors of a free
+program will individually obtain patent licenses, in effect making the
+program proprietary.  To prevent this, we have made it clear that any
+patent must be licensed for everyone's free use or not licensed at all.
+
+  The precise terms and conditions for copying, distribution and
+modification follow.
+
+@iftex
+@unnumberedsec TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+@end iftex
+@ifinfo
+@center TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+@end ifinfo
+
+@enumerate 0
+@item
+This License applies to any program or other work which contains
+a notice placed by the copyright holder saying it may be distributed
+under the terms of this General Public License.  The ``Program'', below,
+refers to any such program or work, and a ``work based on the Program''
+means either the Program or any derivative work under copyright law:
+that is to say, a work containing the Program or a portion of it,
+either verbatim or with modifications and/or translated into another
+language.  (Hereinafter, translation is included without limitation in
+the term ``modification''.)  Each licensee is addressed as ``you''.
+
+Activities other than copying, distribution and modification are not
+covered by this License; they are outside its scope.  The act of
+running the Program is not restricted, and the output from the Program
+is covered only if its contents constitute a work based on the
+Program (independent of having been made by running the Program).
+Whether that is true depends on what the Program does.
+
+@item
+You may copy and distribute verbatim copies of the Program's
+source code as you receive it, in any medium, provided that you
+conspicuously and appropriately publish on each copy an appropriate
+copyright notice and disclaimer of warranty; keep intact all the
+notices that refer to this License and to the absence of any warranty;
+and give any other recipients of the Program a copy of this License
+along with the Program.
+
+You may charge a fee for the physical act of transferring a copy, and
+you may at your option offer warranty protection in exchange for a fee.
+
+@item
+You may modify your copy or copies of the Program or any portion
+of it, thus forming a work based on the Program, and copy and
+distribute such modifications or work under the terms of Section 1
+above, provided that you also meet all of these conditions:
+
+@enumerate a
+@item
+You must cause the modified files to carry prominent notices
+stating that you changed the files and the date of any change.
+
+@item
+You must cause any work that you distribute or publish, that in
+whole or in part contains or is derived from the Program or any
+part thereof, to be licensed as a whole at no charge to all third
+parties under the terms of this License.
+
+@item
+If the modified program normally reads commands interactively
+when run, you must cause it, when started running for such
+interactive use in the most ordinary way, to print or display an
+announcement including an appropriate copyright notice and a
+notice that there is no warranty (or else, saying that you provide
+a warranty) and that users may redistribute the program under
+these conditions, and telling the user how to view a copy of this
+License.  (Exception: if the Program itself is interactive but
+does not normally print such an announcement, your work based on
+the Program is not required to print an announcement.)
+@end enumerate
+
+These requirements apply to the modified work as a whole.  If
+identifiable sections of that work are not derived from the Program,
+and can be reasonably considered independent and separate works in
+themselves, then this License, and its terms, do not apply to those
+sections when you distribute them as separate works.  But when you
+distribute the same sections as part of a whole which is a work based
+on the Program, the distribution of the whole must be on the terms of
+this License, whose permissions for other licensees extend to the
+entire whole, and thus to each and every part regardless of who wrote it.
+
+Thus, it is not the intent of this section to claim rights or contest
+your rights to work written entirely by you; rather, the intent is to
+exercise the right to control the distribution of derivative or
+collective works based on the Program.
+
+In addition, mere aggregation of another work not based on the Program
+with the Program (or with a work based on the Program) on a volume of
+a storage or distribution medium does not bring the other work under
+the scope of this License.
+
+@item
+You may copy and distribute the Program (or a work based on it,
+under Section 2) in object code or executable form under the terms of
+Sections 1 and 2 above provided that you also do one of the following:
+
+@enumerate a
+@item
+Accompany it with the complete corresponding machine-readable
+source code, which must be distributed under the terms of Sections
+1 and 2 above on a medium customarily used for software interchange; or,
+
+@item
+Accompany it with a written offer, valid for at least three
+years, to give any third party, for a charge no more than your
+cost of physically performing source distribution, a complete
+machine-readable copy of the corresponding source code, to be
+distributed under the terms of Sections 1 and 2 above on a medium
+customarily used for software interchange; or,
+
+@item
+Accompany it with the information you received as to the offer
+to distribute corresponding source code.  (This alternative is
+allowed only for noncommercial distribution and only if you
+received the program in object code or executable form with such
+an offer, in accord with Subsection b above.)
+@end enumerate
+
+The source code for a work means the preferred form of the work for
+making modifications to it.  For an executable work, complete source
+code means all the source code for all modules it contains, plus any
+associated interface definition files, plus the scripts used to
+control compilation and installation of the executable.  However, as a
+special exception, the source code distributed need not include
+anything that is normally distributed (in either source or binary
+form) with the major components (compiler, kernel, and so on) of the
+operating system on which the executable runs, unless that component
+itself accompanies the executable.
+
+If distribution of executable or object code is made by offering
+access to copy from a designated place, then offering equivalent
+access to copy the source code from the same place counts as
+distribution of the source code, even though third parties are not
+compelled to copy the source along with the object code.
+
+@item
+You may not copy, modify, sublicense, or distribute the Program
+except as expressly provided under this License.  Any attempt
+otherwise to copy, modify, sublicense or distribute the Program is
+void, and will automatically terminate your rights under this License.
+However, parties who have received copies, or rights, from you under
+this License will not have their licenses terminated so long as such
+parties remain in full compliance.
+
+@item
+You are not required to accept this License, since you have not
+signed it.  However, nothing else grants you permission to modify or
+distribute the Program or its derivative works.  These actions are
+prohibited by law if you do not accept this License.  Therefore, by
+modifying or distributing the Program (or any work based on the
+Program), you indicate your acceptance of this License to do so, and
+all its terms and conditions for copying, distributing or modifying
+the Program or works based on it.
+
+@item
+Each time you redistribute the Program (or any work based on the
+Program), the recipient automatically receives a license from the
+original licensor to copy, distribute or modify the Program subject to
+these terms and conditions.  You may not impose any further
+restrictions on the recipients' exercise of the rights granted herein.
+You are not responsible for enforcing compliance by third parties to
+this License.
+
+@item
+If, as a consequence of a court judgment or allegation of patent
+infringement or for any other reason (not limited to patent issues),
+conditions are imposed on you (whether by court order, agreement or
+otherwise) that contradict the conditions of this License, they do not
+excuse you from the conditions of this License.  If you cannot
+distribute so as to satisfy simultaneously your obligations under this
+License and any other pertinent obligations, then as a consequence you
+may not distribute the Program at all.  For example, if a patent
+license would not permit royalty-free redistribution of the Program by
+all those who receive copies directly or indirectly through you, then
+the only way you could satisfy both it and this License would be to
+refrain entirely from distribution of the Program.
+
+If any portion of this section is held invalid or unenforceable under
+any particular circumstance, the balance of the section is intended to
+apply and the section as a whole is intended to apply in other
+circumstances.
+
+It is not the purpose of this section to induce you to infringe any
+patents or other property right claims or to contest validity of any
+such claims; this section has the sole purpose of protecting the
+integrity of the free software distribution system, which is
+implemented by public license practices.  Many people have made
+generous contributions to the wide range of software distributed
+through that system in reliance on consistent application of that
+system; it is up to the author/donor to decide if he or she is willing
+to distribute software through any other system and a licensee cannot
+impose that choice.
+
+This section is intended to make thoroughly clear what is believed to
+be a consequence of the rest of this License.
+
+@item
+If the distribution and/or use of the Program is restricted in
+certain countries either by patents or by copyrighted interfaces, the
+original copyright holder who places the Program under this License
+may add an explicit geographical distribution limitation excluding
+those countries, so that distribution is permitted only in or among
+countries not thus excluded.  In such case, this License incorporates
+the limitation as if written in the body of this License.
+
+@item
+The Free Software Foundation may publish revised and/or new versions
+of the General Public License from time to time.  Such new versions will
+be similar in spirit to the present version, but may differ in detail to
+address new problems or concerns.
+
+Each version is given a distinguishing version number.  If the Program
+specifies a version number of this License which applies to it and ``any
+later version'', you have the option of following the terms and conditions
+either of that version or of any later version published by the Free
+Software Foundation.  If the Program does not specify a version number of
+this License, you may choose any version ever published by the Free Software
+Foundation.
+
+@item
+If you wish to incorporate parts of the Program into other free
+programs whose distribution conditions are different, write to the author
+to ask for permission.  For software which is copyrighted by the Free
+Software Foundation, write to the Free Software Foundation; we sometimes
+make exceptions for this.  Our decision will be guided by the two goals
+of preserving the free status of all derivatives of our free software and
+of promoting the sharing and reuse of software generally.
+
+@iftex
+@heading NO WARRANTY
+@end iftex
+@ifinfo
+@center NO WARRANTY
+@end ifinfo
+
+@item
+BECAUSE THE PROGRAM IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY
+FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW@.  EXCEPT WHEN
+OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES
+PROVIDE THE PROGRAM ``AS IS'' WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED
+OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE@.  THE ENTIRE RISK AS
+TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU@.  SHOULD THE
+PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING,
+REPAIR OR CORRECTION.
+
+@item
+IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
+WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR
+REDISTRIBUTE THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES,
+INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING
+OUT OF THE USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED
+TO LOSS OF DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY
+YOU OR THIRD PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER
+PROGRAMS), EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGES.
+@end enumerate
+
+@iftex
+@heading END OF TERMS AND CONDITIONS
+@end iftex
+@ifinfo
+@center END OF TERMS AND CONDITIONS
+@end ifinfo
+
+@page
+@unnumberedsec How to Apply These Terms to Your New Programs
+
+  If you develop a new program, and you want it to be of the greatest
+possible use to the public, the best way to achieve this is to make it
+free software which everyone can redistribute and change under these terms.
+
+  To do so, attach the following notices to the program.  It is safest
+to attach them to the start of each source file to most effectively
+convey the exclusion of warranty; and each file should have at least
+the ``copyright'' line and a pointer to where the full notice is found.
+
+@smallexample
+@var{one line to give the program's name and an idea of what it does.}
+Copyright (C) 19@var{yy}  @var{name of author}
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE@.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+@end smallexample
+
+Also add information on how to contact you by electronic and paper mail.
+
+If the program is interactive, make it output a short notice like this
+when it starts in an interactive mode:
+
+@smallexample
+Gnomovision version 69, Copyright (C) 19@var{yy} @var{name of author}
+Gnomovision comes with ABSOLUTELY NO WARRANTY; for details
+type `show w'.  This is free software, and you are welcome
+to redistribute it under certain conditions; type `show c' 
+for details.
+@end smallexample
+
+The hypothetical commands @samp{show w} and @samp{show c} should show
+the appropriate parts of the General Public License.  Of course, the
+commands you use may be called something other than @samp{show w} and
+@samp{show c}; they could even be mouse-clicks or menu items---whatever
+suits your program.
+
+You should also get your employer (if you work as a programmer) or your
+school, if any, to sign a ``copyright disclaimer'' for the program, if
+necessary.  Here is a sample; alter the names:
+
+@smallexample
+@group
+Yoyodyne, Inc., hereby disclaims all copyright
+interest in the program `Gnomovision'
+(which makes passes at compilers) written 
+by James Hacker.
+
+@var{signature of Ty Coon}, 1 April 1989
+Ty Coon, President of Vice
+@end group
+@end smallexample
+
+This General Public License does not permit incorporating your program into
+proprietary programs.  If your program is a subroutine library, you may
+consider it more useful to permit linking proprietary applications with the
+library.  If this is what you want to do, use the GNU Library General
+Public License instead of this License.
+
+@summarycontents
+@contents
+@bye

@@ -1,0 +1,61 @@
+-*- outline -*-
+
+This is a list of things I think need to be done before release.  Add
+to it and subtract from it.
+
+* high priority
+** parse .nethackrc
+
+** finish up the cooked status window stuff
+
+** Makefile shouldn't require GNU make
+
+* low priority
+** tiles under xemacs
+
+** scrolling the map should happen *before* you step across the edge
+   C-l now works, so you can manually recenter
+
+** turning on DEC graphics (for example) breaks things (invalid characters)
+We need to hardcode/override some of the preferences.
+
+** indicate/track the menu state
+;; FIXME: we should somehow track when a menu is active, so if the
+;; window configuration gets mixed up while a menu is active, the
+;; user knows this and can easily continue working in a menu and not
+;; be confused when keystokes in the map buffer arent getting any
+;; response.
+
+** design a clean way to customize the printing 
+   (how and where (ie modeline)).
+
+* lower priority
+** make RET or SPC toggle menu entries that the point is on
+we have too many potential bindings for these keys.  what exactly
+should the defaults be?
+
+** print a message in the echo area describing how to dismiss a popup
+
+** nethack options should be respected where possible
+in particular the color boolean
+
+** there should be some indication of whether or not a menu
+is pick-one or pick-any or pick-none. This is not shown in any other
+port however.
+
+** the menu that never goes away is actually a dedicated inventory window.
+try to bury it if possible after submitting it, otherwise its always
+the next buffer in the list, so switching away from the map lands you
+there.  at best, erase its contents so its not quite so confusing.
+perhaps it should be a hidden buffer?
+
+** fix byte-compile warnings
+
+* finished, sorta?
+** make all the variables customizable through M-x customize
+most of these are done.  do the rest of them.
+
+** window configuration stuff should be customizable and good
+something like what gnus has.  or maybe something else.
+
+I like what we have now, I think we can call this done.

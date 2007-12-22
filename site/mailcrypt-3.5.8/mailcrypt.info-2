@@ -1,0 +1,612 @@
+This is mailcrypt.info, produced by makeinfo version 4.2 from
+./mailcrypt.texi.
+
+INFO-DIR-SECTION Emacs
+START-INFO-DIR-ENTRY
+* Mailcrypt: (mailcrypt).  An Emacs/PGP interface.
+END-INFO-DIR-ENTRY
+
+   This documentation describes Mailcrypt version 3.5.8.  This
+documentation was last updated on August 29, 1998.
+
+   Copyright 1995 Patrick J. LoPresti Copyright 1998 Leonard R. Budney
+Copyright 2001 Brian Warner
+
+   The Mailcrypt program and this manual are published as free software.
+You may redistribute and/or modify them under the terms of the GNU
+General Public License as published by the Free Software Foundation;
+either version 2, or (at your option) any later version.
+
+   Mailcrypt is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+along with GNU Emacs; see the file COPYING.  If not, write to the Free
+Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
+
+
+File: mailcrypt.info,  Node: HTTP Fetch,  Next: GnuPG Fetch,  Prev: Finger Fetch,  Up: Key Fetching
+
+HTTP Fetch
+==========
+
+   The function `mc-pgp-fetch-from-http' will attempt to fetch a key by
+connecting to a key server (*note Key Servers::) which has a World Wide
+Web interface.
+
+   The variables `mc-pgp-keyserver-address', `mc-pgp-keyserver-port',
+and `mc-pgp-keyserver-url-template' control the fetching process.  The
+default is to use Brian LaMacchia's key server at MIT.  If this default
+should stop working, or if you want to help with network congestion and
+machine load, you can choose a different server.  As of this writing,
+any of the following sequences of Emacs Lisp in your `.emacs' file will
+work; choose one:
+
+     ;; Key server at MIT (Massachusetts, USA)
+     ;; This is the default; these lines are only for reference
+     ;(setq mc-pgp-keyserver-address "pgp.ai.mit.edu")
+     ;(setq mc-pgp-keyserver-port 80)
+     ;(setq mc-pgp-keyserver-url-template
+     ;      "/htbin/pks-extract-key.pl?op=get&search=%s")
+
+     ;; Key server at UPC (Barcelona, Spain)
+     (setq mc-pgp-keyserver-address "goliat.upc.es")
+     (setq mc-pgp-keyserver-port 80)
+     (setq mc-pgp-keyserver-url-template
+           "/cgi-bin/pks-extract-key.pl?op=get&search=%s")
+
+     ;; Key server at Cambridge University (Cambridge, England)
+     (setq mc-pgp-keyserver-address "www.cl.cam.ac.uk")
+     (setq mc-pgp-keyserver-port 80)
+     (setq mc-pgp-keyserver-url-template
+           "/cgi-bin/pks-extract-key.pl?op=get&search=%s")
+
+     ;; Key server at UIT (Tromso, Norway)
+     (setq mc-pgp-keyserver-address "www.service.uit.no")
+     (setq mc-pgp-keyserver-port 80)
+     (setq mc-pgp-keyserver-url-template
+           "/cgi-bin/pks-extract-key.pl?op=get&search=%s")
+
+     ;; Key server at CMU (Pennsylvania, USA)
+     (setq mc-pgp-keyserver-address "gs211.sp.cs.cmu.edu")
+     (setq mc-pgp-keyserver-port 80)
+     (setq mc-pgp-keyserver-url-template "/cgi-bin/pgp-key?pgpid=%s")
+
+   If your organization has a firewall, you might not be able to access
+the World Wide Web directly.  Your organization may have a proxy HTTP
+server set up, however.  In that case, you should place code like the
+following in your `.emacs' file.  You can use any of the above key
+servers instead of the one at MIT, of course.
+
+     ;; Mailcrypt configuration for accessing key server through HTTP proxy
+     (setq mc-pgp-keyserver-address "your.proxy.com")
+     (setq mc-pgp-keyserver-port 13013)  ; Your proxy's port
+     (setq mc-pgp-keyserver-url-template
+           "http://pgp.ai.mit.edu/htbin/pks-extract-key.pl?op=get&search=%s")
+
+   Note that fetching from a key server can be somewhat slow, so be
+patient.  (At least it beats the tar out of the Email interface.)
+
+
+File: mailcrypt.info,  Node: GnuPG Fetch,  Prev: HTTP Fetch,  Up: Key Fetching
+
+GnuPG Fetch
+===========
+
+   GnuPG happens to have a built-in HKP keyserver interface which is
+completely independent from MailCrypt's own key fetching support.  If
+your `.gnupg/options' file includes a line like:
+
+   `keyserver wwwkeys.pgp.net'
+
+   then any operation that needs an otherwise-unavailable public key
+(which generally means signature verification) will automatically
+contact the keyserver and try to retrieve the key.  It sends the hex
+keyid to the server, not a string, so it could only be used at
+encryption time if you already know the keyid of your recipients.
+
+   You can also tell GPG to explicitly request a key (by hex keyid) with
+`--recv-keys', or to send your own key with `--send-keys'.  Check the
+GnuPG manual for details.
+
+
+File: mailcrypt.info,  Node: Miscellaneous Configuration,  Next: Tips,  Prev: Key Fetching,  Up: Top
+
+Miscellaneous Configuration
+***************************
+
+   This chapter documents some additional Mailcrypt configuration
+options which could not be naturally described elsewhere.
+
+* Menu:
+
+* Alternate Keyring::           Specifying a different file to act
+                                  like your public keyring.
+* Comment Field::               Burma
+                                  Shave
+* Mode Line::                   Changing that "MC-w" and "MC-r" stuff
+* Key Bindings::                Which keys cause which actions.
+* Nonstandard Paths::           Useful if your PGP installation is weird.
+
+
+File: mailcrypt.info,  Node: Alternate Keyring,  Next: Comment Field,  Prev: Miscellaneous Configuration,  Up: Miscellaneous Configuration
+
+Alternate Keyring
+=================
+
+   By default, Mailcrypt will use the same public keyring that PGP would
+use if executed from the shell.
+
+   You can cause Mailcrypt to use a specific public keyring by setting
+the variable `mc-pgp-alternate-keyring'.  If this variable is set,
+Mailcrypt will use that keyring for all functions which would otherwise
+have used the default.  This includes adding keys, extracting keys,
+verifying signatures, and encrypting messages.
+
+   This feature might be useful if you maintain multiple keyrings; you
+can switch between them by setting this variable.  Depending on your
+tastes, you might want to configure fetching from a keyring as well
+(*note Keyring Fetch::).
+
+
+File: mailcrypt.info,  Node: Comment Field,  Next: Mode Line,  Prev: Alternate Keyring,  Up: Miscellaneous Configuration
+
+Comment Field
+=============
+
+   By default, Mailcrypt will supply a "comment" option to PGP,
+resulting in output which looks something like this:
+
+     ----- BEGIN PGP FOOBAR -----
+     Version: 2.6.3
+     Comment: Processed by Mailcrypt 3.5.8, an Emacs/PGP interface
+     
+     ...
+     ----- END PGP FOOBAR -----
+
+   To change the comment to one of your own, set the variable
+`mc-pgp-comment'. Set it to `nil' to use PGP's default, which is
+probably either no comment or something defined in `config.txt'.
+`mc-pgp50-comment' and `mc-gpg-comment' are the corresponding variables
+for the other versions.
+
+
+File: mailcrypt.info,  Node: Mode Line,  Next: Key Bindings,  Prev: Comment Field,  Up: Miscellaneous Configuration
+
+Mode Line
+=========
+
+   `mc-read-mode' and `mc-write-mode' will each indicate they are
+active by placing the string `MC-r' or `MC-w' in the mode line,
+respectively.
+
+   You can change these strings by setting the variables
+`mc-read-mode-string' and `mc-write-mode-string'.  So, for example, to
+get rid of the mode indicators entirely, you might put the following
+lines into your `.emacs' file:
+
+     (setq mc-read-mode-string "")
+     (setq mc-write-mode-string "")
+
+
+File: mailcrypt.info,  Node: Key Bindings,  Next: Nonstandard Paths,  Prev: Mode Line,  Up: Miscellaneous Configuration
+
+Key Bindings
+============
+
+   The Mailcrypt key bindings are defined by the keymaps
+`mc-read-mode-map' and `mc-write-mode-map'.  To change the key
+bindings, you just need to set these variables in your `.emacs' file.
+
+   For example, if you wanted `C-c C-m' to be the Mailcrypt prefix
+(instead of `C-c /') in `mc-read-mode', you would put the following
+code in your `.emacs' file:
+
+     (setq mc-read-mode-map (make-sparse-keymap))
+     (define-key mc-read-mode-map "\C-c\C-mf" 'mc-deactivate-passwd)
+     (define-key mc-read-mode-map "\C-c\C-md" 'mc-decrypt)
+     (define-key mc-read-mode-map "\C-c\C-mv" 'mc-verify)
+     (define-key mc-read-mode-map "\C-c\C-ma" 'mc-snarf)
+     (define-key mc-read-mode-map "\C-c\C-mk" 'mc-pgp-fetch-key)
+
+   For more information on Emacs key bindings, see *Note Customizing
+Key Bindings: (emacs)Key Bindings.
+
+
+File: mailcrypt.info,  Node: Nonstandard Paths,  Prev: Key Bindings,  Up: Miscellaneous Configuration
+
+Nonstandard Paths
+=================
+
+   The information in this section should be unnecessary, but is
+provided "just in case".
+
+   Mailcrypt will look for the PGP executable in your standard search
+path under the name `pgp'.  To use a different name (or to provide a
+complete path), set the variable `mc-pgp-path'.
+
+   PGP 5.0 includes four separate executables, usually installed as
+"pgpe", "pgps", "pgpv", and "pgpk". The variables `mc-pgp50-pgpe-path',
+`mc-pgp50-pgps-path', `mc-pgp50-pgpv-path', and `mc-pgp50-pgpk-path'
+tell Mailcrypt where to find them if they are not on your search path.
+
+   GnuPG is normally installed as "gpg". `mc-gpg-path' tells Mailcrypt
+where to find the executable if it is not on your path.
+
+   In order to keep your identities straight, Mailcrypt needs to know
+where your secret keyring resides.
+
+   Mailcrypt figures this out heuristically by assuming that the file
+`secring.pgp' is in the same directory as your public key ring.  It
+determines the location of the latter by doing a dry run of PGP with
+`+verbose=1' and parsing the output.
+
+   If this heuristic is failing for you, you can manually tell Mailcrypt
+where your secret key ring is by setting the variable `mc-pgp-keydir',
+like this:
+
+     (setq mc-pgp-keydir "/users/patl/.pgp/")
+
+   Note that the trailing slash is _required_.
+
+   If the heuristic fails, please report it as a bug (*note Credits::).
+
+   Note that if you have changed the default location of your secret
+keyring, Mailcrypt will be unable to locate it.  You can work around
+this by either setting `mc-pgp-keydir', or by making a symbolic link to
+your secret keyring from `secring.pgp' in your default public keyring
+directory.
+
+
+File: mailcrypt.info,  Node: Tips,  Next: Limitations,  Prev: Miscellaneous Configuration,  Up: Top
+
+Tips
+****
+
+   Here are some random tips.
+
+   * PGP provides quite good security when used correctly.  You are far
+     more likely to use it correctly if you have read the directions.
+     Read the `PGP User's Guide'!
+
+   * 60 seconds is a relatively safe but somewhat inconvenient value for
+     `mc-passwd-timeout'.  If your paranoia permits, consider increasing
+     it to five or ten minutes (*note Passphrase Cache::).
+
+   * If Mailcrypt ever does something you wish it had not, _DON'T
+     PANIC_.  Just use the normal Emacs undo command, `M-x undo' or
+     `C-x u', to restore your buffer (*note Emacs Undo: (emacs)Undo.).
+     Mailcrypt keeps almost no state except what you see in your
+     buffer, so any action can be undone this way.
+
+   * All Mailcrypt operations place PGP's output in the `*MailCrypt*'
+     buffer.  Check it occasionally for status and warning messages.
+
+   * Add yourself to the Mailcrypt announcements mailing list (*note
+     Mailing List::).  That way you can find out about new versions of
+     Mailcrypt automatically, and we can enjoy the feeling that people
+     are actually using our package.
+
+
+
+File: mailcrypt.info,  Node: Limitations,  Next: References,  Prev: Tips,  Up: Top
+
+Limitations
+***********
+
+   Mailcrypt is a powerful program, but it is not a complete PGP
+interface.  Perhaps some future version will be; in the meantime, you
+will need to use the command-line interface for some operations.
+Things which the current version does not support include:
+
+_Complete Key Management_
+     Mailcrypt's key management support is limited to adding and
+     extracting keys from keyrings.  It does not support key
+     generation, key removal, key revocation, ID and trust parameter
+     editing, or key signing.  It also ignores PGP's warnings when you
+     use a key which is not fully certified.  (Of course, you can see
+     these warnings by viewing the `*MailCrypt*' buffer; see *Note
+     Tips::.)
+
+_Encryption with Conventional Cryptography_
+     Mailcrypt supports decryption but not encryption with
+     "conventional" (i.e., non-public key) cryptography.
+
+_Detached Signatures_
+     Mailcrypt does not support the creation nor the verification of
+     detached signatures.
+
+_"For your eyes only" Decryption_
+     Mailcrypt will be unable to decrypt a file which was encrypted
+     with the "for your eyes only" (`-m') option.  This is actually a
+     bug in PGP, which provides no portable way to avoid its paging
+     behavior.
+
+
+File: mailcrypt.info,  Node: References,  Next: Credits,  Prev: Limitations,  Up: Top
+
+References
+**********
+
+   This chapter contains information and pointers to information about
+topics related to PGP and Mailcrypt.
+
+* Menu:
+
+* Online Resources::            Recreational reading with a purpose.
+* Key Servers::                 Keepers of the Global Keyring.
+* Mailing List::                Staying informed while pumping the
+                                  authors' egos.
+* Politics::                    Anarcho-foobarism.
+
+
+File: mailcrypt.info,  Node: Online Resources,  Next: Key Servers,  Prev: References,  Up: References
+
+Online Resources
+================
+
+`http://cag-www.lcs.mit.edu/mailcrypt/'
+     "Mailcrypt: An Emacs/PGP Interface", by Pat LoPresti. This page has
+     been the Mailcrypt homepage since October 10, 1995.  It is still
+     the distribution site for version 3.4 of Mailcrypt-a rock-solid
+     version still to be recommended if you use only PGP 2.6.x.
+
+`http://world.std.com/~franl/crypto.html'
+     "Cryptography, PGP, and Your Privacy", by Fran Litterio.  This
+     page is simply excellent.  It makes all the other References in
+     this chapter redundant, but we will include them anyway for
+     redundancy.
+
+`http://web.mit.edu/network/pgp.html'
+     MIT is the canonical distribution site for PGP; this is the
+     announcement page.
+
+`ftp://rtfm.mit.edu/pub/usenet/alt.security.pgp/'
+     This is an archive site for the `alt.security.pgp' FAQ lists.
+
+`news:alt.security.pgp'
+     The `alt.security.pgp' newsgroup is a good place to go for
+     discussion about PGP, as well as any topic which any fool anywhere
+     ever thinks is related to PGP.  It is also a good last resort for
+     getting answers to questions, but please read the FAQ lists first.
+
+`http://pgp.ai.mit.edu/~bal/pks-toplev.html'
+     Brian LaMacchia (bal@zurich.ai.mit.edu) has put together a World
+     Wide Web interface to the public key servers (*note Key Servers::).
+     Mailcrypt uses this interface by default when attempting to fetch
+     keys via HTTP (*note HTTP Fetch::); most people get to his
+     interface through this page.
+
+`ftp://ftp.csua.berkeley.edu/pub/cypherpunks/Home.html'
+     The Cypherpunks are dedicated to taking proactive measures to
+     ensure privacy in the digital age.  They wrote the software for,
+     and operate many of, the anonymous remailers currently in
+     existence.
+
+`http://www.cs.berkeley.edu/~raph/'
+     Raph Levien actively maintains a remailer list which Mailcrypt
+     knows how to parse.  If you are impressed by how easy it is to
+     configure Mailcrypt's remailer functions, Raph is the one to
+     thank.  Raph's page also has many useful links.
+
+`http://www.obscura.com/~loki/'
+     Lance Cottrell is the author of Mixmaster.  His home page is the
+     canonical source for information on Mixmaster and is a good source
+     for PGP pointers in general.
+
+`http://www.gnupg.org/'
+     Homepage for the GNU Privacy Guard. This is a GPL-ed replacement
+     for PGP.
+
+
+File: mailcrypt.info,  Node: Key Servers,  Next: Mailing List,  Prev: Online Resources,  Up: References
+
+Key Servers
+===========
+
+   "Key servers" are machines with a publicly accessible interface to
+an enormous global public keyring.  Anyone may add keys to or query this
+keyring.  Each key server holds a complete copy of the global keyring,
+and they arrange to keep one another informed of additions they receive.
+
+   This means you can tell any key server to add your public key to the
+global keyring, and all of the other servers will know about it within a
+day or so.  Then anyone will be able to query any key server to obtain
+your public key.
+
+   To add your key to the keyservers, send an Email message to
+`pgp-public-keys@pgp.ai.mit.edu' with a subject line of `ADD' and a
+body containing your public key block.  With Mailcrypt installed, you
+can just type `C-c / x' to insert your public key block (*note
+Inserting Keys::) into the body of the message.
+
+   For help with the Email interface to the key servers, send a message
+with a subject line of `HELP'.  For a World Wide Web interface to the
+key servers, see Brian LaMacchia's home page at
+`http://www-swiss.ai.mit.edu/~bal/'.
+
+   Some other key servers include:
+
+   * pgp-public-keys@jpunix.com
+
+   * pgp-public-keys@kub.nl
+
+   * pgp-public-keys@uit.no
+
+   * pgp-public-keys@pgp.ox.ac.uk
+
+
+   For a complete list, consult any good online repository of PGP
+information (*note Online Resources::).
+
+   It is strongly recommended that you submit your key to the key
+servers, since many humans and programs (including Mailcrypt) may look
+for it there.  Besides, it takes mere seconds and the pain passes
+quickly.
+
+
+File: mailcrypt.info,  Node: Mailing List,  Next: Politics,  Prev: Key Servers,  Up: References
+
+Mailing List
+============
+
+   If you would like to automatically receive information about new
+releases of Mailcrypt, send Email to
+`mc-announce-request@cag.lcs.mit.edu' asking to be placed on the
+`mc-announce' mailing list.  The mailing list is maintained manually,
+so please be patient.
+
+   The `mc-announce' list is reserved for announcements of new
+Mailcrypt versions, so it has extremely low volume.  We encourage you to
+add yourself so we can get a rough idea of how many people are using
+our package.
+
+
+File: mailcrypt.info,  Node: Politics,  Prev: Mailing List,  Up: References
+
+Politics
+========
+
+   Cryptography in general, PGP in particular, and free software are
+politically somewhat controversial topics.  Heck, in the U.S. Congress,
+freedom of speech is a controversial topic.  Anyway, here are some
+organizations you should definitely watch and preferably send lots of
+money.
+
+_The Electronic Frontier Foundation_
+     The EFF (`http://www.eff.org/') works to protect civil liberties in
+     cyberspace.  They also maintain an impressive collection of on-line
+     resources.  If you like Mailcrypt so much that you wish you had
+     paid for it, this is the number one place we would want to see
+     your money go.  The EFF newsgroups, `comp.org.eff.news' and
+     `comp.org.eff.talk', are required reading for the well-informed.
+
+_The League for Programming Freedom_
+     The LPF (`http://www.lpf.org/') works to fight software patents,
+     which threaten to make free software like Mailcrypt impossible.
+
+_The Center for Democracy and Technology_
+     The CDT (`http://www.cdt.org/') has essentially the same goals as
+     the EFF, but is more of a lobbying group.
+
+   Mailcrypt's remailer support was inspired by the Communications
+Decency Act of 1995 (see `http://www.cdt.org/cda.html') and by the
+International "Church" of Scientology (see
+`http://www.mit.edu:8001/people/rnewman/scientology/').
+
+
+File: mailcrypt.info,  Node: Credits,  Next: Index,  Prev: References,  Up: Top
+
+Credits
+*******
+
+   Mailcrypt was written by Jin Choi (jin@atype.com) and Pat LoPresti
+(patl@lcs.mit.edu).  Please send us your bug reports and comments.
+Also see *Note Mailing List::.
+
+   This documentation was mostly written by Pat LoPresti, but borrows
+heavily from an earlier version by Hal Abelson (hal@mit.edu).
+
+   Mailcrypt would not be as robust nor as featureful if it were not for
+our outstanding set of Beta testers:
+
+   * Samuel Tardieu <sam@inf.enst.fr>
+
+   * Richard Stanton <stanton@haas.berkeley.edu>
+
+   * Peter Arius <arius@immd2.informatik.uni-erlangen.de>
+
+   * Tomaz Borstnar <tomaz@cmir.arnes.si>
+
+   * Barry Brumitt <belboz@frc2.frc.ri.cmu.edu>
+
+   * Steffen Zahn <Steffen.Zahn%robinie@sunserv.sie.siemens.co.at>
+
+   * Mike Campbell <mcampbel@offenbach.sbi.com>
+
+   * Mark Baushke <mdb@cisco.com>
+
+   * Mike Long <mike.long@analog.com>
+
+
+
+File: mailcrypt.info,  Node: Index,  Prev: Credits,  Up: Top
+
+Index
+*****
+
+   This index has an entry for every key sequence, function, and
+variable documented in this manual.
+
+* Menu:
+
+* C-c / a:                               Snarfing Keys.
+* C-c / b:                               Response Blocks.
+* C-c / d:                               Decrypting.
+* C-c / e:                               Encrypting.
+* C-c / f:                               Passphrase Cache.
+* C-c / k:                               Key Fetching.
+* C-c / p:                               Pseudonyms.
+* C-c / r:                               Remailer Chains.
+* C-c / s:                               Signing.
+* C-c / v:                               Verifying.
+* C-c / x:                               Inserting Keys.
+* mc-always-replace:                     Decrypting.
+* mc-deactivate-passwd:                  Passphrase Cache.
+* mc-decrypt:                            Decrypting.
+* mc-demix:                              Mixmaster Support.
+* mc-encrypt:                            Encrypting.
+* mc-encrypt-for-me:                     Encrypting.
+* mc-gpg-comment:                        Comment Field.
+* mc-gpg-path:                           Nonstandard Paths.
+* mc-insert-public-key:                  Inserting Keys.
+* mc-install-read-mode:                  General Use.
+* mc-install-write-mode:                 General Use.
+* mc-levien-file-name:                   Remailer Tips.
+* mc-mixmaster-list-path:                Mixmaster Support.
+* mc-mixmaster-path:                     Mixmaster Support.
+* mc-passwd-timeout:                     Passphrase Cache.
+* mc-pgp-alternate-keyring:              Alternate Keyring.
+* mc-pgp-always-sign:                    Encrypting.
+* mc-pgp-comment:                        Comment Field.
+* mc-pgp-fetch-from-finger:              Finger Fetch.
+* mc-pgp-fetch-from-http:                HTTP Fetch.
+* mc-pgp-fetch-from-keyrings:            Keyring Fetch.
+* mc-pgp-fetch-key:                      Key Fetching.
+* mc-pgp-fetch-keyring-list:             Keyring Fetch.
+* mc-pgp-fetch-methods:                  Key Fetching.
+* mc-pgp-keydir:                         Nonstandard Paths.
+* mc-pgp-keyserver-address:              HTTP Fetch.
+* mc-pgp-keyserver-port:                 HTTP Fetch.
+* mc-pgp-keyserver-url-template:         HTTP Fetch.
+* mc-pgp-path:                           Nonstandard Paths.
+* mc-pgp-user-id:                        Encrypting.
+* mc-pgp50-comment:                      Comment Field.
+* mc-pgp50-pgpe-path:                    Nonstandard Paths.
+* mc-pgp50-pgpk-path:                    Nonstandard Paths.
+* mc-pgp50-pgps-path:                    Nonstandard Paths.
+* mc-pgp50-pgpv-path:                    Nonstandard Paths.
+* mc-post-encryption-hook:               Encrypting.
+* mc-post-signature-hook:                Signing.
+* mc-pre-encryption-hook:                Encrypting.
+* mc-pre-signature-hook:                 Signing.
+* mc-read-mode:                          General Use.
+* mc-read-mode-map:                      Key Bindings.
+* mc-read-mode-string:                   Mode Line.
+* mc-remailer-encrypt-for-chain:         Remailer Chains.
+* mc-remailer-internal-chains:           Remailer Chains.
+* mc-remailer-preserved-headers:         Remailing Posts.
+* mc-remailer-pseudonyms:                Pseudonyms.
+* mc-remailer-user-chains:               Remailer Chains.
+* mc-reread-levien-file:                 Remailer Tips.
+* mc-setversion:                         General Use.
+* mc-sign:                               Signing.
+* mc-snarf:                              Snarfing Keys.
+* mc-verify:                             Verifying.
+* mc-write-mode:                         General Use.
+* mc-write-mode-map:                     Key Bindings.
+* mc-write-mode-string:                  Mode Line.
+
+

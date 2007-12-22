@@ -1,0 +1,23 @@
+(
+(crypttext . "
+-----BEGIN PGP MESSAGE-----
+Version: GnuPG v1.2.0 (GNU/Linux)
+
+hM4DV7wu3TSGTqsQAv0c3eF+PJvZUGXMTf5c/ttBkHSquV1cwkGLvUcxotaJR8+m
++I1/NiChdjhJ1DpsiHEhct4irFMSWNzXBuzSgtsjCDLnJaHmIqGQh1lrJiYsZ+0/
+mYbnH3Tmvyi/H5rR5P0C/Ai6AdoV+AbwHwIsT9skLc2si8bfV6ZwdQTzCOKbFbda
+d9AsRAtdTa8nlU4QXspdMAfa7aPshW9wyTwXNFMJuX+nAos8wwrbXQNqiy2f8Rr6
+mwzoLRuINUReIa3wjFhaP9JVAcqCALZqtT224kR4RjhmmMqizFt48I37G1YMzeWb
+DEFgtVH21XpXiMOBqCleqSesnFyozdqanZnVLQfQCYgpeiNQOVKoZt812av50mQL
+1eW3yHqqFQ==
+=YW0C
+-----END PGP MESSAGE-----
+")
+(encryption_id . "0xC8B20C2FB481403E")
+(error . nil)
+(name . "E.e1r")
+(passphrase . "owner1")
+(plaintext . "This is a plaintext message
+")
+(signature_status . nil)
+)

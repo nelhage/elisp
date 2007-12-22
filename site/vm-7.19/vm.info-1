@@ -1,0 +1,1412 @@
+Info file: vm.info,    -*-Text-*-
+produced by `texinfo-format-buffer'
+from filebuffer `*scratch*'
+using `texinfmt.el' version 2.41 of  1 Mar 2005.
+
+START-INFO-DIR-ENTRY
+* VM::			A mail reader.
+END-INFO-DIR-ENTRY
+
+This file documents the VM mail reader.
+
+Copyright (C) 1989, 1991, 1999 Kyle E. Jones
+
+Permission is granted to make and distribute verbatim copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies.
+
+
+
+File: vm.info, Node: Top, Next: Introduction, Up: (DIR)
+
+This manual documents the VM mail reader, a Lisp program which runs as
+a subsystem under Emacs.  The manual is divided into the following
+chapters.
+
+* Menu:
+
+* Introduction::	Overview of the VM interface.
+* Starting Up::		What happens when you start VM.
+* Selecting Messages::	How to select messages for reading.
+* Reading Messages::	Previewing and paging through a message.
+* Sending Messages::	How to send messages from within VM.
+* Saving Messages::	How to save messages.
+* Deleting Messages::	How to delete, undelete and expunge messages.
+* Editing Messages::    How to alter the text and headers of a message.
+* Message Marks::	Running VM commands on arbitrary sets of messages.
+* Message Attributes::	How to change and undo changes to message attributes.
+* Sorting Messages::	How to make VM present similar messages together.
+* Reading Digests::	How to read digests under VM.
+* Summaries::		How to view and customize the summary of a folder.
+* Virtual Folders::	Blurring the boundaries of different physical folders.
+* Frames and Windows::	How to customize VM's use of windows and frames.
+* Toolbar::		How to configure VM's toolbar.
+* Menus::		How to configure VM's menus.
+* Faces::		How to configure VM's use of faces.
+* Using the Mouse::	Understanding the VM mouse interface.
+* Hooks::		How you can make VM run your code at certain times.
+* License::		Copying and distribution terms for VM.
+
+Indices:
+
+* Key Index::		Menus of command keys and their references.
+* Command Index::	Menus of commands and their references.
+* Variable Index::	Menus of variables and their references.
+
+
+
+File: vm.info, Node: Introduction, Next: Starting Up, Prev: Top, Up: Top
+
+Introduction
+************
+
+VM (View Mail) is an Emacs subsystem that allows UNIX mail to be read
+and disposed of within Emacs.  Commands exist to do the normal things
+expected of a mail user agent, such as generating replies, saving
+messages to folders, deleting messages and so on.  There are other
+more advanced commands that do tasks like bursting and creating
+digests, message forwarding, and organizing message presentation
+according to various criteria.
+
+To invoke VM, type `M-x vm'.  VM gathers any mail that has arrived in
+your system mailbox and appends it to a file known as your "primary
+inbox", and visits that file for reading.  *Note Starting Up::.  A
+file visited for reading by VM is called the "current folder".
+
+If there are any messages in the primary inbox, VM selects the first
+new or unread message, and previews it.  "Previewing" is VM's way of
+showing you part of a message and allowing you to decide whether you
+want to read it.  *Note Previewing::.  By default VM shows you the
+message's sender, recipient, subject and date headers.  Typing SPC
+(`vm-scroll-forward') exposes the body of the message and flags the
+message as read.  Subsequent SPC's scroll forward through the message,
+`b' or DEL scrolls backward.  When you reach the end of a message,
+typing SPC or `n' moves you forward to preview the next message.
+*Note Paging::.
+
+If you do not want to read a message that's being previewed, type
+`n' and VM will move to the next message (if there is one).
+*Note Selecting Messages::.
+
+To save a message to a mail folder use `s' (`vm-save-message').
+VM will prompt you for the folder name in the minibuffer.
+*Note Saving Messages::.
+
+Messages are deleted by typing `d' (`vm-delete-message') while
+previewing or reading them.  The message is not removed right away; VM
+makes a note that you want the message to be removed later.  If you
+change your mind about deleting a message, select it and type `u'
+(`vm-undelete-message'), and the message will be undeleted.  *Note
+Deleting Messages::.  The actual removal of deleted messages from the
+current folder is called "expunging" and it is accomplished by typing
+`###' (`vm-expunge-folder').  The message is still present in the
+on-disk version of the folder until the folder is saved.
+
+Typing `h' (`vm-summarize') causes VM to display a window containing a
+summary of the contents of the current folder.  The summary is
+presented one line per message, by message number, listing each
+message's author, date sent, line and byte count, and subject.  Also,
+various letters appear beside the message number to indicate that a
+message is new, unread, flagged for deletion, etc.  An arrow `->'
+appears to the left of the line summarizing the current message.  The
+summary format is user configurable, *Note Summaries::.
+
+When you are finished reading mail the current folder must be saved,
+so that the next time the folder is visited VM will know which
+messages have been already read, replied to and so on.  Typing `S'
+(`vm-save-folder') saves the folder.  Note that deleted messages are
+*not* expunged automatically when you save a folder; this is a change
+from version 4 of VM.  The next time you visit the folder any deleted
+messages will still be flagged for deletion.
+
+When a folder is first visited, the value of the variable
+`vm-folder-file-precious-flag' is used to initialize a buffer-local
+instance of `file-precious-flag', which determines how folders are
+saved.  A non-nil value causes folders to be saved by writing to a
+temporary file and then replacing the folder with that file.  A nil
+value causes folders to be saved by writing directly to the folder
+without the use of a temporary file.
+
+If the folder is empty at the time you save it and the variable
+`vm-delete-empty-folders' is non-`nil', VM will remove the zero length
+folder after saving it.
+
+To quit visiting a folder you can type `q' (`vm-quit') or `x'
+(`vm-quit-no-change').  Typing `q' saves the current folder before
+quitting.  Also, any messages flagged new are changed to be flagged as
+old and unread, before saving.  The `x' command quits a folder without
+changing the status of new messages, saving or otherwise modifying the
+current folder.
+
+If the variable `vm-confirm-quit' is set to `t' VM will always ask for
+confirmation before ending a VM visit of a folder.  A `nil' value
+means VM will ask only when messages will be lost unwittingly by
+quitting, i.e. not removed by intentional delete and expunge.  A value
+that is neither `nil' nor `t' causes VM to ask only when there are
+unsaved changes to message attributes or when messages will be lost.
+
+You do not have to quit a folder to continue using Emacs for other
+purposes.  (`vm-quit-just-bury') buries the buffers associated with
+the current folder deep in Emacs' stack of buffers, but otherwise
+leaves the folder visited so that you can resume reading messages
+quickly.  You can locate the folder's buffers again by using
+`list-buffers', which is normally bound to `C-x C-b'.
+
+Another command you can use if you are using a window system like X
+Windows is `vm-quit-just-iconify'.  This command buries the folder's
+buffers like `vm-quit-just-bury' and also iconifies the current frame.
+
+At any time while reading mail in any folder you can type `g'
+(`vm-get-new-mail') to check to see if new mail for that folder has
+arrived.  If new mail has arrived it will be moved from the spool file
+or spool files associated with the current folder and merged into the
+folder.  If you are not in the middle of another message, VM will also
+move to the first new or unread message.
+
+If `vm-get-new-mail' is given a prefix argument, it will prompt for
+another file from which to gather messages instead of the usual spool
+files.  In this case the source folder is copied but no messages are
+deleted from it as they would be for a spool file.
+
+By default your primary inbox has your system mailbox associated with
+it, e.g. `/var/spool/mail/kyle', and so typing `g' will retrieve
+mail from this file.  Your system mailbox is one example of a "spool
+file", a file that the mail transport system delivers messages into.
+You can associate other spool files with your primary inbox and spool
+files with other folders by setting the variable
+`vm-spool-files'.  *Note Spool Files::.
+
+
+
+File: vm.info, Node: Starting Up, Next: Selecting Messages, Prev: Introduction, Up: Top
+
+Starting Up
+***********
+
+The first time VM is started in an Emacs session, it attempts to load
+the file specified by the variable `vm-init-file', normally `~/.vm'.
+If present this file should contain Lisp code, much like the `.emacs'
+file.  Since VM has well over one hundred configuration variables, use
+of the `~/.vm' can considerably reduce clutter in the `.emacs' file.
+You can reload this file by typing `L' (`vm-load-init-file') from
+within VM.
+
+`M-x vm' causes VM to visit a file known as your "primary inbox".  If
+the variable `vm-auto-get-new-mail' is set non-`nil', VM will gather
+any mail present in your system mailbox and integrate it into your
+primary inbox.  The default name of your primary inbox is `~/INBOX',
+but VM will use whatever file is named by the variable
+`vm-primary-inbox'.
+
+VM transfers the mail from the system mailbox to the primary inbox via
+a temporary file known as the "crash box".  The variable
+`vm-crash-box' names the crash box file.  VM first copies the mail to
+the crash box, truncates the system mailbox to zero messages, merges
+the crash box contents into the primary inbox, and then deletes the
+crash box.  If the system or Emacs should crash in the midst of this
+activity, any message not present in the primary inbox will be either
+in the system mailbox or the crash box.  Some messages may be
+duplicated but no mail will be lost.
+
+If the file named by `vm-crash-box' already exists when VM is started
+up, VM will merge that file with the primary inbox before retrieving
+any new messages from the system mailbox.
+
+`M-x vm-visit-folder' (`v' from within VM) allows you to visit some
+other mail folder than the primary inbox.  The folder name will be
+prompted for in the minibuffer.
+
+Once VM has read the folder, any spool files associated with the
+folder are checked for new messages if `vm-auto-get-new-mail' is
+non-`nil'.  *Note Spool Files::.  After this, the first new or unread
+message will be selected, if any.  If there is no such message, VM
+will select whatever the selected message was when this folder was
+last saved.  If this folder has never been visited and saved by VM,
+then the first message in the folder is selected.
+
+`M-x vm-mode' can be used on a buffer already loaded into Emacs to put
+it into the VM major mode so that VM commands can be executed on it.
+This command is suitable for use in Lisp programs, and for inclusion
+in `auto-mode-alist' to automatically start VM on a file based on a
+particular filename suffix.  `vm-mode' skips some of VM's startup
+procedures (e.g. starting up a summary) to make non-interactive use
+easier.
+
+The variable `vm-startup-with-summary' controls whether VM
+automatically displays a summary of the folder's contents at startup.  A
+value of `nil' gives no summary; a value of `t' always gives a
+summary.  A value that is a positive integer N means that VM
+should generate a summary on if there are N or more messages in
+the folder.  A negative value -N means generate a summary only if
+there are N or fewer messages.  The default value of
+`vm-startup-with-summary' is `t'.
+
+* Menu:
+
+* Spool Files::  Linking folders and mailboxes.
+* Getting New Mail::  Retrieving mail from spool files.
+* Crash Recovery::  Recovering changes after Emacs or your system dies.
+
+
+
+File: vm.info, Node: Spool Files, Next: Getting New Mail, Prev: Starting Up, Up: Starting Up
+
+Spool Files
+===========
+A "spool file" is a file where the mail transport system delivers
+messages intended for you.  Typically a program called `/bin/mail' or
+`/bin/mail.local' does this delivery, although agents such as
+`procmail', `filter' and `slocal' can be invoked from a user's
+`~/.forward' or `~/.qmail' files.  No matter what the delivery agent,
+what all spool files have in common is that mail is delivered into
+them by one or more entities apart from VM and that all access to
+spool files must therefore be accompanied by the use of some file
+locking protocol.
+
+VM leaves the task of accessing spool files to `movemail', a program
+distributed with Emacs that is written for this purpose.  The variable
+`vm-movemail-program' specifies the name of the movemail program and
+defaults to `"movemail"'.  The variable `vm-movemail-program-switches'
+lets you specify some initial command line argument to pass to the
+movemail program.
+
+Every folder, including the primary inbox, can have one or more spool
+files associated with it.  You make these associations known to VM by
+setting the variable `vm-spool-files'.
+
+If you only want to associate spool files with your primary inbox, you
+can set `vm-spool-files' to a list of strings.  By default, the
+location of your system mailbox (the spool file that is associated
+with your primary inbox) is determined heuristically based on what
+type of system you're using.  VM can be told explicitly where the
+system mailbox is by setting `vm-spool-files' like this:
+
+     (setq vm-spool-files '("/var/spool/mail/kyle" "~/Mailbox"))
+
+With this setting, VM will retrieve mail for the primary inbox from
+first `/var/spool/mail/kyle' and then `~/Mailbox'.
+
+If the value of `vm-spool-files' is `nil', a default value for
+`vm-spool-files' will be inherited from the shell environmental
+variables MAILPATH or MAIL if either of these variables are defined.
+This inheritance happens before your init file is loaded, so setting
+`vm-spool-files' in your init file will override any environmental
+variables.
+
+If you want to associate spool files with folders other than or in
+addition to the primary inbox, the value of `vm-spool-files' must be a
+list of lists.  Each sublist specifies three entities, a folder, a
+spool file and a crash box.  When retrieving mail for a particular
+folder, VM will scan `vm-spool-files' for folder names that match the
+current folder's name.  The spool file and crash box found in any
+matching entries will be used to gather mail for that folder.
+
+For example, you can set `vm-spool-files' like this
+
+     (setq vm-spool-files
+           '(
+             ("~/INBOX"      "/var/spool/mail/kyle"      "~/INBOX.CRASH")
+             ("~/INBOX"      "~/Mailbox"                 "~/INBOX.CRASH")
+             ("~/Mail/bugs"  "/var/spool/mail/answerman" "~/Mail/bugs.crash")
+            )
+     )
+
+The folder `~/INBOX' has two spool files associated with it in this
+example, `/var/spool/mail/kyle' and `~/Mailbox'.  Another folder,
+`"~/Mail/bugs"' has one folder `/var/spool/mail/answerman' associated
+with it.  Note that both of the `~/INBOX' entries used the same crash
+box.  The crash box can be the same if the folder name is the same.
+Different folders should use different crashboxes.
+
+An alternate way of specifying folder/spool file associations
+is to use the variables `vm-spool-file-suffixes' and
+`vm-crash-box-suffix'.
+
+The value of `vm-spool-file-suffixes' should be a list of string
+suffixes to be used to create possible spool file names for folders.
+Example:
+
+     (setq vm-spool-file-suffixes '(".spool" "-"))
+
+With `vm-spool-file-suffixes' set this way, if you visit a folder
+`~/mail/beekeeping', when VM attempts to retrieve new mail for that
+folder it will look for mail in `~/mail/beekeeping.spool' and
+`~/mail/beekeeping-' in addition to scanning `vm-spool-files' for
+matches.  The value of `vm-spool-files-suffixes' will not be used
+unless `vm-crash-box-suffix' is also defined, since a crash box is
+required for all mail retrieval from spool files.
+
+The value of `vm-crash-box-suffix' should be a string suffix used to
+create possible crash box file names for folders.  When VM uses
+`vm-spool-file-suffixes' to create a spool file name, it will append
+the value of `vm-crash-box-suffix' to the folder's file name to create
+a crash box name.  If the value of `vm-spool-files-suffixes' is `nil',
+then the value of `vm-crash-box-suffix' is not used by VM.
+
+The idea behind `vm-spool-file-suffixes' and `vm-crash-box-suffix' is
+to give you a way to have many folders with individual spool files
+associated with them, without having to list them all in
+`vm-spool-files'.  If you need even more control of spool file and
+crash box names, use `vm-make-spool-file-name' and
+`vm-make-crash-box-name'.  The value of both of these should be a
+function or the name of a function.  When VM visits a folder, it will
+call the function with the name of the folder as an argument, and the
+function should return the spool file name or crash box name to be
+used for that folder.
+
+If your spool file is on another host, VM supports accessing spool
+files on remote hosts using the POP and IMAP protocols.
+
+* Menu:
+
+* POP Spool Files::	How to use a POP maildrop as a spool file
+* IMAP Spool Files::	How to use an IMAP maildrop as a spool file
+* POP Folders::		How to use a POP maildrop as a folder
+* IMAP Folders::	How to use a IMAP maildrop as a folder
+
+
+
+File: vm.info, Node: POP Spool Files, Up: Spool Files
+
+POP Spool Files
+===============
+VM supports accessing spool files on remote hosts via the Post Office
+Protocol (POP).  Instead of a spool file name as in the examples
+above, you would use a string that tells VM how to access the POP
+mailbox.  The format of this string is:
+
+     "pop:HOST:PORT:AUTH:USER:PASSWORD"
+
+Replace `pop' in the example with `pop-ssl' to have VM speak POP over
+an SSL connection.  Use `pop-ssh' to use POP over an SSH connection.
+
+For SSL, you must have the stunnel program installed and the variable
+`vm-stunnel-program' must name it in order for POP over SSL to work.
+The default value of this variable, `"stunnel"', should be sufficient
+if the program is installed in your normal command search path.
+
+For SSH, you must have the ssh program installed and the variable
+`vm-ssh-program' must name it in order for POP over SSH to work.  When
+VM makes the SSH connection it must run a command on the remote host
+so that the SSH session is maintained long enough for the POP
+connection to be established.  By default that command is `"echo
+ready; sleep 10"', but you can specify another command by setting
+`vm-ssh-remote-command'.  Whatever command you use must produce some
+output and hold the connection open long enough for VM to establish a
+port-forwarded connection to the POP server.
+
+HOST is the host name of the POP server.  PORT is the TCP port number
+to connect to (should normally be 110).  For POP over SSL connections
+the standard port is 995.  USER is the user name sent to the server.
+PASSWORD is the secret shared by you and the server for authentication
+purposes.  How it is used depends on the value of the AUTH parameter.
+If the PASSWORD is `*', VM will prompt you for the password the first
+time you try to retrieve mail from the maildrop.  If the password is
+valid, VM will not ask you for the password again during this Emacs
+session.
+
+AUTH is the authentication method used to convince the server you
+should have access to the maildrop.  Acceptable values are `pass',
+`rpop' and `apop'.  For `pass', the PASSWORD is sent to the server
+with the POP PASS command.  For `rpop', the PASSWORD should be the
+string to be sent to the server via the RPOP command.  In this case
+the string is not really a secret; authentication is done by other
+means.  For `apop', an MD5 digest of the PASSWORD appended to the
+server timestamp will be sent to the server with the APOP command.  If
+Emacs does not have bulit in MD5 support, you will have to set the
+value of `vm-pop-md5-program' appropriately to point at the program
+that will generate the MD5 digest that VM needs.
+
+By default VM will retrieve all the messages from a POP maildrop
+before returning control of Emacs to you.  If the maildrop is large,
+the wait could be considerable.  If you set `vm-pop-max-message-size'
+to a positive numeric value, VM will not automatically retrieve
+messages larger than this size.  If VM is retrieving messages because
+you invoked `vm-get-new-mail' interactively, then VM will ask whether
+it should retrieve the large message.  If VM is retrieving messages
+automatically (e.g. `vm-auto-get-new-mail' is set non-`nil') then VM
+will skip the large message and you can retrieve it later.
+
+The variable `vm-pop-messages-per-session' controls how many messages
+VM will retrieve from a POP maildrop before returning control to you.
+Similarly, the variable `vm-pop-bytes-per-session' limits the number
+of bytes VM will retrieve from a POP maildrop before returning control
+to you.  By default, the value of both variables is nil, which tells
+VM to retrieve all the messages in the POP maildrop regardless of how
+many messages there are and how large the maildrop is.
+
+After VM retrieves messages from the maildrop, the default action is
+to delete the messages from there.  If you want VM to leave messages
+in the remote maildrop until you explicitly request their removal, set
+`vm-pop-expunge-after-retrieving' to `nil'.  Messages will not be
+removed from the maildrop until you run `vm-expunge-pop-messages';
+only those messages that VM has retrieved into the current folder will
+be expunged.
+
+The variable `vm-pop-auto-expunge-alist' gives you a way to specify on
+a per-maildrop basis which POP maildrops have messages automatically
+removed when retrieved and which ones leave the messages on the POP
+server.  The value of `vm-pop-auto-expunge-alist' should be a list of
+POP mailboxes and values specifying whether messages should be
+automatically deleted from the mailbox after retrieval.  The format of
+the list is:
+
+     ((MAILBOX . VAL) (MAILBOX . VAL) ...)
+
+MAILBOX should be an POP maildrop specification as described in the
+documentation for the variable `vm-spool-files'.  If you have the POP
+password specified in the `vm-spool-files' entry, you do not have to
+specify it here as well.  Use `*' instead; VM will still understand
+that this mailbox is the same as the one in `vm-spool-files' that
+contains the password.
+
+VAL should be `nil' if retrieved messages should be left in the
+corresponding POP mailbox, `t' if retrieved messages should be removed
+from the mailbox immediately after retrieval.
+
+Here is an example:
+
+     (setq vm-pop-auto-expunge-alist
+        '(
+          ("odin.croc.net:110:pass:kyle:*" . nil)  ;; leave message on the server
+          ("hilo.harkie.org:110:pass:kyle:*" . t)  ;; expunge immediately
+         )
+     )
+
+
+
+File: vm.info, Node: IMAP Spool Files, Up: Spool Files
+
+IMAP Spool Files
+================
+VM can also use the IMAP protocol to access a mailbox on a remote
+host.  As with POP, instead of specifying a spool file name in the
+`vm-spool-files' definition, you would give a string that tells VM how
+to access to remote maildrop.
+
+An IMAP maildrop specification has the following format:
+
+     "imap:HOST:PORT:MAILBOX:AUTH:USER:PASSWORD"
+
+Replace `imap' in the example with `imap-ssl' to have VM speak IMAP
+over an SSL connection.  Use `imap-ssh' to use IMAP over an SSH
+connection.
+
+For SSL, you must have the stunnel program installed and the variable
+`vm-stunnel-program' must name it in order for IMAP over SSL to work.
+The default value of this variable, `"stunnel"', should be sufficient
+if the program is installed in your normal command search path.
+
+For SSH, you must have the ssh program installed and the variable
+`vm-ssh-program' must name it in order for IMAP over SSH to work.
+When VM makes the SSH connection it must run a command on the remote
+host so that the SSH session is maintained long enough for the IMAP
+connection to be established.  By default that command is `"echo
+ready; sleep 10"', but you can specify another command by setting
+`vm-ssh-remote-command'.  Whatever command you use must produce some
+output and hold the connection open long enough for VM to establish a
+port-forwarded connection to the IMAP server.  SSH must be able to
+authenticate without a password, which means you must be using .shosts
+authentication or RSA.
+
+HOST is the host name of the IMAP server.
+
+PORT is the TCP port number to connect to (should normally be 143).
+For IMAP over SSL connections the standard port is 993.
+
+MAILBOX is the name of the mailbox on the IMAP server.  This should be
+`"inbox"', to access your default IMAP maildrop on the server.
+
+AUTH is the authentication method used to convince the server you
+should have access to the maildrop.  Acceptable values are
+`"preauth"', `"cram-md5"', and `"login"'.  `"preauth"' causes VM to
+skip the authentication stage of the protocol with the assumption that
+the session was authenticated in some way external to VM.  The hook
+`vm-imap-session-preauth-hook' is run, and it is expected to return a
+process connected to an authenticated IMAP session.  `"cram-md5' tells
+VM to use the CRAM-MD5 authentication method as specificed in RFC
+2195.  The advantage of this method over the `"login"' method is that
+it avoids sending your password over the net unencrypted.  Not all
+IMAP servers support `"cram-md5"'; if you're not sure, ask your mail
+administrator or just try it.  The other value, `"login"', tells VM to
+use the IMAP LOGIN command for authentication, which sends your
+username and password in cleartext to the server.
+
+USER is the user name used in authentication methods that require such
+an identifier.  `"login"' and `"cram-md5"' use it currently.
+
+PASSWORD is the secret shared by you and the server for authentication
+purposes.  If the PASSWORD is `*', VM will prompt you for the password
+the first time you try to retrieve mail from the maildrop.  If the
+password is valid, VM will not ask you for the password again during
+this Emacs session.
+
+By default VM will retrieve all the messages from an IMAP maildrop
+before returning control of Emacs to you.  If the maildrop is large,
+the wait could be considerable.  If you set `vm-imap-max-message-size'
+to a positive numeric value, VM will not automatically retrieve
+messages larger than this size.  If VM is retrieving messages because
+you invoked `vm-get-new-mail' interactively, then VM will ask whether
+it should retrieve the large message.  If VM is retrieving messages
+automatically (e.g. `vm-auto-get-new-mail' is set non-`nil') then VM
+will skip the large message and you can retrieve it later.
+
+The variable `vm-imap-messages-per-session' controls how many messages
+VM will retrieve from an IMAP maildrop before returning control to
+you.  Similarly, the variable `vm-imap-bytes-per-session' limits the
+number of bytes VM will retrieve from an IMAP maildrop before
+returning control to you.  By default, the value of both variables is
+nil, which tells VM to retrieve all the messages in the IMAP maildrop
+regardless of how many messages there are and how large the maildrop
+is.
+
+After VM retrieves messages from the maildrop, the default action is
+to delete the messages from there.  If you want VM to leave messages
+in the remote maildrop until you explicitly request their removal, set
+`vm-imap-expunge-after-retrieving' to `nil'.  Messages will not be
+removed from the maildrop until you run `vm-expunge-imap-messages';
+only those messages that VM has retrieved into the current folder will
+be expunged.
+
+The variable `vm-imap-auto-expunge-alist' gives you a way to specify
+on a per-maildrop basis which IMAP maildrops have message
+automatically removed when retrieved and which ones leave the messages
+on the IMAP server.  The value of `vm-imap-auto-expunge-alist' should
+be a list of IMAP mailboxes and values specifying whether messages
+should be automatically deleted from the mailbox after retrieval.  The
+format of the list is:
+
+     ((MAILBOX . VAL) (MAILBOX . VAL) ...)
+
+MAILBOX should be an IMAP maildrop specification as described in the
+documentation for the variable `vm-spool-files'.  If you have the IMAP
+password specified in the `vm-spool-files' entry, you do not have to
+specify it here as well.  Use `*' instead; VM will still understand
+that this mailbox is the same as the one in `vm-spool-files' that
+contains the password.
+
+VAL should be `nil' if retrieved messages should be left in the
+corresponding IMAP mailbox, `t' if retrieved messages should be
+removed from the mailbox immediately after retrieval.
+
+Here is an example:
+
+     (setq vm-imap-auto-expunge-alist
+        '(
+          ;; leave message on the server
+          ("imap:odin.croc.net:143:inbox:login:kyle:*" . nil)
+          ;; expunge immediately
+          ("imap:hilo.harkie.org:143:inbox:login:kyle:*" . t)
+         )
+     )
+
+
+
+File: vm.info, Node: POP Folders, Up: Spool Files
+
+POP Folders
+===========
+
+VM's traditional mode of operation is to treat all remote mail sources
+as spool files, pulling all mail down from remote sources into local
+folders and deleting the remote copies.  But sometimes it is more
+convenient to treat a remote mail source as a folder instead of a
+spool file, manipulating the remote source as if it were a folder
+instead of just a holding area for incoming messages.
+
+The command `vm-visit-pop-folder' allows you to visit a POP mailbox as
+if it were a folder.  When you visit a POP folder, VM will download
+copies of the messages that it finds there for you to read.  If you
+delete and expunge messages in the folder, the corresponding messages
+on the POP server will be removed when you save the changes with
+`vm-save-folder'.
+
+Message attributes (new, replied, filed, etc.) and labels cannot be
+stored on the POP server but they will be maintained locally, just as
+they are for ordinary folders.
+
+In order for VM to know about POP folders that you can access, you
+must declare them by setting the variable `vm-pop-folder-alist'.  The
+variable's value should be an associative list of the form:
+
+      ((POPDROP NAME) ...)
+
+POPDROP is a POP maildrop specification in the same format used by
+`vm-spool-files'.
+
+NAME is a string that should give a less cumbersome name that you will
+use to refer to this maildrop when using `vm-visit-pop-folder'.
+
+For example:
+
+     (setq vm-pop-folder-alist
+           '(
+              ("pop:pop.mail.yahoo.com:110:pass:someuser:*" "Yahoo! mail")
+              ("pop:localhost:110:pass:someuser:*" "local mail")
+            )
+     )
+
+`Yahoo! mail' and `local mail' are what you would type when
+`vm-visit-pop-folder' asks for a folder name.
+
+
+
+File: vm.info, Node: IMAP Folders, Up: Spool Files
+
+IMAP Folders
+============
+
+VM's traditional mode of operation is to treat all remote mail sources
+as spool files, pulling all mail down from remote sources into local
+folders and deleting the remote copies.  But sometimes it is more
+convenient to treat a remote mail source as a folder instead of a
+spool file, manipulating the remote source as if it were a folder
+instead of just a holding area for incoming messages.
+
+The command `vm-visit-imap-folder' allows you to visit a IMAP mailbox
+as if it were a folder.  When you visit a IMAP folder, VM will
+download copies of the messages that it finds there for you to read.
+If you delete and expunge messages in the local copy of the folder,
+the corresponding messages on the IMAP server will be removed when you
+save the changes with `vm-save-folder'.
+
+Message attributes (new, replied, filed, etc.) are stored on the IMAP
+server and are also cached locally.  Labels cannot be stored on the
+IMAP server but you can use them lcoally.
+
+In order for VM to know about IMAP servers that you can access, you
+must declare them by setting the variable `vm-imap-server-list'.  The
+variable's value should be a list of the form:
+
+      (IMAPDROP IMAPDROP ...)
+
+IMAPDROP is a IMAP maildrop specification in the same format used by
+`vm-spool-files'.
+
+For example:
+
+     (setq vm-imap-server-list
+           '(
+              "imap-ssl:mail.foocorp.com:993:inbox:login:becky:*"
+              "imap:crickle.lex.ky.us:143:inbox:login:becky:*"
+            )
+     )
+
+The mailbox (`inbox' in the example) is ignored; when when
+`vm-visit-imap-folder' asks for a folder name you can enter any folder
+that is acessible to you on the IMAP server.
+
+
+
+File: vm.info, Node: Getting New Mail, Next: Crash Recovery, Prev: Spool Files, Up: Starting Up
+
+Getting New Mail
+================
+
+Pressing `g' runs `vm-get-new-mail', which will retrieve mail from all
+the spool files associated with the current folder.  *Note Spool
+Files::.  For POP folders, any newly arrived messages at the POP
+server will be incorporated into the local copy of the POP folder.
+
+If the value of the variable `vm-auto-get-new-mail' is non-`nil' VM
+will retrieve mail for a folder whenever the folder is visited.  If
+the value is a positive integer N, VM will also check for new mail
+every N seconds for all folders currently being visited.  If new mail
+is present, VM will retrieve it.
+
+If the value of the variable `vm-mail-check-interval' is a positive
+integer N, VM will check for new mail every N seconds, but instead of
+retrieving mail, the word "Mail" will appear on the Emacs mode line of
+folders that have mail waiting.
+
+
+
+File: vm.info, Node: Crash Recovery, Prev: Getting New Mail, Up: Starting Up
+
+Crash Recovery
+==============
+
+When Emacs crashes, its last action before dying is to try to write
+out an autosave file that contains changes to files that you were
+editing.  VM folders are file buffers inside Emacs, so folders are
+autosaved also.  Changes, with regard to VM folders, means attribute
+changes, label additions and deletions, message edits, and expunges.
+VM keeps track of whether a message is new or old, whether it has been
+replied to, whether it is flagged for deletion and so on, by writing
+special headers into the folder buffer.  These headers are saved to
+disk when you save the folder.  If Emacs crashes before the folder has
+been saved, VM may forget some attribute changes unless they were
+written to the autosave file.
+
+Note that when VM retrieves mail from spool files it *always* writes
+them to disk immediately and at least one copy of the message is on
+disk at all times.  So while you can lose attribute changes from
+crashes, you should not lose messages unless the disk itself is
+compromised.
+
+When you visit a folder, VM checks for the existence of an autosave
+file that has been modified more recently than the folder file.  If
+such an autosave file exists, there is a good chance that Emacs or
+your operating system crashed while VM was visiting a folder.  VM will
+then write a message to the echo area informing you of the existence
+of the autosave file and visit the folder in read-only mode.  Visiting
+the folder in read-only mode prevents you from modifying the folder,
+which in turn prevents Emacs from wanting to write new changes to the
+autosave file.  VM will not retrieve new mail for a folder that is in
+read-only mode.  VM also skips summary generation and MIME decoding to
+help catch your attention.
+
+If you want to recover the lost changes, run `M-x recover-file' or use
+the Recover toolbar button.  At the `Recover File: ' prompt press
+`RET'.  Emacs will then display a detailed directory listing showing
+the folder file and the autosave file and ask if you want to recover
+from the autosave file.  A good rule of thumb is to answer "yes" if
+the autosave file is larger than the folder file.  If the autosave
+file is significantly smaller, Emacs may not have completed writing
+the autosave file.  Or it could be that the smaller autosave file
+reflects the results of an expunge that you had not yet committed to
+disk before the crash.  If so, answering "no" means you might have to
+do that expunge again, but this is better than not knowing whether the
+autosave file was truncated.
+
+Assuming you answered "yes", the folder buffer's contents will be
+replaced by the contents of the autosave file and VM will reparse the
+folder.  At this point the contents of the folder buffer and the disk
+copy of the folder are different.  Therefore VM will not get new mail
+for this folder until the two copies of the folder are synchronized.
+When you are satisfied that the recovered folder is whole and intact,
+type `S' to save it to disk.  After you do this, VM will allow you to
+use `g' to retrieve any new mail that has arrived in the spool files
+for the folder.
+
+Assuming you answered "no" to the recovery question, you should type
+`C-x C-q', which is bound to `vm-toggle-read-only' in VM folder
+buffers.  The folder will be taken out of read-only mode and you can
+read and retrieve your mail normally.
+
+
+
+File: vm.info, Node: Selecting Messages, Next: Reading Messages, Prev: Starting Up, Up: Top
+
+Selecting Messages
+******************
+
+In order to read, delete, or do anything to a message, you need to
+select it.  In other words, make the message the "current message".
+
+The primary commands for selecting messages in VM are `n'
+(`vm-next-message') and `p'
+(`vm-previous-message').  These commands move forward and
+backward through the current folder.  By default, these commands
+skip messages flagged for deletion.  This behavior can be
+disabled by setting the value of the variable
+`vm-skip-deleted-messages' to `nil'.  These commands
+can also be made to skip messages that have been read; set
+`vm-skip-read-messages' to `t' to do this.
+
+The commands `n' and `p' also take prefix arguments that specify the
+number of messages to move forward or backward.  If the magnitude of
+the prefix argument is greater than 1, no message skipping will be
+done regardless of the settings of the skip variables.
+
+The variable `vm-circular-folders' determines whether VM folders will
+be considered circular by various commands.  "Circular" means VM will
+wrap from the end of the folder to the start and vice versa when
+moving the message pointer, deleting, undeleting or saving messages
+before or after the current message.
+
+A value of `t' causes all VM commands to consider folders circular.
+A value of `nil' causes all VM commands to signal an error if
+the start or end of the folder would have to be passed to complete the
+command.  For movement commands, this occurs after the message pointer
+has been moved as far as it can go.  For other commands the error occurs
+before any part of the command has been executed, i.e. no deletions, saves,
+etc. will be done unless they can be done in their entirety.  A value
+other than `nil' or `t' causes only VM's movement
+commands to consider folders circular.  Saves, deletes and undeletes
+will behave as if the value is `nil'.  The default value of
+`vm-circular-folders' is `nil'.
+
+You can also select messages by using the summary window.  *Note
+Summaries::.  Move the cursor to the summary line for the message you
+want to select and press `RET'.  VM will select this message.  Instead
+of pressing `RET' you could run some other VM command that operates
+based on the notion of a `current message'.  VM will select the
+message under the cursor in the summary window before executing such
+commands.  Example, if you type `d', VM will select the message under
+the cursor and then delete it.  Note that this occurs *only* when you
+execute a command when the cursor is in the summary buffer window and
+only if the variable `vm-follow-summary-cursor' is non-`nil'.
+
+When a folder is visited or when you type `g' and VM retrieves some
+mail, the default action is to move to the first new or unread message
+in the folder.  New messages are favored over old but unread messages.
+If you set `vm-jump-to-new-messages' to `nil', VM will favor old,
+unread messages over new messages if the old, unread message appears
+earlier in the folder.  If you set `vm-jump-to-unread-messages' to
+`nil' also, VM will not search for new or unread messages.
+
+Other commands to select messages:
+
+`RET (`vm-goto-message')'
+     Go to message number N.  N is the prefix argument, if provided,
+     otherwise it is prompted for in the minibuffer.
+`TAB (`vm-goto-message-last-seen')'
+     Go to message last previewed or read.
+`N (`vm-next-message-no-skip')'
+`P (`vm-previous-message-no-skip')'
+     Go to the next (previous) message, ignoring the settings of the
+     skip control variables.
+`M-n (`vm-next-unread-message')'
+`M-p (`vm-previous-unread-message')'
+     Move forward (backward) to the nearest new or unread message.
+`M-s (`vm-isearch-forward')'
+`M-x vm-isearch-backward'
+     These work just like Emacs' normal forward and backward incremental
+     search commands, except that when the search ends, VM selects the
+     message containing point.  If the value of the variable
+     `vm-search-using-regexps' is non-`nil', a regular expression
+     may be used instead of a fixed string for the search pattern; VM
+     defaults to the fixed string search.  If a prefix argument is given,
+     the value of `vm-search-using-regexps' is temporarily reversed for
+     the search.
+     *Note Incremental Search: (emacs)Incremental Search.
+
+
+
+File: vm.info, Node: Reading Messages, Next: Sending Messages, Prev: Selecting Messages, Up: Top
+
+Reading Messages
+****************
+
+Once a message has been selected, VM will show it to you.  By default,
+presentation is done in two stages: "previewing" and "paging".
+
+* Menu:
+
+* Previewing::	                Customizing message previews.
+* Paging::	Scrolling through the current message.
+* Reading MIME Messages::	Using VM's MIME display features.
+
+
+
+File: vm.info, Node: Previewing, Next: Paging, Prev: Reading Messages, Up: Reading Messages
+
+Previewing
+==========
+
+"Previewing" means showing you a small portion of a message and
+allowing you to decide whether you want to read it.  Typing SPC
+exposes the body of the message, and from there you can repeatedly
+type SPC to page through the message.
+
+By default, the sender, recipient, subject and date headers are shown
+when previewing; the rest of the message is hidden.  This behavior may
+be altered by changing the settings of three variables:
+`vm-visible-headers', `vm-invisible-header-regexp' and
+`vm-preview-lines'.
+
+If the value of `vm-preview-lines' is a number, it tells VM how many
+lines of the text of the message should be visible.  The default value
+of this variable is 0.  If `vm-preview-lines' is `nil', then
+previewing is not done at all; when a message is first presented it is
+immediately exposed in its entirety and is flagged as read.  If
+`vm-preview-lines' is `t', the message body is displayed fully but the
+message is not flagged as read until you type SPC.
+
+The value of `vm-visible-headers' should be a list of regular
+expressions matching the beginnings of headers that should be made
+visible when a message is presented.  The regexps should be listed in
+the preferred presentation order of the headers they match.
+
+If non-`nil', the variable `vm-invisible-header-regexp' specifies what
+headers should *not* be displayed.  Its value should be a string
+containing a regular expression that matches all headers you do not
+want to see.  Setting this variable non-`nil' implies that you want to
+see all headers not matched by it; therefore the value of
+`vm-visible-headers' is only used to determine the order of the
+visible headers in this case.  Headers not matched by
+`vm-invisible-header-regexp' or `vm-visible-headers' are displayed
+last.
+
+If you change the value of either `vm-visible-headers' or
+`vm-invisible-header-regexp' in the middle of a VM session the effects
+will not be immediate.  You will need to use the command
+`vm-discard-cached-data' on each message (bound to `j' by default) to
+force VM to rearrange the message headers.  A good way to do this is
+to mark all the messages in the folder and apply
+`vm-discard-cached-data' to the marked messages.  *Note Message
+Marks::.
+
+Another variable of interest is `vm-highlighted-header-regexp'.  The
+value of this variable should be a single regular expression that
+matches the beginnings of any header that should be presented in
+inverse video when previewing.  For example, a value of
+`"^From\\|^Subject"' causes the From and Subject headers to be
+highlighted.  Highlighted headers will be displayed using the face
+specified by `vm-highlighted-header-face', which defaults to 'bold.
+
+By default, VM will not preview messages that are flagged as read.  To
+have VM preview all messages, set the value of
+`vm-preview-read-messages' to `t'.
+
+Typing `t' (`vm-expose-hidden-headers') makes VM toggle between
+exposing and hiding headers that would ordinarily be hidden.
+
+
+
+File: vm.info, Node: Paging, Next: Reading MIME Messages, Prev: Previewing, Up: Reading Messages
+
+Paging
+======
+
+Typing SPC during a message preview exposes the body of the message.
+If the message was new or previously unread, it will be flagged
+read".  At this point you can use SPC to scroll forward, and `b' or
+DEL to scroll backward a windowful of text at a time.  A prefix
+argument N applied to these commands causes VM to scroll forward or
+backward N lines.  Typing space at the end of a message moves you to
+the next message.  If the value of `vm-auto-next-message' is `nil',
+SPC will not move to the next message; you must type `n' explicitly.
+
+If the value of `vm-honor-page-delimiters' is non-`nil', VM will
+recognize and honor page delimiters.  This means that when you scroll
+through a document, VM will display text only up to the next page
+delimiter.  Text after the delimiter will be hidden until you type
+another SPC, at which point the text preceding the delimiter will
+become hidden.  The Emacs variable `page-delimiter' determines what VM
+will consider to be a page delimiter.
+
+You can "unread" a message (so to speak) by typing `U'
+(`vm-unread-message').  The current message will be flagged unread.
+
+Sometimes you will receive messages that contain lines that are too
+long to fit on your screen without wrapping.  If you set
+`vm-fill-paragraphs-containing-long-lines' to a positive numeric value
+N, VM will call `fill-paragraph' on all paragraphs that contain lines
+spanning N columns or more.  As with other things VM does that
+modifies the way the message looks on the screen, this does not change
+message contents.  VM copies the message contents to a "presentation"
+buffer before altering them.  The fill column that VM uses is
+controlled by `vm-paragraph-fill-column'.  Unlike the Emacs variable
+`fill-column', this variable is not buffer-local by default.
+
+
+
+File: vm.info, Node: Reading MIME Messages, Prev: Paging, Up: Reading Messages
+
+Reading MIME Messages
+*********************
+
+If the variable `vm-display-using-mime' is non-`nil' VM will display
+messages using Multipurpose Internet Mail Extensions (MIME).  "MIME"
+is a set of extensions to the standard Internet message format that
+allows reliable transmission of arbitrary data including images, audio
+and video, as well as ordinary text.  A non-`nil' value for this
+variable means that VM will recognize MIME encoded messages and
+display them as specified by the various MIME standards
+specifications.  A nil value means VM will display MIME messages as
+plain text messages.
+
+At its most basic MIME is a set of transfer encodings used to ensure
+error free transport, and a set of content types.  VM understands the
+two standard MIME transport encodings, Quoted-Printable and BASE64,
+and will decode messages that use them as necessary.  VM also will try
+to recognize and decode messages using the UNIX "uuencode" encoding
+system.  While this is not an official MIME transfer encoding and
+never will be, enough old mailers still use it that it is worthwile to
+attempt to decode it.  VM has Emacs-Lisp based Quoted-Printable and
+BASE64 encoders and decoders, but you can have VM use external
+programs to perform these tasks and the process will almost certainly
+be faster.  The variables `vm-mime-qp-decoder-program',
+`vm-mime-qp-decoder-switches', `vm-mime-qp-encoder-program',
+`vm-mime-qp-encoder-switches', `vm-mime-base64-decoder-switches',
+`vm-mime-base64-encoder-switches', `vm-mime-base64-decoder-program',
+`vm-mime-base64-encoder-program', tell VM which programs to use and
+what command line switches to pass to them.  There are C programs at
+VM's distribution sites on the Internet to handle BASE64 and
+Quoted-Printable.  VM does not have a builtin "uuencode" decoder, so
+`vm-mime-uuencode-decoder-program' must be set non-`nil' for VM to
+decode uuencoded MIME objects.
+
+By default VM will display as many content types as possible within
+Emacs.  Images and audio are also supported if support for images and
+audio has been compiled in.  Types that cannot be displayed internally
+within Emacs can be converted to a type that can, or be displayed
+using an external viewer.
+
+The first step in displaying a MIME message is decoding it to
+determine what object types it contains.  The variable
+`vm-auto-decode-mime-messages' controls when this happens.  A value of
+`t' means VM should decode the message as soon as the message body is
+exposed, or during previewing if `vm-mime-decode-for-preview' is also
+set non-`nil'.  A `nil' value means wait until decoding is explicitly
+requested.  Type `D' (`vm-decode-mime-message') to manually initiate
+MIME decoding.
+
+After decoding you will see either the decoded MIME objects or button
+lines that must be activated to attempt display of the MIME object.
+The variable `vm-auto-displayed-mime-content-types' specifies the
+types that are displayed immediately.  Its value should be a list of
+MIME content types that should be displayed immediately after
+decoding.  Other types will be displayed as a button that you must
+activate to display the object.  To activate a button, either click
+the middle mouse button over it, or move the cursor to the line and
+press RET.  If you are running under a window system, you can use the
+right mouse button over a MIME button to display a menu of actions you
+can take on the MIME object.  If you prefer using keyboard commands,
+you can save the MIME object with `$ w', print it with `$ p', or pipe
+it to a shell command with `$ |'.  Use `$ s' to append an encapsulated
+message or USENET news article to a folder.  If you want to display
+the object with its characters displayed using Emacs' default face,
+use `$ RET'.  To display the object using an external viewer, type `$
+e'.
+
+Sometimes MIME objects are large and you may not want to save
+them along with the message that contains them.  If so, use
+`$ d' (`vm-delete-mime-object') while the cursor is on
+the MIME button.  The object will be deleted and replaced with
+an object that indicates what the old object was and the fact
+that it is gone.  This is not an undoable operation, so use this
+command with care.  If you inadvertently delete an object, the
+only way to get it back is to quit visiting the current folder
+without saving and then revisit the folder.  This works because
+the object isn't removed from the disk copy of the folder until
+you save the folder.  By default VM will ask if you're sure
+about deleting an object before doing the deletion.  You can
+make VM not ask this question by setting
+`vm-mime-confirm-delete' to `nil'.
+
+A value of t for `vm-auto-displayed-mime-content-types' means that all
+types should be displayed immediately.  A nil value means never
+display MIME objects immediately; only use buttons.  If the value of
+`vm-auto-displayed-mime-content-types' is a list, it should be a list
+of strings, which should all be MIME types or type/subtype pairs.
+Example:
+
+     (setq vm-auto-displayed-mime-content-types '("text" "image/jpeg"))
+
+If a top-level type is listed without a subtype, all subtypes of that
+type are assumed to be included.  The example above specifies that all
+text types are displayed immediately, but only JPEG images are
+displayed this way.
+
+The variable `vm-auto-displayed-mime-content-type-exceptions' should
+be a list of MIME content types that should not be displayed
+immediately after decoding.  This variable acts as an exception list
+for `vm-auto-displayed-mime-content-types'; all types listed there
+will be auto-displayed except those in the exception list.
+
+The value of `vm-auto-displayed-mime-content-type-exceptions' should
+be either nil or a list of strings.  The strings should all be types
+or type/subtype pairs.  Example:
+
+     (setq vm-auto-displayed-mime-content-type-exceptions '("text/html"))
+
+Again, if a top-level type is listed without a subtype, all subtypes
+of that type are assumed to be included.
+
+The variable `vm-mime-internal-content-types' specifies which types
+should be displayed internally within Emacs.  Like
+`vm-auto-displayed-mime-content-types' its value should be a list of
+MIME content types.  A value of t means that VM should always display
+an object internally if possible.  VM knows which object types can be
+displayed internally, so you can specify the types you want without
+worrying about errors if Emacs can't handle them.  A `nil' value means
+never display MIME objects internally, which means VM will have to run
+an external viewer to display all MIME objects.
+
+If the value is a list, it should be a list of strings.  Example:
+
+     (setq vm-mime-internal-content-types '("text" "image/jpeg"))
+
+If a top-level type is listed without a subtype, all subtypes of that
+type are assumed to be included.  Note that multipart types are always
+handled internally regardless of the setting of this variable.
+
+The variable `vm-mime-internal-content-type-exceptions' serves as the
+exception list for `vm-mime-internal-content-types'.  Its value should
+be a list of types that should not be displayed internally.
+
+For types that you want displayed externally, set the value of
+`vm-mime-external-content-types-alist' to specify external viewers for
+the types.  The value of this variable should be an associative list
+of MIME content types and the external programs used to display them.
+If VM cannot display a type internally or a type is not listed in
+`vm-mime-internal-content-types' VM will try to launch an external
+program to display that type.
+
+The alist format is a list of lists, each sublist having the form
+
+     (TYPE PROGRAM ARG ARG ... )
+
+or
+
+     (TYPE COMMAND-LINE)
+
+TYPE is a string specifying a MIME type or type/subtype pair.  For
+example "text" or "image/jpeg".  If a top-level type is listed without
+a subtype, all subtypes of that type are assumed to be included.
+
+In the first form, PROGRAM is a string naming a program to run to
+display an object.  Any ARGs will be passed to the program as
+arguments.  The octets that compose the object will be written into a
+temporary file and the name of the file can be inserted into an ARG
+string by writing `%f' in the ARG string.  In earlier versions of VM
+the filename was always added as the last argument; as of VM 6.49 this
+is only done if `%f' does not appear in any of the ARG strings.
+
+If the COMMAND-LINE form is used, the program and its
+arguments are specified as a single string and that string is
+passed to the shell ("sh -c" typically) for execution.  Since
+the command line will be passed to the shell, you can use shell
+variables and input/output redirection if needed.  As with the
+PROGRAM/ARGS form, the name of the temporary file that
+contains the MIME object will be appended to the command line if
+`%f' does not appear in the command line string.
+
+In either the PROGRAM/ARG or COMMAND-LINE forms, all the program and
+argument strings will have any %-specifiers in them expanded as
+described in the documentation for the variable
+`vm-mime-button-format-alist'.  The only difference is that `%f'
+refers to the temporary file VM creates to store the object to be
+displayed, not the filename that the sender may have associated with
+the attachment.
+
+Example:
+
+     (setq vm-mime-external-content-types-alist
+           '(
+	 ("text/html"	"netscape")
+	 ("image/gif"	"xv")
+	 ("image/jpeg"	"xv")
+	 ("video/mpeg"	"mpeg_play")
+	 ("video"	"xanim")
+            )
+     )
+
+The first matching list element will be used.
+
+No multipart message will ever be sent to an external viewer.
+
+External viewer processes are normally killed when you select a
+a new message in the current folder.  If you want viewer
+processes to not be killed, set
+`vm-mime-delete-viewer-processes' to a `nil' value.
+
+Any type that cannot be displayed internally or externally or
+converted to a type that can be displayed, will be displayed as a
+button that allows you to save the body to a file.
+
+As with the internal type list, there is an exception list that
+you can use to specify types that you do not want displayed
+externally.  When VM is considering whether it should
+automatically launch an external viewer, it will consult the
+variable `vm-mime-external-content-type-exceptions'.  If the
+type to be displayed is listed, VM will not launch a viewer.
+This allows you to setup viewers for types that ordinarily you
+would not want VM to display or for types that you norally want
+to convert to some other type using `vm-mime-type-converter-alist'.
+You can still display such a type with anexternal viewer by using
+`$ e'.
+
+
+When a MIME object is displayed using an external viewer VM must first
+write the object to a temporary file.  The external viewer thne opens
+and displays that file.  Some viewers will not open a file unless the
+filename ends with some extention that it recognizes such as `.html'
+or `.jpg'.  You can use the variable
+`vm-mime-attachment-auto-suffix-alist' to map MIME types to extensions
+that your external viewers will recognize.  The value of this variable
+should be a list of type and suffix pairs.  The list format is:
+
+     ((TYPE . SUFFIX) ...)
+
+TYPE is a string specifying a MIME top-level type or a type/subtype
+pair.  If a top-level type is listed without a subtype, all subtypes
+of that type are matched.
+
+SUFFIX is a string specifying the suffix that shoul be used for the
+accompanying type.
+
+Example:
+
+     (setq vm-mime-attachment-auto-suffix-alist
+           '(
+             ("image/jpeg"		.	".jpg")
+             ("image/gif"		.	".gif")
+             ("image/png"		.	".png")
+             ("text"			.	".txt")
+            )
+     )
+
+VM will search the list for a matching type.  The suffix associated
+with the first type that matches will be used for the temporary
+filename.
+
+Types that cannot be displayed internally or externally are
+checked against an associative list of types that can be converted to other
+types.  If an object can be converted to a type that VM can
+display, then the conversion is done and the new object is
+subject to the auto-display rules which determine whether the
+object is displayed immediately or a button is displayed in its
+place.  The conversion list is stored in the variable
+`vm-mime-type-converter-alist'.
+
+The alist format is
+
+     ( (START-TYPE END-TYPE COMMAND-LINE ) ... )
+
+START-TYPE is a string specifying a MIME type or type/subtype pair.
+Example `"text"' or `"image/jpeg"'.  If a top-level type is listed
+without a subtype, all subtypes of that type are assumed to be
+included.
+
+END-TYPE must be an exact type/subtype pair.  This is the type to
+which START-TYPE will be converted.
+
+COMMAND-LINE is a string giving a command line to be passed to the
+shell.  The octets that compose the object will be written to the
+standard input of the shell command.
+
+Example:
+
+     (setq vm-mime-type-converter-alist
+            '(
+	 ("image/jpeg"	"image/gif"	"jpeg2gif")
+	 ("text/html"	"text/plain"	"striptags")
+	)
+     )
+
+The first matching list element will be used.
+
+For text type messages, MIME also requires that a character set be
+specified, so that the recipient's mail reader knows what character
+glyphs to use to display each character code.  To display a message
+properly VM needs to know how to choose a font for a given character
+set.
+
+The variable `vm-mime-default-face-charsets' tells VM what character
+sets your default face can display.  For most American and European
+users using X Windows, Emacs' default face displays the ISO-8859-1 and
+US-ASCII characters, US-ASCII being a subset of ISO-8859-1.  The value
+of `vm-mime-default-face-charsets' must be a list of strings
+specifying the character sets that your default face can display.
+This variable is useful for making bogus, unregistered character sets
+that are slight variants of ISO-8859-1 visible.  Example:
+
+     (add-to-list 'vm-mime-default-face-charsets "Windows-1251")
+     (add-to-list 'vm-mime-default-face-charsets "Windows-1252")
+     (add-to-list 'vm-mime-default-face-charsets "Windows-1257")
+
+Messages sent using such character sets would normally be considered
+undisplayable by VM, and a button would be displayed that offers to
+save the message body to a file.
+
+Sometimes a charset that VM cannot display can be converted to a one
+that VM can display.  An example would be a message encoded using
+UTF-8 but in fact only contains Japanese characters.  In that case the
+message text could probably be converted to iso-2022-jp which VM
+running on a MULE-enabled Emacs could display.
+
+VM offers a way to do such conversions.  The variable
+`vm-mime-charset-converter-alist' is an associative list of MIME
+charsets and programs that can convert between them.  If VM cannot
+display a particular character set, it will scan this list to see if
+the charset can be converted into a charset that it can display.
+
+The alist format is:
+
+      ( ( START-CHARSET END-CHARSET COMMAND-LINE ) ... )
+
+START-CHARSET is a string specifying a MIME charset.  Example
+`"iso-8859-1"' or `"utf-8"'.
+
+END-CHARSET is a string specifying the charset to which
+START-CHARSET will be converted.
+
+COMMAND-LINE is a string giving a command line to be passed to the
+shell.  The characters in START-CHARSET will be written to the
+standard input of the shell command and VM expects characters encoded
+in END-CHARSET to appear at the standard output of the COMMAND-LINE.
+COMMAND-LINE is passed to the shell, so you can use pipelines, shell
+variables and redirections.
+
+Example:
+
+     (setq vm-mime-charset-converter-alist
+           '(
+	 ("utf-8" "iso-2022-jp" "iconv -f utf-8 -t iso-2022-jp")
+            )
+     )
+
+The first matching list element will be used.
+
+The variable `vm-mime-charset-font-alist' tells VM what font to use to
+display a character set that cannot be displayed using the default
+face.  The value of this variable should be an assoc list of character
+sets and fonts that can be used to display them.  The format of the
+list is:
+
+( (CHARSET . FONT) ...)
+
+CHARSET is a string naming a MIME registered character set such as
+`"iso-8859-5"'.
+
+FONT is a string naming a font that can be used to display
+CHARSET.
+
+An example setup might be:
+
+     (setq vm-mime-charset-font-alist
+       '(
+         ("iso-8859-5" . "-*-*-medium-r-normal-*-16-160-72-72-c-80-iso8859-5")
+        )
+     )
+
+This variable is only useful for character sets whose characters can
+all be encoded in single 8-bit bytes.  Also multiple fonts can only be
+displayed if you're running under a window system e.g. X Windows.  So
+this variable will have no effect if you're running Emacs on a tty.
+
+Note that under FSF Emacs 19 any fonts you use must be the same height
+as your default font.  XEmacs and Emacs 21 do not have this
+limitation.  Under Emacs 20 and beyond, and under any XEmacs version
+compiled with MULE support, the value of `vm-mime-charset-font-alist'
+has no effect.  This is because all characters are displayed using
+fonts discovered by MULE and VM has no control over them.
+
+MIME allows a message to be sent with its content encoded in multiple
+formats, simultaneously, in the same message.  Such messages have a
+content type of multipart/alternative.  The idea is that the sender
+might have different MIME decoding or display capabilities than some
+of his recipients.  For instance, the sender may be able to compose a
+message using fancy text formatting constructs like tables, italics
+and equations but some of the recipients may only be able to display
+plain text.  The multipart/alternative type message is the solution to
+this dilemma.  Such a message would contain at least two text
+subparts, one in plaintext and the other in the full featured text
+formatting language that the sender used.
+
+To control how VM displays multipart/alternative messages, you must
+set the variable `vm-mime-alternative-select-method'.  Its value must
+be a symbol.  A value of `best' tells VM to display the message using
+the subpart closest in appearance to what the sender used to compose
+the message.  In the example above this would mean displaying the
+fully featured text subpart, if VM knows how to display that type.  VM
+will display the type either internally or externally.  A value of
+`best-internal' tells VM to use the closest subpart that it can
+display internally.  External viewers won't be used in this case.
+
+Some mailers incorrectly use the generic `application/octet-stream'
+type when sending files that really have a specific MIME type.  For
+example, a JPEG image might be sent using `application/octet-stream'
+type instead of `image/jpeg', which would be the correct type.  In
+many cases the filename sent along with the mistyped file
+(e.g. `foo.jpg') suggests the correct type.  If the variable
+`vm-infer-mime-types' is set non-`nil', VM will attempt to use the
+filename sent with a MIME attachment to guess an attachment's type if
+the attachment is of type `application/octet-stream'.
+
+
+

@@ -1,0 +1,66 @@
+How to setup VM:
+
+0) Look at the Makefile and review the values of EMACS, INFODIR,
+   LISPDIR, BINDIR and PIXMAPDIR.  If they are not right for your
+   system, change them.
+
+1) Your build options:
+     `make' to build a usable VM.
+     `make vm.info' to build the Info online help document.
+     'make utils' to compile the external Quoted-Printable and
+         BASE64 encoders and decoders.
+     `make all' to make everything.
+   If there are byte compiler warnings, ignore them.  They
+   probably can't be avoided with code that is run on multipe
+   Emacs versions.
+
+2) Put all the .elc files into a Lisp directory that is in your
+   Emacs load-path.  If you've already set LISPDIR to this
+   directory, just `make install'.
+
+3) If you're using XEmacs or Emacs 21 and you want toolbar
+   support, make a directory called `vm' in the XEmacs `etc'
+   directory.  Copy the files in pixmaps directory into the
+   directory you just created.  VM will look for the pixmaps
+   there by default.
+
+   Alternately you can put the pixmap files in any directory you
+   want or just leave them where they are.  Be sure to point the
+   variables vm-toolbar-pixmap-directory and vm-image-directory at
+   the direrctory where you put the files.  That is
+
+      (setq vm-toolbar-pixmap-directory "/path/to/pixmaps")
+      (setq vm-image-directory "/path/to/pixmaps")
+
+   in your .emacs or .vm file.  If you've set PIXMAPDIR, 'make
+   install' will copy the files to that directory.
+
+4) If you built the Info document, copy the file vm.info* files
+   into the Emacs' info.  ('make install' will do this for you if
+   you've set INFODIR). You may need to edit the "dir" file in
+   that directory and add a menu entry for VM.  It should look
+   like this:
+
+* VM:: (vm)		A mail reader.
+
+5) Put these lines in your .emacs file if they aren't there
+   already:
+
+   (autoload 'vm "vm" "Start VM on your primary inbox." t)
+   (autoload 'vm-other-frame "vm" "Like `vm' but starts in another frame." t)
+   (autoload 'vm-visit-folder "vm" "Start VM on an arbitrary folder." t)
+   (autoload 'vm-visit-virtual-folder "vm" "Visit a VM virtual folder." t)
+   (autoload 'vm-mode "vm" "Run VM major mode on a buffer" t)
+   (autoload 'vm-mail "vm" "Send a mail message using VM." t)
+   (autoload 'vm-submit-bug-report "vm" "Send a bug report about VM." t)
+
+You're now ready to use VM.  C-h i should start up the Emacs Info
+system and if you've installed the Info document properly you can
+use the online documentation to teach yourself how to use VM.
+
+Please use M-x vm-submit-bug-report to report bugs.  The bug report
+will be sent to bug-vm@uunet.uu.net and be gatewayed from there to
+gnu.emacs.vm.bug.
+
+VM's home page on the World Wide Web is at http://www.wonderworks.com/vm .
+You can get the latest version of VM from there.

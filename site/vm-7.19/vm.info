@@ -1,0 +1,69 @@
+Info file: vm.info,    -*-Text-*-
+produced by `texinfo-format-buffer'
+from filebuffer `*scratch*'
+using `texinfmt.el' version 2.41 of  1 Mar 2005.
+
+START-INFO-DIR-ENTRY
+* VM::			A mail reader.
+END-INFO-DIR-ENTRY
+
+This file documents the VM mail reader.
+
+Copyright (C) 1989, 1991, 1999 Kyle E. Jones
+
+Permission is granted to make and distribute verbatim copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies.
+
+
+
+Indirect:
+vm.info-1: 464
+vm.info-2: 65328
+vm.info-3: 116515
+
+Tag table:
+(Indirect)
+Node: Top467
+Node: Introduction2115
+Node: Starting Up8466
+Node: Spool Files11818
+Node: POP Spool Files17328
+Node: IMAP Spool Files22758
+Node: POP Folders28812
+Node: IMAP Folders30591
+Node: Getting New Mail32320
+Node: Crash Recovery33273
+Node: Selecting Messages36698
+Node: Reading Messages41049
+Node: Previewing41501
+Node: Paging44554
+Node: Reading MIME Messages46441
+Node: Sending Messages65331
+Node: MIME Composition70781
+Node: Replying75866
+Node: Forwarding Messages79460
+Node: Saving Messages81689
+Node: Deleting Messages87457
+Node: Editing Messages89109
+Node: Message Marks90088
+Node: Message Attributes92089
+Node: Sorting Messages95632
+Node: Threading98313
+Node: Reading Digests100014
+Node: Summaries101083
+Node: Virtual Folders107052
+Node: Frames and Windows116518
+Node: Frame Configuration117660
+Node: Window Configuration121231
+Node: Toolbar124007
+Node: Menus129908
+Node: Faces132248
+Node: Using the Mouse134329
+Node: Hooks135666
+Node: Key Index145273
+Node: Command Index149938
+Node: Variable Index154151
+Node: License165840
+
+End tag table

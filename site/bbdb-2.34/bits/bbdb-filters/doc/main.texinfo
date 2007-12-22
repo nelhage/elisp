@@ -1,0 +1,492 @@
+% This is really LaTeXInfo, but some time LaTeX mode is more useful -*- LaTeX  -*-
+% This is really LaTeXInfo, but some time LaTeX mode is more useful -*- Latexinfo  -*-
+%
+%  Revision:  main.texinfo,v 1.1.1.1 1995/08/07 08:43:10 mohsen Exp
+%
+%\documentstyle[12pt,latexinfo,format,smallverb,tabular]{book}
+%\documentstyle[12pt,latexinfo,format]{book}
+\documentstyle[12pt,format,hyperlatex,latexinfo]{book}
+%\documentstyle[12pt,times,latexinfo,format]{book}
+%\documentstyle[12pt,avantgarde,latexinfo,format]{book}
+%\documentstyle[12pt,palatino,latexinfo,format]{book}
+%\documentstyle[10pt,avantgarde,latexinfo,format]{book}
+
+\pagestyle{empty}
+
+\c \input{transfig}  \c Used with eepic -- not needed when using psfig.
+\input{epsf}
+
+\begin{document}
+
+\c \bibliographystyle{alpha}  \c [banan92]
+\c \bibliographystyle{plain}   \c Numbers [1]
+
+\c \textwidth 5.2in \c for .tty generation
+
+\htmldirectory{bbdbFilters}
+\htmlname{bbdbFilters}
+\htmltitle{BBDB Filters}
+\htmlmathitalics
+\htmladdress{\htmlrule{}info@neda.com}
+
+\c Declare which indices you want to make use of.
+\newindex{cp}
+\newindex{fn}
+
+\title{BBDB Input and Output Filters\\
+        \vspace{0.25in} {\large DRAFT}\\
+        {\normalsize Version 0.2}}  
+
+\author{{\normalsize Prepared by}\\
+        Mohsen Banan \\
+        \code{mohsen@neda.com}\\
+        Neda Communications, Inc.\\
+        17005 SE 31st Place\\
+        Bellevue, WA 98008}
+
+\c (current-time-string)
+\date{July 26, 1995}
+\c \date{\today}
+
+\maketitle
+
+\c The following commands start the copyright page for the printed manual.
+\clearpage
+\vspace*{0pt plus 1filll}
+
+
+\bigskip
+\bigskip
+\bigskip
+
+
+This document describes the ``BBDB Input and Output Filters'' package,
+a utility which translates BBDB information to and from various other
+formats.
+
+\begin{display}
+
+Copyright \copyright 1995 Neda Communications, Inc.
+
+Published by:
+Neda Communications, Inc.
+17005 SE 31st Place, 
+Bellevue, WA 98008 USA
+
+\end{display}
+
+
+Permission is granted to make and distribute verbatim copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies.
+
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions for verbatim copying, provided that the
+entire resulting derived work is distributed under the terms of a
+permission notice identical to this one.
+
+Permission is granted to copy and distribute translations of this
+manual into another language, under the above conditions for modified
+versions, except that this permission notice may be stated in a
+translation approved by the Foundation.
+
+\bigskip
+\bigskip
+
+\clearpage
+\pagestyle{headings}
+
+\c Use roman numerals for the page numbers and Insert the Table of Contents.
+\pagenumbering{roman}
+\tableofcontents
+
+\c \listoftables
+\c \listoffigures
+
+\c End the Table of Contents and start numbering from 1 with Arabic numbers
+
+\clearpage
+\pagenumbering{arabic}
+
+\c Anything before the setfilename will not appear in the Info file.
+\setfilename{INFOFILE}
+
+\topnode{BBDB Filters}
+
+\htmlmenu{6}
+
+\begin{ifinfo}
+Copyright \copyright \var{1995} \var{Neda Communications, Inc.}
+\end{ifinfo}
+
+\c The Top node contains the master menu for the Info file.
+\c This appears only in the Info file, not the printed manual.
+
+\chapter{Introduction}
+
+Over time much valuable data has been gathered in BBDB database files.
+Many wish to share parts or all of this information with others.  They
+also wish to have access to this same information from other systems
+(like personal digital assistants) lacking straightforward BBDB
+access.
+
+For these reasons, we have prepared a family of filters that convert
+the information in BBDB to and from a variety of other
+formats. ``Output filters'' export BBDB information to other formats
+while ``input filters'' import information from other formats into
+BBDB.
+
+Our hope is that over time this collection of BBDB filters will grow
+through contributed code.
+
+\section{About This Package}
+
+This package is a collection of filters and is called ``BBDB Input and
+Output Filters''.  It has been somewhat tested with BBDB version 1.50.
+The present state of the software is still preliminary although it has
+proved useful.
+
+\section{About This Manual}
+
+This documentation applies to Version 0.2 of the ``BBDB Input and
+Output Filters'' package.  The documentation is presently skeletal and
+very preliminary.  It mostly provides the user with instructions for
+use, and very little background is included.  Familiarity with Emacs
+Lisp is assumed for some sections.
+
+\chapter{Output Filters}
+
+``Output filters'' are used to export BBDB information into formats 
+used by other systems.
+
+In general, an output filter uses the contents of your
+\code{*BBDB*} buffer as input.  Note that output filters do not use
+BBDB files (typically `\code{~/.bbdb}') directly.
+
+An output filter is invoked by executing its associated lisp function.
+The name of the function is conventionally named \code{bbdb-<system>-output} 
+(e.g., \code{M-x bbdb-hp200lx-output}).
+
+The result of running an output filter is to create a new buffer that
+contains the \code{*BBDB*} information appropriately transformed into a
+format suitable for use by the target system.  The new buffer is given
+a file name that you specify.
+
+\section{HP 200LX Phone Book}
+
+\cindex{HP 200LX Connectivity Pack}
+This package has only been tested on HP 200LX palmtop systems.  It
+also requires the ``HP 200LX Connectivity Pack'' for converting
+comma-delimited ASCII files into binary .PDB files which are read by
+the HP 200LX Phone Book application.  Version 1.00 of the ``HP 200LX
+Connectivty Pack'' was used for testing.
+
+The HP 200LX output filter is in file \code{bbdb-hp200lx.el}.
+
+\begin{enumerate}
+
+\findex{bbdb-hp200lx-output}
+
+\item Invoke \code{M-x bbdb} to populate the \code{*BBDB*} buffer
+with the contents you wish to export.
+
+\item Invoke \code{ bbdb-hp200lx-output} to create an ASCII .CDF 
+(Comma Delimited File). \cindex{.CDF file, HP 200LX Phone Book}
+
+\item Using Xlate/Merge option of HP Connectivity Pack convert the
+.CDF file into a binary .PDB file used by the Phone Book program.
+\cindex{.PDF file, HP 200LX Phone Book}
+
+\item Download the .PDB file to your palmtop's internal disk and
+ensure that the Phone Book program is set use the newly downloaded
+.PDB file.
+
+\end{enumerate}
+
+\section{PC Eudora}
+
+BBDB information can be exported to PC Eudora in two formats--as a
+nickname database file and as a recipients database file.
+
+The PC Eudora output filter is in file \code{bbdb-eudora.el}.
+
+\subsection{PC Eudora Nickname Database}
+
+\begin{enumerate}
+
+\item Invoke \code{M-x bbdb} to populate the \code{*BBDB*} buffer
+with the contents you wish to export.
+
+\findex{bbdb-eudora-nndbase-output}
+\item Invoke \code{bbdb-eudora-nndbase-output} to create a PC Eudora
+Nickname database file.
+
+\item Make the file accessible to PC Eudora.
+
+\end{enumerate}
+
+\subsection{PC Eudora Recipient Database}
+
+\begin{enumerate}
+
+\item Invoke \code{M-x bbdb} to populate the \code{*BBDB*} buffer
+with the contents you wish to export.
+
+\findex{bbdb-eudora-rcpdbase-output}
+\item Invoke \code{bbdb-eudora-rcpdbase-output} to create a PC Eudora 
+recipient's database file.
+
+\item Make the file accessible to PC Eudora.
+
+\end{enumerate}
+
+\section{Lotus cc:Mail Nicknames}
+
+The Lotus cc:Mail output filter is in file \code{bbdb-ccmail.el}.
+
+\begin{enumerate}
+
+\item Invoke \code{M-x bbdb} to populate the \code{*BBDB*} buffer
+with the contents you wish to export.
+
+\findex{bbdb-ccmail-output}
+\item Invoke \code{ bbdb-ccmail-output} to create a cc:Mail Nicknames file.
+
+\item Make the file accessible to cc:Mail. 
+
+\end{enumerate}
+
+\section{PH}
+
+The PH output filter is in file \code{bbdb-ph.el}.
+
+\begin{enumerate}
+
+\item Invoke \code{M-x bbdb} to populate the \code{*BBDB*} buffer
+with the contents you wish to export.
+
+\findex{bbdb-ph-output}
+\item Invoke \code{bbdb-ph-output} to create a \code{ph} data file for 
+use with the  \code{maked} program.
+
+\item Make the file accessible to \code{ph}.
+
+\end{enumerate}
+
+\section{Emacs Lisp Export}
+
+The Emacs Lisp Export output filter is in file \code{bbdb-export.el}.
+
+This output filter uses the current contents of your
+\code{*BBDB*} buffer to generate a new buffer (\code{*BBDB* Export}) 
+that contains a single lisp \code{(progn ...)} expression.  For
+example, a \code{*BBDB*} buffer containing two records would result in
+the following \code{*BBDB* Export} buffer:
+
+\begin{example}
+;;; ======= Start of Exported BBDB Records =======
+(progn  
+  (require 'bbdb-com)
+  (defun bbdb-maybe-create (name company net &optional addrs phones notes)
+    "Try to add a record to BBDB if it does not already exist."
+    (condition-case err
+        (progn
+          (bbdb-create-internal name company net addrs phones notes)
+          (message "%s %s added." name (if net (concat "<" net ">") ""))
+          (sleep-for 1))    
+      (error (ding)
+             (message "%s %s skipped. (%s)"
+                      name
+                      (if net (concat "<" net ">") "")
+                      (car (cdr err)))
+             (sleep-for 1))))
+
+  (bbdb-maybe-create "Jill Doe--IMPORTED"
+                     "CBS Corporation"
+                     '("jilld@cbs.com")
+                     '(
+                       ["Home"
+                        "368 222ND PL"
+                        ""
+                        ""
+                        "Springfield"
+                        "MA" 2117]
+                       )
+                     '(
+                       ["Office" 617 555 9983 0]
+                       ) '"Movie Mogul")
+  (bbdb-maybe-create "John Doe--IMPORTED"
+                     "ABC Incorporated"
+                     '("jdoe@abc.com")
+                     '(
+                       ["Office"
+                        "123 Any Street"
+                        ""
+                        ""
+                        "Any Town"
+                        "WA" (98027 7758)]
+                       )
+                     '(
+                       ["Office" 206 555 1234 0]
+                       ) '"TV Producer")
+  )
+;;; ======= End of Exported BBDB Records =======
+\end{example}
+
+\cindex{Sending BBDB records via email}
+This lisp expression can then be sent via email or some other
+text-based messaging facility to another user who can then evaluate
+the expression which will add the \code{BBDB} records to the
+recipient's
+\code{BBDB} database.  
+
+Only new records are added.  A record with the same name or net
+address as one already existing in the \code{BBDB} is skipped
+entirely.
+
+In the sample contents of a \code{*BBDB* Export} buffer presented, two
+records are being exported--one for ``John Doe'' and the other for
+``Jill Doe''.  Notice that their names have been appended with
+\code{--IMPORTED}.  This string can be used to quick locate each record
+that is added to the database using this mechanism.
+
+The following steps are for exporting BBDB records into Emacs Lisp:
+
+\begin{enumerate}
+
+\item Invoke \code{M-x bbdb} to populate the \code{*BBDB*} buffer
+with the contents you wish to export.
+
+\findex{bbdb-export}
+\item Invoke \code{bbdb-export} to create a \code{*BBDB* Export} buffer which contains a
+single \code{(progn ...)} can be evaluated to add the records to the
+existing \code{BBDB} database (if the records do not already exist).
+
+\item Use the contents of \code{*BBDB* Export} in email and other messaging systems.
+
+\end{enumerate}
+
+The following steps are for a user wishing to import the contents of a
+\code{*BBDB* Export} buffer's expression into his or her own database:
+
+\begin{enumerate}
+
+\item Evaluate the region bounded by the lines \\
+ \code{;;; ======= Start of Exported BBDB Records =======} \\
+and \\
+ \code{;;; ======= End of Exported BBDB Records =======}. \\
+You can use such commands as
+\code{M-x eval-region} or \code{M-x eval-last-sexp}.
+
+\item Review the newly imported entries.  To see them, invoke \code{M-x
+bbdb} and specify \code{--IMPORTED} at the \code{Regular Expression}
+prompt.  
+
+\item After reviewing the contents of the imported records, you may
+wish to remove the \code{--IMPORTED} that is appended to the name by
+\code{bbdb-export}.
+
+\end{enumerate}
+
+\chapter{Input Filters}
+
+``Input filters'' are used to import into BBDB information from a
+foreign system's data file.
+
+The name of the function is conventionally named
+\code{bbdb-<system>-input} (e.g., \code{bbdb-passwd-input} is the name
+of the Emacs Lisp function for the UNIX password file input filter).
+
+In general, an ``input filter'' expects the foreign system's data to
+be in the current buffer.  The contents of the current buffer are used
+to create an Emacs Lisp file which when loaded will add new records
+into your BBDB database if they don't yet exist--existing BBDB records
+will not be modified.
+
+\section{General Facilities for Input Filtering}
+
+The result of running an input filter is to produce a new buffer a
+series of \code{bif-create-record} \findex{bif-create-record}
+expressions, each corresponding to a single user's record.  Notice
+that input filters do not directly modify the contents of the BBDB
+files (typically `\code{~/.bbdb}').
+
+To actually modify the contents of the BBDB database, you must
+evaluated the expressions in the resultant buffer created by the input
+filter.  One way to do so is simply to invoke \code{M-x eval-buffer}.
+Another way is to simply save the buffer to disk and load its contents
+into Emacs Lisp using \code{M-x load-file}.
+
+\section{UNIX Password Files}
+
+The UNIX password file input filter is in file \code{bbdb-passwd.el}.
+
+\begin{enumerate}
+
+\item Use \code{M-x find-file} to visit the UNIX password file you wish to import.
+
+\findex{bbdb-passwd-input}
+\item With the password file in the current buffer, invoke the input 
+filter \code{M-x bbdb-passwd-input}.  You will be prompted for the
+domain name associated with that host's password file; an organization
+name; as well as the file name to be associated with the buffer of
+\code{bif-create-record} expressions.
+
+\item Evaluate the contents of the input filter's buffer to add records 
+into your BBDB database file.
+
+\end{enumerate}
+
+\chapter{Miscellany}
+
+\section{TODO List}
+
+\begin{itemize}
+
+\item Move generic input filter functionality out of
+\code{bbdb-passwd.el} and into, say, \code{bbdb-ifilt.el}.  
+The generic functionality code has names typically prefixed with \code{bif-}.
+
+\item Add support for \code{gdbload} (as an alternative to the 
+Xlate/Merge application provided in the HP 200LX Connectivity Pack)
+into the HP 200LX output filter.  This is based on input from Robert
+Nicholson \code{<robert@steffi.dircon.co.uk>}.
+
+\item Add documentation for variables in the various input and output filters.
+
+\item Check and document all dependencies on other packages.
+
+\end{itemize}
+
+\section{Credits}
+
+Pean Lim \code{<pean@neda.com>} wrote most of this package.  Mohsen
+Banan \code{<mohsen@neda.com>} put it all together and guided the
+work.  Neda Communications, Inc. sponsored the work.  The output
+filters code is based on \code{bbdb-print} by Boris Goldowsky\\
+\code{<boris@prodigal.psych.rochester.edu>}.
+
+\c ;;;;;;;;;;;;;;;; Appendix Starts Here ;;;;;;;;;;;;;
+\appendix
+
+\mbinput{lgpl.tex}
+
+\begin{tex}
+%\bibliography{/usr/local/lib/bib/gnu,/usr/local/lib/bib/networking,/usr/local/lib/bib/directory,/usr/local/lib/bib/rfcs}
+\end{tex}
+
+\c \twocolumn
+\node Concept Index, Top, First Chapter, Top
+\unnumbered{Concept Index}
+
+\printindex{cp}
+
+\H \htmlprintindex
+
+\node Command Index, Top, First Chapter, Top
+\unnumbered{Command Index}
+
+\printindex{fn}
+
+\end{document}
+

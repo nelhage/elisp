@@ -1,0 +1,36 @@
+Mailcrypt is an Emacs lisp package which provides a simple interface
+to cryptographic functions with PGP.  It was written by Patrick
+LoPresti (patl@lcs.mit.edu) and Jin Choi (jin@atype.com), updated with
+some support for PGP 5.0 by Len Budney (lbudney@pobox.com), and
+updated with support for GnuPG by Brian Warner (warner@lothar.com).
+
+The original Mailcrypt is available through the Mailcrypt home page at
+`http://cag-www.lcs.mit.edu/mailcrypt/'.  An FTP mirror is at
+`ftp://cag.lcs.mit.edu/pub/patl/'.  The latest Mailcrypt may be found at
+`http://mailcrypt.sourceforge.net' or at any sunsite mirror.
+
+To install the Mailcrypt package on your system, follow the directions
+in the file `INSTALL'.
+
+To hook Mailcrypt into your mail and news browsers, follow the
+directions in the "Installation" section of the Mailcrypt manual.  If
+you don't know how to use the Emacs Info browser, you should learn;
+type `C-h i' and poke around.  You can read the Info version of the
+Mailcrypt manual by doing `C-u C-h i' on the file `mailcrypt.info'.
+
+To automatically be informed of improvements to Mailcrypt, add
+yourself to the (very low volume) Mailcrypt announcement list.  Send
+Email to mc-announce-request@cag.lcs.mit.edu with a request to be
+added.
+
+Send all bug reports and comments to the authors.  And most of all,
+enjoy!
+
+ - Patrick LoPresti (patl@lcs.mit.edu) and Jin Choi (jin@atype.com)
+   Thu Jun 22 19:58:35 1995
+
+ - Len Budney (lbudney@pobox.com)
+   Sat Jan 31 20:05:30 1998
+
+ - Brian Warner (warner@lothar.com)
+   Sat May 19 20:55:49 2001

@@ -1,0 +1,76 @@
+  Mailcrypt 3.5.8 is Available for Download
+
+
+  1.  Introduction
+
+  Mailcrypt is an Emacs Lisp package which provides a simple interface
+  to message encryption with PGP (you do use Emacs to handle your mail
+  and news, right?).  The current version of Mailcrypt handles PGP 2.6.x,
+  PGP 5.x, and GnuPG 1.x .
+
+
+  2.  Features
+
+  2.1. New in this Release
+
+  This is mainly a bugfix release. Anonymous remailer support was updated to
+  match modern remailers, and the GPG passphrase code was changed to cache
+  by keyid instead of name, which will help folks who use multiple keys with
+  the same name but different passphrases.
+
+
+  2.2.	Stable Features for PGP 5.0 and GnuPG
+
+  Support for GnuPG.  Key fetching/snarfing functionality for PGP 5.0.
+  Messages from PGP 5.0 operations now resemble more closely the
+  messages generated for version 2.6.  Encryption works correctly,
+  even when the secret keyring is not available (a requested feature
+  for paranoid types ;-).  Mixmaster and Cypherpunk remailers can be
+  used in PGP 5.0 mode, if the user has an RSA key. Further updated
+  documentation for support under various mail packages.
+
+
+  2.3.	Features for PGP 2.6.x (stable)
+
+  Encryption, decryption, signing, adding keys, extracting keys,
+  passphrase caching with timeout, multiple secret key (identity)
+  support, a simple but flexible interface to Cypherpunk remailers
+  (including chaining, response blocks, pseudonyms, and Mixmaster
+  support), and an automatic keyserver interface via HTTP.
+
+
+  2.4.	Still To Do
+
+  o  Fix signing of foreign-language emails under GNUS/Mule. Currently,
+     foreign characters are preceded by a '\207' byte, which is
+     present at signing, but stripped when messages are sent.
+
+  o  Get Mailcrypt to work with PGP 5.0 on NT.
+
+  o  Test Mailcrypt against PGP 6.5.
+
+  o  Refine Mailcrypt schemes so that alternate backends, like Crypt++,
+     can be used.
+
+  o  Expand self-test framework.
+
+
+  3.  Downloading Mailcrypt
+
+  The Official Mailcrypt version 3.5.8 can be downloaded at:
+
+  <http://mailcrypt.sourceforge.net>
+
+  Since receiving the blessing of the original authors, this is now
+  the official Mailcrypt site.
+
+  Of course, Mailcrypt 3.4 can still be downloaded at the (just as
+  official) Mailcrypt sites: 
+
+  <http://cag-www.lcs.mit.edu/mailcrypt/>
+  and
+  <ftp://cag.lcs.mit.edu/pub/patl/>
+
+  Share and Enjoy!
+	- Brian Warner <warner-mailcrypt@lothar.com>
+	- Len Budney <lbudney@pobox.com>

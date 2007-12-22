@@ -1,0 +1,1 @@
+(provide 'g-cus-load)

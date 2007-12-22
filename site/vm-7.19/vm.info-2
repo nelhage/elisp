@@ -1,0 +1,1177 @@
+Info file: vm.info,    -*-Text-*-
+produced by `texinfo-format-buffer'
+from filebuffer `*scratch*'
+using `texinfmt.el' version 2.41 of  1 Mar 2005.
+
+START-INFO-DIR-ENTRY
+* VM::			A mail reader.
+END-INFO-DIR-ENTRY
+
+This file documents the VM mail reader.
+
+Copyright (C) 1989, 1991, 1999 Kyle E. Jones
+
+Permission is granted to make and distribute verbatim copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies.
+
+
+
+File: vm.info, Node: Sending Messages, Next: Saving Messages, Prev: Reading Messages, Up: Top
+
+Sending Messages
+****************
+
+When sending messages from within VM, you will be using the standard
+Mail major mode provided with GNU Emacs, plus some extensions added by
+VM.  *Note Mail Mode: (emacs)Mail Mode.  However, mail composition
+buffers created by VM have some extra command keys.
+
+`C-c C-y (`vm-yank-message')'
+     Copies a message from the folder that is the parent of this
+     composition into the mail composition buffer.
+     The message number is read from the minibuffer.  By default, each line of
+     the copy is prepended with the value of the variable
+     `vm-included-text-prefix'.  All message headers are yanked along
+     with the text.  Point is left before the inserted text, the mark after.
+     Any hook functions bound to `mail-yank-hooks' are run, after inserting
+     the text and setting point and mark.  If a prefix argument is given,
+     this tells VM to ignore `mail-yank-hooks', don't set the mark, don't prepend the
+     value of `vm-included-text-prefix' to every yanked line, and don't yank
+     any headers other than those specified in
+     `vm-visible-headers' and `vm-invisible-headers'.  To yank a message from
+     a different folder than the parent of this composition, use
+     M-x vm-yank-message-other-buffer.
+`C-c C-v <Any VM command key>'
+     All VM commands may be accessed in a VM Mail mode buffer by
+     prefixing them with C-c C-v.
+`C-c C-a (`vm-mime-attach-file')'
+     Attaches a file to the composition.  When you send the message,
+     VM will insert the file and MIME encode it.  The variable
+     `vm-send-using-mime' must be set non-`nil' for this command to
+     work.  You will be asked for the file's type, and a brief
+     description of the attachment.  The description is optional.  If
+     the file's type is a text type, you will also be asked for the
+     character set in which the text should be displayed.  The new
+     attachment will appear as a highlighted tag in the composition
+     buffer.  You can use mouse button 3 on this tag to set the
+     default content disposition of the attachment.  The content
+     disposition gives a hint to the recipient's mailer how to treat
+     the attachment.  Specifically the disposition will indicate
+     whether the attachment should be displayed along with the message
+     or saved to a file.  Any text in the composition that appears
+     before the tag will appear in a MIME text part before the
+     attachment when the message is encoded and sent.  Similarly, any
+     text after the tag will appear after the attachment in the
+     encoded message.  If you change your mind about using the
+     attachment, you can remove it from the composition with C-k.  If
+     you want to move the attachment to some other part of the
+     message, you can kill it C-k and yank it back with C-y.
+`C-c C-m (`vm-mime-attach-message')'
+     Attaches a mail message to the composition.  If invoked with a
+     prefix arg, the name of a folder read from the minibuffer and the
+     message or messages to be attached are copied from that folder.
+     You will be prompted for the message number of the message to be
+     attached.  If you invoke the command on marked messages by
+     running `vm-next-command-uses-marks' first, the marked messages
+     in the selected folder will be attached as a MIME digest.
+`C-c C-b (`vm-mime-attach-buffer')'
+     Attaches an Emacs buffer to the composition.
+`C-c C-e (`vm-mime-encode-composition')'
+     Encodes the composition using MIME, but does not send it.  This
+     is useful if you want to use PGP to sign a message before sending
+     it.  After signing the message, you would use C-c C-c as usual to
+     send the message.  Emacs' `undo' command can be used to undo the
+     encoding, so that you can continue composing the unencoded
+     message.
+`C-c C-p (`vm-preview-composition')'
+     Previews the current composition.  The message is copied into a
+     temporary folder and you can read the message and interact with
+     it using normal VM mode commands to see how it might look to a
+     recipient.  Type q to quit the temporary folder and resume
+     composing your message.
+
+The simplest command is `m' (`vm-mail') which sends a mail message
+much as `M-x mail' does but allows the added commands described above.
+
+`vm-mail' can be invoked outside of VM by typing `M-x vm-mail'.
+However, only (`vm-yank-message-other-folder') will work; all the
+other commands require a parent folder.
+
+If you send a message and it is returned by the mail system because it
+was undeliverable, you can resend the message by typing `M-r'
+(`vm-resend-bounced-message').  VM will extract the old message and
+its pertinent headers from the returned message, and place you in a VM
+Mail mode buffer.  A Resent-To header will be added, which you can
+fill in with the corrected addresses of the recipients that bounced.
+You can also added a Resent-Cc header, which has the same meaning as a
+Cc header in a normal message.  Mail will only be sent to the
+addresses in the Resent-To and Resent-Cc headers unless you delete
+both of those headers.  In that case the To and Cc headers will be
+used.
+
+* Menu:
+
+* MIME Composition::	Sending a message using MIME attachments.
+* Replying::		Describes the various ways to reply to a message.
+* Forwarding Messages::	How to forward a message to a third party.
+
+
+
+File: vm.info, Node: MIME Composition, Next: Replying, Prev: Sending Messages, Up: Sending Messages
+
+MIME Composition
+================
+
+To use VM's MIME composition features, you must have
+`vm-send-using-mime' set to a non-`nil' value.  With MIME composition
+enabled, VM will allow you to add file attachments to your composition
+and will analyze your message when you send it and MIME encode it as
+necessary.
+
+To attach a file to your composition, use `C-c C-a'
+(`vm-mime-attach-file').  VM will ask you for the name of the file,
+its type, a brief description and its character set if it is a text
+attachment.  The attachment will be represented in the composition as
+a tag line like this
+
+  [ATTACHMENT ~/sounds/chronophasia_scream.au, audio/basic]
+
+You can type text before and after this tag and it will appear before
+or after the text in the final MIME message when VM encodes it.  You
+can kill the tag with `C-k' and yank it back with `C-y' to move it to
+another place in the message.  You can yank back the tag multiple
+times to duplicate the attachment in the message.  Or you can leave
+the tag killed and the attachment won't appear in the message when it
+is sent.
+
+If you click the right mouse button on the attachment tag, a menu
+will appear that allows you to change the content disposition of
+the attachment.  The "content disposition" of a MIME object
+gives a mail reader a hint as to whether an object should be
+displayed inline or as an inert tag or button that you must
+activate in some fashion.  "Inline" display usually means
+that the object will be display within or alongside the message
+text, if that is possible.  "Attachment", when used as a
+content disposition, means that the object will likely be
+displayed as a tag.  By default, VM specifies an inline
+disposition for all MIME types except `application' and
+`model' types.
+
+To attach a buffer instead of a file, use `C-c C-b' (normally bound to
+`vm-mime-attach-buffer'.  You must not kill the buffer that you attach
+until after the message has been sent.
+
+To preview what a MIME message will look like to a recipient, use `C-c
+C-p' (`vm-mime-preview-composition').  VM will encode a copy of the
+message and present it to you in a temporary mail folder.  You can
+scroll through the message using normal VM mail reading commands.
+Typing `q' in this folder will return you to your composition where
+you can make further changes.
+
+To encode a MIME message without sending it, use `C-c C-e'
+(`vm-mime-encode-composition').  This is useful if you use PGP and
+want to sign a message before sending it.  VM will encode the message
+for transport, inserting all necessary headers and boundary markers.
+You can then sign the message and send it with C-c C-c and be
+confident that VM won't invalidate the signature by making further
+modifications to the message.  Or if you want to resume editing the
+message you can run the Emacs `undo' (normally bound to `C-x u')
+command which will revert the encoded MIME bodies back to tags and you
+can continue entering your composition.
+
+By default, when you type text into a composition buffer VM assumes
+that if all the character codes are less than 128, you are using the
+US-ASCII character set and that is the character set declared in the
+encoding of the message when it is sent.  If you are using some other
+character set, you must specify it by setting the variable
+`vm-mime-7bit-composition-charset'.  The value of this variable should
+be a string specifying the character set.
+
+If there are character codes in the composition greater than 128, the
+variable `vm-mime-8bit-composition-charset' tells VM what character
+set to assume when encoding the message.  The default is
+`iso-8859-1'.
+
+Character codes greater than 128 may not be transported reliably
+across the Internet in mail messages.  Some machines will refuse to
+accept messages containing such characters and some will accept them
+but zero the eighth bit, garbling the message.  To avoid these
+problems, VM transfer encodes 8-bit text by default.
+
+MIME has two transfer encodings that convert 8-bit data to 7-bit data
+for safe transport.  "Quoted-printable" leaves the text mostly
+readable even if the recipient does not have a MIME-capable mail
+reader.  "BASE64" is unreadable without a MIME-capable mail reader.
+
+VM's text transfer encoding behavior is controlled by the variable
+`vm-mime-8bit-text-transfer-encoding'.  Its value should be a symbol
+that specifies what kind of transfer encoding to do for 8-bit text.  A
+value of `quoted-printable', means to use quoted-printable encoding.
+A value of `base64' means to use BASE64 encoding.  A value of `8bit'
+means to send the message as is.  Note that this variable usually only
+applies to textual MIME content types.  Images, audio, video,
+etc. typically will have some attribute that makes VM consider them to
+be "binary", which moves them outside the scope of this variable.  For
+example, messages with line lengths of 1000 characters or more are
+considered binary, as are messages that contain carriage returns
+(ASCII code 13) or NULs (ASCII code 0).
+
+
+
+File: vm.info, Node: Replying, Next: Forwarding Messages, Prev: MIME Composition, Up: Sending Messages
+
+Replying
+========
+
+VM has special commands that make it easy to reply to a message.  When
+a reply command is invoked, VM fills in the subject and recipient
+headers for you, since it is apparent to whom the message should be
+sent and what the subject should be.  There is an old convention of
+prepending the string `"Re: "' to the subject of replies if the string
+isn't present already.  VM supports this indirectly by providing the
+variable `vm-reply-subject-prefix'.  Its value should be a string to
+prepend to the subject of replies, if the string isn't present
+already.  A `nil' value means don't prepend anything to the subject
+(this is the default).  In any case you can edit any of the message
+headers manually, if you wish.
+
+VM also helps you quote material from a message to which you are
+replying by providing "included text" as a feature of some of the
+commands.  "Included text" is a copy of the message being replied to
+with some fixed string prepended to each line so that included text
+can be distinguished from the text of the reply.  The variable
+`vm-included-text-prefix' specifies what the prepended string will be.
+
+The variable `vm-included-text-attribution-format' specifies the
+format for the attribution of included text.  This attribution is a line
+of text that tells who wrote the text that is to be included; it will be
+inserted before the included text.  If non-`nil', the value of
+`vm-included-text-attribution-format' should be a string format
+specification similar to `vm-summary-format'.  *Note Summaries::.  A
+`nil' value causes the attribution to be omitted.
+
+The variable `vm-in-reply-to-format' specifies the format of the
+In-Reply-To header that is inserted into the header section of the
+reply buffer.  Like `vm-included-text-attribution-format',
+`vm-in-reply-to-format' should be a string similar to that of
+`vm-summary-format'.  A `nil' value causes the In-Reply-To header to
+be omitted.
+
+The recipient headers generated for reply messages are created by
+copying the appropriate headers from the message to which you are
+replying.  This includes any full name information, comments, etc. in
+these headers.  If the variable `vm-strip-reply-headers' is non-`nil',
+the recipient headers will be stripped of all information except the
+actual addresses.
+
+The reply commands are:
+
+`r (`vm-reply')'
+     Replies to the author of the current message.
+`R (`vm-reply-include-text')'
+     Replies to the author of the current message and provides
+     included text.
+`f (`vm-followup')'
+     Replies to the all recipients of the current message.
+`F (`vm-followup-include-text')'
+     Replies to the all recipients of the current message and provides
+     included text.
+
+These commands all accept a numeric prefix argument N, which if
+present, causes VM to reply to the next (or previous if the argument is
+negative) N-1 messages as well as the current message.  Also, all
+the reply commands set the "replied" attribute of the messages to
+which you are responding, but only when the reply is actually sent.  The
+reply commands can also be applied to marked messages,
+*Note Message Marks::.
+
+If you are one of multiple recipients of a message and you use `f' and
+`F', your address will be included in the recipients of the reply.
+You can avoid this by judicious use of the variable
+`vm-reply-ignored-addresses'.  Its value should be a list of regular
+expressions that match addresses that VM should automatically remove
+from the recipient headers of replies.
+
+
+
+File: vm.info, Node: Forwarding Messages, Prev: Replying, Up: Sending Messages
+
+Forwarding Messages
+===================
+
+VM has three commands to forward messages: `z'
+(`vm-forward-message'), @ (`vm-send-digest') and
+`B' (`vm-resend-message').
+
+Typing `z' puts you into a VM Mail mode buffer just like `m', except
+the current message appears as the body of the message in the VM Mail
+mode buffer. The forwarded message encapsulated as specified by the
+variable `vm-forwarding-digest-type'.  Recognized values are
+`"rfc934"', `"rfc1153"' and `"mime"'.  If the variable
+`vm-forwarding-subject-format' is non-`nil' it should specify the
+format of the Subject header of the forwarded message.  A `nil' value
+causes the Subject header to be left blank.  The forwarded message is
+flagged "forwarded" when the message is sent.  The command @
+(`vm-send-digest') works like `z' except that a digest of all the
+messages in the current folder is made and inserted into the VM Mail
+mode buffer.  Also, `vm-send-digest' can be applied to just marked
+messages.  *Note Message Marks::.  When applied to marked messages,
+`vm-send-digest' will only bundle marked messages, as opposed to the
+usual bundling of all messages in the current folder.  The message
+encapsulation method is specified by the variable
+`vm-digest-send-type', which accepts the same values as
+`vm-forwarding-digest-type'.  All the messages included in the digest
+will be flagged "forwarded" when the digest message is sent.
+
+If you give `vm-send-digest' a prefix argument, VM will insert a list
+of preamble lines at the beginning of the digest, one line per
+digestified message.  The variable `vm-digest-preamble-format'
+determines the format of the preamble lines.  If the value of
+`vm-digest-center-preamble' is non-`nil', the preamble lines will be
+centered.
+
+If you wish to forward a message and want to send it without the
+encapsulation used by `vm-forward-message', use `B'
+(`vm-resend-message').  Instead of encapsulating the message, VM will
+use essentially the same message and headers and add a Resent-To
+header that you should fill in with the new recipients.  Use `C-c C-c'
+as usual to send the message.  The resent message will be flagged as
+redistributed".
+
+
+
+File: vm.info, Node: Saving Messages, Next: Deleting Messages, Prev: Sending Messages, Up: Top
+
+Saving Messages
+***************
+
+Mail messages are normally saved to files that contain only mail
+messages.  Such files are called "folders".  Folders are distinguished
+from spool files in that VM does not expect other programs to modify
+them while VM is visiting them.  This is important to remember.  VM
+does no locking of folders when visiting them.  If the disk copy of a
+folder is modified behind VM's back, Emacs will complain with the
+dreaded "File changed on disk" message when you try to save the
+folder.
+
+The VM command to save a message to a folder is `s'
+(`vm-save-message'); invoking this command causes the current message
+to be saved to a folder whose name you specify in the minibuffer.  If
+`vm-save-message' is given a prefix argument N, the current message
+plus the next N-1 messages are saved.  If N is negative, the current
+message and the previous N-1 messages are saved.  Messages saved with
+`vm-save-message' are flagged "filed".
+
+If the value of the variable `vm-confirm-new-folders' is non-`nil', VM
+will ask for confirmation before creating a new folder on interactive
+saves.
+
+If you have a directory where you keep all your mail folders, you
+should set the variable `vm-folder-directory' to point to it.  If this
+variable is set, `vm-save-message' will insert this directory name
+into the minibuffer before prompting you for a folder name; this will
+save you some typing.
+
+Another aid to selecting folders in which to save mail is the variable
+`vm-auto-folder-alist'.  The value of this variable should be a list
+of the form:
+
+     ((HEADER-NAME
+        (REGEXP . FOLDER-NAME) ...)
+       ...)
+
+where HEADER-NAME and REGEXP are strings, and FOLDER-NAME is a string
+or an s-expression that evaluates to a string.
+
+If any part of the contents of the message header named by
+HEADER-NAME is matched by the regular expression
+REGEXP, VM will evaluate the corresponding
+FOLDER-NAME and use the result as the default when
+prompting for a folder to save the message in.  If the resulting
+folder name is a relative pathname it resolves to the directory
+named by `vm-folder-directory', or the
+`default-directory' of the currently visited folder if
+`vm-folder-directory' is `nil'.
+
+When FOLDER-NAME is evaluated, the current buffer will contain only
+the contents of the header named by HEADER-NAME.  It is safe to modify
+this buffer.  You can use the match data from any `\( ...  \)'
+grouping constructs in REGEXP along with the function
+`buffer-substring' to build a folder name based on the header
+information.  If the result of evaluating FOLDER-NAME is a list, then
+the list will be treated as another auto-folder-alist and will be
+descended recursively.
+
+Whether matching is case sensitive depends on the value of the
+variable `vm-auto-folder-case-fold-search'.  A non-`nil' value makes
+matching case insensitive.  The default value is `t', which means
+matching is case insensitive.  Note that the matching of header names
+is always case insensitive because the Internet message standard RFC
+822 specifies that header names are case indistinct.
+
+VM can save messages to a folder in two distinct ways.  The message
+can be appended directly to the folder on disk, or the folder can be
+visited as Emacs would visit any other file and the message appended
+to that buffer.  In the latter method you must save the buffer
+yourself to change the on-disk copy of the folder.  The variable
+`vm-visit-when-saving' controls which method is used.  A value of `t'
+causes VM to always visit a folder before saving message to it.  A
+`nil' value causes VM to always append directly to the folder file.
+In this case VM will not save messages to the disk copy of a folder
+that is being visited.  This restriction is necessary to insure that
+the buffer and on-disk copies of the folder are consistent. If the
+value of VM-VISIT-WHEN-SAVING is not `nil' and not `t' (e.g. 0, the
+default), VM will append to the folder's buffer if the buffer is
+currently being visited, otherwise VM will append to the file itself.
+
+After a message is saved to a folder, the usual thing to do next is to
+delete it.  If the variable `vm-delete-after-saving' is non-`nil', VM
+will flag messages for deletion automatically after saving them.  This
+applies only to saves to folders, not for the `w' or `A' commands (see
+below).  The variable `vm-delete-after-archiving' works like
+`vm-delete-after-saving' but applies to the `A'
+(`vm-auto-archive-messages') command instead.
+
+Other commands:
+
+`w (`vm-save-message-sans-headers')'
+     Saves a message or messages to a file without their headers.
+     This command responds to a prefix argument exactly as
+     `vm-save-message' does.  Messages saved this way are flagged
+     written".
+`A (`vm-auto-archive-messages')'
+     Save all unfiled messages that auto-match a folder via
+     `vm-auto-folder-alist' to their appropriate folders.  Messages
+     that are flagged for deletion are not saved by this command.  If
+     invoked with a prefix argument, confirmation will be requested
+     for each save.
+`| (`vm-pipe-message-to-command')'
+     Runs a shell command with some or all of the current message as input.
+     By default, the entire message is used.
+
+     If invoked with one C-u the text portion of the message is used.
+     If invoked with two C-u's the header portion of the message is used.
+
+     If the shell command generates any output, it is displayed in a
+     `*Shell Command Output*' buffer.  The message itself is not altered.
+
+A non-`nil' value of VM-BERKELEY-MAIL-COMPATIBILITY means to read and
+write BSD Mail(1) style Status: headers.  This makes sense if you plan
+to use VM to read mail archives created by Mail.
+
+
+
+File: vm.info, Node: Deleting Messages, Next: Editing Messages, Prev: Saving Messages, Up: Top
+
+Deleting Messages
+*****************
+
+In VM, messages are flagged for deletion, and then are subsequently
+expunged" or removed from the folder.  The messages are not removed
+from the on-disk copy of the folder until the folder is saved.
+
+`d (`vm-delete-message')'
+     Flags the current message for deletion.  A prefix argument N
+     causes the current message and the next N-1 messages to be
+     flagged.  A negative N causes the current message and the
+     previous N-1 messages to be flagged.
+`u (`vm-undelete-message')'
+     Removes the deletion flag from the current message.  A prefix
+     argument N causes the current message and the next N-1 messages
+     to be undeleted.  A negative N causes the current message and the
+     previous N-1 messages to be undeleted.
+`k (`vm-kill-subject')'
+     Flags all messages with the same subject as the current message
+     (ignoring "Re:") for deletion.
+`### (`vm-expunge-folder')'
+     Does the actual removal of messages flagged for deletion in the
+     current folder.
+
+Setting the variable `vm-move-after-deleting' non-`nil' causes VM to
+move past the messages after flagging them for deletion.  Setting
+`vm-move-after-undeleting' non-`nil' causes similar movement after
+undeletes.  Setting `vm-move-after-killing' non-`nil' causes VM to
+move after killing messages with `vm-kill-subject'.  Note that the
+movement is done by calling `vm-next-message' which means that the
+value of `vm-circular-folders' applies to the post-command motion as
+for a motion command, not as for a non-motion command.
+
+
+
+File: vm.info, Node: Editing Messages, Next: Message Marks, Prev: Deleting Messages, Up: Top
+
+Editing Messages
+****************
+
+To edit a message, type `e' (`vm-edit-message').  The current message
+is copied into a temporary buffer, and this buffer is selected for
+editing.  The major mode of this buffer is controlled by the variable
+`vm-edit-message-mode'.  The default is Text mode.
+
+Use `C-c ESC' (`vm-edit-message-end') when you have finished editing
+the message.  The message will be inserted into its folder, replacing
+the old version of the message.  If you want to quit the edit without
+your edited version replacing the original, use `C-c C-]'
+(`vm-edit-message-abort'), or you can just kill the edit buffer with
+`C-x k' (`kill-buffer').
+
+If you give a prefix argument to `vm-edit-message', then the current
+message will be flagged unedited.
+
+As with VM Mail mode buffers, all VM commands can be accessed from the
+edit buffer through the command prefix `C-c C-v'.
+
+
+
+File: vm.info, Node: Message Marks, Next: Message Attributes, Prev: Editing Messages, Up: Top
+
+Message Marks
+*************
+
+VM provides general purpose "marks" that may be applied to any and all
+messages within a given folder.  Certain VM commands can be
+subsequently invoked only on those messages that are marked.
+
+To mark the current message, type `M M' (`vm-mark-message').  If you
+give a numeric prefix argument N, the next N-1 messages will be marked
+as well.  A negative prefix argument means mark the previous N-1.  An
+asterisk (`*') will appear to the right of the message numbers of all
+marked messages in the summary window.
+
+To remove a mark from the current message, use `M U'
+(`vm-unmark-message').  Prefix arguments work as with
+`vm-mark-message'.
+
+Use `M m' to mark all messages in the current folder; `M u' removes
+marks from all messages.
+
+Other marking commands:
+
+`M C (`vm-mark-matching-messages')'
+     Mark all messages matched by a virtual folder selector.
+     *Note Virtual Folders::.
+`M c (`vm-unmark-matching-messages')'
+     Unmark all messages matched by a virtual folder selector.
+`M T (`vm-mark-thread-subtree')'
+     Mark all messages in the thread tree rooted at current message.
+     *Note Threading::.
+`M t (`vm-unmark-thread-subtree')'
+     Unmark all messages in the thread tree rooted at current message.
+`M S (`vm-mark-same-subject')'
+     Mark messages with the same subject as the current message.
+`M s (`vm-unmark-same-subject')'
+     Unmark messages with the same subject as the current message.
+`M A (`vm-mark-same-author')'
+     Mark messages with the same author as the current message.
+`M a (`vm-unmark-same-author')'
+     Unmark messages with the same author as the current message.
+
+To apply a VM command to all marked messages you must prefix it with
+the key sequence `M N' (`vm-next-command-uses-marks').  The next VM
+command will apply to all marked messages, provided the command can be
+applied to such messages in a meaningful and useful way.
+
+
+
+File: vm.info, Node: Message Attributes, Next: Sorting Messages, Prev: Message Marks, Up: Top
+
+Message Attributes
+******************
+
+Each message in a folder has a set of attributes that VM will remember
+from session to session.  Various VM commands set and unset these
+attributes.  Here are the attributes maintained by VM.
+
+`new'
+     The message was retrieved from a spool file during this visit of
+     the current folder.
+`unread'
+     The message was retrieved from a spool file during some past
+     visit of the folder but is still unread.
+`filed'
+     The message has been saved to some folder.
+`written'
+     The body of the message has been saved to a file.
+`edited'
+     The message has been altered (with `vm-edit-message') since it
+     arrived.
+`deleted'
+     The message is deleted and will be removed from the folder at the
+     next expunge.
+`forwarded'
+     The message has been forwarded with either
+     `vm-forward-message' or `vm-send-digest'.
+`redistributed'
+     The message has been forwarded with the
+     `vm-resend-message' command.
+`replied'
+     The message has been replied to.
+
+You can set and unset these attributes directly by using `a'
+(`vm-set-message-attributes').  You will be prompted in the minibuffer
+for names of the attributes and you can enter them with completion.
+Every attribute has an "un-" prefixed name you can use to unset the
+attribute, excepting "new" and "unread", which are both negated by
+read".  You can use a prefix argument with this command to affect
+multiple messages, and you can apply this command to marked messages
+with `M N'.
+
+VM provides a special form of undo which allows changes to message
+attributes to be undone.  Typing `C-x u' or C-_ (`vm-undo') undoes the
+last attribute change.  Consecutive `vm-undo''s undo further and
+further back.  Any intervening command breaks the undo chain, after
+which the undo's themselves become undoable by subsequent invocations
+of `vm-undo'.
+
+Note that expunges, saves and message edits are *not* undoable.
+
+"Labels" are user-defined message attributes.  They can have any name
+and be assigned any meaning by you.  Labels are added with `l a'
+(`vm-add-message-labels' and `l e' (`vm-add-existing-message-labels',
+and are removed by `l d' (`vm-delete-message-labels').  BABYL format
+folders use labels to store basic attributed like "deleted" and
+unread".  When visiting a BABYL folder VM uses these labels also in
+order to be compatible with other BABYL mailers.  The labels used are
+recent", "unseen", "deleted", "answered", "forwarded",
+redistributed", "filed", "edited" and "written".  If (and only if) you
+are using BABYL format folders, you should not use these label names
+for your own purposes.
+
+All message attributes are stored in the folder.  In order for
+attribute changes to be saved to disk, they must be written to the
+folder's buffer prior to the buffer being saved.  The variable
+`vm-flush-interval' controls how often that is done.  A value of `t'
+means write the new attributes to the folder buffer whenever a change
+occurs.  A value of `nil' means wait until just before the folder is
+saved before writing out the attributes.  VM will work faster with
+this setting, but if Emacs or your system crashes, the autosave file
+will contain no useful data pertaining to message attribute changes.
+The autosave file will still reflect message edits and expunges.
+*Note Crash Recovery::.  A positive integer value N instructs VM to
+write out attribute changes every N seconds.  The default value of
+this variable is `t'.
+
+
+
+File: vm.info, Node: Sorting Messages, Next: Reading Digests, Prev: Message Attributes, Up: Top
+
+Sorting Messages
+****************
+
+In order to make numerous related messages easier to cope with, VM
+provides the command `G' (`vm-sort-messages'), which sorts all
+messages in a folder using one or more sort keys.  By default the
+actual order of the messages in the folder is not altered; that is, if
+you looked at the folder file outside of VM the message order would be
+unchanged.  VM numbers and presents the messages in a different order
+internally.  If you want the message order to be changed in the folder
+so that other programs can see the change, you can either invoke
+`vm-sort-messages' with a prefix argument, or you can set
+`vm-move-message-physically' non-`nil' before sorting.  Either way, VM
+will shift the actual messages around in the folder buffer, and when
+you save the folder, the order change will be visible to other
+programs.
+
+Valid sort keys are: "date", "reversed-date", "author",
+reversed-author", "subject", "reversed-subject", "recipients",
+reversed-recipients", "line-count", "reversed-line-count",
+byte-count", "reversed-byte-count", "physical-order", and
+reversed-physical-order".
+
+When sorting by subject (or threading using subjects, or killing
+messages by subject) the subject of the message is
+"normalized" before comparisons are done.  A "normalized"
+subject has uninteresting prefixes and suffixes stripped off, and
+multiple consecutive whitespace characters are collapsed to a single
+space.  The variable `vm-subject-ignored-prefix' should be
+a regular expression that matches all strings at the beginning of
+a subject that you do not want to be considered when message
+subjects are compared.  A `nil' value means VM should not ignore
+any prefixes.  The analogous variable for subject suffixes is
+`vm-subject-ignored-suffix'.
+
+Once the subject has been normalized, the variable
+`vm-subject-significant-chars' controls how much of what remains is
+considered significant for matching purposes.  The first
+`vm-subject-significant-chars' will be considered significant.
+Characters beyond this point in the subject string will be ignored.  A
+`nil' value for this variable means all characters in the subject are
+significant.
+
+If you want to move messages around by hand, use `C-M-n'
+(`vm-move-message-forward') and `C-M-p'
+(`vm-move-message-backward').  The default is to move the current
+message forward or backward by one message in the message list.  A
+prefix argument N can specify a longer move.  The value of
+`vm-move-messages-physically' applies to these commands.
+
+* Menu:
+
+* Threading::	Using subjects and message IDs to group messages.
+
+
+
+File: vm.info, Node: Threading, Up: Sorting Messages
+
+Threading
+=========
+A "thread" is a group of messages that are either related by subject
+or that have a common ancestor.  "Threading" is the process of
+determining the relationship between such messages and displaying them
+so that those relationships are evident.
+
+To enable and disable threading, type `C-t'
+(`vm-toggle-threads-display'.  In the summary buffer related messages
+are grouped together and the subject part of the summary listings of
+messages are indented to show hierarchical relationships.  Parent
+messages are displayed before their children and children are indented
+a default two spaces to the right for each level of descendence from
+their ancestors.  The amount of indentation per level is controlled by
+the variable `vm-summary-thread-indent-level'.
+
+Message relationships are discovered by examining References,
+In-Reply-To, and Subject headers.  The first two headers are more
+reliable sources of information but not all mailers provide them.
+If you don't want VM to use Subject headers, set the variable
+`vm-thread-using-subject' to `nil'.
+
+If you want VM to always display messages using threads, you should
+set the default value of the variable `vm-summary-show-threads'
+non-`nil' in your VM init file.  Exmaple:
+
+     (setq-default vm-summary-show-threads t)
+
+Do not use `setq', as this will only set the value of the variable in
+a single buffer.  Once you've started VM you should not change the
+value of this variable.  Rather you should use `C-t' to control the
+thread display.
+
+Note that threading is really a specialized form of sorting, and so
+the value of the variable `vm-move-messages-physically' applies.
+
+
+
+File: vm.info, Node: Reading Digests, Next: Summaries, Prev: Sorting Messages, Up: Top
+
+Reading Digests
+***************
+
+A "digest" is one or more mail messages encapsulated within another
+message.
+
+VM supports digests by providing a command to "burst" them into their
+individual messages.  These messages can then be handled like any
+other messages under VM.
+
+The command `*' (`vm-burst-digest') bursts a digest into its
+individual messages and appends them to the current folder.  These
+messages are then assimilated into the current folder as new messages.
+The original digest message is not altered, and the messages extracted
+from it are not part of the on-disk copy of the folder until a save is
+done.  You will be prompted for the type of digest to burst.  VM
+understands three formats, "rfc934", "rfc1154" and "mime".  If you
+don't know what kind of digest you've received, type "guess" and VM
+will try to figure out the digest type on its own.  VM is pretty smart
+about digests and will usually make the correct choice if the digest
+is properly formatted.
+
+
+
+File: vm.info, Node: Summaries, Next: Virtual Folders, Prev: Reading Digests, Up: Top
+
+Summaries
+*********
+
+Typing `h' (`vm-summarize') causes VM to display a summary of contents
+of the current folder.  The information in the summary is
+automatically updated as changes are made to the current folder.  An
+arrow `->' appears to the left of the line summarizing the current
+message.  The variable `vm-auto-center-summary' controls whether VM
+will keep the summary arrow vertically centered within the summary
+window.  A value of `t' causes VM to always keep the arrow centered.
+A value of `nil' (the default) means VM will never bother centering
+the arrow.  A value that is not `nil' and not `t' causes VM to center
+the arrow only if the summary window is not the only existing window.
+You can change what the summary arrow looks like by setting
+vm-summary-arrow to a string depicting the new arrow.  You should set
+this variable before VM creates the summary buffer.
+
+The variable `vm-summary-format' controls the format of each message's
+summary.  Its value should be a string.  This string should contain
+printf-like "%" conversion specifiers which substitute information
+about the message into the final summary.
+
+Recognized specifiers are:
+`a'
+     attribute indicators (always four characters wide)
+
+     The first char is  `D', `N', `U' or ` ' for deleted, new, unread
+     and read messages respectively.
+
+     The second char is `F', `W' or ` ' for filed (saved) or written
+     messages.
+
+     The third char is `R', `Z' or ` ' for messages replied to,
+     and forwarded messages.
+
+     The fourth char is `E' if the message has been edited, ` ' otherwise.
+`A'
+     longer version of attributes indicators (seven characters
+     wide).
+
+     The first char is  `D', `N', `U' or ` ' for deleted, new, unread
+     and read messages respectively.
+
+     The second is `r' or ` ', for message replied to.
+
+     The third is `z' or ` ', for messages forwarded.
+
+     The fourth is `b' or ` ', for messages redistributed.
+
+     The fifth is `f' or ` ', for messages filed.
+
+     The sixth is `w' or ` ', for messages written.
+
+     The seventh is `e' or ` ', for messages that have been edited.
+`c'
+     number of characters in message (ignoring headers)
+`d'
+     numeric day of month message sent
+`f'
+     author's address
+`F'
+     author's full name (same as f if full name not found)
+`h'
+     hour:min:sec message sent
+`H'
+     hour:min message sent
+`i'
+     message ID
+`I'
+     thread indentation
+`l'
+     number of lines in message (ignoring headers)
+`L'
+     labels (as a comma list)
+`m'
+     month message sent
+`M'
+     numeric month message sent (January = 1)
+`n'
+     message number
+`s'
+     message subject
+`t'
+     addresses of the recipients of the message, in a comma-separated
+     list
+`T'
+     full names of the recipients of the message, in a comma-separated
+     list If a full name cannot be found, the corresponding address is
+     used instead.
+`U'
+     user defined specifier.  The next character in the format string
+     should be a letter.  VM will call the function
+     vm-summary-function-<letter> (e.g. vm-summary-function-A for
+     %UA") in the folder buffer with the message being summarized
+     bracketed by (point-min) and (point-max).  The function will be
+     passed a message struct as an argument.  The function should
+     return a string, which VM will insert into the summary as it
+     would for information from any other summary specifier.
+`w'
+     day of the week message sent
+`y'
+     year message sent
+`z'
+     timezone of date when the message was sent
+`*'
+     `*' if the message is marked, ` ' otherwise
+`('
+     starts a group, terminated by %).  Useful for specifying the
+     field width and precision for the concatentation of group of
+     format specifiers.  Example: \"%.35(%I%s%)\" specifies a maximum
+     display width of 35 characters for the concatenation of the
+     thread indentation and the subject.
+`)'
+     ends a group.
+
+Use "%%" to get a single "%".
+
+A numeric field width may be specified between the "%" and the
+specifier; this causes right justification of the substituted string.
+A negative field width causes left justification.  The field width may
+be followed by a "." and a number specifying the maximum allowed
+length of the substituted string.  If the string is longer than this
+value, it is truncated.
+
+If you save copies of all your outbound messages in a folder and later
+visit that folder, the `%F' format specifier will normally display
+your own name.  If you would rather see the recipient addresses in
+this case, set the variable `vm-summary-uninteresting-senders'. This
+variable's value, if non-`nil', should be a regular expression that
+matches addresses that you don't consider interesting enough to appear
+in the summary.  When such senders would be displayed by the `%F' or
+`%f' summary format specifiers VM will substitute the value of
+`vm-summary-uninteresting-senders-arrow' (default "To: ") followed by
+what would be shown by the `%T' and `%t' specifiers respectively.
+
+The summary format need not be one line per message but it must end
+with a newline, otherwise the message pointer will not be displayed
+correctly in the summary window.
+
+You can have a summary generated automatically at VM startup
+by setting the variable `vm-startup-with-summary' non-nil.
+*Note Starting Up::.
+
+All VM commands are available in the summary buffer just as they are
+in the folder buffer itself.  If you set `vm-follow-summary-cursor'
+non-`nil', VM will select the message under the cursor in the summary
+window before executing commands that operate on the current message.
+Note that this occurs *only* when executing a command from the summary
+buffer window.
+
+A non-`nil' value of VM-GARGLE-UUCP means to use a crufty regular
+expression that does surprisingly well at beautifying UUCP addresses
+that are substituted for `%f' and `%t' as part of summary and
+attribution formats.
+
+
+
+File: vm.info, Node: Virtual Folders, Next: Frames and Windows, Prev: Summaries, Up: Top
+
+Virtual Folders
+***************
+
+A "virtual folder" is a mapping of messages from one or more real
+folders into a container that in most ways acts like a real folder but
+has no real existence outside of VM.  You can have a virtual folder
+that contains a subset of messages in a real folder or several real
+folders.  A virtual folder can also contain a subset of messages from
+another virtual folder.
+
+A virtual folder is defined by its name, the folders that it contains
+and its selectors.  The variable `vm-virtual-folder-alist' is a list
+of the definitions of all named virtual folders.  In order to visit a
+virtual folder with the `vm-visit-virtual-folder' (`V V') command, a
+virtual folder must have an entry in vm-virtual-folder-alist.
+
+Each virtual folder definition should have the following form:
+
+     (VIRTUAL-FOLDER-NAME
+       ( (FOLDER-NAME ...)
+         (SELECTOR [ARG ...]) ... )
+       ... )
+
+VIRTUAL-FOLDER-NAME is the name of the virtual folder being defined.
+This is the name by which you and VM will refer to this folder.
+
+FOLDER-NAME should be the name of a real folder.  There may be more
+than one FOLDER-NAME listed, the SELECTORs within that sublist will
+apply to them all.  If FOLDER-NAME is a directory, VM will assume this
+to mean that all the folders in that directory should be searched.
+
+The SELECTOR is a Lisp symbol that tells VM how to decide whether a
+message from one of the folders specified by the FOLDER-NAMEs should
+be included in the virtual folder.  Some SELECTORs require an argument
+ARG; unless otherwise noted ARG may be omitted.
+
+`author'
+     matches message if ARG matches the author; ARG should be a
+     regular expression.
+`author-or-recipient'
+     matches message if ARG matches the author of the message or any
+     of its recipients; ARG should be a regular expression.
+`and'
+     matches the message if all its argument selectors match the
+     message.  Example:
+          (and (author "Derek McGinty") (new))
+     matches all new messages from Derek McGinty.
+     `and' takes any number of arguments.
+`any'
+     matches any message.
+`deleted'
+     matches message if it is flagged for deletion.
+`edited'
+     matches message if it has been edited.
+`filed'
+     matches message if it has been saved with its headers.
+`forwarded'
+     matches message if it has been forwarded using a variant of
+     `vm-forward-message' or `vm-send-digest'.
+`header'
+     matches message if ARG matches any part of the header portion of
+     the message; ARG should be a regular expression.
+`header-or-text'
+     matches message if ARG matches any part of the
+     headers or the text portion of the message;
+     ARG should be a regular expression.
+`label'
+     matches message if message has a label named ARG.
+`less-chars-than'
+     matches message if message has less than ARG characters.  ARG
+     should be a number.
+`less-lines-than'
+     matches message if message has less than ARG lines.  ARG should
+     be a number.
+`more-chars-than'
+     matches message if message has more than ARG characters.  ARG
+     should be a number.
+`more-lines-than'
+     matches message if message has more than ARG lines.  ARG should
+     be a number.
+`marked'
+     matches message if it is marked, as with
+     `vm-mark-message'.
+`new'
+     matches message if it is new.
+`not'
+     matches message only if its selector argument does NOT match the
+     message.  Example: (not (deleted)) matches messages that are not
+     deleted.
+`or'
+     matches the message if any of its argument selectors match the
+     message.  Example:
+          (or (author "Dave Weckl") (subject "drum"))
+     matches messages from Dave Weckl or messages
+     with the string "drum" in their Subject header.
+     `or' takes any number of arguments.
+`read'
+     matches message if it is neither new nor unread.
+`recent'
+     matches message if it is new.
+`recipient'
+     matches message if ARG matches any part of the recipient list of
+     the message.  ARG should be a regular expression.
+`redistributed'
+     matches message if it has been redistributed using
+     `vm-resend-message'.
+`replied'
+     matches message if it has been replied to.
+`sent-after'
+     matches message if it was sent after the date ARG.  A fully
+     specified date looks like this: "31 Dec 1999 23:59:59 GMT"
+     although the parts can appear in any order.  You can leave out
+     any part and it will default to the current date's value for that
+     part, with the exception of the `hh:mm:ss' part which defaults to
+     midnight.
+`sent-before'
+     matches message if it was sent before the date ARG.  A fully
+     specified date looks like this: "31 Dec 1999 23:59:59 GMT"
+     although the parts can appear in any order.  You can leave out
+     any part and it will default to the current date's value for that
+     part, with the exception of the hh:mm:ss part which defaults to
+     midnight.
+`subject'
+     matches message if ARG matches any part of the message's subject;
+     ARG should be a regular expression.
+`text'
+     matches message if ARG matches any part of the text portion of
+     the message; ARG should be a regular expression.
+`unanswered'
+     matches message if it has not been replied to.  Same as the
+     `unreplied' selector.
+`undeleted'
+     matches message if it has not been deleted.
+`unedited'
+     matches message if it has not been edited.
+`unfiled'
+     matches message if it has not been saved with its headers.
+`unforwarded'
+     matches message if it has not been forwarded using
+     `vm-forward-message' or `vm-send-digest' or one of their
+     variants.
+`unread'
+     matches message if it is not new and hasn't been read.
+`unseen'
+     matches message if it is not new and hasn't been read.  Same as
+     the `unread' selector.
+`unredistributed'
+     matches message if it has not been redistributed using
+     `vm-resend-message'.
+`unreplied'
+     matches message if it has not been replied to.
+`virtual-folder-member'
+     matches message if the message is already a member of some
+     virtual folder currently being visited.
+`written'
+     matches message if it has been saved without its headers.
+
+Here is an example that you may find useful as a template to create
+virtual folder definitions.
+
+     (setq vm-virtual-folder-alist
+        '(
+          ;; start virtual folder definition
+          ("virtual-folder-name"
+           (("/path/to/folder" "/path/to/folder2")
+            (header "foo")
+            (header "bar")
+           )
+           (("/path/to/folder3" "/path/to/folder4")
+            (and (header "baz") (header "woof"))
+           )
+          )
+          ;; end of virtual folder definition
+        )
+     )
+
+Again, you visit virtual folders you have defined in
+`vm-virtual-folder-alist' with `V V'.  Once you've visited a virtual
+folder most VM commands work as they do in a normal folder.  There are
+exceptions.  If you use `S' (`vm-save-folder', the folder save command
+will be invoked on each real folder in turn.  Similarly if you use `g'
+(`vm-get-new-mail' in a virtual folder, mail is retrieved from the
+spool files associated with each of the real folders.  If any of the
+retrieved messages are matched by the virtual folder's selector, they
+will be added to the virtual folder.
+
+These commands will signal an error when invoked if the current folder
+is a virtual folder:
+
+         vm-save-buffer
+         vm-write-file
+         vm-change-folder-type
+         vm-expunge-imap-messages
+         vm-expunge-pop-messages
+
+Normally messages in a virtual folder share attributes with the
+underlying real messages.  For example, if you delete a message in a
+virtual folder, it is also flagged as deleted in the real folder.  If
+you then run `vm-expunge-folder' in the virtual folder, the deleted
+message is expunged from the virtual folder and from the real folder.
+Labels are shared between virtual and real messages.  However virtual
+folders have their own set of message marks.
+
+To make virtual folders not share message attributes with real folders
+by default, set the variable `vm-virtual-mirror' to nil.  This should
+be done in your VM init file and you should use `setq-default', as
+this variable is automatically local to all buffers.
+
+     (setq-default vm-virtual-mirror nil)
+
+If you want to change whether the currently visited virtual folder
+shares attributes with the underlying real folders, use the command
+`vm-toggle-virtual-mirror' (bound to `V M').  If the virtual folder is
+currently sharing attributes it will no longer be.  If it is not
+sharing attributes with the underlying folders then it will be.
+
+The command `vm-create-virtual-folder' (bound to `V C') lets
+you interactively create a virtual folder from the messages of
+the current folder, using exactly one selector to choose the
+messages.  If you type `V C header RET pigs', VM will create
+a folder containing only those messages that contain the string
+`pigs' in the header.
+
+The command `vm-apply-virtual-folder' (bound to `V X') tries the
+selectors of a named virtual folder against the messages of the
+current folder and creates a virtual folder containing the matching
+messages.
+
+The keys `V S' and `V A' invoke
+`vm-create-virtual-folder-same-subject' and
+`vm-create-virtual-folder-same-author' which create virtual folders
+containing all the messages in the current folder with the same
+subject or author as the current message.
+
+
+

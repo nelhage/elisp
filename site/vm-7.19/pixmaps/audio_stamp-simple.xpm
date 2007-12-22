@@ -1,0 +1,43 @@
+/* XPM */
+static char *audio_stamp[] = {
+/* width height num_colors chars_per_pixel */
+"    18    24       12            1",
+/* colors */
+". c #000000",
+"# c #00ffff",
+"a c #00ff00",
+"b c #bebebe s background",
+"c c #ff00ff",
+"d c #ff0000",
+"e c #6e6e6e",
+"f c #ffffff",
+"g c #ffff00",
+"h c #e7e7e7",
+"i c #bfbfbf",
+"j c #0000ff",
+/* pixels */
+"bbbbbbbbbbbbbbbbbb",
+"bbbbbbbbbbbbabbbbb",
+"bbbbbbbbbbbebbbbbb",
+"bbbbbbbeebbbbbebbb",
+"bbbbbbbe.bbbbjebbb",
+"bbbbbbeh.bbejijhbb",
+"bbbbbebh.bijhieiib",
+"bbbbiehh.bieiejibb",
+"b..e.hhh.biebjjiib",
+"b.hehhhh.bejibebci",
+"b.hhhhhh.ijjiibiib",
+"b.hhhhhh.ihiiieiii",
+"b.hhhhhh.ibiiieiii",
+"b.hhhhhh.bhfbbdhii",
+"b.hhhhhh.bbbbieiib",
+"b.hehhhh.bbbideiib",
+"b..e.hhh.bbbidebbb",
+"bbbbbehh.bbbiibbbb",
+"bbbbbebh.bbbbbbbgi",
+"bbbbiieh.bbbbbbbgg",
+"bbbbiibe.bb#bbbbib",
+"bbbbbbbeebbbh#bbgb",
+"bbbbbbbbbbbbbbbbii",
+"bbbbbbbbbbbbbbbbgb"
+};

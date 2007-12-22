@@ -1,0 +1,40 @@
+@SET_MAKE@
+
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_SCRIPT = @INSTALL_SCRIPT@
+INSTALL_DATA = @INSTALL_DATA@
+
+RM   = @RM@
+LN_S = @LN_S@
+
+PACKAGEDIR = @PACKAGEDIR@
+SYMLINKS = @SYMLINKS@
+LINKPATH = @LINKPATH@
+
+install-pkg: uninstall-pkg
+	@if test "x$(SYMLINKS)" = "xno" ; then                       \
+          mkdir -p -m 0755 $(PACKAGEDIR)/etc/bbdb/utils ;            \
+          for i in `ls -d * | egrep -v '(Makefile|CVS)'` ; do        \
+            $(INSTALL_DATA) $$i $(PACKAGEDIR)/etc/bbdb/utils/ ;      \
+          done ;                                                     \
+        else                                                         \
+          if test "x$(LINKPATH)" = "x" ; then                        \
+            $(LN_S) `pwd` $(PACKAGEDIR)/etc/bbdb/utils ;             \
+          else                                                       \
+            $(LN_S) $(LINKPATH)/utils $(PACKAGEDIR)/etc/bbdb/utils ; \
+          fi ;                                                       \
+        fi
+
+uninstall-pkg:
+	-$(RM) -r $(PACKAGEDIR)/etc/bbdb/utils
+
+clean:
+
+distclean:
+
+# Backward compatibility:
+reallyclean: distclean
+
+cvsclean: distclean
+	-$(RM) Makefile

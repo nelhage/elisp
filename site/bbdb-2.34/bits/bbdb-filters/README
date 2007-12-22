@@ -1,0 +1,64 @@
+
+BBDB is a rolodex-like database program for GNU Emacs.
+BBDB stands for Insidious Big Brother Database. BBDB is written by:
+Jamie Zawinski <jwz@mcom.com>. My current version is 1.50.
+
+We have prepared a family of filters for BBDB. Currently the output
+filters include:
+
+     - bbdb --> emacs lisp exporting (for exchanging business cards)
+     - bbdb --> HP100/200 LX Phone Book
+     - bbdb --> PC Eudora Nicknames
+     - bbdb --> CC Mail Nicknames 
+     - bbdb --> PH/QI
+
+There is presently only one input filter:
+
+     - bbdb <-- UNIX passwd files
+
+We hope that over time a variety of other input and output filters
+will be added to this collection.
+
+
+bbdb-export in particular, can be very useful over the net.
+It provides a convenient way for exchanging business cards.
+
+
+This is a preliminary release. This stuff has not been tested much
+outside of our office. We do use most of these filters on an going basis
+and they work fine for us.
+
+To install, just edit the makefile and run "make install".
+
+To run them, read the comments on top of each filter file.
+
+There is very skimpy documentation in latexinfo format. It is just
+meant to be a starting point.
+
+In addition to the attached shar file,
+you can also ftp this package from:
+   //anonymous@ftp.neda.com:/pub/eoe/bbdbPlus/bbdb-filters-0.2.tar 
+   URL =  ftp://ftp.neda.com/pub/eoe/bbdbPlus/bbdb-filters-0.2.tar 
+
+Many of the filters require bbdb-tex-print package by:
+Boris Goldowsky <boris@prodigal.psych.rochester.edu>.
+
+The one that we use can be found in:
+  //anonymous@ftp.neda.com:/pub/eoe/bbdbPlus/bbdb-tex-3.0.tar 
+  URL =  ftp://ftp.neda.com/pub/eoe/bbdbPlus/bbdb-tex-3.0.tar 
+
+You can checkout the overview of this package by 
+browsing the manual (latex/info/html) at:
+  URL = http://www.neda.com/eoe/bbdbFilters/bbdbFilters.html
+
+
+Send  bug-reports, comments and suggestions to:
+		  Mohsen Banan-neda <mohsen@neda.com>
+and refer to:
+	bbdb-filters RCS: README,v 1.2 1995/08/08 02:59:15 mohsen Exp
+
+
+Hope you find this helpful.
+
+...Mohsen.
+

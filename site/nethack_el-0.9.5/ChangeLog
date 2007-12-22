@@ -1,0 +1,1335 @@
+2005-02-27    <katia_dilkina@verizon.net>
+
+	* mkpatch: get $src $ref and $work as arguments.
+
+	* Makefile: add rules for building slashem patches
+
+2004-11-22  Shawn Betts  <katia_dilkina@verizon.net>
+
+	* nethack-nhlaunch.el (nethack-network-server): new defvar
+	(nethack-network-port): likewise
+	(nethack-network-user): likewise
+	(nethack-network-password): likewise
+	(nethack-network-game): likewise
+	(nh-network-server): remove
+	(nh-network-port): likewise
+	(nh-network-user): likewise
+	(nh-network-filter): use the new nethack-network-* variables.
+	(nethack-connect-to-server): ask for the password. Ask for the
+	game when universal arg is given.
+
+	* nhlaunch.c (games): make nethack the first entry.
+
+	* nethack-nhlaunch.el (nh-network-game): new defvar
+	(nh-network-filter): send the game to play
+	(nethack-connect-to-server): take another arg, game.
+
+	* nhlaunch.c (read_cmd): new command, list
+	(struct game_t): new struct
+	(games): new global
+	(NETHACK_PROGRAM): remove
+	(find_program): new function
+	(list_programs): likewise
+	(read_cmd): play takes an argument and uses find_program to
+	determine which program to execlp.
+	(read_cmd): remove debugging output
+
+2004-11-19  Shawn Betts  <katia_dilkina@verizon.net>
+
+	* nethack-nhlaunch.el (nethack-connect-to-server): make autoload
+	require nethack.
+
+	* nethack.el (nethack): make autoload
+
+2004-11-19  Shawn Betts  <sabetts@vcn.bc.ca>
+
+	* nethack.el (nethack-add-menu-hook): new hook
+
+	* nethack-example.el (nethack-x-highlights): new defvar
+	(nethack-x-highlight-option): new function
+
+	* nethack-cmd.el (technique): new nethack command
+
+	* nethack-api.el (nhapi-add-menu): run the nethack-add-menu-hook.
+
+2004-11-16  Shawn Betts  <sabetts@vcn.bc.ca>
+
+	* mkpatch: src, ref, and work are pulled from args 1, 2, and 3.
+
+	* Makefile: Add rules for building slashem patches
+
+	* nethack.el (nethack): call nethack-start with the process as an
+	arg.
+	(nethack-connect-to-server): remove
+	(nethack-is-running): new function
+	(nethack-start): new function
+	(nethack-create-process): remove function
+
+	* nethack-keys.el (nh-map-mode-map): add keybinding for travel command
+
+	* nethack-cmd.el (travel): new nethack command
+
+2004-11-14  Shawn Betts  <sabetts@vcn.bc.ca>
+
+	* nethack.el (nethack): call nethack-create-process
+	(nethack-connect-to-server): new function
+	(nethack-create-process): new function
+	(nh-send-and-wait): check if nh-proc's status is 'open or 'run
+
+	* nethack-cmd.el (options): new command
+
+	* nethack-api.el (nh-options-cbreak): new defvar
+	(nh-options-dec-graphics): likewise
+	(nh-options-echo): likewise
+	(nh-options-ibm-graphics): likewise
+	(nh-options-msg-history): likewise
+	(nh-options-num-pad): likewise
+	(nh-options-news): likewise
+	(nh-options-window-inited): likewise
+	(nh-options-vision-inited): likewise
+	(nh-options-menu-tab-sep): likewise
+	(nh-options-menu-requested): likewise
+	(nh-options-num-pad-mode): likewise
+	(nh-options-purge-monsters): likewise
+	(nh-options-bouldersym): likewise
+	(nh-options-travelcc): likewise
+	(nh-options-sanity-check): likewise
+	(nh-options-mon-polycontrol): likewise
+	(nhapi-options): new function
+
+2004-11-14  Shawn Betts  <sabetts@vcn.bc.ca>
+
+	* Makefile (DISTFILES): change nethack-glyphs.el to nethack-tiles.el
+	(all): likewise
+
+2004-11-12  Shawn Betts  <sabetts@vcn.bc.ca>
+
+	* nethack-api.el (nh-menu-toggle-all-items): fix which regexp
+	match gets replaced with '-' or '+'
+
+2004-11-11  Shawn Betts  <sabetts@vcn.bc.ca>
+
+	* nethack-keys.el (nh-accelerator-chars): add ?# to the vector
+	(nh-accelerator-chars-regexp): new defvar
+	(nh-menu-item-regexp): likewise
+
+	* nethack-api.el (nhapi-yn-function): Add ESC and C-g as abort keys.
+	(nh-menu-toggle-all-items): use nh-menu-item-regexp
+	(nh-menu-goto-next): likewise
+	(nh-menu-goto-prev): likewise
+	(nh-menu-submit): likewise
+	(nh-menu-cancel): likewise
+
+2004-07-24  Shawn Betts  <sabetts@burnt.emmett.ca>
+
+	* Makefile (NETHACK_EL_VER): version bump to 0.9.3
+	(NH_VER): version bump to 3.4.3
+
+2003-09-18  Shawn Betts  <sabetts@vcn.bc.ca>
+
+	* nethack.el (nethack-purge-buffers): new global
+	(nh-proc-kill-buffer-on-quit): set to `t' by default
+	(nh-sentinel): call nethack-kill-buffers.
+
+2003-09-15  Shawn Betts  <sabetts@vcn.bc.ca>
+
+	* nethack.el (nethack-end-hook): new hook
+	(nh-proc-kill-buffer-on-quit): new defvar
+	(nh-log-buffer): likewise
+	(nh-sentinel): kill the process buffer if
+	nh-proc-kill-buffer-on-quit is t.
+	(nh-log): use nh-log-buffer
+	(nethack-kill-buffers): new function
+
+	* nethack-api.el (nhapi-end): run the hook, nethack-end-hook.
+
+2003-09-14  Shawn Betts  <sabetts@vcn.bc.ca>
+
+	* Makefile (DISTFILES): added nethack-compat.el and ese-007e3.patch
+
+2003-09-13  Shawn Betts  <sabetts@vcn.bc.ca>
+
+	* Makefile (NH_VER): bumped to 3.4.2
+
+2003-08-29  Shawn Betts  <sabetts@vcn.bc.ca>
+
+	* nethack-api.el (nhapi-ask-direction): use
+	read-key-sequence-vector instead of nh-read-char.
+
+2003-06-03  Shawn Betts  <sabetts@sfu.ca>
+
+	* nethack.el (nethack-el-version): bump version to 0.9.0
+
+	* Makefile (NETHACK_EL_VER): new variable
+	(DISTDIR): use NETHACK_EL_VER in directory
+	(DISTFILES): add ese-007e0.patch
+
+	* nethack.el (nethack-pet-face): new face.
+
+	* nethack-api.el (nhapi-print-glyph): new optional argument,
+	special. When special is 'pet, use the pet face.
+ 
+2003-04-09  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack-api.el (nhapi-clear-map): Make sure gamegrid doesn't try
+	to use glyphs.  Make sure the cursor is visible in the map window.
+	From Istvan Marko.
+	
+2003-04-09  Shawn Betts  <sabetts@sfu.ca>
+
+	* nethack.el (nethack-el-version): version update
+
+2003-04-03  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack-keys.el (nh-map-mode-map): Don't map M-[.
+
+2003-03-28  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* INSTALL: Update nethack version references (to 3.4.1).
+
+	* nethack-api.el: No longer require overlay.  Require
+	nethack-compat.
+
+	* nethack-compat.el: Add file.  Localize version specific hacks
+	here.
+
+	* nethack.el (nh-propertize):
+	(nh-assq-delete-all):
+	(nh-window-buffer-height):
+	(nh-char-to-int):
+	(nh-read-char): Move these functions to nethack-compat.el.
+
+	* Makefile (clean): Clean *.elc not *elc.
+
+2003-03-10  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* enh-341.patch: Update file (was added without ChangeLog entry).
+
+	* Makefile (NH_VER): Add variable to specify nethack source
+	version to create patch from.
+
+	* mkpatch: Update to use NH_VER.
+
+2003-03-08  Shawn Betts  <sabetts@sfu.ca>
+
+	* nethack-api.el (nh-menu-submit): Don't print the list of
+	selected menu items to the minibuffer.
+
+2002-09-26  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack.el (nh-sentinel): Don't pop to process buffer on signal.
+
+	* nethack-api.el (nhapi-create-message-window): Erase the buffer.
+	(nhapi-block): Clear the message highlight after input.
+	(nhapi-raw-print): Pop to the raw-print-buffer.
+
+2002-09-20  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack.el (nethack-el-version): Add function.
+	(nethack-el-version): Add variable.
+
+	* nethack-cmd.el (version): Show nethack-el version.
+
+	* nethack-example.el (nethack-x-timestamp-message): Rename from
+	`nethack-timestamp-message'.
+	(nethack-x-gdb): Rename from `nh-gdb'.
+	(nethack-x-warn-low-hp): Add function.
+
+	* nethack-api.el (nh-status-string): Add function.
+	(nh-status-n, nh-status-w, nh-status-s, nh-status-d, nh-status-c) 
+	(nh-status-i, nh-status-W, nh-status-C, nh-status-A, nh-status-L) 
+	(nh-status-l, nh-status-g, nh-status-h, nh-status-p, nh-status-a) 
+	(nh-status-e, nh-status-t, nh-status-f): Add functions.
+
+	* nethack.el (nethack-status-attribute-change-functions): Rename
+	from `nethack-status-attribute-change-hook'.
+
+	* nethack-api.el (nh-print-status): Rewrite.
+
+	* nethack.el (nethack-status-format): Remove variable.
+	(nethack-status-in-modeline): Remove variable.
+	(nethack-status-buffer-format): Add variable.
+	(nethack-status-mode-line-format): Add variable.
+	(nethack-status-header-line-format): Add variable.
+
+	* nethack-keys.el: Remove require.
+
+	* nethack-glyphs.el (nh-empty-tile): Rename from
+	nethack-empty-tile.
+	(nh-tile-vector): Rename from nethack-glyph-vector.
+
+	* nethack-cmd.el: Add provide line.
+
+	* nethack-api.el: Move all customizable variables and face
+	definitions to nethack.el.
+
+	* nethack.el: Reorder functions and variables.  Cosmetic change.
+	Update comments.
+	
+2002-09-19  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack.el: Rename all "non-user" functions and variables from
+	nethack-* to nh-*.  Rename all nethack-api-* functions and
+	variables to nhapi-*.  Rename all references of "glyphs" to
+	"tiles" (except for the filename nethack-glyphs.el).
+
+	* nethack-keys.el: Likewise.
+
+	* nethack-glyphs.el: Likewise.
+
+	* nethack-example.el: Likewise.
+	
+	* nethack-cmd.el: Likewise.
+
+	* nethack-api.el: Likewise.
+	
+	* nethack-api.el (overlay): Add require for XEmacs.
+
+2002-09-16  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* Makefile (test-patch): Add rule.
+	(dist): Depend on a tested patch.
+
+	* mkpatch: Add win/tty/termcap.c to list of files to include in
+	patch.  Create patch from clean tarball.
+
+	* nethack-example.el (nethack-timestamp-message): Put loose code
+	from this file into this function.
+	(nh-gdb): New function.
+
+2002-09-15  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack-keys.el (nethack-map-mode-map, nethack-menu-mode-map):
+	Add supress-keymap.  From Istvan Marko <mi@imarko.dhs.org>.
+
+2002-09-12  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack-api.el: Removed the remains of the window.doc comments.
+	They were misleadingly out of date.
+	(nethack-api-end): Add function.
+
+	* mkpatch: Don't include win/lisp/TODO file in patch.
+
+	* nethack-api.el (nethack-api-menu-putstr): Rename from
+	`nethack-api-putstr'.
+	
+2002-09-12  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* Makefile (dist): Build the distribution tarball in the current
+	directory.
+	(DISTFILES): Update patch filename.
+
+	* nethack-api.el (nethack-reset-status-variables): Rename from
+	`nethack-reset-status'.
+	(nethack-api-curs): Don't take a winid argument.  Always operate
+	on `nethack-map-buffer'.
+	(nethack-api-message): Split out from nethack-api-putstr.  Always
+	operates on `nethack-message-buffer'.
+	(nethack-api-print-glyph): Always operate on `nethack-map-buffer'.
+	(nethack-inventory-need-update): Add variable.
+	(nethack-api-update-inventory): Set
+	`nethack-inventory-need-update' to t.
+	(nethack-api-create-message-window): No longer takes a winid.
+	(nethack-api-create-status-window): Likewise.
+	(nethack-api-create-map-window): Likewise.
+	(nethack-api-create-inventory-window): Rename winid arg to menuid.
+	(nethack-api-start-menu): Likewise.
+	(nethack-api-add-menu): Likewise.
+	(nethack-api-select-menu): Likewise.
+	(nethack-api-clear-nhwindow): Remove.
+	(nethack-api-clear-message): New function.
+	(nethack-api-clear-map): New function.
+	(nethack-api-display-nhwindow): Remove.
+	(nethack-api-display-menu): Add function.
+	(nethack-api-block): New function.
+	(nethack-api-restore-window-configuration): Rename from
+	`nethack-restore-window-configuration' as its now also called from
+	Nethack.  Change the placement of windows.
+	(nethack-menu-submit): Don't set window-configuration unless
+	`nethack-window-configuration' contains a valid value.
+
+	* nethack-cmd.el (redraw-screen): Update to call
+	`nethack-api-restore-window-configuration'.
+
+	* nethack.el (nethack): Update to call
+	`nethack-restore-window-configuration' and
+	`nethack-reset-status-variables'.
+	(nethack-map-mode): Ensure that `scroll-other-window' operates on
+	`nethack-message-buffer'.
+
+
+2002-07-16  Ryan C Yeske  <rcyeske@vcn.bc.ca>
+
+	* enh-340.patch: Add file.
+
+	* Makefile: Generate patch for nethack-3.4.0
+
+	* mkpatch: Likewise.
+
+2002-05-11  Shawn Betts  <sabetts@vcn.bc.ca>
+
+	* nethack-glyphs.el (nethack-glyph-vector): update with new glyphs.
+	(nethack-empty-glyph): remove :mode heuristic.
+
+2002-04-23  Shawn  <sabetts@vcn.bc.ca>
+
+	* nethack.el (nethack): reset status variables
+
+	* nethack-api.el (nethack-reset-status): new function
+	(nethack-status-attribute-Score): new variable
+	(nethack-api-print-glyph): change arguments to reflect C source.
+
+2002-04-10  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* Makefile (dist): Add rule.
+
+	* mkpatch: Add file.
+
+	* Makefile (patch): Call external mkpatch sh-script to generate
+	the patch.
+
+2002-02-14  Shawn Betts  <sabetts@vcn.bc.ca>
+
+	* nethack-glyphs.el (nethack-glyph-vector): Add warning glyphs.
+
+2002-02-01  Ryan C Yeske  <rcyeske@vcn.bc.ca>
+
+	* COPYING: Add file.
+
+	* nethack.el: Update copyright.
+
+	* nethack-keys.el: Update copyright.
+
+	* nethack-keys-dvorak.el: Update copyright.
+
+	* nethack-glyphs.el: Update copyright.
+
+	* nethack-api.el: Update copyright.
+
+2002-02-01  Shawn Betts  <sabetts@vcn.bc.ca>
+
+	* nethack.el (nethack-message-pre-print-hook): new hook.
+
+	* nethack-api.el (nethack-api-putstr): run the
+	nethack-message-pre-print-hook hook.
+
+2002-02-01  Ryan C Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack.el (nethack-black-face, nethack-green-face) 
+	(nethack-brown-face, nethack-blue-face, nethack-magenta-face) 
+	(nethack-cyan-face, nethack-bright-green-face) 
+	(nethack-bright-blue-face): Fix colors.
+
+	* nethack-api.el (nethack-status-good-face)
+	(nethack-status-bad-face)
+	(nethack-status-neutral-face): Fix colors.
+
+2002-01-30  Ryan C Yeske  <rcyeske@vcn.bc.ca>
+
+	* enh-331.patch: Add file.
+
+	* Makefile: Likewise.
+
+	* INSTALL: Likewise.
+
+	* BUGS: Likewise.
+
+	* AUTHORS: Likewise.
+
+2002-01-29  Ryan C Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack-cmd.el (defun-nethack-command): Reformat.
+
+	* nethack-api.el (nethack-api-update-status): Rewrite using a
+	separate variable for each attribute.  Don't print the attributes
+	here.  Run hooks when an attribute has changed.
+	(nethack-print-status): New function.
+	(nethack-status-attribute-name, nethack-status-attribute-monster) 
+	(nethack-status-attribute-rank, nethack-status-attribute-St) 
+	(nethack-status-attribute-Dx, nethack-status-attribute-Co) 
+	(nethack-status-attribute-In, nethack-status-attribute-Wi) 
+	(nethack-status-attribute-Ch, nethack-status-attribute-Align) 
+	(nethack-status-attribute-Dungeon, nethack-status-attribute-Dlvl) 
+	(nethack-status-attribute-$, nethack-status-attribute-HP) 
+	(nethack-status-attribute-HPmax, nethack-status-attribute-PW) 
+	(nethack-status-attribute-PWmax, nethack-status-attribute-AC) 
+	(nethack-status-attribute-Level, nethack-status-attribute-XP) 
+	(nethack-status-attribute-HD, nethack-status-attribute-T) 
+	(nethack-status-attribute-confusion) 
+	(nethack-status-attribute-hunger, nethack-status-attribute-sick) 
+	(nethack-status-attribute-blind) 
+	(nethack-status-attribute-stunned) 
+	(nethack-status-attribute-hallucination) 
+	(nethack-status-attribute-slimed) 
+	(nethack-status-attribute-encumbrance): Add variables.
+	(nethack-status-good-face, nethack-status-bad-face) 
+	(nethack-status-neutral-face): Add faces.
+	(nethack-active-menu-buffer): Add variable.
+	(nethack-api-select-menu): Set nethack-active-menu-buffer.
+	(nethack-menu-submit): Clear nethack-active-menu-buffer.
+	(nethack-menu-toggle-item): Fix count bug, so C-u 1 works.
+	(nethack-restore-window-configuration): Make sure the menu is
+	displayed if it is active.
+
+2002-01-27  Ryan C Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack.el (nh-filter): Remove nh-log-process-text test.
+	(nh-log): Test nh-log-process-text here.
+	(nh-prompt-regexp): Make constant.
+	(nh-log-process-text): Rename from nh-log-process.
+
+2002-01-23  Ryan C Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack.el (nh-proc-buffer-name): Add variable.
+	(nh-log-process): Likewise.
+	(nh-sentinel): Don't erase the process buffer here.
+	(nh-log): Add function.
+	(nh-filter): Log evaluated text.
+	(nh-send): Log commands and erase text from process buffer.
+	(nethack-window-buffer-height, nethack-char-to-int)
+	(nethack-read-char): Add functions.
+
+	* nethack-api.el (nethack-api-raw-print-bold): Fix typo.
+	(nethack-api-putstr): Reformat.
+	(nethack-api-yn-function): Use nethack-read-char.
+	(nethack-api-display-nhwindow): Likewise.
+	(nethack-message-highlight-face): Change definition.
+	(nethack-api-clear-nhwindow): Move (require 'nethack-glyphs) to
+	here.
+	(nethack-menu-toggle-item): Remove replace-match code.
+	(nethack-menu-submit): Call nethack-char-to-int on accelerator.
+	(nethack-api-add-menu): Propertize strings going into menu.
+	(nethack-api-select-menu): Use nethack-window-buffer-height.
+
+2002-01-22  Ryan C Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack-api.el (nethack-api-clear-nhwindow): Move the
+	nethack-glyphs require from nethack.el to here.
+
+2002-01-22  shawn  <sabetts@vcn.bc.ca>
+
+	* nethack-api.el (nethack-menu-submit): return list pairs
+	containing the accelerator and the value.
+	(nethack-api-add-menu): remove identifier parameter.
+
+2002-01-22  Ryan C Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack-cmd.el (southwest-until-ontop, southwest-until-near):
+	Fill in definitions.
+
+	* nethack.el (nethack-assq-delete-all): New function.
+	(nethack-propertize): New function.
+	(nh-proc): Rename from nh-comint-proc.
+	(nethack): Use start-process not make-comint.
+	(nh-comint-mode): Remove.
+	(nh-filter): Rewrite without comint.
+	(nh-send): Rewrite without comint.
+
+	* nethack-api.el (nethack-api-raw-print-bold): Use
+	nethack-propertize.
+	(nethack-api-update-status, nethack-api-putstr): Likewise.
+	(nethack-api-add-menu): Add nethack attributes.
+	(nethack-api-destroy-nhwindow): Use nethack-assq-delete-all.
+
+2002-01-22  shawn  <sabetts@vcn.bc.ca>
+
+	* nethack-keys.el (nethack-accelerator-chars): add ?* to the
+	vector.
+
+	* nethack-api.el (nethack-api-choose-role): remove function
+	(nethack-api-choose-race): likewise
+	(nethack-api-choose-gender): likewise
+	(nethack-api-choose-alignment): likewise
+	(nethack-menu-toggle-item): adjust item regexp to include ?*
+	(nethack-menu-toggle-all-items): likewise
+	(nethack-menu-goto-next): likewise
+	(nethack-menu-goto-prev): likewise
+	(nethack-menu-submit): likewise
+	(nethack-menu-cancel): likewise
+
+2002-01-21  Ryan C Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack-api.el (nethack-menu): Remove variable.
+	(nethack-menu-toggle-item, nethack-menu-toggle-all-items)
+	(nethack-menu-goto-next, nethack-menu-goto-prev)
+	(nethack-menu-submit, nethack-menu-cancel)
+	(nethack-api-start-menu, nethack-api-add-menu)
+	(nethack-api-end-menu): Rewrite to remove ewoc dependancy.
+	(nethack-api-add-menu): Add tile argument.
+
+	* nethack.el (nethack): Don't setq nethack-menu.
+
+	* nethack-api.el (ewoc): Remove require.
+	(nethack-menu-item-print): Remove function.
+
+2002-01-20  Ryan C Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack-keys.el: Add bindings for remaining functions.
+
+	* nethack-cmd.el: Define remaining functions.
+
+2002-01-18  Ryan C Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack-api.el (nethack-api-ask-direction): Correct se and sw
+	correspondances.
+
+2002-01-17  Ryan C Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack-api.el (nethack-api-getlin): Handle Quit.
+
+	* nethack.el (nethack-map-mode-syntax-table): Add '{' and '}'.
+
+2002-01-16  Ryan C Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack-keys-dvorak.el (nethack-map-mode-hook): Add binding for
+	nethack-command-offer.
+
+	* nethack-api.el (nethack-api-print-status-numeric): Remove
+	function.
+	(nethack-api-print-status-string): Remove function.
+	(nethack-print-status-string): Add function.
+	(nethack-api-update-status): Use nethack-print-status.
+	(nethack-api-raw-print): Print to nethack-message-buffer.
+	(nethack-api-exit-nhwindows): Don't clean up buffers.
+	(nethack-api-display-nhwindow): Try to print text to
+	nethack-message-buffer.
+	(nethack-restore-window-configuration): Remove buffer dedication
+	of status window.
+	(nethack-api-end-menu): Don't move the point.
+	(nethack-api-select-menu): Use the window displaying the message
+	buffer for the menu, and enlarge it only if necessary.
+
+	* nethack.el (nethack-map-glyph-face): Fix typo.
+	(nethack-map-mode-syntax-table): Add `[' and `]'.
+
+2002-01-15  Ryan C Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack.el (nethack-map-mode-syntax-table): New variable.
+	(nethack-map-mode): Use nethack-map-mode-syntax-table.
+	(nethack-map-glyph-face): Don't set face on tty displays.
+
+2002-01-14  Ryan C Yeske  <rcyeske@sfu.ca>
+
+	* nethack.el (nh-send-and-wait): Stop waiting for process output
+	if the process dies.
+
+	* nethack-api.el (nethack-api-putstr): Use overlay for highlight.
+	Insert newline after text, not before.
+	(nethack-api-create-nhwindow): Move code from cond into appropriate
+	nethack-api-create-*-window functions.
+	(nethack-api-create-menu-window): Make buffer read-only.
+	(nethack-api-start-menu): Inhibit read-only.
+	(nethack-api-create-message-window): Create highlight overlay.
+	(nethack-api-clear-nhwindow): Don't create gamegrid if using glyphs.
+	(nethack-api-putstr): Inhibit readonly.
+
+	* nethack.el (nethack): Check for buffer before killing it.
+
+2002-01-13  shawn  <sabetts@vcn.bc.ca>
+
+	* nethack-glyphs.el (nethack-glyph-vector): fix the giant ant image.
+
+2002-01-13  Ryan C Yeske  <rcyeske@sfu.ca>
+
+	* nethack.el (nh-prompt-regexp): New variable.
+	(nh-comint-mode): Use above variable.
+
+2002-01-10  Ryan C Yeske  <rcyeske@sfu.ca>
+
+	* nethack.el (nethack-map-glyph-face): Put in nethack-faces group.
+	(nethack-use-glyphs): Default to nil.
+	(nethack-toggle-glyphs): New function.
+
+	* nethack-api.el (nethack-api-display-nhwindow): Don't wait for a
+	key on echo area messages.
+	(nethack-menu-item-print, nethack-menu-toggle-item)
+	(nethack-menu-toggle-item, nethack-menu-toggle-all-items)
+	(nethack-menu-submit, nethack-api-add-menu): Handle prefix arg on
+	menu selection.  From sabetts.
+
+	* nethack-cmd.el (redraw-screen): Restore window configuration
+	always, only redraw glyphs with a prefix arg.
+	(defun-nethack-command): Expand cmdstr in test.
+
+	* nethack-api.el (nethack-restore-window-configuration): Make the
+	status window dedicated.
+
+2002-01-01  shawn  <sabetts@vcn.bc.ca>
+
+	* nethack.el (nethack): set nethack-status-alist to nil when
+	starting a new nethack game.
+
+2002-01-01    <sabetts@watchman.phalanx.tmp>
+
+	* nethack-api.el (nethack-menu-toggle-all-items): only toggle
+	items that have identifiers.
+	(nethack-api-update-status): remove CL dependancy for flag
+	processing.
+	(nethack-api-update-status): properly re-create the "Flags" status
+	alist.
+
+2001-12-20  shawn  <sabetts@vcn.bc.ca>
+
+	* nethack.el (nethack-map-glyph-face): new face.
+
+	* nethack-api.el (nethack-api-update-status): take 1 argument
+	which is an alist of status properties. Print each status
+	property.
+	(nethack-api-print-status-numeric): new function
+	(nethack-api-print-status-string): new function
+	(nethack-api-update-status): highlight status attributes that
+	change.
+	(nethack-api-update-status): Insert a space between each
+	attribute.
+	(nethack-api-clear-nhwindow): insert newlines using the
+	nethack-map-glyph-face when using glyphs.
+
+	* nethack.el (nh-sentinel): evaluate any remaining lisp code when
+	the lisp process gets a sentinel event.
+
+2001-12-19  shawn  <sabetts@vcn.bc.ca>
+
+	* nethack.el: require nethack-glyphs
+	(nethack-use-glyphs): new variable
+
+	* nethack-api.el (nethack-api-print-glyph): add argument `tile'
+	(nethack-api-print-glyph): draw graphical tiles, when graphics are
+	enabled.
+	(nethack-api-clear-nhwindow): fill the map with empty graphical
+	tiles, when graphics are enabled.
+
+2001-12-04  Ryan Yeske  <rcyeske@sfu.ca>
+
+	* nethack-api.el (nethack-cook-status): Rename from
+	nh-cooked-status.
+
+2001-12-02  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack-api.el (nethack-return): Remove.
+	(nh-use-cooked-status): New variable.
+	(nethack-api-update-status): New function.
+	(nethack-api-get-command): Comment out, it is obsolete with new
+	comint process handling.
+	(nethack-restore-window-configuration): Rename from
+	nethack-setup-window-configuration.
+	(nethack-api-create-message-window)
+	(nethack-api-create-status-window, nethack-api-create-map-window)
+	(nethack-api-create-inventory-window)
+	(nethack-api-create-menu-window, nethack-api-create-text-window):
+	New function.
+
+	* nethack-cmd.el (defun-nethack-command): Update to handle new
+	process handling code nh-send-and-wait.
+
+	* nethack.el (nethack): Use comint to communicate with process.
+	(nh-comint-mode): New function.
+	(nethack-process-buffer-name): Remove.
+	(nethack-process-name): Remove.
+	(nethack-start-program): Remove.
+	(nethack-process-send-string): Remove.
+	(nh-send): New function.
+	(nh-send-and-wait): New function.
+	(nethack-status-line-number, nethack-status-line):
+	Remove.
+	(nh-sentinel): New function.
+	(nh-filter): New function.
+
+2001-10-23  shawn  <sabetts@vcn.bc.ca>
+
+	* nethack.el (nethack-parse-status-lines): flags are highlighted
+	as red always (always bad).
+
+2001-10-23  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack-cmd.el (defun-nethack-command): Allow arbitrary code to
+	go into function definitions.
+	(shell): Run a shell.
+
+	* nethack-keys.el (nethack-menu-mode-map): Add
+	(nethack-menu-mode-map): Add bindings for
+	`nethack-menu-toggle-all-items'.
+	(nethack-menu-mode-map): Bind keys to the extended commands.
+
+	* nethack-api.el (nethack-api-end-menu): Comment out broken
+	initial positioning code.
+	(nethack-menu-toggle-all-items): New function.
+
+2001-10-23  shawn  <sabetts@vcn.bc.ca>
+
+	* nethack-api.el (nethack-api-getlin): send the string read from
+	the minibuffer, not the object which is a a string.
+
+	* nethack.el (nethack-parse-status-lines): the highlight delay is
+	negative if the change in status is bad and positive when good.
+	(nethack-parse-status-lines, nethack-format-status): if the status
+	change is negative change the value to a red face, green if
+	positive.
+	(nethack-parse-status-lines): handles the case when
+	nethack-status-alist is nil.
+
+2001-10-22  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack.el (nethack-process-filter): Do not send the return
+	value to the running process.
+
+	* nethack-keys.el (nethack-map-mode-map): C-c C-c is bound to
+	nethack-command-quit.
+
+	* nethack-api.el (nethack-return): Send the return value directly
+	from here.
+	(nethack-retval): Remove function.
+	(nethack-api-ask-direction): Add prompt argument.  Add down, up,
+	and self directions.
+	(nethack-api-display-nhwindow): Do not protect windows.  Clear the
+	value of nethack-menu when displaying a menu window.
+	(nethack-menu-goto-next): Make sure nethack-menu is non-nil.
+	(nethack-menu-goto-prev): Likewise.
+	(nethack-protect-windows): Remove macro.
+	(nethack-api-select-menu): Do not protect windows.
+
+	* nethack-apix.el: Removed from repository.
+
+	* nethack.el (nethack-colors): New vector.
+	(nethack-colors-alist): Remove.
+
+	* nethack-api.el (nethack-api-print-glyph): Use nethack-colors
+	vector.
+
+	* nethack.el (nethack-format-status): Use nethack-red-face for
+	changed attributes.
+
+	* nethack-api.el (nethack-return): New function.
+	(nethack-retval): New function.
+	(nethack-api-raw-print, nethack-api-raw-print, nethack-api-curs)
+	(nethack-api-putstr, nethack-api-get-command)
+	(nethack-api-print-glyph, nethack-api-player-selection)
+	(nethack-api-display-file, nethack-api-doprev-message)
+	(nethack-api-init-nhwindows, nethack-api-exit-nhwindows)
+	(nethack-api-clear-nhwindow, nethack-api-display-nhwindow)
+	(nethack-api-destroy-nhwindow, nethack-api-start-menu)
+	(nethack-api-add-menu, nethack-api-end-menu)
+	(nethack-api-select-menu, nethack-api-outrip): Remove 'void.
+	(nethack-api-yn-function, nethack-api-ask-direction)
+	(nethack-api-getlin, nethack-api-choose-role)
+	(nethack-api-choose-race, nethack-api-choose-gender)
+	(nethack-api-choose-alignment, nethack-api-create-nhwindow)
+	(nethack-api-delay-output): Use nethack-return to create a return
+	value.
+
+	* nethack.el (nethack-process-filter): Use nethack-retval to
+	unpack return values.  Don't check for unimplemented.
+
+2001-10-22  Ryan  <rcyeske@vcn.bc.ca>
+
+	* nethack-keys.el (nethack-accelerator-chars): Moved from
+	nethack-api.el.
+	(nethack-menu-mode-map): New variable.  Setup the entire static
+	keymap.
+
+	* nethack-api.el (nethack-api-display-nhwindow): Call
+	nethack-menu-mode to set up the buffer.
+	(nethack-api-select-menu): Likewise.
+	(nethack-menu-item-print): Use aref, not elt.
+	(nethack-menu-mode): New function.
+	(nethack-menu-toggle-item): Don't toggle pick-none menus.
+	(nethack-menu-goto-next): New function.
+	(nethack-menu-goto-prev): New function.
+	(nethack-api-end-menu): Position the point on the first selectable
+	menu item.
+
+	* nethack.el (nethack-menu-mode-hook): New hook.
+
+2001-10-19  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack-cmd.el (nethack-command-previous-message): New function.
+	(nethack-command-redraw-screen): Likewise.
+
+	* nethack-api.el (nethack-api-raw-print): Display the raw print
+	buffer as the only window.
+	(nethack-api-raw-print-bold): Use nethack-atr-bold-face.
+	(nethack-atr-none-face, nethack-atr-uline-face)
+	(nethack-atr-bold-face, nethack-atr-blink-face)
+	(nethack-atr-inverse-face): New faces.
+	(nethack-api-putstr): Use whatever attribute is specified.
+	(nethack-attr-face): New function.
+	(nethack-api-clear-nhwindow): Remove debugging `.'.
+	(nethack-api-display-nhwindow): Handle blocking map displays.
+	(nethack-api-add-menu): Use whatever attribute is specified.
+	(nethack-api-outrip): Output a trailing newline.
+
+2001-10-19  shawn  <sabetts@vcn.bc.ca>
+
+	* nethack.el (nethack-parse-status-lines): regexp truncated.
+	(nethack-parse-status-lines): alter regexp to handle strengths > 18
+	(nethack-status-highlight-delay): new variable
+	(nethack-parse-status-lines): the data changed field in the status
+	alist is now a number that counts down from
+	nethack-status-highlight-delay.
+	(nethack-format-status): Only highlight the data if the 3rd
+	element in the data list is > 0.
+
+	* nethack-api.el (nethack-api-putstr): only print the status when
+	both status lines have been received.
+
+	* nethack.el (nethack-status-alist): new defvar
+	(nethack-status-string): likewise
+	(nethack-parse-status-lines): new function
+	(nethack-format-status): likewise
+
+	* nethack-api.el (nethack-api-putstr): parse the status lines and
+	print the status according to the format string
+	nethack-status-string.
+
+2001-10-19  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack.el (nethack-red-face): Add -face, and to all other color
+	faces.
+
+	* nethack-api.el (nethack-api-toplines, nethack-api-win-message)
+	(nethack-api-win-message, nethack-api-win-map)
+	(nethack-api-win-status, nethack-api-ae, nethack-api-ae)
+	(nethack-api-li, nethack-api-li, nethack-api-ospeed): Comment out.
+
+	* nethack.el (nethack): If the process is already running,
+	display all of the game windows.
+
+	* nethack-api.el (nethack-api-exit-nhwindows): Clean up buffers.
+	(nethack-map-buffer): New variable.
+	(nethack-status-buffer): Likewise.
+	(nethack-message-buffer): Likewise.
+	(nethack-api-create-nhwindow): Record the "standard" buffers into
+	the above variables.
+	(nethack-api-display-nhwindow): Setup the windows for first time
+	use.
+	(nethack-status-window-height): New variable.
+	(nethack-message-window-height): Likewise.
+	(nethack-setup-window-configuration): New function.
+
+2001-10-18  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack-apix.el: Remove file, move functions into
+	nethack-api.el.
+
+	* nethack-keys.el (nethack-mode-map): Add nethack-command-loot
+	binding.
+
+	* nethack.el (gamegrid,nethack-apix): Don't require.
+	(nethack-process-filter): Remove save-excursion wrapper.
+	(nethack-setup-map-buffer): Remove.
+	(nethack-map-mode): Turn off show-paren mode.
+
+	* nethack-api.el (gamegrid): Require.
+	(nethack-api-curs): Wrap in save-excursion.  Subtract 1 from x
+	value.
+	(nethack-api-putstr): Wrap in save-excursion.  Propertize strings
+	going into menu and text windows.
+	(nethack-api-print-glyph): Wrap in save-excursion.  Subtract 1
+	from x value.
+	(nethack-api-get-ext-cmd): Remove.
+	(nethack-choose-attribute): Move here from nethack-apix.el.  Check
+	for choice lists of only 1 element here.
+	(nethack-api-choose-role): Move here from nethack-apix.el.  Don't
+	Check for choice lists of only 1 element here.
+	(nethack-api-choose-race): Likewise.
+	(nethack-api-choose-gender): Likewise.
+	(nethack-api-choose-alignment): Likewise.
+	(nethack-api-doprev-message): Uncomment body.
+	(nethack-api-clear-nhwindow): Initialize gamegrid with .'s instead
+	of spaces for debugging.
+	(nethack-api-display-nhwindow): Display short messages in the echo
+	area.
+	(nethack-api-start-menu): Wrap in save-excursion.
+	(nethack-api-end-menu): Wrap in save-excursion.
+
+2001-10-17  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack-api.el (nethack-raw-print-buffer-name): New variable.
+	(nethack-api-raw-print): Print text into
+	`nethack-raw-print-buffer-name' and display it.
+	(nethack-api-raw-print-bold): Call nethack-api-raw-print.
+	(nethack-api-putstr): Move code from nethack-print-status-lines
+	and nethack-set-status-line here.
+	(nethack-api-putstr): Propertize strings going into the message
+	buffer.
+	(nethack-api-display-file): Use the nethack-directory when
+	searching for file.
+	(nethack-protect-windows): Add macro.
+	(nethack-window-configuration): New variable.
+	(nethack-api-select-menu): Save window-configuration before
+	popping to window.
+	(nethack-menu-submit): Restore window configuration.
+	(nethack-unassigned-accelerators): New variable.
+	(nethack-unassigned-accelerator-index): New variable.
+	(nethack-specify-accelerator): New function.
+	(nethack-api-add-menu): Specify accelerators for menus that do
+	not.
+	(nethack-menu-cancel): New function.
+	(nethack-menu-reset-keymap): New function.
+	(nethack-api-display-nhwindow): Don't split vertically.  Protect
+	the status and message windows.
+	(nethack-api-exit-nhwindows): Raw print the argument.
+	(nethack-api-add-menu): Propertize strings with attributes.
+	(nethack-api-raw-print-bold): Propertize string bold.
+
+	* nethack.el (nethack): Kill off leftover buffers before starting.
+	(nethack-buffer-name-alist): Remove.
+	(nethack-buffer-id-alist): Remove.
+	(nethack-get-buffer): Rename to `nethack-buffer'.
+	(nethack-map-mode): Don't kill-local-variables.
+	(nethack-create-buffer): Remove.
+	(nethack-set-status-line): Remove, code moved into
+	`nethack-api-putstr'.
+	(nethack-print-status-lines): Likewise.
+	(nethack-restore-windows): Comment out.
+
+2001-10-16  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack.el: Don't require nethack-menu.
+	(nethack-start-program): Removed reference to obsolete variable.
+	(nethack-process-send-string): Format log output nicely.
+	(nethack-process-send): New function.
+	(nethack-process-filter): Clobbering the point in the
+	process-buffer no longer breaks processing.
+	(nethack-log-string): Log messages right into the process buffer.
+	(nethack-handle-command): Use `nconc' instead of `append'.
+
+	* nethack-menu.el: Removed from repository.
+
+	* nethack-api.el (nethack-api-display-file): Make an attempt at
+	displaying file.
+	(nethack-menu): New variable.
+	(nethack-menu-item-print): New function.
+	(nethack-menu-how): New variable.
+	(nethack-menu-toggle-item): New function.
+	(nethack-api-start-menu): Rewrite, no longer use widgets, but ewoc
+	instead.
+	(nethack-api-add-menu): Likewise.
+	(nethack-api-end-menu): Likewise.
+	(nethack-api-select-menu): Likewise.
+	(ewoc): Require 'ewoc for menus.
+
+2001-07-22  shawn  <sabetts@diggin.lamenet.tmp>
+
+	* nethack-menu.el (nethack-menu-fill-accelerators): new function
+	(nethack-menu-draw): fill in valid accelerators for items that do
+	not have them.
+	(nethack-menu-draw): use elt to access the elements of
+	nethack-menu-options.
+
+	* nethack-api.el (nethack-api-display-nhwindow): vertically split
+	the current buffer if the nethack buffer to be shown is the menu
+	buffer. Add a keystroke to the menu buffer to hide it.
+
+2001-07-21  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack.el (nethack-restore-windows): split so that the status
+	window is just big enough to show contents.
+
+	* nethack-menu.el (nethack-menu-create-item): fix bug that
+	prevented non-menu text from showing up.
+
+2001-07-19  shawn  <sabetts@diggin.lamenet.tmp>
+
+	* nethack-apix.el (nethack-api-choose-attribute): new arg ABORT.
+	(nethack-api-choose-attribute): trap the quit signal and return
+	ABORT in this case.
+	(nethack-api-choose-role): properly return the associated number
+	when there is only 1 choice.
+	(nethack-api-choose-race): likewise
+	(nethack-api-choose-gender): likewise
+	(nethack-api-choose-alignment): likewise
+
+2001-07-18  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack-menu.el (nethack-menu-keymap): rename from
+	nethack-menu-mode-map.
+	(nethack-menu-create-item): pass in HOW argument
+	(nethack-menu-how): remove variable
+	(nethack-menu-create-item): use accelerators.
+
+2001-07-16  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack.el: tweak faces for light background.
+
+	* nethack-api.el (nethack-api-putstr): save-selected-window only
+	once.
+	(nethack-api-delay-output): return a dummy value to the process.
+
+2001-07-14  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack-cmd.el: Remove default key from docstring.
+
+	* nethack-api.el (nethack-api-putstr): Force maximum output on
+	status windows.
+
+2001-07-13  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack-cmd.el (defun-nethack-command): New macro.  Redefine all
+	nethack commands with this macro.  All nethack commands now take
+	optional count argument.
+
+2001-07-10  Ryan Yeske  <rcyeske@van.gobasis.com>
+
+	* nethack-api.el (nethack-api-ask-direction): remove setq
+
+2001-07-09  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack.el (nethack-process-filter): rewrite to insert string
+	into process buffer and read and evaluate forms directly out of
+	the buffer
+	(nethack-process-output): remove
+	(nethack-process-command-list): remove
+	(nethack-parse-command): remove
+	(nethack-log-string): comment out body
+	(nethack-start-program): make sure process buffer exists and erase
+	old contents.
+
+	* nethack-menu.el (nethack-menu-buffer): remove
+	(nethack-menu-add-item): add accelerator argument
+	(nethack-menu-draw): use accelerator argument
+	(nethack-menu-get-choices): replace `cond' with `if'
+
+	* nethack-api.el (nethack-api-add-menu): call
+	nethack-menu-add-item with accelerator argument.
+	(nethack-api-bell): call ding.
+
+2001-07-06  shawn  <sabetts@diggin.lamenet.tmp>
+
+	* nethack.el (nethack-handle-command): Add arg to specify how many
+	times to execute the command.
+
+	* nethack-menu.el (nethack-menu-get-choices): use -1 for the
+	quantity of the item chosen.
+
+	* nethack-cmd.el (nethack-command-search): Add prefix arg.
+	(nethack-command-rest-one-move): likewise
+
+	* nethack-api.el (nethack-api-ask-direction): s is a list of
+	commands to move south.
+
+2001-07-05  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack.el (nethack-yellow): Use "yellow3" for light
+	backgrounds.
+
+	* nethack-menu.el (nethack-menu-draw): Print close instructions at
+	the top of menu.  Place the point at the top of menu after drawing
+	it.
+
+2001-07-05  shawn  <sabetts@diggin.lamenet.tmp>
+
+	* nethack.el (nethack-load-hook): new hook
+	run nethack-load-hook hooks.
+
+	* nethack-keys.el (nethack-mode-map): remove binding to
+	nethack-command-cancel
+
+	* nethack-cmd.el (nethack-command-southwest): new function
+
+	* nethack-api.el (nethack-api-ask-direction): accepts any keys
+	that are bound to nethack movement commands.
+
+2001-07-02  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack.el: add provide line.
+
+2001-07-01  shawn  <sabetts@diggin.lamenet.tmp>
+
+	* nethack.el (nethack-process-filter): remove let variables
+	(nethack-process-command-list): log the incomplete command as such
+	(nethack-parse-command): remove 'void-fixme and 'no-retval from
+	the cond.
+
+	* nethack-menu.el (nethack-menu-draw): menu appears on the left
+	side of the split
+
+	* nethack-api.el (nethack-api-raw-print): return 'void
+	(nethack-api-raw-print-bold): likewise
+	(nethack-api-raw-print-bold): likewise
+	(nethack-api-curs): likewise
+	(nethack-api-putstr): likewise
+	(nethack-api-get-command): likewise
+	(nethack-api-destroy-nhwindow): likewise
+	(nethack-api-end-menu): likewise
+	(nethack-api-select-menu): likewise
+	(nethack-api-cliparound): likewise
+	(nethack-api-outrip): likewise
+	(nethack-api-delay-output): comment out body
+
+2001-06-28  shawn  <sabetts@diggin.lamenet.tmp>
+
+	* nethack.el (nethack-red): new face
+	(nethack-green): likewise
+	(nethack-brown): likewise
+	(nethack-blue): likewise
+	(nethack-magenta): likewise
+	(nethack-cyan): likewise
+	(nethack-gray): likewise
+	(nethack-dark-gray): likewise
+	(nethack-orange): likewise
+	(nethack-bright-green): likewise
+	(nethack-yellow): likewise
+	(nethack-bright-blue): likewise
+	(nethack-bright-magenta): likewise
+	(nethack-bright-cyan): likewise
+	(nethack-white): likewise
+	(nethack-color-alist): new const
+
+	* nethack-keys.el (nethack-mode-map): "b" key calls
+	nethack-command-southwest.
+	(nethack-mode-map): "u" key calls nethack-command-northeast.
+	(nethack-mode-map): "y" key calls nethack-command-northwest.
+
+	* nethack-api.el (nethack-api-print-glyph): new parameter
+	`face'. Set the color for each glyph.
+	
+
+2001-06-27  shawn  <sabetts@diggin.lamenet.tmp>
+
+	* nethack.el (nethack-restore-windows): new function
+
+	* nethack-menu.el (nethack-menu-buffer): new var
+	(nethack-menu-draw): assign the nethack-menu-buffer to the
+	buffer. horizontally split the current window. 
+	(nethack-menu-submit): call nethack-restore-windows.
+
+	* nethack-api.el (nethack-api-yn-function): pressing return
+	returns the default value. returns the key as an integer. Add a
+	space after the prompt.
+	(nethack-api-ask-direction): new function
+
+2001-06-25  shawn  <sabetts@diggin.lamenet.tmp>
+
+	* nethack.el (nethack-process-command-list): use while to loop
+	through the command list. If the last command fails to parse, keep
+	it in the command list.
+
+2001-06-21  Shawn Betts  <sabetts@van.gobasis.com>
+
+	* nethack-menu.el (nethack-menu-create-item): insert a space after
+	the checkbox widget.
+
+	* nethack-api.el (nethack-api-exit-nhwindows): returns 'void.
+
+	* nethack-menu.el (nethack-menu-add-item): add the item to the end
+	of the list.
+	(nethack-menu-create-item): only buttonize items with positive
+	id's.
+
+2001-05-06  shawn  <sabetts@diggin.lamenet.tmp>
+
+	* nethack-menu.el (nethack-menu-options): new defvar
+	(nethack-menu-widgets): likewise
+	(nethack-menu-how): likewise
+	(nethack-menu-mode-map): likewise
+	(nethack-menu-add-item): new function
+	(nethack-menu-create-item): likewise
+	(nethack-menu-draw): likewise
+	(nethack-menu-get-choices): likewise
+	(nethack-menu-submit): likewise
+
+	* nethack.el (nethack-menu): require nethack-menu
+	(nethack-create-buffer): kill-all-local-variables on the buffer
+
+	* nethack-api.el (nethack-api-start-menu): initialize some
+	internal menu variables
+	(nethack-api-add-menu): call nethack-menu-add-item
+	(nethack-api-end-menu): do nothing
+	(nethack-api-select-menu): call nethack-menu-draw
+
+2000-09-26  Shawn  <sabetts@vcn.bc.ca>
+
+	* nethack.el (nethack-process-command-list): The filter can now
+	handle globs of nethack lisp commands.
+
+2000-09-25  Shawn  <sabetts@vcn.bc.ca>
+
+	* nethack-apix.el: In player selection, doesn't ask the user if
+	there is only one choice.
+
+	* nethack-api.el (nethack-api-yn-function): implemented.
+
+	* nethack-cmd.el: Added the rest of the movement commands
+
+2000-09-19  Ryan yeske  <rcyeske@van.gobasis.com>
+
+	* nethack-api.el (nethack-api-get-command): renamed from
+	nethack-api-getch and rewrote.
+
+2000-09-11  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack.el (nethack-handle-command): Renamed from
+	nethack-handle-key and rewritten in preparation for the removal of
+	nethack-api-getch in favour of nethack-get-command.
+	(nethack-waiting-for-command-flag): renamed from
+	nethack-waiting-for-key-p.
+	(nethack-command-queue): renamed from nethack-key-queue.
+	(nethack-map-mode-map): removed.
+
+	* nethack-cmd.el: Revived file.  Added a provide line to end.
+	Renamed all calls to nethack-send-command to
+	nethack-handle-command.
+
+2000-09-07  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack-cmd.el: obsolete, removed file from CVS.
+	
+	* nethack-keys.el: obsolete, removed file from CVS.
+
+	* nethack-api.el (nethack-api-delay-output): implemented.
+	(nethack-api-outrip): implemented.
+	(nethack-api-wait-synch): implemented.
+	(nethack-api-start-menu): implemented.
+	(nethack-api-yn-function): implemeneted.
+
+2000-08-20  Ryan Yeske  <rcyeske@vcn.bc.ca>
+
+	* nethack-api.el: changed all retvals to 'unimplemented for
+	functions that have not been flushed out.
+
+	* nethack.el (nethack-draw-glyph): removed.  handle in nethack-api
+	with (nethack-api-print-glyph)
+	(nethack-process-send-string): now sends a newline.
+	(nethack-create-map-buffer): removed.
+	(nethack-create-status-buffer): removed.
+	(nethack-create-map-buffer): removed.
+
+	* nethack-api.el: massive reformatting of comments and overall
+	file structure.
+
+2000-03-23  Ryan Yeske  <rcyeske@sfu.ca>
+
+	* nethack.el (nethack-program,nethack-program-args): added `*' to
+	docstrings to enable interactive setting of vars
+
+	* nethack-keys.el: test added to prevent creating new keymap
+
+	* nethack-api.el (nethack-api-putstr): added missing close paren
+
+2000-03-20  Ryan Yeske  <rcyeske@sfu.ca>
+
+	* nethack.el (nethack-parse-command): added evaluation
+
+2000-03-18  Ryan Yeske  <rcyeske@sfu.ca>
+
+	* nethack-keys.el: renamed some functions, not used yet so no
+	details given
+
+	* nethack-cmd.el: renamed some functions, not used yet so no
+	details given
+
+	* nethack.el (nethack-program): new variable
+	(nethack-program-args): new variable
+	(nethack): new function
+	(nethack-start-program): new function
+	(nethack-process-buffer-name): new variable
+	(nethack-process): new variable
+	(nethack-process-send-string): new function
+	(nethack-end-of-command-string): new variable
+	(nethack-process-filter): new function
+	(nethack-log-string): new function
+	(nethack-quit): new function
+	(nethack-send-command): new function
+
+	* nethack-api.el: updated file description in header comments
+

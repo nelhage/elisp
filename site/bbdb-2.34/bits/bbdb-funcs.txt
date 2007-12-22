@@ -1,0 +1,383 @@
+Navigation: Table of Contents, Index, next: .emacs file by Alex, prev: Emacs
+
+BBDB Elisp Code
+
+Overview:
+
+   * Unmigrating from file format 4
+   * Writing a .mailrc from BBDB
+   * Writing a Pine addressbook from BBDB, by Matt McClure
+   * Editing and formatting addresses with the country patch
+        o A new address editing function
+        o Adding a new formatting function
+             + The identifying function
+             + The formatting function
+             + Print formatting of addresses
+
+Unmigrating from file format 4
+
+(defun bbdb-unmigrate-stuff (&optional new-version)
+  "Create a buffer with unmigrated BBDB data.
+Usefull if you fooled around with BBDB file format 4 by Alex and want to
+start using the official BBDB 2.00.06 again.  In order to do that, you
+have to save your .bbdb in BBDB file format 3 instead of the file format 4
+introduced by Alex.  This function will create a *BBDB Version 3* buffer
+for you, which you can examine and save as your new .bbdb.  The unmigration
+will strip the country fields of all entries in your BBDB as such a field
+did not exist in the BBDB file format 3 used in BBDB 2.00.06."
+  (interactive "nUnmigrate to version (I recommend version 3): ")
+  (if (null new-version)
+      (setq new-version 3))
+  (if (>= new-version bbdb-file-format)
+      (error "Current BBDB file format is version %d" bbdb-file-format)
+    (let* ((records (bbdb-records))
+           (propnames (bbdb-with-db-buffer bbdb-propnames))
+           (rec)
+           (bbdb-file-format-migration (cons bbdb-file-format new-version))
+           (buf (get-buffer-create (format "*BBDB Version %d*" (cdr bbdb-file-format-migration)))))
+      (message "Unconverting the BBDB database...")
+      (set-buffer buf)
+      (erase-buffer)
+      (insert (format (concat ";;; file-version: %d\n"
+                              ";;; user-fields: %S\n")
+                      new-version (mapcar (function (lambda (x) (intern (car x))))
+                                          propnames)))
+      (while records
+        (setq rec (copy-sequence (car records)))
+        (bbdb-unmigrate-record rec)
+        (aset rec 8 nil)
+        (insert (format "%S\n" rec))
+        (setq records (cdr records)))
+      (pop-to-buffer buf)
+      (message "Unconverting the BBDB database...done"))))
+
+Writing a .mailrc from BBDB
+
+The following will export a very primitive version of your BBDB information
+into a .mailrc file which is used for normal mail(1) and Emacs Rmail.
+
+Usually the main problem when exporting BBDB to other formats is the
+creation of an ALIAS name. In my example below I just use LASTNAME. The
+following function tries to write your BBDB into a .mailrc file, like this:
+
+alias LASTNAME "FULL_NAME <NETADDRESS>"
+
+mail-groups defined via the mail-alias field are not supported, but see Matt
+McClure's code further down the page for an example on how to do this.
+
+I used the same code as bbdb-print for the file-name. Unfortunately this
+very simple code must have a bug somewhere. It only occurs if you test it a
+lot: When you are prompted for a file-name, "~/bbdb.tex" or "~/.mailrc" is
+the default. Press RET. Sometimes this will find-file the correct file, and
+sometimes you will overwrite your selected buffer instead. I haven't looked
+into this, however. :(
+
+(defvar bbdb-mailrc-file-name ".mailrc"
+  "Filename to write mail aliases to.")
+
+(defun bbdb-write-mailrc (visible-records to-file)
+  (interactive (list (bbdb-do-all-records-p)
+                     (read-file-name "Export To File: " bbdb-mailrc-file-name)))
+  (setq bbdb-mailrc-file-name (expand-file-name to-file))
+  ;; `good' are people with netaddresses, `bad' are people without.  The
+  ;; people are taken of the list records and put on either the good or
+  ;; the bad list.
+  (let ((good '()) (bad '())
+        (records (if (not visible-records)
+                     (bbdb-records)
+                   (set-buffer bbdb-buffer-name)
+                   (mapcar 'car bbdb-records))))
+    ;; Open .mailrc file
+    (find-file bbdb-mailrc-file-name)
+    (widen)
+    (erase-buffer)
+    ;; Loop through records to print.
+    (while records
+      (if (bbdb-record-net (car records))
+          (setq good (cons (car records) good))
+        (setq bad (cons (car records) bad)))
+      (setq records (cdr records)))
+    ;; write all net-addresses into .mailrc
+    (insert (mapconcat (function (lambda (x)
+                                   (let ((name (bbdb-dwim-net-address x))
+                                         (alias (bbdb-record-lastname x)))
+                                     (concat "alias "
+                                             alias
+                                             " \""
+                                             (if (string-match "\"\\(.*\\)\"\\(.*\\)" name)
+                                                 (format "%s%s" (match-string 1 name)
+                                                         (match-string 2 name))
+                                               name)
+                                             "\""))))
+                       (nreverse good)
+                       "\n"))
+    ;; Mail groups
+
+    ;;   not implemented, yet
+
+    ;; Feedback on the output quality.
+    (if bad
+        (message "There were %d people with bad or missing net addresses."
+                 (length bad))
+      (message "Done."))))
+
+Writing a Pine addressbook from BBDB, by Matt McClure
+
+From: Matt McClure <matthew.mcclure.es.99@aya.yale.edu>
+Subject: Re: conversion to pine addressbook?
+Date: Wed, 25 Aug 1999 10:12:50 -0400 (EDT)
+
+It isn't pretty, but this will create a pine addressbook.
+It also supports the mail-alias field (inefficiently, but it works).
+I don't think it should be too difficult to modify to create mailrc
+files instead.
+
+Thanks to Alex for the start.
+
+Matt
+
+;;;;;
+
+(defvar bbdb-mailrc-file-name "~/.addressbook"
+  "Filename to write mail aliases to.")
+
+(defun bbdb-write-dot-addressbook (to-file)
+  (interactive (list (read-file-name "Export To File: " "" nil nil bbdb-mailrc-file-name)))
+  (setq bbdb-mailrc-file-name (expand-file-name to-file))
+  ;; `good' are people with netaddresses, `bad' are people without.  The
+  ;; people are taken of the list records and put on either the good or
+  ;; the bad list.
+  (let ((good '()) (bad '())
+        (records (bbdb-records))
+        (grouped-good '()) (grouped-bad '())
+        (grouped-records (bbdb-records))
+        (mail-groups-alist '()))
+    ;; Open .mailrc file
+    (find-file bbdb-mailrc-file-name)
+    (widen)
+    (erase-buffer)
+    ;; Loop through records to print.
+    (while records
+      (if (bbdb-record-net (car records))
+          (setq good (cons (car records) good))
+        (setq bad (cons (car records) bad)))
+      (setq records (cdr records)))
+    ;; write all net-addresses into .mailrc
+    (insert (mapconcat
+             (function (lambda (x)
+                         (let ((alias (concat (bbdb-record-firstname x)
+                                              " "
+                                              (bbdb-record-lastname x)))
+                               (name (concat (bbdb-record-lastname x)
+                                             ", "
+                                             (bbdb-record-firstname x)))
+                               (email (car (bbdb-record-net x)))
+                               )
+                           (concat alias
+                                   "\t"
+                                   name
+                                   "\t"
+                                   email
+                                   )
+                           )))
+             (nreverse good)
+             "\n"))
+    ;; Mail groups
+    ;; get the mail-aliases
+    (while grouped-records
+      (if (and
+           (bbdb-record-net (car grouped-records))
+           (assoc 'mail-alias (bbdb-record-raw-notes (car grouped-records))))
+           (setq grouped-good (cons (car grouped-records) grouped-good))
+        (setq grouped-bad (cons (car grouped-records) grouped-bad)))
+      (setq grouped-records (cdr grouped-records)))
+
+    (while grouped-good
+      (let ((aliases (split-string
+                      (cdr (assoc 'mail-alias
+                                  (bbdb-record-raw-notes (car grouped-good))))
+                      "[, \f\t\n\r\v]+")))
+        (while aliases
+          ;; store the name associated with alias somehow
+          (setq mail-groups-alist
+                (cons (cons (car aliases)
+                            (concat "\""
+                                    (bbdb-record-firstname (car grouped-good))
+                                    " "
+                                    (bbdb-record-lastname (car grouped-good))
+                                    "\""))
+                      mail-groups-alist))
+          (setq aliases (cdr aliases))))
+      (setq grouped-good (cdr grouped-good)))
+
+    (setq mail-groups-alist (sort mail-groups-alist
+                                  (lambda (x y)
+                                    (string< (car x) (car y)))))
+
+    ;; put each name from mail-groups-alist into the appropriate mail aliases
+    (setq assn '("" . ""))
+    (while mail-groups-alist
+      (let ((assn-new (car mail-groups-alist)))
+        (if (string= (car assn) "")
+            (insert (concat "\n" (car assn-new) "\t\t("))
+          (if (not (string= (car assn) (car assn-new)))
+              (insert (concat ")\n" (car assn-new) "\t\t("))))
+        (insert (concat (cdr assn-new) ","))
+        (setq mail-groups-alist (cdr mail-groups-alist))
+        (setq assn assn-new)))
+
+    (if (not (string= (car assn) ""))
+        (insert ")\n"))
+
+    ;; Feedback on the output quality.
+    (if bad
+        (message "There were %d people with bad or missing net addresses."
+                 (length bad))
+      (message "Done."))))
+
+Editing and formatting addresses with the country patch
+
+If you are using my country patch to BBDB, you might want to use a different
+address editing function or add new address formating functions. The
+following shows you how to go about doing that.
+
+A new address editing function
+
+You can only have one active input function at the time. The name of the
+active input function is stored in the variable
+`bbdb-address-editing-function'. Therefore, you will have to write a new
+address editing function and you will have to set
+`bbdb-address-editing-function'.
+
+The easiest way to go about this, is using paste and copy: use
+`bbdb-address-edit-default' as a starting point.
+
+(defun bbdb-address-edit-continental-german (addr)
+  "Function to use for address editing.
+The sub-fields are queried using the continental order and using German
+prompts.  This is an alternate value for `bbdb-address-editing-function'.
+It is used by German speaking users.
+
+The sub-fields and the prompts used are:
+Strasse, Zeile 1: street1
+Strasse, Zeile 2: street2
+Strasse, Zeile 3: street3
+PLZ:              zip
+Stadt:            city
+Region/Staat:     state
+Land:             country"
+  (let* ((st1 (bbdb-read-string "Strasse, Zeile 1: " (bbdb-address-street1 addr)))
+         (st2 (if (string= st1 "") ""
+                (bbdb-read-string "Strasse, Zeile 2: " (bbdb-address-street2 addr))))
+         (st3 (if (string= st2 "") ""
+                (bbdb-read-string "Strasse, Zeile 3: " (bbdb-address-street3 addr))))
+         (zip (bbdb-error-retry
+               (bbdb-parse-zip-string
+                (bbdb-read-string "PLZ: " (bbdb-address-zip-string addr)))))
+         (cty (bbdb-read-string "Stadt: " (bbdb-address-city addr)))
+         (ste (bbdb-read-string "Region/Staat: " (bbdb-address-state addr)))
+         (country (bbdb-read-string "Land: " (bbdb-address-country addr))))
+    (bbdb-address-set-street1 addr st1)
+    (bbdb-address-set-street2 addr st2)
+    (bbdb-address-set-street3 addr st3)
+    (bbdb-address-set-city addr cty)
+    (bbdb-address-set-state addr ste)
+    (bbdb-address-set-zip addr zip)
+    (bbdb-address-set-country addr country)
+    nil))
+(setq bbdb-address-editing-function 'bbdb-address-edit-continental-german)
+
+Adding a new formatting function
+
+You will have to add a new entry to `bbdb-address-formatting-alist'. The new
+entry must be a cons cell consisting of an identifying function and a
+formatting function.
+
+I'll use a Japanese format as an example. Please note that I don't really
+know how Japanese mail is formatted in Japan. The following reflects
+international standards for mail from outside Japan being sent to a Japanese
+address.
+
+First we'll start by adding the identifying function and the formatting
+function to `bbdb-address-formatting-alist'. This will controll address
+formatting in the *BBDB* buffer.
+
+(add-to-list 'bbdb-address-formatting-alist
+             '(bbdb-address-is-japanese . bbdb-format-address-japanese))
+
+The identifying function
+
+The function can do any testing it likes with the address received. In this
+case we just test for the country name "Japan".
+
+(defun bbdb-address-is-japanese (addr)
+  "Return non-nil if the address ADDR is a japanese address.
+
+This is a possible identifying function for
+`bbdb-address-formatting-alist' and
+`bbdb-address-print-formatting-alist'."
+  (and (string= (upcase (bbdb-address-country addr)) "JAPAN")))
+
+The formatting function
+
+Another paste and copy event: use `bbdb-format-address-default' as a
+starting point.
+
+(defun bbdb-format-address-japanese (addr)
+  "Insert formated Japanese address ADDR in current buffer.
+
+This is what it looks like:
+       location: street1
+                 street2
+                 street3
+                 city
+                 state
+                 zip country"
+  (insert (format " %14s: " (bbdb-address-location addr)))
+  (bbdb-format-streets addr)
+  (let ((c (bbdb-address-city addr))
+        (s (bbdb-address-state addr))
+        (z (bbdb-address-zip-string addr))
+        (y (bbdb-address-country addr)))
+    (if (or (> (length c) 0)
+            (> (length s) 0)
+            (> (length z) 0)
+            (> (length y) 0))
+        (progn
+          (if (> (length c) 0)
+              (progn
+                (indent-to 17)
+                (insert c "\n")))
+          (if (> (length s) 0)
+              (progn
+                (indent-to 17)
+                (insert s "\n")))
+          (if (or (> (length z) 0)
+                  (> (length y) 0))
+              (progn
+                (indent-to 17)
+                (if (> (length z) 0)
+                    (insert z (if (> (length y) 0) " " "")))
+                (if (> (length y) 0)
+                    (insert y))
+                (insert "\n" "")))))))
+
+Print formatting of addresses
+
+This works just like the example above. Instead of adding the identifying
+and formatting functions to `bbdb-address-formatting-alist', you add the two
+functions to `bbdb-address-print-formatting-alist'. You can use the same
+identifying function that you used in `bbdb-address-formatting-alist'. The
+only thing you will have to code up is a print formatting function. It will
+be very similar to the normal formatting function. Use
+`bbdb-print-format-address-default' as a starting point. The details are
+left as an exercise to the reader.
+----------------------------------------------------------------------------
+
+Navigation: Top, Table of Contents, Index, next: .emacs file by Alex, prev:
+Emacs
+----------------------------------------------------------------------------
+http://hammer.prohosting.com/~gumbart/bbdb-funcs.html / Alex Schroeder
+<a.schroeder@bsiag.ch> / updated: 2000-03-10 / significant changes:
+2000-02-11
+----------------------------------------------------------------------------

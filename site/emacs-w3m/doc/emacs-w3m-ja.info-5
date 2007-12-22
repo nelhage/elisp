@@ -1,0 +1,133 @@
+Info file: emacs-w3m-ja.info,    -*-Text-*-
+produced by `texinfo-format-buffer'
+from file `emacs-w3m-ja.texi'
+using `texinfmt.el' version 2.42 of  7 Jul 2006.
+
+INFO-DIR-SECTION GNU Emacs Lisp
+START-INFO-DIR-ENTRY
+* Emacs-w3m-ja: (emacs-w3m-ja).  An Emacs interface to w3m (Japanese)
+END-INFO-DIR-ENTRY
+
+
+This file documents emacs-w3m, an Emacs interface to w3m.
+
+$B$3$N%U%!%$%k$O(B Emacs $B$GF0$/(B w3m $B$N%$%s%?%U%'!<%9$G$"$k(B emacs-w3m $B$K4X$9(B
+$B$k@bL@=q$G$9!#(B
+
+Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006
+TSUCHIYA Masatoshi
+
+This edition is for emacs-w3m version 1.4.147.
+
+$B$3$NHG$O(B emacs-w3m $B%P!<%8%g%s(B 1.4.147 $B$KBP1~$7$^$9!#(B
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU General Public License, Version 2 or any
+later version published by the Free Software Foundation.
+
+$B$3$NJ8=q$r!"%U%j!<%=%U%H%&%'%":bCDH/9T$N(B GNU $B0lHL8xMQ;HMQ5vBz=qBh(B 2 $BHG(B
+$B$^$?$O$=$l0J9_$NHG$,Dj$a$k>r7o$N2<$GJ#@=!"G[I[!"$"$k$$$OJQ99$9$k$3$H$r(B
+$B5v2D$7$^$9!#(B
+
+This document is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
+
+$B$3$NJ8=q$OM-MQ$H$O;W$$$^$9$,(B, $BHRI[$K$"$?$C$F$O(B, $B;T>l@-5Z$SFCDjL\E*E,9g(B
+$B@-$K$D$$$F$N0EL[$NJ]>Z$r4^$a$F(B, $B$$$+$J$kJ]>Z$b9T$J$$$^$;$s(B. $B>\:Y$K$D$$(B
+$B$F$O(B GNU $B0lHL8xM-;HMQ5vBz=q$r$*FI$_$/$@$5$$(B.
+
+You should have received a copy of the GNU General Public License
+along with this document; if not, you can either send email to this
+document's maintainer or write to: The Free Software Foundation, Inc.;
+51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+
+$B$"$J$?$O(B, $B$3$NJ8=q$H0l=o$K(B GNU $B0lHL8xM-;HMQ5vBz$N<L$7$r<u$1<h$C$F$$$k$O(B
+$B$:$G$9(B. $B$=$&$G$J$$>l9g$O(B, $BJ8=q$N4IM}<T$K%a!<%k$rAw$k$+!"$^$?$O!"%U%j!<(B
+$B%=%U%H%&%'%":bCD(B (51 Franklin Street, Fifth Floor, Boston, MA
+02110-1301, USA.) $B$K<j;f$r=q$$$F$/$@$5$$!#(B
+
+
+
+
+
+File: emacs-w3m-ja.info, Node: Function Index, Prev: Variable Index, Up: Index
+
+$(IJ=$AJ}KwR}(B
+========
+
+* Menu:
+
+* gnus-group-make-shimbun-group: Nnshimbun.             (line  19)
+* gnus-group-make-shimbun-groups: Nnshimbun.            (line  42)
+* octet-find-file:              Octet.                  (line   5)
+* w3m-antenna-add-current-url:  Setting up Antenna.     (line  13)
+* w3m-antenna:                  Daily web tracking.     (line  35)
+* w3m-bookmark-add-current-url: Adding Bookmarks.       (line   5)
+* w3m-bookmark-add-this-url:    Adding Bookmarks.       (line   5)
+* w3m-bookmark-edit:            Editing Bookmarks.      (line  23)
+* w3m-bookmark-kill-entry:      Editing Bookmarks.      (line  19)
+* w3m-bookmark-undo:            Editing Bookmarks.      (line  28)
+* w3m-bookmark-view:            Consulting Bookmarks.   (line   5)
+* w3m-browse-url:               Launching and Jumping.  (line  42)
+* w3m-close-window:             Going back to daily hacking and/or daily writing.  (line  19)
+* w3m-copy-buffer:              Creating and killing buffers.  (line  17)
+* w3m-delete-buffer:            Creating and killing buffers.  (line  23)
+* w3m-delete-other-buffers:     Creating and killing buffers.  (line  27)
+* w3m-download-this-url:        Downloading.            (line  21)
+* w3m-dtree:                    Showing Directory Tree.  (line  49)
+* w3m-edit-current-url:         HTML File Information.  (line  38)
+* w3m-edit-this-url:            HTML File Information.  (line  42)
+* w3m-fb-mode:                  Frame Local Buffers.    (line  10)
+* w3m-find-file:                Launching and Jumping.  (line  37)
+* w3m-gohome:                   Moving over pages.      (line  31)
+* w3m-goto-url:                 Launching and Jumping.  (line  79)
+* w3m-goto-url-new-session:     Launching and Jumping.  (line  86)
+* w3m-history-restore-position: Tracing History.        (line  54)
+* w3m-history-store-position:   Tracing History.        (line  50)
+* w3m-history:                  Tracing History.        (line  46)
+* w3m-history:                  Tracing History.        (line  87)
+* w3m-horizontal-recenter:      Moving in a page.       (line  57)
+* w3m:                          Launching and Jumping.  (line  20)
+* w3m-mouse-view-this-url:      Browsing With Mouse Operations.  (line  20)
+* w3m-mouse-view-this-url-new-session: Browsing With Mouse Operations.  (line  25)
+* w3m-next-anchor:              Moving in a page.       (line  68)
+* w3m-next-buffer:              Moving across buffers.  (line  28)
+* w3m-next-form:                Moving in a page.       (line  79)
+* w3m-next-image:               Moving in a page.       (line  89)
+* w3m-pattern-uri-replace:      General Variables.      (line 568)
+* w3m-previous-anchor:          Moving in a page.       (line  74)
+* w3m-previous-buffer:          Moving across buffers.  (line  22)
+* w3m-previous-form:            Moving in a page.       (line  84)
+* w3m-previous-image:           Moving in a page.       (line  94)
+* w3m-print-current-url:        Launching and Jumping.  (line  96)
+* w3m-print-this-url:           Launching and Jumping.  (line 101)
+* w3m-quit:                     Going back to daily hacking and/or daily writing.  (line  24)
+* w3m-reload-this-page:         Launching and Jumping.  (line 107)
+* w3m-save-image:               Inline Images.          (line  38)
+* w3m-scroll-down-or-previous-url: Moving in a page.    (line  27)
+* w3m-scroll-down-or-previous-url: Moving over pages.   (line 102)
+* w3m-scroll-left:              Moving in a page.       (line  33)
+* w3m-scroll-right:             Moving in a page.       (line  39)
+* w3m-scroll-up-or-next-url:    Moving in a page.       (line  21)
+* w3m-scroll-up-or-next-url:    Moving over pages.      (line  56)
+* w3m-search:                   The Search Interface.   (line  29)
+* w3m-search-uri-replace:       General Variables.      (line 574)
+* w3m-select-buffer:            Selecting buffers.      (line  45)
+* w3m-shift-left:               Moving in a page.       (line  45)
+* w3m-shift-right:              Moving in a page.       (line  51)
+* w3m-switch-buffer:            Selecting buffers.      (line  40)
+* w3m-toggle-inline-images:     Inline Images.          (line  28)
+* w3m-view-header:              HTML File Information.  (line  33)
+* w3m-view-image:               Inline Images.          (line  34)
+* w3m-view-next-page:           Moving over pages.      (line  24)
+* w3m-view-parent-page:         Moving over pages.      (line  39)
+* w3m-view-previous-page:       Moving over pages.      (line  18)
+* w3m-view-source:              HTML File Information.  (line  28)
+* w3m-view-this-url:            Launching and Jumping.  (line  57)
+* w3m-view-this-url:            Launching and Jumping.  (line  70)
+* w3m-view-url-with-external-browser: HTML File Information.  (line  47)
+* w3m-zoom-in-image:            Inline Images.          (line  49)
+* w3m-zoom-out-image:           Inline Images.          (line  44)
+

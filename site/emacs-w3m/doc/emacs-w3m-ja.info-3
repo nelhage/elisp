@@ -1,0 +1,1572 @@
+Info file: emacs-w3m-ja.info,    -*-Text-*-
+produced by `texinfo-format-buffer'
+from file `emacs-w3m-ja.texi'
+using `texinfmt.el' version 2.42 of  7 Jul 2006.
+
+INFO-DIR-SECTION GNU Emacs Lisp
+START-INFO-DIR-ENTRY
+* Emacs-w3m-ja: (emacs-w3m-ja).  An Emacs interface to w3m (Japanese)
+END-INFO-DIR-ENTRY
+
+
+This file documents emacs-w3m, an Emacs interface to w3m.
+
+$B$3$N%U%!%$%k$O(B Emacs $B$GF0$/(B w3m $B$N%$%s%?%U%'!<%9$G$"$k(B emacs-w3m $B$K4X$9(B
+$B$k@bL@=q$G$9!#(B
+
+Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006
+TSUCHIYA Masatoshi
+
+This edition is for emacs-w3m version 1.4.147.
+
+$B$3$NHG$O(B emacs-w3m $B%P!<%8%g%s(B 1.4.147 $B$KBP1~$7$^$9!#(B
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU General Public License, Version 2 or any
+later version published by the Free Software Foundation.
+
+$B$3$NJ8=q$r!"%U%j!<%=%U%H%&%'%":bCDH/9T$N(B GNU $B0lHL8xMQ;HMQ5vBz=qBh(B 2 $BHG(B
+$B$^$?$O$=$l0J9_$NHG$,Dj$a$k>r7o$N2<$GJ#@=!"G[I[!"$"$k$$$OJQ99$9$k$3$H$r(B
+$B5v2D$7$^$9!#(B
+
+This document is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
+
+$B$3$NJ8=q$OM-MQ$H$O;W$$$^$9$,(B, $BHRI[$K$"$?$C$F$O(B, $B;T>l@-5Z$SFCDjL\E*E,9g(B
+$B@-$K$D$$$F$N0EL[$NJ]>Z$r4^$a$F(B, $B$$$+$J$kJ]>Z$b9T$J$$$^$;$s(B. $B>\:Y$K$D$$(B
+$B$F$O(B GNU $B0lHL8xM-;HMQ5vBz=q$r$*FI$_$/$@$5$$(B.
+
+You should have received a copy of the GNU General Public License
+along with this document; if not, you can either send email to this
+document's maintainer or write to: The Free Software Foundation, Inc.;
+51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+
+$B$"$J$?$O(B, $B$3$NJ8=q$H0l=o$K(B GNU $B0lHL8xM-;HMQ5vBz$N<L$7$r<u$1<h$C$F$$$k$O(B
+$B$:$G$9(B. $B$=$&$G$J$$>l9g$O(B, $BJ8=q$N4IM}<T$K%a!<%k$rAw$k$+!"$^$?$O!"%U%j!<(B
+$B%=%U%H%&%'%":bCD(B (51 Franklin Street, Fifth Floor, Boston, MA
+02110-1301, USA.) $B$K<j;f$r=q$$$F$/$@$5$$!#(B
+
+
+
+
+
+File: emacs-w3m-ja.info, Node: VM, Prev: SEMI MUAs, Up: Hooking into MUAs
+
+VM (vieW maiL) $A$O(B Wanderlust $A$K$"$i$:(B
+=====================================
+
+Emacs-w3m $B$O(B VM $B$r@Q6KE*$K%5%]!<%H$7$F$$$^$;$s!#$=$l$OC1$K(B emacs-w3m $B%A!<(B
+$B%`$K(B VM $B%f!<%6$,$$$J$$$+$i$G$9!#$7$+$7Ha4Q$7$J$$$G!#(BEmacs-w3m $B$NG[I[$N(B
+`attic' $B%G%#%l%/%H%j$K(B `vm-w3m.el' $B%b%8%e!<%k$,$"$j$^$9!#$=$l$,;H$($l$P(B
+$B$a$C$1$b$s$G$9!#$H$K$+$/;n$7$F8+$F2<$5$$!#;H$$J}$O$=$N%U%!%$%k$K$"$j$^(B
+$B$9!#(B
+
+$BJV?.%a%C%;!<%8$NCf$K0zMQ$7$?(B HTML $B%a!<%k$r%G%3!<%I$9$k$K$O!"(B
+`vm-7.19.patch' $B$H$$$&%Q%C%A(B (emacs-w3m $B$NG[I[$N(B `attic' $B%G%#%l%/%H%j$K(B
+$B4^$^$l$F$$$^$9(B) $B$r(B `vm-reply.el' $B$KEv$F$F!":F%3%s%Q%$%k$7$F2<$5$$!#(B
+
+VM $B$N$I$l$+$N%P%C%U%!$K$$$k$H$-$K!"%W%l%<%s%F!<%7%g%s!&%P%C%U%!$N2hA|I=(B
+$B<($r%H%0%k$K@Z$j49$($?$$>l9g$O!"0J2<$r;H$C$F2<$5$$(B:
+
+     (define-key vm-mode-map "T" 'vm-w3m-safe-toggle-inline-images)
+
+
+
+File: emacs-w3m-ja.info, Node: Frequently Asked Questions, Next: Known Problems, Prev: Hooking into MUAs, Up: Top
+
+$A1X$:4p$,$"$k$H$OO^$i$J$$(B
+************************
+
+* Menu:
+
+* General FAQ::                 $B0lHLE*$J<ALd(B
+* Trouble FAQ::                 $B%H%i%V%k(B
+* Shimbun FAQ::                 Shimbun $B$K4X$9$k<ALd(B
+
+
+
+File: emacs-w3m-ja.info, Node: General FAQ, Next: Trouble FAQ, Prev: Frequently Asked Questions, Up: Frequently Asked Questions
+
+$AR;0c5D$J$(Go3YB(B
+============
+
+   * Q. emacs-w3m $B$C$F2?$G$9$+(B?
+
+     w3m $B$r(B Emacs $B>e$GF0$+$9%$%s%?!<%U%'!<%9%W%m%0%i%`$G$9!#(BEmacs $B>e$G(B
+     $BF0$/%&%'%V%V%i%&%6$H$7$F;H$&$3$H$b$G$-$^$9!#$5$i$J$k>pJs$O(B *Note
+     Introduction:: $B$b;2>H$7$F$/$@$5$$!#(B
+
+   * Q. $BF0:n$9$k(B Emacs $B$O(B?
+
+     $B0J2<$N(B Emacsen $B$GF0:n$9$k$3$H$,3NG'$5$l$F$$$^$9!#(B
+
+        * Emacs 21
+        * Emacs 22
+        * XEmacs 21.4.17 $B0J>e!"(BMule $BM-$j(B/$BL5$7(B
+        * XEmacs 21.5-b19 $B0J>e!"(BMule $BM-$j(B/$BL5$7(B
+        * Meadow
+
+     $B$J$*!"(BXEmacs $B$G$O(B APEL $B$,I,MW$H$J$j$^$9!#>\$7$/$O(B *Note Other
+     Requirements:: $B$r3NG'$7$F2<$5$$!#(B
+
+   * Q. $BF0:n$9$k(B w3m $B$O(B?
+
+     $B0J2<$N(B w3m $B$GF0:n$9$k$3$H$,3NG'$5$l$F$$$^$9!#(B
+
+        * w3m-0.3
+        * w3mmee-p24-18 + moe-1.5.4
+
+          $BNc$K>e$2$?(B w3mmee $B$O(B `lang=many' $B$G(B configure $B$5$l$F$$$k(B ($B$=(B
+          $B$l$O(B `configure' $B%9%/%j%W%H$,(B `Which language do you
+          prefer?' $B$H?R$M$?$H$-$K(B 3 $B$rF~NO$9$k$3$H$K$h$C$F$G$-$^$9(B) $B$3(B
+          $B$H$KCm0U$7$F2<$5$$!#$5$i$K$=$l$O(B `libmoe' $B%Q%C%1!<%8$rI,MW$H(B
+          $B$7$^$9!#(B
+
+   * Q. XEmacs $B$N(B SUMO $B%Q%C%1!<%8$K4^$^$l$F$$$k(B APEL $B$r%$%s%9%H!<%k$7$F(B
+     $B$"$k$N$G$9$,(B?
+
+     XEmacs $B$N(B APEL $B%Q%C%1!<%8(B ($B$9$Y$F$N%b%8%e!<%k$,(B Mule $BIU$-$N(B
+     XEmacs $BMQ$K%3%s%Q%$%k$5$l$F$$$k(B) $B$K$O$$$m$$$mLdBj$,$"$j$^$9!#Nc$((B
+     $B$P(B `std11' $B%b%8%e!<%k$,(B FLIM $B$N$b$N$H$+$A9g$&!"$J$I!#$=$l$G$b(B
+     `apel-1.23-pkg.tar.gz' $B0J>e$N$b$N$@$C$?$i!"$=$7$F(B `shimbun' $B$N5!G=(B
+     $B$N$?$a$K(B FLIM $B$r;H$o$J$$$J$i$P!"(BMule $BIU$-$HL5$7N>J}$N(B XEmacs $B$G;H(B
+     $B$($k$N$G$9$,!"%*%j%8%J%k$N(B APEL $B$GCV$-49$($k$+?75,$K%$%s%9%H!<%k$9(B
+     $B$k$3$H$r4+$a$^$9!#<hF@>l=j$O(B *Note Other Requirements:: $B$r8+$F2<$5(B
+     $B$$!#(B
+
+   * Q. CVS $B$G:G?7HG$r<hF@$7$?$N$G$9$,!"(B`configure' $B%9%/%j%W%H$,8+$D$+(B
+     $B$j$^$;$s!#(B
+
+     `autoconf' $B$r<B9T$7$F$/$@$5$$!#(B
+
+
+
+File: emacs-w3m-ja.info, Node: Trouble FAQ, Next: Shimbun FAQ, Prev: General FAQ, Up: Frequently Asked Questions
+
+$A%H%i%V%k(B
+========
+
+   * Q. $BG'>Z$NI,MW$J%Z!<%8$N%Q%9%o!<%I$,F~NO$G$-$^$;$s!#(B
+
+     $BJQ?t(B `w3m-async-exec' $B$K(B `nil' $B0J30$NCM$,@_Dj$5$l$F$$$k$3$H$r3NG'(B
+     $B$7$F2<$5$$!#(B
+
+   * Q. $BG'>Z$NI,MW$J(B proxy $B%5!<%P!<$N%Q%9%o!<%I$,F~NO$G$-$^$;$s!#(B
+
+     $BJQ?t(B `w3m-async-exec' $B$K(B `nil' $B0J30$NCM$,@_Dj$5$l$F$$$k$3$H$r3NG'(B
+     $B$7$F2<$5$$!#(B
+
+   * Q. $B%j%s%/$,$?$I$l$^$;$s!#(B
+
+     `-header' $B%*%W%7%g%s$r<u$1IU$1$k(B w3m $B%3%^%s%I$,I,MW$G$9!#(Bw3m $B$N%P!<(B
+     $B%8%g%s$r3NG'$7$F2<$5$$!#(B
+
+   * Q. $BJ8;z2=$1$7$^$9!#(B
+
+     $B$$$/$D$+$N860x$,$"$j$^$9!#(B
+
+       1. HTML $B%U%!%$%k$NLdBj(B
+
+          HTML $B%U%!%$%kCf$G(B `<meta>' $B%?%0$K$h$C$F;XDj$5$l$F$$$kJ8;z%3!<(B
+          $B%I$H!"<B:]$NJ8;z%3!<%I$,0[$J$k$H!"@5>o$KI=<($5$l$^$;$s!#(B`M-x
+          w3m-redisplay-with-charset RET' $B$^$?$O(B `C c' $B%3%^%s%I$r;H$C$F!"(B
+          $B@5$7$$J8;z%3!<%I$r;XDj$7$F:FIA2h$7$F2<$5$$!#(B
+
+       2. $BJ8;z%3!<%I(B
+
+          ISO-2022-JP(jis), EUC-JP $B$^$?$O(B SHIFT_JIS $B0J30$NJ8;z%3!<%I$G(B
+          $B5-=R$5$l$?%Z!<%8$K$D$$$F$O!"I=<($G$-$J$$>l9g$,$"$j$^$9!#<!$N(B
+          $B$$$:$l$+$NJ}K!$GBP=h$7$F2<$5$$!#(B
+
+            a. Mule-UCS (*Note Other Requirements::) $B$r%$%s%9%H!<%k$9$k(B
+               $B$H!"(BUnicode $B$GDj5A$5$l$F$$$kHO0O$NJ8;z$OI=<($G$-$k$h$&$K(B
+               $B$J$j$^$9!#%$%s%9%H!<%k8e!"JQ?t(B `w3m-use-mule-ucs' $B$,(B
+               `nil' $B0J30$NCM$K@_Dj$5$l$F$$$k$3$H$r3NG'$7$F2<$5$$!#$J$*!"(B
+               Emacs ($B$=$l$K(B emacs-w3m $B$b(B) $B$,(B EUC-JISX0213 $B$*$h$S(B
+               ISO-2022-JP-3 $B$NJ8;z%3!<%I$r07$($k$h$&$K$9$k$K$O!"(B
+               Mule-UCS $B$KImB0$7$F$$$k(B `jisx0213' $B%b%8%e!<%k$r%$%s%9%H!<(B
+               $B%k$9$kI,MW$,$"$j$^$9(B ($B;DG0$J$,$i(B XEmacs $B$G$O;H$($^$;$s(B
+               $B$,(B)$B!#(B
+
+            b. w3mmee $B$d(B w3m-m17n $B$r%$%s%9%H!<%k$7$F!"JQ?t(B
+               `w3m-command' $B$KE,@Z$JCM$r@_Dj$7$F2<$5$$!#$3$N$h$&$K@_Dj(B
+               $B$9$k$H!"(Bemacs-w3m $B$O$3$l$i$N%W%m%0%i%`$,Ds6!$9$kB?8@8l5!(B
+               $BG=$rMxMQ$9$k$h$&$K$J$j$^$9!#$?$@$7!"(BEmacs $B$,07$($kJ8;z%3!<(B
+               $B%I$K8B$i$l$^$9$N$G!"I,MW$K1~$8$F(B Mule-UCS $B$b%$%s%9%H!<%k(B
+               $B$7$F$/$@$5$$!#(B
+
+       3. Emacsen $B$NLdBj(B
+
+          XEmacs 21.1 $B$G$O(B SHIFT_JIS $B$N%Z!<%8$,2=$1$k$3$H$,$"$j$^$9!#$^(B
+          $B$?!"(BXEmacs 21.2 $B$G$b(B beta36 $B0JA0$G$OLdBj$,$"$j$^$9!#$=$&$$$&(B
+          $B$b$N$r;H$C$F$$$k>l9g$O(B XEmacs $B$r%"%C%W%0%l!<%I$7$F2<$5$$!#(B
+
+          XEmacs 21.1 $B$H(B 21.2 $B$O!"$9$G$K8x<0$K$*Lr8fLH$K$J$C$?$3$H$rG'(B
+          $B<1$7$F2<$5$$!#(B
+
+       4. `standard-display-european' $B$r;H$o$J$$$G2<$5$$(B
+
+          $B$=$l$O$7$P$7$P(B Latin $BJ8;z$r@5$7$/I=<($5$;$J$$$N$G!"35$7$FM-32(B
+          $B$G$9!#Nc$($P!"(B`&#8217' $B$H$7$F%(%s%3!<%I$5$l$?%"%]%9%H%m%U%#J8(B
+          $B;z(B (`'') $B$O!"$=$l$,$"$?$+$b(B `&#249' $B$H$7$F%(%s%3!<%I$5$l$?$+(B
+          $B$N$h$&$K!"Dc%"%/%;%s%H(B (a grave accent) $B$,IU$$$?J8;z(B `u' $B$H$7(B
+          $B$FI=<($5$l$k$G$7$g$&!#$"$J$?$N(B `~/.emacs' $B%U%!%$%k$+!"(BEmacs
+          $B$,5/F0;~$KFI$_9~$`(B site $B%U%!%$%k$K!"2?$+0J2<$N$h$&$J9T$,$"$k(B
+          $B$J$i$P!"$=$l$r<h$j=|$/$3$H$r6/$/4+$a$^$9!#(B
+
+               (standard-display-european 1)
+
+          $B$=$3$G$O!"0z?t$O(B `1' $B$G$O$J$/$F(B `t' $B$+$b$7$l$^$;$s!#(B
+
+   * Q. $B2hA|I=<($G$-$^$;$s!#(B
+
+     $B$$$/$D$+$N860x$,$"$j$^$9!#(B
+
+     $B8E$$%P!<%8%g%s$N(B `libungif' $B%i%$%V%i%j$K$O%P%0$,$"$j$^$9!#(B
+     `libungif-4.1.0b1' $B0J9_$N$b$N$r%$%s%9%H!<%k$7$J$1$l$P$J$j$^$;$s!#(B
+
+     XEmacs $B$G$OI,$:(B `gifsicle' $B%W%m%0%i%`$r%$%s%9%H!<%k$7$F2<$5$$!#8=(B
+     $B:_MxMQ$G$-$kA4$F$N(B XEmacs 21.x $B$K$O%P%0$,$"$j!"(Bemacs-w3m $B$G$O$3$l(B
+     $B$r;H$C$FBP:v$7$F$$$^$9(B (*Note Other Requirements::)$B!#(B
+
+     $B8E$$(B w3m $B%3%^%s%I$G$O@5>o$KI=<($G$-$^$;$s!#(Bw3m $B$N%P!<%8%g%s$r3NG'(B
+     $B$7$F2<$5$$!#(B
+
+   * Q. Cookie $B$,I,MW$J%Z!<%8$r1\Mw$G$-$^$;$s!#(B
+
+     ($B$^$@<B83E*$J5!G=$G$9!#(B)
+
+     $BJQ?t(B `w3m-use-cookies' $B$K(B `nil' $B0J30$NCM$,@_Dj$5$l$F$$$k$3$H$r3NG'(B
+     $B$7$F2<$5$$!#(B
+
+   * Q. $B%U%)!<%`$KF~NO$G$-$^$;$s!#(B
+
+     ($B$^$@<B83E*$J5!G=$G$9!#(B)
+
+     $BJQ?t(B `w3m-use-form' $B$K(B `nil' $B0J30$NCM$,@_Dj$5$l$F$$$k$3$H$r3NG'$7(B
+     $B$F2<$5$$!#(B
+
+   * Q. $B%U%)!<%`$rAw?.$G$-$^$;$s!#(B
+
+     ($B$^$@<B83E*$J5!G=$G$9!#(B)
+
+     $BJQ?t(B `w3m-use-form' $B$K(B `nil' $B0J30$NCM$,@_Dj$5$l$F$$$k$3$H$r3NG'$7(B
+     $B$F2<$5$$!#$3$N5!G=$r;H$&$K$O!"(B`-post' $B%*%W%7%g%s$rG'<1$9$k(B w3m $B%3(B
+     $B%^%s%I$,I,MW$G$9!#(Bw3m $B$N%P!<%8%g%s$r3NG'$7$F2<$5$$!#(B
+
+   * Q. $B%U%l!<%`$,%l%s%@%j%s%0$5$l$^$;$s!#(B
+
+     w3mmee $B$r%$%s%9%H!<%k$7$F!"0J2<$N@_Dj$r(B `~/.emacs' $B%U%!%$%k$KF~$l(B
+     $B$F2<$5$$(B:
+
+          (setq w3m-command "w3mmee")
+
+   * Q. Emacs21 $B$N(B tab bar $B$K(B favicon $B$,I=<($5$l$J$$$N$G$9$,!#(B
+
+     Image Magick $B$K4^$^$l$F$$$k(B `convert' $B%W%m%0%i%`$r%$%s%9%H!<%k$7$F(B
+     $B2<$5$$!#(B`http://www.imagemagick.org/' $B$+$iF~<j$G$-$^$9!#(B
+
+   * Q. Emacs21 $B$G(B favicon $B$rI=<($7$h$&$H$7$?$N$G$9$,!"(BEmacs $B$,%m%C%/$7(B
+     $B$^$7$?!#(B
+   * Q. Emacs-w3m $B$rN)$A>e$2$h$&$H$7$?$i!"7c$7$/%G%#%9%/%"%/%;%9$7$?8e!"(B
+     `process convert exited abnormally with code 10' $B$J$I$HI=<($5$l$^(B
+     $B$7$?!#$I$&$J$C$F$$$k$s$G$7$g$&(B?
+
+     $B8E$$%P!<%8%g%s$N(B Image Magick $B$r;H$C$F$$$^$;$s$+(B?
+     ImageMagick-5.2.1 $B$KIUB0$7$F$$$k(B `convert' $B$r;H$C$F$$$k$H!"$=$&$J(B
+     $B$k$3$H$,CN$i$l$F$$$^$9!#(BImageMagick-5.4.0-5 ($B0J>e(B) $B$KIUB0$7$F$$$k(B
+     `convert' $B$G$O!"@5>oF0:n$,3NG'$5$l$F$$$^$9!#(B
+
+     $B$b$7(B ImageMagick $B$,;H$($J$$!"$^$?$O;H$$$?$/$J$$>l9g$O(B
+     `~/.emacs-w3m' $B%U%!%$%k$K(B
+
+          (setq w3m-use-favicon nil)
+
+     $B$N@_Dj$rDI2C$7$F2<$5$$!#(B
+
+   * Q. $B$J$<(B emacs-w3m $B$,(B w3mmee $B$GF0:n$7$J$$$N$G$9$+(B?
+
+     $B$b$7(B `lang=en' $B$^$?$O(B `lang=ja' $B$G(B configure $B$5$l$?(B w3mmee $B$r;H$C(B
+     $B$F$$$k$N$J$i$P!"(B`lang=many' $B$G(B configure $B$7D>$7$F(B ($B$=$l$O(B
+     `configure' $B%9%/%j%W%H$,(B `Which language do you prefer?' $B$H?R$M$?(B
+     $B$H$-$K(B 3 $B$rF~NO$9$k$3$H$K$h$C$F$G$-$^$9(B)$B!"(Bw3mmee $B$r:F9=C[$7$F2<$5(B
+     $B$$!#(B
+
+   * Q. $B$J$<(B emacs-w3m $B$G(B web $B%Z!<%8$,8+$($J$$$N$G$7$g$&$+(B?  $B%m!<%+%k$J(B
+     html $B%U%!%$%k$r8+$?$j!"AG$N(B w3m $B$r;H$&>l9g$OLdBjL5$$$N$G$9$,!#(B
+
+     $B$"$k(B Linux $B$NG[I[(B ($BNc$($P(B Gentoo Linux) $B$,4^$s$G$$$k(B w3m $B%3%^%s%I(B
+     $B$K$O!"(Basync $B%Q%C%A(B (1) (*Note Trouble FAQ-Footnotes::) $B$H$$$&$b$N(B
+     $B$,Ev$?$C$F$$$^$9!#$=$l$OAG$N(B w3m $B%3%^%s%I$r;H$&$H$-$KM-MQ$J$N$G$9(B
+     $B$,!"(Bemacs-w3m $B$r%O%s%0$5$;$k$+$b$7$l$^$;$s!#$=$l$,5?$o$l$k$J$i$P!"(B
+     w3m $B%3%^%s%I$r%=!<%9$+$i:F%$%s%9%H!<%k$9$k$3$H$r4+$a$^$9!#(B
+
+   * Q. $B$J$<(B emacs-w3m $B$N%U%l!<%`$,%]%C%W%"%C%W$7$J$$$N$G$9$+(B?
+
+     Emacs-w3m $B$N%U%l!<%`$,B>$N%U%l!<%`$N2<$K1#$l$F$$$F$b!"$=$l$,(B `M-x
+     w3m RET' $B%3%^%s%I$G%]%C%W%"%C%W$9$k$N$O!"$+$J$jJXMx$G$9!#$7$+$7!"(B
+     $B$$$/$D$+$N%W%i%C%H%U%)!<%`!"Nc$($P(B Fedora Core 4$B!A(B6 $B>e$G(B Emacs 21
+     $B$rAv$i$;$k>l9g$K!"$=$l$,F/$+$J$$$H$$$&Js9p$,$"$j$^$7$?!#$=$l$i$N%7(B
+     $B%9%F%`$G$O!"(BEmacs $B$N%U%l!<%`$r%]%C%W%"%C%W$5$;$kB>$N5!G=$bF0$+$J$$(B
+     $B$G$7$g$&!#$b$7$"$J$?$,$=$s$J;4$a$J6-6x$K$"$k$J$i$P!"0J2<$N(B advice
+     $B$r;n$92ACM$,$"$k$+$b$7$l$^$;$s!#(B
+
+          (if (or (featurep 'xemacs) (< emacs-major-version 22))
+              nil
+            (defadvice raise-frame
+              (after make-it-work (&optional frame) activate)
+              "Make it work."
+              (call-process
+               "wmctrl" nil nil nil "-i" "-R"
+               (frame-parameter (or frame (selected-frame))
+                                'outer-window-id))))
+
+     $B$3$3$G(B `wmctrl' $B$O!"0J2<$N>l=j$G<hF@$G$-$k30It%3%^%s%I$G$9!#(B
+
+     `http://sweb.cz/tripie/utils/wmctrl/'
+
+     Advice $B$r(B `~/.emacs' $B%U%!%$%k$K=q$-9~$`A0$K!"(B`wmctrl' $B%3%^%s%I$r%$(B
+     $B%s%9%H!<%k$7$J$1$l$P$J$i$J$$$3$H$K!"Cm0U$7$F2<$5$$!#(B
+
+
+File: emacs-w3m-ja.info  Node: Trouble FAQ-Footnotes, Up: Trouble FAQ
+
+(1) w3m on cygwin (http://www.page.sannet.ne.jp/knabe/w3m/w3m.html)
+
+
+
+File: emacs-w3m-ja.info, Node: Shimbun FAQ, Prev: Trouble FAQ, Up: Frequently Asked Questions
+
+Shimbun $A$K$(IJ=$A$9$k$(Go3YB(B
+====================
+
+   * Q. $B$J$<(B `shimbun' $B%b%8%e!<%k$,%$%s%9%H!<%k$5$l$J$$$N$G$9$+(B?
+
+     FLIM $B%Q%C%1!<%8$,%$%s%9%H!<%k$5$l$F$$$J$$$H!"(B`shimbun' $B%b%8%e!<%k(B
+     (`shimbun/' $B%G%#%l%/%H%j$K$"$k%U%!%$%k72(B) $B$O%$%s%9%H!<%k$5$l$J$$$3(B
+     $B$H$KCm0U$7$F2<$5$$!#(B
+
+     `configure' $B%9%/%j%W%H$O<+F0E*$K(B FLIM $B$NM-L5$rH=Dj$9$k$h$&@_7W$5$l(B
+     $B$F$$$^$9$,!"I8=`E*$G$O$J$$%G%#%l%/%H%j$K(B FLIM $B$,%$%s%9%H!<%k$5$l$F(B
+     $B$$$k$H!"H=Dj$K<:GT$7$^$9!#$=$N>l9g$O(B `--with-addpath' $B%*%W%7%g%s$r(B
+     $B;H$C$F!"(BFLIM $B$,%$%s%9%H!<%k$5$l$F$$$k%G%#%l%/%H%j$rL@<(E*$K;XDj$7(B
+     $B$F2<$5$$!#Nc$G$9(B:
+
+          % ./configure --with-addpath=$HOME/share/emacs/site-lisp/flim
+
+
+
+File: emacs-w3m-ja.info, Node: Known Problems, Next: Shimbun Library, Prev: Frequently Asked Questions, Up: Top
+
+$A$"$J$?$J$i$-$C$H=b$(GJn$A$G$-$k(B
+**************************
+
+
+
+
+File: emacs-w3m-ja.info, Node: Shimbun Library, Next: Tips, Prev: Known Problems, Up: Top
+
+$A%&%'%VIO$NPB$(GjL$A$r$BFI$A$`$?$a$N5@>_(B
+******************************
+
+$B%&%'%V$G$O!"$^$9$^$9B?$/$N?7J9!"%a!<%j%s%0%j%9%H$N%"!<%+%$%V!"7G<(HD!"(B
+$B$"$k$$$O8D?M$NF|5-(B (hyper nikki system$B!"(Bweblogs $B$^$?$O(B blogs) $B$,8x3+$5(B
+$B$l$F$$$^$9!#(B`Shimbun' $B%i%$%V%i%j$O!"$=$l$i$N%3%s%F%s%D$r5.J}$N9%$_$N%a!<(B
+$B%i!<$GFI$`$3$H$,$G$-$k$h$&$K$7$^$9!#6qBNE*$K$O!"$=$l$i$N%3%s%F%s%D$r!"(B
+$B%a!<%k$N$h$&$K@07A!&@0M}$9$k5!G=$rDs6!$7$^$9!#(B
+
+$B$9$Y$F$N(B `shimbun' $B%b%8%e!<%k$O!"IaDL$N%a!<%k$d%K%e!<%9$N$h$&$KFI$`$3$H(B
+$B$,$G$-$k5-;v$r@8@.$9$k$3$H$rL\I8$K$7$F$$$^$9!#$7$+$7$J$,$i!"%&%'%V%5%$(B
+$B%H$,$=$l$i$N5-;v$N(B html $B$r$7$P$7$PJQ99$9$k$N$G!"$=$NEY$K;d$?$A$O:$Fq$K(B
+$B$V$D$+$j$^$9!#(B
+
+$B$b$7!"L50UL#$J2hA|$d!"5-;v$H$O4X78$NL5$$%F%-%9%H$,8=$l$k$N$K5$$,$D$$$?(B
+$B$i!"(B($B$?$H$(:3:Y$J$b$N$G$b(B) `report-emacs-w3m-bug' (*Note Mailing
+List::) $B$r;H$C$FJs9p$7$F2<$5$$!#(B
+
+`Shimbun' $B%i%$%V%i%j$O!"8=:_!"D+F|?7J9!"FIGd%*%s%i%$%s!"(BEmacs Devel$B!"(B
+XEmacs Beta$B!"(BGnus/Mew/Wanderlust $B$J$I$N%a!<%j%s%0%j%9%H!"(BSlashdot
+Japan$B!"$*$h$SB>$N$?$/$5$s$N$b$N$KBP1~$7$F$$$^$9!#6qBNE*$K$O!"(B*Note
+Shimbun Sites:: $B$r;2>H$7$F$/$@$5$$!#(B
+
+$B$H$3$m$G!"(B`Shimbun' $B%i%$%V%i%j$rMxMQ$9$k;~$O!"Cx:n8"$K$D$$$FCm0U$,I,MW(B
+$B$G$9!#(B`Shimbun' $B%i%$%V%i%j$K$h$C$F2C9)!&@8@.$5$l$?5-;v$NCx:n8"$O!"$=$N(B
+$B5-;v$r@8@.$9$k85$K$J$C$?%G!<%?$NCx:n<T$K5"B0$7$^$9!#$7$?$,$C$F!"F@$i$l(B
+$B$?5-;v$rMxMQ$9$k>l9g$O!"85$N%G!<%?$NCx:n<T$N8"Mx$r?/32$7$J$$HO0O$r<i$k(B
+$BK!N'>e$N5AL3$,$"$j$^$9!#$D$^$j!"Cx:n8"K!$KDj$a$i$l$?!V;dE*MxMQ!W$NHO0O(B
+$B$r<i$i$J$1$l$P$J$i$J$$!"$H$$$&$3$H$G$9!#(B
+
+`Shimbun' $B%i%$%V%i%j$rMxMQ$7$?$3$H$K$h$C$F!"K|$,0l$"$J$?$,ITMx1W$rHo$C(B
+$B$?$j!"$"$J$?$,B><T$N8"Mx$r?/32$7$?$3$H$K$h$C$F$"$J$?$,AJ$($i$l$?$H$7$F(B
+$B$b!"(Bemacs-w3m $B3+H/%A!<%`$O0l@Z$N@UG$$rIi$$$^$;$s!#(B
+
+`Shimbun' $B%i%$%V%i%j$O$?$/$5$s$N%b%8%e!<%k$N%3%l%/%7%g%s$G!"$=$l$i$N3F!9(B
+$B$OC1FH$G$O2?$NLr$K$bN)$A$^$;$s!#$3$3$G$OBeI=E*$J;0$D$N(B `Shimbun' $B$N%"%W(B
+$B%j%1!<%7%g%s%W%m%0%i%`(B ($B$=$l$i$N$&$A$NFs$D$O(B `Shimbun' $B%i%$%V%i%j$K4^$^(B
+$B$l$F$$$^$9(B) $B$H!"$"$J$?$,<+J,$G(B `Shimbun' $B%b%8%e!<%k$r:n$kJ}K!$K$D$$$F@b(B
+$BL@$7$^$9(B (Emacs Lisp $B%W%m%0%i%`$r=q$/$3$H$,$G$-$kI,MW$,$"$j$^$9(B)$B!#(B
+
+* Menu:
+
+* Nnshimbun::                   Gnus $B$r%&%'%V%V%i%&%6$K$9$k(B!
+* Mew Shimbun::                 Mew $B$G?7J9$rFI$`(B
+* Shimbun with Wanderlust::     Wanderlust $B$G?7J9$rFI$`(B
+* Shimbun Sites::               $B?7J9$,FI$a$k%5%$%H(B
+* Shimbun Basics::              $B?7J9%b%8%e!<%k$N:n$jJ}(B
+
+`Shimbun' $B%i%$%V%i%j$rMxMQ$9$k$?$a$K$O!"(Bemacs-w3m $B$r9=C[$7$F%$%s%9%H!<(B
+$B%k$9$kA0$K(B FLIM $B%Q%C%1!<%8(B ($B2C$($F(B `nnshimbun' $B$r;H$$$?$1$l$P(B Gnus) $B$r(B
+$B%$%s%9%H!<%k$9$kI,MW$,$"$k$3$H$KCm0U$7$F2<$5$$!#(BFLIM $B%Q%C%1!<%8$K$O(B
+APEL $B%Q%C%1!<%8$,I,MW$G$9!#$"$J$?$O(B *Note Other Requirements:: $B$b8+$k$Y(B
+$B$-$+$b$7$l$^$;$s!#(B
+
+
+
+File: emacs-w3m-ja.info, Node: Nnshimbun, Next: Mew Shimbun, Prev: Shimbun Library, Up: Shimbun Library
+
+Gnus $A$r%&%'%V%V%i%&%6$K$9$k(B!
+============================
+
+`Nnshimbun' $B$O(B Gnus $B$N%P%C%/%(%s%I$G$9!#$7$+$7$J$,$i!"Nc30E*$K(B Gnus $B$G(B
+$B$O$J$/$F(B emacs-w3m $B$H$H$b$KG[I[$5$l$F$$$^$9!#(B`Nnshimbun' $B$O(B Gnus $B$rJB30(B
+$B$l$FJXMx$J%&%'%V%V%i%&%6$K$9$k$3$H$,$G$-$^$9!#$9$Y$F$N9-9p$KHQ$o$5$l$:(B
+$B$K?7J9<R$N%&%'%V%5!<%P$G5-;v$r=&$$FI$_$9$k$3$H$,$G$-$^$9!#%a!<%j%s%0%j(B
+$B%9%H$N5-;v%"!<%+%$%V$r!"$=$N%j%9%H$K9VFIEPO?$7$F$$$k$h$&$KFI$`$3$H$,$G(B
+$B$-$^$9!#7G<(HD$N=q$-9~$_$bFI$`$3$H$,$G$-$^$9!#Ey!9(B... $B$G$b(B Gnus $B$O(B
+`nnshimbun' $B$G%&%'%V$r2p$7$?Ej9F$,$G$-$J$$$N$G!"%U%)%m!<$7$?$$$H$-$O(B
+emacs-w3m $B$r;H$o$J$1$l$P$$$1$J$$$3$H$KCm0U$7$F2<$5$$!#(B
+
+$B$5$i$K(B emacs-w3m $B$G(B HTML $B%a%C%;!<%8$r@07A$9$k$K$O(B *Note Gnus:: $B$b;2>H$7(B
+$B$F2<$5$$!#(BT-gnus $B$+(B Nana-gnus $BMQ$K$O!"Be$o$j$K(B *Note SEMI MUAs:: $B$r8+$F(B
+$B2<$5$$!#(B
+
+`Nnshimbun' $B$r;O$a$k$?$a$N0lHV4JC1$JJ}K!$O!"%0%k!<%W%P%C%U%!$G0J2<$N$h(B
+$B$&$J$3$H$r$9$k$3$H$G$9(B:
+
+`M-x gnus-group-make-shimbun-group RET asahi RET national RET'
+
+`asahi' $B$H(B `national' $B$O!"@\B3$7$?$$%5!<%P!<$KBP1~$7$?%-!<%o!<%I$H6=L#(B
+$B$N$"$k%0%k!<%W$K!"$=$l$>$lCV$-49$($F2<$5$$!#(BTAB $B$+(B SPC $B$r%?%$%W$9$k$3$H(B
+$B$K$h$C$F!"$=$l$i$NL>A0$rN>J}$H$bJd40$9$k$3$H$,$G$-$^$9!#(B
+
+$B$b$7(B `gnus-group-mode-map' $B$K==J,$J6u$-$,$"$k$J$i$P!"0J2<$N$h$&$J$b$N$r(B
+`~/.gnus.el' $B%U%!%$%k$K2C$($F2<$5$$(B (T-gnus $B$K$O$3$l$HF1MM$N$b$N$,$9$G(B
+$B$K$"$k$N$G!"$o$6$o$6DI2C$9$kI,MW$O$"$j$^$;$s(B):
+
+     (eval-after-load "gnus-group"
+       '(define-key gnus-group-mode-map "Gn"
+          'gnus-group-make-shimbun-group))
+
+$B$9$k$H!"(B`M-x gnus-group-make-shimbun-group' $B$NBe$o$j$K(B `G n' $B$r;H$&$3$H(B
+$B$,$G$-$^$9!#(B
+
+*$(Go!$A$+$3$N%-$B!<$A$r(B Gnus $A%?%o$B!<$A$KSh$(GR|$A$7$F$/$l$^$;$s$+(B?*
+
+
+$B$3$NB>$K!"(B`gnus-group-make-shimbun-groups' $B%3%^%s%I$r;H$C$F!";XDj$7$?%5!<(B
+$B%P!<$N$9$Y$F$N%0%k!<%W$r:n$k$3$H$,$G$-$^$9!#(B
+
+`Nnshimbun' $B$OC1$K%&%'%V%5!<%P$+$i(B HTML $B%3%s%F%s%D$r<h$j4s$;$F!"$=$l$r(B
+$B5-;v$H$7$FI=<($7$^$9$,!"1JB35-;v(B (*Note Persistent Articles:
+(gnus)Persistent Articles.) $B$r:n$k>l9g$r=|$$$F!"%m!<%+%k%U%!%$%k$K5-;v(B
+$B$r%;!<%V$9$k$3$H$O$"$j$^$;$s!#(B`Nnshimbun' $B$O(B NOV $B%U%!%$%k$r!"$=$l$>$l$N(B
+`nnshimbun' $B%0%k!<%W$G;H$$$^$9!#$=$N%P%C%/%(%s%I$O(B `nnml' $B$H$[$\F1$8$G(B
+$B$9!#(B
+
+$B0J2<$N(B `nnshimbun' $B$K4X$9$kJQ?t$r%+%9%?%^%$%:$9$k$3$H$,2DG=$G$9(B:
+
+`nnshimbun-keep-backlog'
+     $B$3$NJQ?t$O(B `nnshimbun' $B%0%k!<%W$G(B `gnus-keep-backlog' $BJQ?t(B (*Note
+     Article Backlog: (gnus)Article Backlog.) $B$r>e=q$-$7$^$9!#$b$7(B
+     `nnshimbun-keep-backlog' $B$r?t;z(B N $B$K@_Dj$9$k$H!"(B`nnshimbun' $B$O:GBg(B
+     $B$G(B N $B$N8E$$5-;v$r8e$N:F<hF@$N$?$a$K%P%C%U%!$KN/$a$F$*$-$^$9!#$3$N(B
+     $BJQ?t$,(B `nil' $B$G$O$J$/!"?t;z$G$b$J$$>l9g!"(B`nnshimbun' $B$O(B *$AH+$F(B* $B$N(B
+     $B4{FI5-;v$rC_$($^$9(B ($B$3$l$ONI$$9M$($G$O$"$j$^$;$s(B)$B!#%G%U%)%k%HCM$O(B
+     300 $B$G$9!#(B
+
+     `Nnshimbun' $B$O$"$i$+$8$a<hF@$7$?(B (prefetched) $B5-;v$NJ]B8$K(B
+     backlog $B$r;H$&$N$G!">.$5$9$.$kCM$O(B `prefetch-articles' $B5!G=(B ($B2<5-(B
+     $B;2>H(B) $B$rB;$J$&$+$b$7$l$J$$$3$H$KCm0U$7$F2<$5$$!#(B
+
+`nnshimbun-directory'
+     `Nnshimbun' $B$,(B NOV $B%U%!%$%k$rJ]B8$9$k%G%#%l%/%H%j$G$9!#%G%U%)%k%H(B
+     $BCM$O(B `~/News/shimbun/' $B$G$9!#(B
+
+`nnshimbun-default-group-level'
+     `gnus-level-default-subscribed' $B$r>e=q$-$9$k!"%G%U%)%k%H$N%0%k!<%W(B
+     $B%l%Y%k$G$9!#?7$?$K:n$i$l$?(B `nnshimbun' $B%0%k!<%W$KE,MQ$5$l$^$9!#%G(B
+     $B%U%)%k%HCM$O(B `nil' $B$G$9!#(B
+
+`Nnshimbun' $B$O(B Gnus $B$,Ds6!$9$kI8=`$N%0%k!<%W%Q%i%a!<%?(B (1) (*Note
+Nnshimbun-Footnotes::) $B$K2C$($F!"(B`nnshimbun' $B@lMQ$K@_$1$i$l$?%0%k!<%W%Q(B
+$B%i%a!<%?$rMxMQ$9$k$3$H$,$G$-$^$9!#J#?t$N(B `nnshimbun' $BMQ$N%Q%i%a!<%?$,(B
+`nnshimbun-group-parameters' $B$H$$$&C10l$N%0%k!<%W%Q%i%a!<%?(B ($B$9$Y$F$N%0(B
+$B%k!<%W$G0c$&CM$r;}$D$3$H$,$G$-$k(B) $B$K$^$H$a$i$l$F$$$^$9!#$=$l$O%W%m%Q%F%#(B
+$B%j%9%H$G!"Nc$($P<!$N$h$&$JCM$G$9(B:
+
+     '(index-range all prefetch-articles off encapsulate-images on
+                   expiry-wait 6)
+
+$B0J9_$O$3$l$i$N%0%k!<%W%Q%i%a!<%?$H!"4XO"$9$kJQ?t$N@bL@$G$9!#(B
+
+`prefetch-articles'
+     $B$3$N%0%k!<%W%Q%i%a!<%?$,(B `off' $B$^$?$O(B `nil' $B0J30$N2?$+$K@_Dj$5$l$F(B
+     $B$$$k%0%k!<%W$G$O!"(B`nnshimbun' $B$O?7$7$$5-;v$rC5$9$@$1$G$O$J$/!"$=$l(B
+     $B$i$N5-;v$N%@%&%s%m!<%I$b9T$$$^$9!#$3$l$O?7$7$$5-;v$N8!:w$rCY$/$7$^(B
+     $B$9$,!"5-;v$r1\Mw$9$k$H$-$KBT$?$5$l$^$;$s!#$3$N%0%k!<%W%Q%i%a!<%?$,(B
+     $B@_Dj$5$l$F$$$J$$$+!"$=$NCM$,(B `nil' $B$K$J$C$F$$$k%0%k!<%W$G$O!"Be$o(B
+     $B$j$KJQ?t(B `nnshimbun-pre-fetch-article' $B$NCM(B ($B%G%U%)%k%H$O(B `off')
+     $B$,;H$o$l$^$9!#(B
+
+`encapsulate-images'
+     $B$3$N%0%k!<%W%Q%i%a!<%?$,(B `off' $B$^$?$O(B `nil' $B0J30$N2?$+$K@_Dj$5$l$F(B
+     $B$$$k%0%k!<%W$G$O!"(B`nnshimbun' $B$O85$N5-;v$KKd$a9~$^$l$F$$$k2hA|%G!<(B
+     $B%?$r(B MIME $B$N(B `multipart/related' $B%Q!<%H$H$7$F5-;v$K$O$a9~$_$^$9!#(B
+     $B$3$N%0%k!<%W%Q%i%a!<%?$,@_Dj$5$l$F$$$J$$$+!"$=$NCM$,(B `nil' $B$K$J$C(B
+     $B$F$$$k%0%k!<%W$G$O!"Be$o$j$KJQ?t(B `nnshimbun-encapsulate-images' $B$N(B
+     $BCM$,;H$o$l$^$9!#$3$NJQ?t(B `nnshimbun-encapsulate-images' $B$N%G%U%)%k(B
+     $B%HCM$O!"(B`shimbun' $B%i%$%V%i%j$K$h$C$FDs6!$5$l$kJQ?t(B
+     `shimbun-encapsulate-images' $B$NCM$G$9(B ($B$?$V$s%G%U%)%k%HCM$O(B `t' $B$G(B
+     $B$9(B)$B!#(B
+
+`index-range'
+     $B%0%k!<%W%Q%i%a!<%?(B `index-range' $B$G!"%&%'%V%5!<%P!<$+$i<hF@$5$l$k(B
+     $B5-;v$NHO0O$r;XDj$9$k$3$H$,$G$-$^$9!#HO0O$N;XDj$K$O0J2<$NCM$r;H$C$F(B
+     $B2<$5$$(B:
+
+     `nil'
+     `all'
+          $B$9$Y$F$N%Z!<%8(B
+
+     `last'
+          $B:G?7$N%Z!<%8$@$1(B
+
+     `integer N'
+          $B:G?7$N(B N $B%Z!<%8(B
+
+     `Nnshimbun' $B$O%5!<%P!<>e$KB8:_$9$kL\<!%Z!<%8$r2r@O$7$F?7$7$$5-;v$N(B
+     $BM-L5$rD4$Y$^$9!#%5!<%P!<$K$h$C$F$O$=$N$h$&$JL\<!%Z!<%8$,J#?tB8:_$9(B
+     $B$k>l9g$,$"$j$^$9!#Nc$($P!"%a!<%j%s%0%j%9%H$N5-;v$rDs6!$7$F$$$k%5!<(B
+     $B%P!<$N>l9g$O!"$=$N5-;v$,Ej9F$5$l$?F|IU$K$h$C$FJ,N`$5$l$?L\<!$K$J$C(B
+     $B$F$$$k$3$H$,0lHLE*$G$9!#FC$KCY$$2s@~$rMxMQ$7$F$$$k;~$K!"$=$l$i$9$Y(B
+     $B$F$N5pBg$JL\<!$rD4$Y$k$K$O!"AjEv$J;~4V$,$+$+$k$G$7$g$&!#(B
+
+     `Nnshimbun' $B$OA02s$N@\B3;~$KD4$Y$?L\<!$K$D$$$F$O!"$J$k$Y$/D4$Y$:$K(B
+     $B:Q$^$;$k$h$&$K$J$C$F$$$^$9!#99$K;~4V$r@aLs$7$?$$>l9g$O(B `last' $B$r;H$C(B
+     $B$F2<$5$$!#$3$l$O(B `nnshimbun' $B$K!":G?7$NL\<!$@$1$r;2>H$7$F?7$7$$5-(B
+     $B;v$N8!::$r9T$J$o$;$^$9!#(B
+
+     $B%0%k!<%W%Q%i%a!<%?(B `index-range' $B$,@_Dj$5$l$F$$$J$$$+!"CM$,(B `nil'
+     $B$K$J$C$F$$$k%0%k!<%W$G$O!"JQ?t(B `nnshimbun-index-range' $B$NCM(B ($B%G%U%)(B
+     $B%k%H$O(B `nil') $B$,;H$o$l$^$9!#(B
+
+`nnshimbun-group-parameters-alist'
+     $B$3$l$O(B Emacs Lisp $BJQ?t$G!"%0%k!<%WL>$N@55,I=8=$H(B `nnshimbun' $BMQ%0(B
+     $B%k!<%W%Q%i%a!<%?$NO"A[%j%9%H$G$9!#%G%U%)%k%HCM$O(B `nil' $B$G$9!#3F!9(B
+     $B$NMWAG$O(B `(REGEXP KEYWORD VALUE KEYWORD VALUE...)' $B$N7A<0$r;}$A$^(B
+     $B$9!#Nc$($P(B:
+
+          '("^nnshimbun\\+asahi:" index-range all prefetch-articles off
+            encapsulate-images on expiry-wait 6)
+
+     $B;w$?L>A0$r;}$D(B ($B$9$J$o$A!"8_$$$K;w$?@-3J$r;}$C$F$$$=$&$J(B) $BJ#?t$N%0(B
+     $B%k!<%W$KBP$7$FF1$8(B `nnshimbun' $B%0%k!<%W%Q%i%a!<%?$r;XDj$9$k$3$H$,(B
+     $B$G$-$k$N$G!"8D!9$N%0%k!<%W$KBP$7$F$=$l$>$l%0%k!<%W%Q%i%a!<%?$r@_Dj(B
+     $B$9$kBe$o$j$K;H$&$3$H$,$G$-$FJXMx$G$9!#$b$7%0%k!<%W$G$9$G$K%0%k!<%W(B
+     $B%Q%i%a!<%?$N@_Dj$,9T$J$o$l$F$$$?>l9g$O!"$3$NJQ?t$h$j$b$=$A$i$,M%@h(B
+     $B$5$l$^$9!#(B
+
+`Nnshimbun' $B$K$O5-;v$N4|8B@Z$l>C5n$r9T$J$o$;$k$3$H$,$G$-$^$9(B (2)
+(*Note Nnshimbun-Footnotes::)$B!#5-;v$,4|8B@Z$l>C5n$5$l$k$H8@$C$F$b!"$=$l(B
+$B$,1s3V%5!<%P!<$+$i:o=|$5$l$k$o$1$G$O$J$/!"$=$l$O$:$C$H$=$3$+$i<hF@2DG=(B
+$B$G$"$k$3$H$r3P$($F$*$$$F2<$5$$!#>C$($k$N$O$"$J$?<+?H$N(B `nnshimbun' $BMQ$N(B
+NOV $B%U%!%$%k(B (3) (*Note Nnshimbun-Footnotes::) $B$N!">C5n$5$l$k5-;v$K3:Ev(B
+$B$9$k9T$G$9!#$=$l$K$h$C$F$=$N5-;v$OFsEY$H35N,%P%C%U%!$K8=$l$J$/$J$j$^$9!#(B
+
+
+`Nnshimbun' $B%0%k!<%W$G5-;v$N4|8B@Z$l>C5n$r9T$J$o$J$$$H(B NOV $B%U%!%$%k$,:](B
+$B8BL5$/B@$jB3$1!"Hs>o$K8E$$5-;v$,$"$?$+$bB8:_$7$F$$$k$h$&$K8+$($k$+$b$7(B
+$B$l$^$;$s(B ($B<B:]$K$O!"$=$l$i$O?7J9<R$N%5!<%P!<$G;0G/A0$K4|8B@Z$l>C5n$5$l(B
+$B$F$7$^$C$F$$$k$+$b$7$l$J$$(B!)$B!#$=$l$rFI$b$&$H$7$F$b5-;v%P%C%U%!$K$O2?$b(B
+$B8=$l$J$$$G$7$g$&!#0lJ}!"%a!<%j%s%0%j%9%H$N5-;v$rDs6!$7$F$$$k$?$$$F$$$N(B
+$B%5!<%P!<$O!"0lHLE*$K2a5n$NA45-;v$rDs6!$7$F$$$^$9!#M+=%$NH`J}$K5n$j$78E(B
+$B$-NI$-;~Be$K!"$"$J$?$,6=$8$?5-;v$r2{$+$7$/$&$k$&$k$7$FFI$_JV$9$3$H$,$G(B
+$B$-$k$h$&$K!"$=$&$$$&%0%k!<%W$G$O4|8B@Z$l>C5n$O$5$;$?$/$J$$$H;W$&$+$b$7(B
+$B$l$^$;$s!#(B
+
+$BB>$N%a!<%k%P%C%/%(%s%I$HF1MM$K!"(B`nnshimbun' $B$N%0%k!<%WKh$K5-;v$K<+F04|(B
+$B8B@Z$l>C5n$N0u$rIU$1$F!";D$7$F$*$/4|4V$r@_Dj$9$k$3$H$,$G$-$^$9!#$?$@$7(B
+`nnshimbun' $B%P%C%/%(%s%I$HB>$N%a!<%k%P%C%/%(%s%I$K$O!">/$70c$$$,$"$j$^(B
+$B$9(B:
+
+   * $BBh0l$K!";D$7$F$*$/4|4V$N%G%U%)%k%HCM$O0J2<$NM%@hEY$G7hDj$5$l$^$9!#(B
+     $B%0%k!<%W$K$h$C$F%G%U%)%k%HCM$,0[$J$k$+$b$7$l$J$$$3$H$KCm0U$7$F2<$5(B
+     $B$$!#(B
+
+       1. $B%0%k!<%W$K$*$1$k(B `expiry-wait' $B%0%k!<%W%Q%i%a!<%?$NCM!#(B
+
+       2. $B$=$N%0%k!<%W$rBP>]$H$7$F!"JQ?t(B `nnmail-expiry-wait-function'
+          $B$rI>2A$9$k$3$H$K$h$C$FF@$i$l$?CM!#(B
+
+       3. $B%0%k!<%W$KBP1~$9$k(B `shimbun' $B%b%8%e!<%k$,Ds6!$9$k%G%U%)%k%HCM!#(B
+
+       4. $BJQ?t(B `nnmail-expiry-wait' $B$NCM!#(B
+
+     $BBhFs$K!"JQ?t(B `nnmail-expiry-wait-function' $B$K$h$C$F@_Dj$5$l$k4X?t(B
+     $B$KM?$($i$l$k0z?t$K!"(B"nnshimbun+asahi:national" $B$N$h$&$K%P%C%/%(%s(B
+     $B%I$H%5!<%P!<$NL>A0$,4^$^$l$k$3$H$G$9!#B>$N%a!<%k%P%C%/%(%s%I$N>l9g(B
+     $B$K$O%0%k!<%WL>$@$1$,M?$($i$l$k$N$K!"$G$9!#Nc$r5s$2$^$7$g$&(B:
+
+          (setq nnmail-expiry-wait-function
+                (lambda (group)
+                  (cond ((string-equal group "ding") 7)
+                        ((string-equal group "nnshimbun+ding:ding") 'never))))
+
+     $B$3$l$O!"F1$8(B ding $B%a!<%j%s%0%j%9%HMQ$KFs$D$N%0%k!<%W$,$"$k$3$H$r0U(B
+     $BL#$7$^$9(B: $B0l$D$O%j%9%H$N%a%s%P!<$H$7$F9VFIEPO?$7$F$$$^$9!#$b$&0l$D(B
+     $B$O(B Gnus $B%?%o!<$N%a!<%j%s%0%j%9%H%"!<%+%$%V$+$iFI$`$?$a$N$b$N$G$9!#(B
+     $B$I$&$G$9!"$J$+$J$+8-$$$G$7$g(B?  "ding" $B%0%k!<%W$N%m!<%+%k$J%a!<%k%U%!(B
+     $B%$%k$O<7F|$G4|8B@Z$l>C5n$5$l!"%m!<%+%k%G%#%9%/$NMFNL$,@aLs$5$l$^$9!#(B
+     $B$7$+$7Fs$DL\$N%0%k!<%W$G$O!"A0@$5*$N5-;v$G$5$(FI$`$3$H$,$G$-$^$9(B
+     ($B$=$l$,K\Ev$KI,MW$J$i$P!"$G$9$,(B)$B!#(B
+
+     $BBh;0$K!"$3$l$O$"$J$?$K5?G0$,J($$$?$H$-$K;W$$=P$9$3$H$,$G$-$k$h$&$K(B
+     $B=q$-N1$a$i$l$F$$$^$9(B: `nnshimbun' $B%0%k!<%W$N$9$Y$F$N5-;v$,4|8B@Z$l(B
+     $B>C5n$5$l$k$Y$-$H$-$G$b!":G?7$N0lDL$@$1$O>C$5$:$K;D$7$F$*$-$^$9!#$3(B
+     $B$l$O$"$J$?$NL$N}?4$rK~B-$5$;$k$?$a$G$O$J$/!"<!2s$K$3$N%0%k!<%W$N?7(B
+     $B$7$$5-;v$r<hF@$7$h$&$H$7$?$H$-$K!"(B`nnshimbun' $B$,$I$3$+$i;O$a$k$+$r(B
+     $BCN$C$F!"$9$Y$F$N5-;v$r<hF@$7D>$5$J$$$h$&$K$9$k$?$a$G$9!#(B
+
+`Nnshimbun' $B$N4|8B@Z$l>C5n$K4X78$9$k%0%k!<%W%Q%i%a!<%?$HJQ?t$O0J2<$NDL(B
+$B$j$G$9(B:
+
+`expiry-wait'
+     $B$I$&$+:.Mp$J$5$i$J$$$h$&$K!#(B`expiry-wait' $B%0%k!<%W%Q%i%a!<%?$,(B
+     `nnshimbun' $B@lMQ$K:n$i$l$?%0%k!<%W%Q%i%a!<%?(B
+     `nnshimbun-group-parameters' $B$NMWAG$N0l$D$H$7$FDs6!$5$l$^$9!#$=$l(B
+     $B$OI8=`$N%0%k!<%W%Q%i%a!<%?$HF1$8L>A0$r;}$A!"0UL#$bF1$8$G$9!#$"$J$?(B
+     $B$O$I$A$i$r;H$C$F$b9=$$$^$;$s!#$b$7(B `nnshimbun' $B@lMQ$N$b$N$,(B `nil'
+     $B0J30$NCM$K@_Dj$5$l$k$H!"I8=`$N$b$N$h$j$bM%@h$5$l$^$9!#$3$l$O(B
+     `nnshimbun' $B$K4X78$9$k$b$N$r(B "Gnus Customize" $B%P%C%U%!(B ($B%0%k!<%W%P%C(B
+     $B%U%!$G(B `G c' $B$r%?%$%W$9$k$H8=$l$k(B) $B$N0l2U=j$K=8$a$k$?$a$H!"JQ?t(B
+     `nnshimbun-group-parameters-alist' $B$G0l3g$7$F4IM}$G$-$k$h$&$K$9$k(B
+     $B$3$H$rL\E*$KMQ0U$7$?$b$N$G$9(B (4) (*Note Nnshimbun-Footnotes::)$B!#@_(B
+     $BDj$G$-$kCM$OI8=`$N%0%k!<%W%Q%i%a!<%?$HF1MM$K!";~8B>C5n$NF|?t!"(B
+     `never' $B$^$?$O(B `immediate' $B$G$9!#(B
+
+`nnshimbun-keep-unparsable-dated-articles'
+     $B$3$NJQ?t$NCM$,(B `nil' $B$G$J$$>l9g$O!":n@.$5$l$?(B ($B$^$?$OE~Ce$7$?(B) $B;~(B
+     $B9o$,$o$+$i$J$$5-;v$O4|8B@Z$l>C5n$5$l$^$;$s!#$J$K$7$m$I$N$/$i$$8E$$(B
+     $B$N$+$o$+$i$J$$$s$G$9$+$i!#%G%U%)%k%HCM$O(B `t' $B$G$9!#(B`nil' $B$K@_Dj$9(B
+     $B$k$H!"4|8B@Z$l>C5n$N=hM}$,9T$J$o$l$k$H$-$K!"4|8B$,$o$+$i$J$$5-;v$G(B
+     $B$bL5>r7o$G>C$5$l$F$7$^$$$^$9!#$^$"!"G/$NJk$l$NBgA]=|$NLr$K$ON)$D$3(B
+     $B$H$,H=L@$9$k$+$b$7$l$^$;$s!#(B
+
+
+File: emacs-w3m-ja.info  Node: Nnshimbun-Footnotes, Up: Nnshimbun
+
+(1) $A%0%k$B!<$A%W%Q%i%a$B!<$A%?$r$(G]C$A6($9$k$?$a$NWn$bJV$(I?I$A$J7=7($O!"%0%k$B!<$A%W%P%C%U%!(B
+$A$G!"$(G]C$A6($7$?$$%0%k$B!<$A%W$N$(G^[$AKy$KRF$(GY/$A$7$F$+$i(B `G c' $A$r%?%$%W$9$k$3$H$G(B
+$A$9(B (*Note Group Parameters: (gnus)Group Parameters.)$A!#(B
+
+(2) `Nnshimbun' $A%0%k$B!<$A%W$GWT$(GY/$AFZO^GP$lO{H%$rPP$J$&7=7($OVw$K6~$D$"(B
+$A$j$^$9!#R;$D$O%0%k$B!<$A%WC{$NU}$(G]=$A1m$(G\"(B ("^nnshimbun\\+" $A$GJ<$^$i$J$1$l$P$J(B
+$A$j$^$;$s(B) $A$r$(I+y$AJ}(B `gnus-auto-expirable-newsgroups' $A$KW7<S$7$F!"O{H%(B
+$A$9$k$^$G$NHUJ}$r8w%0%k$B!<$A%W$(I#z$A$K(B `nnmail-expiry-wait-function' $A$GV8(B
+$A6($9$k$3$H$G$9!#$b$&R;$D$O!"WT$(GY/$AFZO^GP$lO{H%$rPP$J$o$;$?$$$?$$$9$Y$F$N(B
+`nnshimbun' $A%0%k$B!<$A%W$G!"%0%k$B!<$A%W%Q%i%a$B!<$A%?(B `auto-expire' $A$r(B
+`t' $A$K$(G]C$A6($7$F!"%0%k$B!<$A%W%Q%i%a$B!<$A%?(B `expiry-wait' $A$GO{H%$9$k$^(B
+$A$G$NFZO^$rV86($9$k$d$j7=$G$9!#$(Gf[$A$7$$$3$H$O(B *Note (gnus)Expiring Mail:: $A$r(B
+$A2NUU$7$FOB$5$$!#(B`expiry-wait' $A%0%k$B!<$A%W%Q%i%a$B!<$A%?$,$(G]C$A6($5$l$F$$$J$$(B
+$A%0%k$B!<$A%W$G$O!"%G%U%)%k%H$N$(I/N$A$,$(GoK$ASC$5$l$^$9!#(B
+
+(3) `Nnshimbun'$ASC$N(B NOV $A%U%!%$%k(B
+$A$O(B~/News/shimbun/asahi/national/.overview" $A$N$h$&$JC{G0$G$9!#(B
+
+(4) $A$J$<(B `auto-expire' $A$J$I$,(B `nnshimbun' $B@l$ASC$N%0%k$B!<$A%W(B
+$A%Q%i%a$B!<$A%?$K:,$^$l$J$$$N(B? $A$H$$$&$(GYB$A$$$K$(I%\$A$9$k4p$($r$9$G$KSCRb$7$F$$(B
+$A$^$9!#$=$N4p$($H$O!"(B`expiry-wait' $A$,(B `nnshimbun' $A%P%C%/(B
+$A%(%s%I$K$h$C$FH!$j$(H$/$A$o$l$k$N$K$(I%\$A$7$F!"(B`auto-expire' $A$O(B Gnus
+$A$NVPJ`$,H!$j$(H$/$A$$$^$9!#$7$?$,$C$F!"(BGnus $A$,R;$D$NLX6($N%P%C%/%(%s%I(B
+$A$N$?$a$K$(I@>$A$/(B ($A$9$J$o$A!"(B`nnshimbun' $B@l$ASC$N%0%k$B!<$A%W%Q%i%a$B!<$A%?(B
+$A$+$i$(I/N$A$r$BFI$A$`(B) $A$h$&$K(B Gnus $A$NVPJ`$(Gq"$AD\$r$(I)/$(GZ/$A$9$k$3$H$O!"(BGnus $A$N$(G]CSS(B
+$A%]%j%7$B!<$A$K74$9$k$N$G$9!#(B
+
+
+
+File: emacs-w3m-ja.info, Node: Mew Shimbun, Next: Shimbun with Wanderlust, Prev: Nnshimbun, Up: Shimbun Library
+
+Mew $A$GPB$(GjL$A$r$BFI$A$`(B
+================
+
+Mew Shimbun $B$O(B `shimbun' $B$H(B Mew (version 2.1 $B0J9_(B) $B$H$H$b$K;H$&$3$H$r0U(B
+$B?^$7$?(B Emacs Lisp $B%W%m%0%i%`$G$9!#(BMew, APEL $B$*$h$S(B FLIM $B$b%$%s%9%H!<%k(B
+$B$5$l$F$$$l$P!"(Bemacs-w3m $B$r%$%s%9%H!<%k$9$k$H$-$K0l=o$K%$%s%9%H!<%k$5$l(B
+$B$^$9!#(B
+
+*Note Mew:: $B$b;2>H$9$k$3$H$r$*4+$a$7$^$9!#(B
+
+  1. $B=t@_Dj(B
+
+     $B0J2<$N3F9T$r(B `~/.mew.el' $B%U%!%$%k$N:G8e$K=q$$$F2<$5$$(B:
+
+     ;;; mew-shimbun $B$N%m!<%I!"%-!<Dj5A(B
+
+     ;; (setq mew-shimbun-use-unseen t) ;; (1) (*Note Mew
+     Shimbun-Footnotes::)
+     (require 'mew-shimbun)
+     (define-key mew-summary-mode-map "G"  (make-sparse-keymap))
+     (define-key mew-summary-mode-map "Gg" 'mew-shimbun-goto-folder)
+     (define-key mew-summary-mode-map "GG" 'mew-shimbun-goto-unseen-folder)
+     (define-key mew-summary-mode-map "Gi" 'mew-shimbun-retrieve)
+     (define-key mew-summary-mode-map "GI" 'mew-shimbun-retrieve-all)
+     (define-key mew-summary-mode-map "Gr" 'mew-shimbun-re-retrieve)
+     (define-key mew-summary-mode-map "GR" 'mew-shimbun-re-retrieve-all)
+     (define-key mew-summary-mode-map "Ge" 'mew-shimbun-expire)
+     (define-key mew-summary-mode-map "GE" 'mew-shimbun-expire-all)
+
+     ;; `mew-shimbun-folder-groups' $B$K(B Mew $B$G9XFI$9$k(B `shimbun' servers $B5Z$S(B
+     ;; group $B$r@_Dj$7$^$9!#$=$l$>$l$NMWAG$O(B
+     ;; `("folder" ("server.group" . range) ...)' $B$N7A<0$G$9!#(B`range' $B$K$O(B
+     ;; `all', `last', $B$*$h$S?t;z$,;XDj$G$-$^$9!#(B
+
+     (setq mew-shimbun-folder-groups
+           '(;; `+shimbun/yomiuri' $B$H$$$&(B folder $B$K(B `yomiuri.shakai',
+             ;; `yomiuri.sports' $B$J$I$r0l3g$7$F<hF@$7$^$9!#(B
+             ("yomiuri"
+              ("yomiuri.shakai" . 2)
+              ("yomiuri.sports". 2)
+              ("yomiuri.kokusai". 2))
+             ;; `+shimbun/security-memo' $B$K(B `security-memo.memo' $B$r<hF@$7$^$9!#(B
+             ("security-memo"
+              ("security-memo.memo" . 2))
+             ("slashdot-jp"
+              ("slashdot-jp.story" . last))
+             ;; $B$3$N$h$&$K!"0[$J$k(B server $B$N(B group $B$b0l$D$N(B folder
+             ;; (`+shimbun/emacs') $B$GFI$`$3$H$,$G$-$^$9!#(B
+             ("emacs"
+              ("airs.wl" . last)
+              ("emacs-w3m.emacs-w3m" . last))
+             ;; `+shimbun/hns/arisawa', `+shimbun/hns/miyoshi' $B$K$=$l$>$l$N(B
+             ;; $BF|5-$r<hF@$7$^$9!#(B
+             ("hns/arisawa"
+              ("hns.arisawa" . last))
+             ("hns/miyoshi"
+              ("hns.miyoshi" . last))))
+
+     $B0J>e$G4pK\E*$J@_Dj$O=*N;$G$9!#B>$N%f!<%6Dj5AJQ?t$O(B `mew-shimbun'
+     $B%0%k!<%W$r(B `M-x customize-group' $B$9$k$+!"%=!<%9$r8+$F2<$5$$!#(B
+
+  2. $B5-;v$N9XFI(B
+
+       a. $B:G=i$N9XFI(B
+
+          $B>e5-$N@_Dj$r$7$?$"$H!"$^$:(B `G I' $B$7$^$7$g$&(B
+          (`mew-shimbun-retrieve-all')$B!#(B`mew-shimbun-folder-groups' $B$G(B
+          $B<o!9$N@_Dj$r9T$J$C$?(B `shimbun' folder $B$,(B `+shimbun' $B0J2<$K=P(B
+          $BMh$^$9!#$^$?!"?7$?$K(B group $B$rDI2C$7$?$H$-$b(B `G I' $B$9$k$HJXMx(B
+          $B$G$9!#$J$*!"(B`+shimbun' $B$O(B `mew-shimbun-folder' $B$H$$$&JQ?t$G9%(B
+          $B$_$N$b$N$KJQ99$G$-$^$9!#(B
+
+       b. `shimbun' folder $B$X$N0\F0(B
+
+          $BDL>o$N(B `g' (`mew-summary-goto-folder') $B$G$b(B `shimbun'
+          folder $B$X$N0\F0$O$G$-$^$9$,!"(B
+          `G g' (`mew-shimbun-goto-folder') $B$r;H$&$H(B `shimbun'
+          folder $B8BDj$G0\F0$G$-$^$9!#$^$?(B `C-u G g' $B$H(B prefix $B$r$D$1$?$H$-$O!"(B
+          $B?75,5-;v$N$"$k(B folder ($B$^$@(B scan $B$r$7$F$$$J$$(B folder) $B$N$_I=<($7$^$9!#(B
+          `G G' $B$G$bF1MM$G$9!#(B
+
+       c. folder $BC10L$G$N5-;v$N<hF@(B
+
+          `shimbun' folder $B$G(B `G i' (`mew-shimbun-retrieve') $B$9$k$H!"8=(B
+          $B:_$N(B `shimbun' folder $B$G?75,5-;v$r<hF@$7$^$9!#(B
+
+       d. $B99?7$5$l$?5-;v$N<hF@(B
+
+          $BFCDj$N5-;v$rI=<($7$?>uBV$G(B `G r' (`mew-shimbun-re-retrieve')
+          $B$9$k$H!"$=$N5-;v$,99?7$5$l$F$$$?$i99?7$7!"F1;~$K?75,5-;v$b<h(B
+          $BF@$7$^$9!#(B`C-u G r' $B$H$9$k$H!"(B`mew-shimbun-mark-re-retrieve'
+          $B$K;XDj$7$?%^!<%/(B ($B%G%U%)%k%HCM$O(B `@') $B$N5-;v$N99?7$r;n$_$^$9!#(B
+          CNET $B$J$I$G;H$&$HJXMx$G$7$g$&!#(B
+
+          `G R' (`mew-shimbun-re-retrieve-all') $B$G$O!"$9$Y$F$N5-;v$N?7(B
+          $B5,@-$rD4$Y<hF@$7$J$*$7$^$9!#(B`C-u G R' $B$G$O%j!<%8%g%s$G;XDj$7(B
+          $B$?HO0O$N5-;v$rBP>]$H$7$^$9!#$*$=$i$/%O%$%Q!<F|5-%7%9%F%`$,2T(B
+          $BF/$7$F$$$kF|5-%5%$%H$G$OM-0U5A$J%3%^%s%I$G$7$g$&!#(B
+
+  3. $BL$FI4IM}(B
+
+     `~/.mew.el' $B%U%!%$%k$G0J2<$N@_Dj$r9T$J$C$F$$$k$H!"(B
+
+          (setq mew-shimbun-use-unseen t)
+
+     $B?75,$K<hF@$7$?5-;v$K(B `mew-shimbun-mark-unseen' $B$G@_Dj$7$?%^!<%/(B
+     ($B%G%U%)%k%H$O(B `*') $B$,$D$/$h$&$K$J$j!"FI$`$H<+F0E*$K>C$($^$9!#(B
+
+     $BDL>o!"(BMew $B$N(B summary $B%b!<%I$G%^!<%/$r$D$1$k!"$"$k$$$O>C$7$?8e!"(B
+     scan $B$r$7$J$$$H(B `.mew-cache' $B%U%!%$%k$KH?1G$5$l$^$;$s$,!"(B
+     `~/.mew.el' $B%U%!%$%k$G0J2<$N@_Dj$r9T$J$&$3$H$K$h$j!"(B
+
+          (setq mew-shimbun-use-unseen-cache-save t)
+
+     Mew $B$N=*N;;~$d(B folder $B$N(B kill $B;~(B (`C-c C-q' $B$r;H$C$?$H$-(B) $B$K(B
+     `shimbun' folder $B$O<+F0E*$K(B `.mew-cache' $B%U%!%$%k$rJ]B8$9$k$h$&$K(B
+     $B$J$j$^$9!#$?$@$7!"3N<B(B (2) (*Note Mew Shimbun-Footnotes::)$B$KJ]B8$9(B
+     $B$k$o$1$G$O$"$j$^$;$s!#4{FI$K$J$C$?>pJs$r3N<B$K(B cache $B$KJ]B8$9$k$K(B
+     $B$O!"$=$N(B folder $B$rFI$_=*$o$C$?$H$-$K(B `scan update' $B$r$9$k=,47$r$D(B
+     $B$1$k$HNI$$$G$7$g$&!#(B
+
+     $BL$FI$K;H$&%^!<%/$,(B `*' $B$8$c%@%a!"$H$$$&J}$O!"JQ?t(B
+     `mew-shimbun-mark-unseen' $B$r%+%9%?%^%$%:$7$F2<$5$$(B ($B>e=R(B)$B!#(B`C-u
+     N' $B$G$=$N%^!<%/$r;XDj$9$k$H3Z$7$$L$FI%i%$%U$r$*$/$k$3$H$,$G$-$k$H(B
+     $B;W$$$^$9!#(B
+
+  4. $B4|8B@Z$l5-;v$N>C5n(B
+
+     $B;vA0$K(B `mew-shimbun-expires' $B$r@_Dj$7$F$*$/$H!"4|8B@Z$l5-;v$N>C5n(B
+     $B$r9T$J$&$3$H$,$G$-$^$9!#Nc$($P(B:
+
+          (setq mew-shimbun-expires
+                '(("yomiuri" . 7)
+                  ("asahi" . 1)
+                  ("slashdot-jp" . 7)
+                  ("emacs" . 7)))
+
+     $B>e5-$N$h$&$K@_Dj$7$F$*$/$H!"(B`+shimbun/yomiuri' $B$O(B 7$BF|!"(B
+     `+shimbun/asahi' $B$O(B 1$BF|$H4|8B$r@_Dj$9$k$3$H$,$G$-$^$9!#;XDj$5$l$F(B
+     $B$$$J$$(B `shimbun' folder $B$O>C5n$7$^$;$s!#(B`G e'
+     (`mew-shimbun-expire') $B$G$=$N(B folder $B$N4|8B@Z$l5-;v$r>C5n$7$^$9!#(B
+     `G e' (`mew-shimbun-expire') $B$G@_Dj$7$?A4$F$N(B folder $B$G5-;v$N>C5n(B
+     $B$r<B9T$7$^$9!#$J$*!"0lEY>C5n$7$?5-;v$OI|5l=PMh$^$;$s$N$GCm0U$7$F2<(B
+     $B$5$$!#(B
+
+  5. $BL$FI%^!<%/$H$7$F(B `$' $B$rDI2C$9$kJ}K!(B
+
+     `$' $B%^!<%/$r?7$?$K:n@.$7!"(B`$' $B%^!<%/$rL$FI%^!<%/$H$7$F;H$&$K$O!"<!(B
+     $B$N5-=R$r(B `~/.mew.el' $B%U%!%$%k$K5-=R$7$F2<$5$$!#$J$*!"(B`$' $B0J30$N5-(B
+     $B9f$K$7$?$1$l$P!"(B
+     `http://www.mew.org/ml/mew-dist-2.0/msg01251.html' $B$r;2>H$7$F5-=R(B
+     $B$r@8@.$7$F2<$5$$!#(B
+
+     ;;----------------------------------------------------------------------
+     ;;; `$' $B$rL$FI%^!<%/$H$7$F;H$&$?$a$N5-=R(B
+     (setq mew-mark-unseen ?$)
+     (setq mew-shimbun-mark-unseen mew-mark-unseen)
+     (setq mew-mark-show-list (cons mew-mark-unseen mew-mark-show-list))
+     (setq mew-mark-afterstep-spec
+           (cons (cons mew-mark-unseen '(1 0 1 0 0 0 0))
+                 mew-mark-afterstep-spec))
+     (setq mew-mark-spec
+           (cons (list mew-mark-unseen "unseen" 0 nil nil nil nil nil)
+                 mew-mark-spec))
+     (setq mew-highlight-mark-keywords
+           (cons
+            (cons mew-mark-unseen 'mew-face-mark-unseen)
+            mew-highlight-mark-keywords))
+     (defface mew-face-mark-unseen
+       '((((class color) (type tty))
+          (:foreground "green"))
+         (((class color) (background light))
+          (:foreground "deep pink" :bold t :italic t))
+         (((class color) (background dark))
+          (:foreground "thistle"))
+         (t (:bold t)))
+       "*Face to highlight the unseen mark"
+       :group 'mew-highlight)
+     (defun mew-summary-unseen (&optional count)
+       "Put the unseen mark(default is '$') in COUNT times."
+       (interactive "P")
+       (mew-mark-put-mark-loop (function mew-summary-unseen-one) count nil))
+     (defun mew-summary-unseen-one (&optional no-msg)
+       "Put the unseen mark(default is '$') on this message."
+       (mew-mark-put-mark mew-mark-unseen no-msg))
+     (defun mew-summary-mark-unseen ()
+       "Change the '*' mark into the '$' mark."
+       (interactive)
+       (mew-summary-exchange-mark mew-mark-review mew-mark-unseen))
+     (defun mew-thread-mark-unseen ()
+       "Put the '$' mark on all messages of the current sub-thread."
+       (interactive)
+       (mew-thread-mark mew-mark-unseen))
+
+     (define-key mew-summary-mode-map "$"  'mew-summary-unseen)
+     (define-key mew-summary-mode-map "m$" 'mew-summary-mark-unseen)
+     (define-key mew-summary-mode-map "t$" 'mew-thread-mark-unseen)
+     ;;----------------------------------------------------------------------
+
+
+File: emacs-w3m-ja.info  Node: Mew Shimbun-Footnotes, Up: Mew Shimbun
+
+(1) $AN4$BFI$A9\@m$r$9$k$H$-$O%3%a%s%H$rMb$7$FOB$5$$!#$3$N$(I+y$AJ}$O1X$:(B
+`(require 'mew-shimbun)' $A$NG0$G$(G]C$A6($7$J$$$H$$$1$^$;$s!#(B
+
+(2) `mew-touch-folder-p' $A$,(B `t' $A$NHK$O$[$\(B 100% $A1#4f$G$-(B
+$A$^$9$,!"(B`nil' $A$NHK$,1#4f$G$-$k?ID\PT$O$[$H$s$I(B 0% $A$@$HK<$o$l(B
+$A$^$9!#(B
+
+
+
+File: emacs-w3m-ja.info, Node: Shimbun with Wanderlust, Next: Shimbun Sites, Prev: Mew Shimbun, Up: Shimbun Library
+
+Wanderlust $A$GPB$(GjL$A$r$BFI$A$`(B
+=======================
+
+Wanderlust $B$K$O(B ELMO $B%b%8%e!<%k$N0l$D$H$7$F(B `elmo-shimbun' $B$,4^$^$l$F$$(B
+$B$k$N$G!"L>A0$,(B `@' $B$G;O$^$k%U%)%k%@$K%"%/%;%9$9$k$@$1$G(B `shimbun' $B$rFI(B
+$B$`$3$H$,$G$-$^$9(B (*Note Shimbun Folder: (wl-ja)Shimbun Folder.)$B!#(B
+
+
+
+File: emacs-w3m-ja.info, Node: Shimbun Sites, Next: Shimbun Basics, Prev: Shimbun with Wanderlust, Up: Shimbun Library
+
+$APB$(GjL$A$,$BFI$A$a$k%5%$%H(B
+==================
+
+`Shimbun' $B%i%$%V%i%j$,BP1~$7$F$$$k%5%$%H$N0lMwI=$G$9!#(B
+
+* Menu:
+
+* Newspapers Supported by Shimbun::     $B?7J9<R(B
+* News Sites Supported by Shimbun::     $B%K%e!<%9%5%$%H(B
+* Mailing Lists Supported by Shimbun::  $B%a!<%j%s%0%j%9%H(B
+* Sport Sites Supported by Shimbun::    $B%9%]!<%D(B
+* Misc Sites Supported by Shimbun::     $B$=$NB>(B
+
+
+
+File: emacs-w3m-ja.info, Node: Newspapers Supported by Shimbun, Next: News Sites Supported by Shimbun, Prev: Shimbun Sites, Up: Shimbun Sites
+
+$APB$(GjL$AIg(B
+------
+
+`Shimbun' $B%i%$%V%i%j$,BP1~$7$F$$$k?7J9<R$G$9!#(B
+
+$A3/HUPB$(GjL(B (http://www.asahi.com/)
+     asahi.book.author asahi.book.bestseller asahi.book.booktimes
+     asahi.book.bunko asahi.book.comic asahi.book.edu
+     asahi.book.hondana asahi.book.navi asahi.book.news
+     asahi.book.paperback asahi.book.ranking asahi.book.review
+     asahi.book.shinsho asahi.book.special asahi.book.topics
+     asahi.business asahi.business.aera asahi.business.column
+     asahi.business.reuter asahi.business.toyo asahi.car
+     asahi.car.italycolumn asahi.car.motorsports asahi.car.newcar
+     asahi.car.newcarbywebcg asahi.culture asahi.culture.column
+     asahi.culture.yurufemi asahi.digital asahi.digital.apc
+     asahi.digital.av asahi.digital.bcnnews asahi.digital.column01
+     asahi.digital.hotwired asahi.digital.internet
+     asahi.digital.mobile asahi.digital.nikkanko asahi.digital.pc
+     asahi.editorial asahi.edu asahi.edu.column asahi.edu.it
+     asahi.edu.kosodate asahi.edu.news asahi.edu.nyushi
+     asahi.edu.tamate asahi.english asahi.health asahi.health.aged
+     asahi.health.alz asahi.health.medical asahi.housing
+     asahi.housing.amano asahi.housing.column asahi.housing.diary
+     asahi.housing.soudan asahi.housing.world asahi.igo
+     asahi.international asahi.international.america
+     asahi.international.asia asahi.international.asiamachi
+     asahi.international.etc asahi.international.europe
+     asahi.international.jinmin asahi.international.middleeast
+     asahi.international.seoul asahi.international.shien asahi.job
+     asahi.job.special asahi.kansai asahi.kansai.beichou
+     asahi.kansai.depa asahi.kansai.fuukei asahi.kansai.heibon
+     asahi.kansai.honma asahi.kansai.kansaiisan asahi.kansai.madam
+     asahi.kansai.okan asahi.kansai.otoriyose asahi.kansai.sakana
+     asahi.kansai.sanshi asahi.kansai.sweets asahi.kansai.umaimon
+     asahi.life asahi.life.column asahi.life.food asahi.national
+     asahi.national.calamity asahi.national.etc asahi.national.trial
+     asahi.obituaries asahi.politics asahi.rss asahi.science
+     asahi.shopping asahi.shopping.kishi asahi.shougi asahi.sports
+     asahi.sports.baseball asahi.sports.column asahi.sports.football
+     asahi.sports.spo asahi.tenjin asahi.travel asahi.travel.kaido
+     asahi.travel.zeitaku asahi.wakamiya asahi.world.china
+     asahi.world.germany
+
+     $B$3$l$i$N%0%k!<%W$O!"%G%U%)%k%H$G%F%-%9%H$@$1$N5-;v$r:n$j$^$9!#$=$l(B
+     $B$i$K!"%F%-%9%H$@$1$G$J$/<L??$r$b4^$`(B HTML $B$N5-;v$r@8@.$5$;$?$$$J$i(B
+     $B$P!"0J2<$N9T$r(B `~/.emacs' $B%U%!%$%k$K2C$($F2<$5$$!#(B
+
+          (setq shimbun-asahi-prefer-text-plain nil)
+
+     $B0lJ}!"(BHTML $B$N5-;v$r:n$k$?$a$K(B `asahi-html' $B%P%C%/%(%s%I$r;H$&$3$H(B
+     $B$b$G$-$^$9!#$=$l$r;H$&$K$O!"Nc$($P%0%k!<%WL>$H$7$F(B
+     `asahi.business' $B$NBe$o$j$K(B `asahi-html.business' $B$r;XDj$7$F2<$5$$!#(B
+
+$A3/HUPB$(GjL(B (http://mytown.asahi.com/)
+     asahi-mytown.(hokkaido...okinawa) asahi-mytown.usa
+
+     $BJF9q$HF|K\$NA4ETF;I\8)$rLVMe$9$kD+F|?7J9$NCOJ}HG$G$9!#(B
+
+$(I#z$AHUPB$(GjL(B (http://www.mainichi-msn.co.jp/)
+     mainichi.entertainment mainichi.entertainment.car
+     mainichi.entertainment.cinema mainichi.entertainment.game
+     mainichi.entertainment.geinou mainichi.entertainment.igo
+     mainichi.entertainment.manga mainichi.entertainment.music
+     mainichi.entertainment.shougi mainichi.entertainment.tv
+     mainichi.eye.closeup mainichi.eye.hassinbako mainichi.eye.hito
+     mainichi.eye.kaisetsu mainichi.eye.kinji mainichi.eye.kishanome
+     mainichi.eye.mieru mainichi.eye.newsup mainichi.eye.shasetsu
+     mainichi.eye.shasetsu.archive mainichi.eye.yoroku
+     mainichi.eye.yuuraku mainichi.kansai.sanshi mainichi.keizai
+     mainichi.keizai.it mainichi.keizai.kaigai mainichi.keizai.kigyou
+     mainichi.keizai.kigyou.info mainichi.keizai.kinyu
+     mainichi.keizai.seisaku mainichi.keizai.wadai
+     mainichi.keizai.wadai.kansoku.archive mainichi.kokusai
+     mainichi.kokusai.afro-ocea mainichi.kokusai.america
+     mainichi.kokusai.asia mainichi.kokusai.europe
+     mainichi.kokusai.mideast mainichi.kurashi mainichi.kurashi.bebe
+     mainichi.kurashi.fashion mainichi.kurashi.katei
+     mainichi.kurashi.kenko mainichi.kurashi.kokoro
+     mainichi.kurashi.shoku mainichi.kurashi.shumi
+     mainichi.kurashi.travel mainichi.kurashi.women mainichi.science
+     mainichi.science.env mainichi.science.kagaku
+     mainichi.science.medical mainichi.science.rikei mainichi.seiji
+     mainichi.seiji.feature mainichi.seiji.gyousei
+     mainichi.seiji.kokkai mainichi.seiji.seitou mainichi.seiji.senkyo
+     mainichi.shakai mainichi.shakai.edu mainichi.shakai.edu.mori
+     mainichi.shakai.edu.elearningschool.nyushi.archive
+     mainichi.shakai.edu.net.morals.archive mainichi.shakai.fu
+     mainichi.shakai.gakugei mainichi.shakai.ji mainichi.shakai.jiken
+     mainichi.shakai.koushitsu mainichi.shakai.tenki
+     mainichi.shakai.wadai mainichi.sokuhou mainichi.sports
+     mainichi.sports.ama mainichi.sports.battle
+     mainichi.sports.feature mainichi.sports.field
+     mainichi.sports.keiba mainichi.sports.major mainichi.sports.pro
+     mainichi.sports.soccer mainichi.today mainichi.yougo
+
+     $B$3$l$i$N%0%k!<%W$O!"%G%U%)%k%H$G<L??$r$b4^$`(B HTML $B$N5-;v$r:n$j$^$9!#(B
+     $B$=$l$i$K!"%F%-%9%H$@$1$N5-;v$r@8@.$5$;$?$$$J$i$P!"0J2<$N9T$r(B
+     `~/.emacs' $B%U%!%$%k$K2C$($F2<$5$$!#(B
+
+          (setq shimbun-mainichi-prefer-text-plain t)
+
+$AHU?/%9%]$B!<$A%D(B (http://www.nikkansports.com/)
+     nikkansports.baseball nikkansports.mlb nikkansports.soccer
+     nikkansports.world-soccer nikkansports.sports nikkansports.battle
+     nikkansports.horseracing nikkansports.entertainment
+     nikkansports.society nikkansports.leisure
+
+$AHU1>$(I8+6v$APB$(GjL(B (http://www.nikkei.co.jp/)
+     nikkei.top nikkei.main nikkei.keizai nikkei.sangyo nikkei.tento
+     nikkei.zinzi nikkei.report nikkei.kansai nikkei.it.business
+     nikkei.it.busi_gyoukai nikkei.it.biz-system nikkei.it.sox
+     nikkei.it.data nikkei.it.taidan nikkei.it.management
+     nikkei.it.analyst nikkei.it.internet nikkei.it.broad
+     nikkei.it.net_gyoukai nikkei.it.iptel nikkei.it.tele
+     nikkei.it.broadcast nikkei.it.internet-column nikkei.it.contents
+     nikkei.it.literacy nikkei.it.ec nikkei.it.policy nikkei.it.e-gov
+     nikkei.it.mobile nikkei.it.mob_gyoukai nikkei.it.mobsoft
+     nikkei.it.mobcon nikkei.it.money nikkei.it.wirelesslan
+     nikkei.it.one nikkei.it.kougengaku nikkei.it.world
+     nikkei.it.media nikkei.it.security nikkei.it.net_crime
+     nikkei.it.digital nikkei.it.digi_contents nikkei.it.pc
+     nikkei.kokunai nikkei.markets nikkei.kawase nikkei.kinri
+     nikkei.ft nikkei.dj nikkei.ngyoseki nikkei.gyosuuchi
+     nikkei.gyoseki nikkei.china nikkei.market nikkei.kaigai
+     nikkei.seiji nikkei.shakai nikkei.retto nikkei.sports
+     nikkei.newpro nikkei.release nikkei.release.it.comp
+     nikkei.release.it.peri nikkei.release.it.sys
+     nikkei.release.it.cont nikkei.release.it.net
+     nikkei.release.it.lsi nikkei.release.it.game
+     nikkei.release.it.etc nikkei.release.dist.depart
+     nikkei.release.dist.ryohan nikkei.release.dist.zakka
+     nikkei.release.dist.cosme nikkei.release.dist.car
+     nikkei.release.dist.book nikkei.release.dist.record
+     nikkei.release.dist.food nikkei.release.dist.mercha
+     nikkei.release.dist.mail nikkei.release.dist.netshop
+     nikkei.release.dist.etc nikkei.release.money.bank
+     nikkei.release.money.sec nikkei.release.money.am
+     nikkei.release.money.insu nikkei.release.money.etc
+     nikkei.release.maker.chemi nikkei.release.maker.mecha
+     nikkei.release.maker.car nikkei.release.maker.elec
+     nikkei.release.maker.food nikkei.release.maker.sports
+     nikkei.release.maker.apparel nikkei.release.maker.commu
+     nikkei.release.maker.etc nikkei.release.service.medic
+     nikkei.release.service.rest nikkei.release.service.trans
+     nikkei.release.service.energy nikkei.release.service.enter
+     nikkei.release.service.env nikkei.release.service.consul
+     nikkei.release.service.edu nikkei.release.service.haken
+     nikkei.release.service.life nikkei.release.service.media
+     nikkei.release.service.lease nikkei.release.service.travel
+     nikkei.release.service.etc nikkei.release.const.const
+     nikkei.release.const.house nikkei.release.const.etc
+     nikkei.shasetsu nikkei.okuyami
+
+$A%9%]%K%A(B (http://www.sponichi.co.jp/)
+     sponichi.baseball sponichi.soccer sponichi.usa sponichi.others
+     sponichi.society sponichi.entertainment sponichi.horseracing
+
+$(G{t$(I%D$APB$(GjL(B (http://www.yomiuri.co.jp/)
+     yomiuri.atmoney yomiuri.entertainment yomiuri.editorial
+     yomiuri.kyoiku yomiuri.national yomiuri.obit yomiuri.politics
+     yomiuri.science yomiuri.sports yomiuri.world
+
+     $B$3$l$i$N%0%k!<%W$O!"%G%U%)%k%H$G%F%-%9%H$@$1$N5-;v$r:n$j$^$9!#$=$l(B
+     $B$i$K!"%F%-%9%H$@$1$G$J$/<L??$r$b4^$`(B HTML $B$N5-;v$r@8@.$5$;$?$$$J$i(B
+     $B$P!"0J2<$N9T$r(B `~/.emacs' $B%U%!%$%k$K2C$($F2<$5$$!#(B
+
+          (setq shimbun-yomiuri-prefer-text-plain nil)
+
+     $B0lJ}!"(BHTML $B$N5-;v$r:n$k$?$a$K(B `yomiuri-html' $B%P%C%/%(%s%I$r;H$&$3(B
+     $B$H$b$G$-$^$9!#$=$l$r;H$&$K$O!"Nc$($P%0%k!<%WL>$H$7$F(B
+     `yomiuri.atmoney' $B$NBe$o$j$K(B `yomiuri-html.atmoney' $B$r;XDj$7$F2<$5(B
+     $B$$!#(B
+
+$(I7E8+$APB$(GjL(B (http://www.sankei.co.jp/)
+     sankei.news.shakai sankei.news.kokusai sankei.news.seiji
+     sankei.news.keizai sankei.news.seikatsu sankei.news.kyouiku
+     sankei.news.sports sankei.news.cutlure sankei.news.chiho
+     sankei.special.komori sankei.special.kuroda sankei.special.ito
+     sankei.special.jieitai sankei.special.kenpo
+     sankei.special.kyouiku sankei.special.kiko sankei.ronsetsu.shucho
+     sankei.ronsetsu.sankeisho sankei.ronsetsu.seiron
+
+BBC (http://www.bbc.co.uk/)
+     bbc.news
+
+Spiegel Online (http://www.spiegel.de/)
+     spiegel.news
+
+$A%2%s%@%$%M%C%H(B (http://gendai.net/)
+     gendai-net.today gendai-net.syakai gendai-net.sports
+     gendai-net.geino gendai-net.wadai gendai-net.kenko
+     gendai-net.syoku gendai-net.book
+
+
+
+File: emacs-w3m-ja.info, Node: News Sites Supported by Shimbun, Next: Mailing Lists Supported by Shimbun, Prev: Newspapers Supported by Shimbun, Up: Shimbun Sites
+
+$A%K%e$B!<$A%9%5%$%H(B
+--------------
+
+`Shimbun' $B%i%$%V%i%j$,BP1~$7$F$$$k%K%e!<%9%5%$%H$G$9!#(B
+
+CNET (http://news.com.com/)
+     cnet.news cnet.enterprise.software cnet.enterprise.hardware
+     cnet.security cnet.networking cnet.personal.technology
+     cnet.newsmakers cnet.perspectives
+
+CNET Japan (http://japan.cnet.com/)
+     cnet-jp.general cnet-jp.news cnet-jp.special cnet-jp.opinion
+     cnet-jp.blog.geetstate cnet-jp.blog.kenn cnet-jp.blog.lessig
+     cnet-jp.blog.matsumura cnet-jp.blog.nakajima cnet-jp.blog.saeki
+     cnet-jp.blog.sakamoto cnet-jp.blog.sasaki cnet-jp.blog.sentan
+     cnet-jp.blog.staff cnet-jp.blog.takawata cnet-jp.blog.watanabe
+
+CNN Japan (http://www.cnn.co.jp/)
+     cnn-jp.business cnn-jp.fringe cnn-jp.science cnn-jp.showbiz
+     cnn-jp.sports cnn-jp.top cnn-jp.usa cnn-jp.world
+
+Engadget Japanese (http://japanese.engadget.com/)
+     engadget-ja.top
+
+$A%(%-%5%$%H(B $A%K%e$B!<$A%9(B (http://www.excite.co.jp/)
+     excite.bit-koneta excite.world-odd
+
+FAU-IAA (http://www.fau.org/)
+     fau.news
+
+Heise Online (http://www.heise.de/)
+     heise.news heise.telepolis
+
+Infoshop News (http://news.infoshop.org/)
+     infoshop.news
+
+$A%$%s%W%l%9(B (http://www.watch.impress.co.jp/)
+     impress.enterprise impress.pc impress.dc impress.akiba impress.av
+     impress.game impress.k-tai impress.internet impress.bb
+     impress.forest impress.robot
+
+ITmedia (http://www.itmedia.co.jp/)
+     itmedia.news.bursts, itmedia.news.domestic, itmedia.news.foreign,
+     itmedia.news.products, itmedia.news.technology,
+     itmedia.news.web20, itmedia.news.nettopics, itmedia.news.society,
+     itmedia.news.security, itmedia.news.industry,
+     itmedia.news.research, itmedia.news.sp_amd, itmedia.anchordesk,
+     itmedia.bizid, itmedia.enterprise, itmedia.+D.plusd,
+     itmedia.+D.mobile, itmedia.+D.pcupdate, itmedia.+D.lifestyle,
+     itmedia.+D.games, itmedia.+D.docomo, itmedia.+D.au_kddi,
+     itmedia.+D.vodafone, itmedia.+D.shopping
+
+Japan Times (http://www.japantimes.co.jp/)
+     japantimes.general japantimes.business
+
+LAUT AG (http://www.laut.de/)
+     laut-de.news laut-de.platten laut-de.platten_alternative
+     laut-de.platten_dance laut-de.platten_hiphop platten_jazz
+     laut-de.platten_metal laut-de.platten_pop laut-de.platten_rnb
+     laut-de.platten_rock
+
+Open Tech Press (http://opentechpress.jp/)
+     opentechpress-jp.general opentechpress-jp.enterprise
+     opentechpress-jp.opensource opentechpress-jp.security
+     opentechpress-jp.news opentechpress-jp.pr
+
+N24 (http://www.n24.de/)
+     n24-de.boerse n24-de.boulevard n24-de.nachrichten n24-de.netnews
+     n24-de.politik n24-de.sport n24-de.wirtschaft
+
+Rediff.com (http://www.rediff.com/)
+     rediff.news
+
+Slashdot Japan (http://slashdot.jp/)
+     slashdot-jp.story slashdot-jp.askslashdot slashdot-jp.bookreview
+     slashdot-jp.bsd slashdot-jp.developers slashdot-jp.interview
+     slashdot-jp.linuxkernel slashdot-jp.mac slashdot-jp.mobile
+     slashdot-jp.science slashdot-jp.security slashdot-jp.slash
+     slashdot-jp.diary.oliver
+
+     $BJQ?t(B `shimbun-slashdot-jp-group-alist' $B$KE,@Z$J@_Dj$r2C$($k$H!"$=(B
+     $B$NB>$N%f!<%6!<$NF|5-$b1\Mw$G$-$^$9!#(B
+
+Weekly World News (http://www.weeklyworldnews.com/news/)
+     weeklyworldnews.news
+
+Die Welt (http://www.welt.de/)
+     welt-de.news
+
+HotWired Japan (http://hotwired.goo.ne.jp/)
+     wired-jp.news wired-jp.business wired-jp.culture
+     wired-jp.technology wired-jp.blog.ogura wired-jp.blog.sasaki
+     wired-jp.blog.takahashi
+
+Yahoo! Japan (http://headlines.yahoo.co.jp/)
+     yahoo.politics yahoo.society yahoo.people yahoo.business-all
+     yahoo.market yahoo.stock yahoo.industry yahoo.international
+     yahoo.entertainment yahoo.sports yahoo.computer yahoo.hokkaido
+     yahoo.tohoku yahoo.kanto yahoo.sinetsu yahoo.hokuriku yahoo.tokai
+     yahoo.kinki yahoo.chugoku yahoo.sikoku yahoo.kyushu yahoo.okinawa
+
+     $B$3$l$i$N%0%k!<%W$O!"%G%U%)%k%H$G%F%-%9%H$@$1$N5-;v$r:n$j$^$9!#$=$l(B
+     $B$i$K!"%F%-%9%H$@$1$G$J$/<L??$r$b4^$`(B HTML $B$N5-;v$r@8@.$5$;$?$$$J$i(B
+     $B$P!"0J2<$N9T$r(B `~/.emacs' $B%U%!%$%k$K2C$($F2<$5$$!#(B
+
+          (setq shimbun-yahoo-prefer-text-plain nil)
+
+ZDNet Japan (http://japan.zdnet.com/)
+     zdnet-jp.news zdnet-jp.news.network zdnet-jp.news.hardware
+     zdnet-jp.news.software zdnet-jp.news.manage
+     zdnet-jp.news.security zdnet-jp.news.internet zdnet-jp.news.os
+     zdnet-jp.news.db zdnet-jp.news.system zdnet-jp.column
+     zdnet-jp.column.sp1 zdnet-jp.column.netsecurity1
+     zdnet-jp.column.ea1 zdnet-jp.column.btl
+     zdnet-jp.column.solutionIT zdnet-jp.channel.security
+     zdnet-jp.channel.ilm zdnet-jp.blog.iida zdnet-jp.blog.mhatta
+     zdnet-jp.blog.kurei zdnet-jp.blog.opensource zdnet-jp.blog.soa
+     zdnet-jp.blog.dp
+
+Die Zeit (http://www.zeit.de/)
+     zeit-de.auto zeit-de.computer zeit-de.deutschland
+     zeit-de.feuilleton zeit-de.gesundheit zeit-de.international
+     zeit-de.leben zeit-de.literatur zeit-de.musik zeit-de.news
+     zeit-de.reisen zeit-de.schule zeit-de.sport zeit-de.studium
+     zeit-de.wirtschaft zeit-de.wissen zeit-de.zuender
+
+$A%*$B!<$A%^%$%K%e$B!<$A%9(B (http://ohmynews.co.jp/)
+     ohmynews-jp.shakai ohmynews-jp.keizai ohmynews-jp.seiji
+     ohmynews-jp.kokusai ohmynews-jp.entame ohmynews-jp.life
+     ohmynews-jp.science ohmynews-jp.sports ohmynews-jp.books
+     ohmynews-jp.all
+
+The Onion (http://www.theonion.com/)
+     the-onion.news
+
+
+
+File: emacs-w3m-ja.info, Node: Mailing Lists Supported by Shimbun, Next: Sport Sites Supported by Shimbun, Prev: News Sites Supported by Shimbun, Up: Shimbun Sites
+
+$A%a$B!<$A%j%s%0%j%9%H(B
+----------------
+
+$B:G6a$G$O!"%a!<%j%s%0%j%9%H$KEj9F$5$l$?2a5n5-;v$N%"!<%+%$%V$,(B WEB $B>e$K4v(B
+$B$D$b8x3+$5$l$F$$$^$9!#(B`Shimbun' $B%i%$%V%i%j$O!"0J2<$N%"!<%+%$%V$r07$&$3(B
+$B$H$,$G$-$^$9!#(B
+
+Semi-gnus Mailing List in Japan (http://lists.airs.net/semi-gnus/archive/)
+     airs.semi-gnus-ja
+
+Wanderlust Mailing List (http://lists.airs.net/)
+     airs.wl airs.wl-en
+
+Big Brother DataBase Mailing List (http://www.rc.tutrp.tut.ac.jp/bbdb-ml/)
+     bbdb-ml.bbdb-ml
+
+GNOME Mailing List (http://mail.gnome.org/archives/)
+     gnome.balsa-list gnome.calendar-list gnome.cvs-commits-list
+     gnome.foundation-announce gnome.foundation-list gnome.fplan-list
+     gnome.gconf-list gnome.gdome gnome.gnome-1.4-list
+     gnome.gnome-announce-list gnome.gnome-components-list
+     gnome.gnome-db-list gnome.gnome-de gnome.gnome-debugger-list
+     gnome.gnome-devel-list gnome.gnome-doc-list gnome.gnome-gui-list
+     gnome.gnome-hackers gnome.gnome-hackers-readonly
+     gnome.gnome-hackers-test gnome.gnome-i18n gnome.gnome-i18n-tools
+     gnome.gnome-kde-list gnome.gnome-list gnome.gnome-office-list
+     gnome.gnome-pilot-list gnome.gnome-sound-list
+     gnome.gnome-themes-list gnome.gnome-ui-hackers
+     gnome.gnome-web-list gnome.gnome-webmaster-list
+     gnome.gnome-workshop-list gnome.gnomecc-list gnome.gnumeric-list
+     gnome.gtk-app-devel-list gnome.gtk-devel-list gnome.gtk-doc-list
+     gnome.gtk-i18n-list gnome.gtk-list gnome.gtk-perl-list
+     gnome.guppi-list gnome.libart gnome.libart-hackers
+     gnome.orbit-list gnome.vote gnome.wm-spec-list gnome.xml
+     gnome.xslt
+
+Java $A%+%s%U%!%l%s%9(B Mailing List (http://www.java-conf.gr.jp/archives/)
+     javaconf.servlet-ml javaconf.business-ml
+     javaconf.duke-in-the-box-ml javaconf.jfriends-ml javaconf.JGT-ml
+     javaconf.jini-ml javaconf.ejb-ml javaconf.cm-ml javaconf.horb-ml
+     javaconf.talk-ml
+
+LinuxCE JP Mailing List (http://www.peanuts.gr.jp/~kei/ml-archive/)
+     linuxce-jp.users
+
+Mule Mailing List (http://www.m17n.org/)
+     m17n.mule-ja m17n.mule
+
+Meadow Mailing List (http://www.ysnb.net/meadow/)
+     meadow.meadow-develop meadow.meadow-users-jp
+
+Mew Mailing List (http://www.mew.org/ml/)
+     mew.mew-dist mew.mew-win32 mew.mew-int
+
+MagicPoint Mailing List (http://www.mew.org/ml/)
+     mew.mgp-users mew.mgp-users-jp
+
+www.namazu.org Mailing Lists (http://www.namazu.org/cgi-bin/mailman/listinfo)
+     namazu.kakasi-commits namazu.kakasi-dev namazu.migemo
+     namazu.namazu-users-en namazu.namazu-users-ja
+     namazu.namazu-devel-ja namazu.namazu-devel-en
+     namazu.namazu-win32-users-ja namazu.sary
+
+emacs-w3m Mailing List (http://emacs-w3m.namazu.org/ml/)
+     emacs-w3m.emacs-w3m
+
+NetBSD JP Mailing List (http://www.jp.netbsd.org/ja/JP/ml/)
+     netbsd.announce-ja netbsd.junk-ja netbsd.tech-misc-ja
+     netbsd.tech-pkg-ja netbsd.port-arm32-ja netbsd.port-hpcmips-ja
+     netbsd.port-mac68k-ja netbsd.port-mips-ja netbsd.port-powerpc-ja
+     netbsd.hpcmips-changes-ja netbsd.members-ja netbsd.admin-ja
+     netbsd.www-changes-ja
+
+Ruby Mailing List (http://blade.nagaokaut.ac.jp/)
+     ruby.comp.lang.ruby ruby.fj.comp.lang.ruby ruby.ruby-dev
+     ruby.ruby-ext ruby.ruby-list ruby.ruby-math ruby.ruby-talk
+
+Toshiba Linux Users JP Mailing List (http://linux.toshiba-dme.co.jp/ML/tlinux-users-j/)
+     toshiba.linux-users-j
+
+w3m-dev Mailing List (http://mi.med.tohoku.ac.jp/~satodai/w3m-dev/)
+     w3m-dev.w3m-dev w3m-dev.w3m-dev-en
+
+digiko Mailing List (http://yar-3.net/digiko/)
+     digiko.digiko
+
+XEmacs Mailing List (http://list-archive.xemacs.org/)
+     xemacs.xemacs-announce xemacs.xemacs-beta-ja xemacs.xemacs-beta
+     xemacs.xemacs-build-reports xemacs.xemacs-cvs
+     xemacs.xemacs-design xemacs.xemacs-mule xemacs.xemacs-nt
+     xemacs.xemacs-patches xemacs.xemacs-users-ja xemacs.xemacs
+
+$A%;%-%e%j%F%#$B!<(BMEMO Mailing List (http://memo.st.ryukoku.ac.jp/archive/)
+     security-memo.memo security-memo.free-memo
+     security-memo.social-memo
+
+     $B$J$*!"(B`security-memo.*' $B$O%"%I%l%92s<}%m%\%C%HBP:v$G(B userid $B$H(B
+     passowrd $B$r5a$a$i$l$k$N$G(B `~/.w3m/passwd' $B$K(B
+
+          machine memo.st.ryukoku.ac.jp
+          realm input username/password = archives/archives
+          login archives
+          passwd archives
+
+          machine memo.st.ryukoku.ac.jp
+          realm input user: archives / password: archives
+          login archives
+          passwd archives
+
+     $B$H=q$-!">e5-%U%!%$%k$+$i(B group, others $B$N%"%/%;%98"$r<h$j=|$$$F$*(B
+     $B$/I,MW$,$"$j$^$9!#(B
+
+Debian JP Mailing List (http://lists.debian.or.jp/)
+     debian-jp.debian-announce debian-jp.debian-devel
+     debian-jp.debian-www debian-jp.debian-users
+     debian-jp.debian-policy debian-jp.jp-qa
+
+Debian Mailing List (http://lists.debian.org/)
+     debian.debian-announce debian.debian-commercial
+     debian.debian-firewall debian.debian-french debian.debian-isp
+     debian.debian-italian debian.debian-kde debian.debian-laptop
+     debian.debian-news debian.debian-news-german
+     debian.debian-news-portuguese debian.debian-security-announce
+     debian.debian-testing debian.debian-user
+     debian.debian-user-catalan debian.debian-user-french
+     debian.debian-user-polish debian.debian-user-portuguese
+     debian.debian-user-spanish debian.debian-user-swedish
+     debian.debian-admintool debian.debian-apache
+     debian.debian-autobuild debian.debian-beowulf debian.debian-boot
+     debian.debian-cd debian.debian-ctte debian.debian-debbugs
+     debian.debian-devel debian.debian-devel-announce
+     debian.debian-devel-french debian.debian-devel-games
+     debian.debian-devel-spanish debian.debian-doc debian.debian-dpkg
+     debian.debian-emacsen debian.debian-events-eu
+     debian.debian-events-na debian.debian-faq debian.debian-gcc
+     debian.debian-glibc debian.debian-gtk-gnome debian.debian-hams
+     debian.debian-ipv6 debian.debian-java debian.debian-jr
+     debian.debian-med debian.debian-mentors debian.debian-newmaint
+     debian.debian-newmaint-admin debian.debian-ocaml-maint
+     debian.debian-openoffice debian.debian-perl debian.debian-pilot
+     debian.debian-policy debian.debian-pool debian.debian-python
+     debian.debian-qa debian.debian-qa-private debian.debian-release
+     debian.debian-security debian.debian-snapshots
+     debian.debian-tetex-maint debian.debian-toolchain
+     debian.debian-vote debian.debian-wnpp debian.debian-www
+     debian.debian-x debian.deity debian.debian-chinese
+     debian.debian-chinese-big5 debian.debian-chinese-gb
+     debian.debian-esperanto debian.debian-i18n debian.debian-japanese
+     debian.debian-l10n-catalan debian.debian-l10n-dutch
+     debian.debian-l10n-english debian.debian-l10n-french
+     debian.debian-l10n-italian debian.debian-l10n-portuguese
+     debian.debian-l10n-spanish debian.debian-laespiral
+     debian.debian-russian debian.debian-simplified-chinese
+     debian.debian-68k debian.debian-alpha debian.debian-arm
+     debian.debian-bsd debian.debian-hppa debian.debian-hurd
+     debian.debian-ia64 debian.debian-mips debian.debian-parisc
+     debian.debian-powerpc debian.debian-s390 debian.debian-sparc
+     debian.debian-superh debian.debian-ultralinux debian.debian-win32
+     debian.debian-all-changes debian.debian-alpha-changes
+     debian.debian-arm-changes debian.debian-books
+     debian.debian-cd-vendors debian.debian-changes
+     debian.debian-consultants debian.debian-curiosa
+     debian.debian-devel-all-changes debian.debian-devel-alpha-changes
+     debian.debian-devel-arm-changes debian.debian-devel-changes
+     debian.debian-devel-hurd-i386-changes
+     debian.debian-devel-i386-changes debian.debian-devel-m68k-changes
+     debian.debian-devel-powerpc-changes
+     debian.debian-devel-sparc-changes debian.debian-hurd-i386-changes
+     debian.debian-i386-changes debian.debian-legal
+     debian.debian-m68k-changes debian.debian-mirrors
+     debian.debian-powerpc-changes debian.debian-project
+     debian.debian-publicity debian.debian-sgml
+     debian.debian-sparc-changes debian.lcs-eng debian.lsb-confcall
+     debian.lsb-discuss debian.lsb-impl debian.lsb-spec
+     debian.lsb-test debian.spi-announce debian.spi-general
+     debian.vgui-discuss
+
+KDE Mailing List in Japan (http://www.kde.gr.jp/ml/)
+     kde.Kuser kde.Kdeveloper
+
+Geocrawler (http://www.geocrawler.com/)
+     Geocrawler $B$KJ]B8$5$l$F$$$kA4$F$N%a!<%j%s%0%j%9%H$r1\Mw$G$-$^$9!#(B
+     `M-x shimbun-geocrawler-add-group RET' $B$H$$$&%3%^%s%I$r;H$C$F!"1\(B
+     $BMw$7$?$$%0%k!<%W$rJQ?t(B `shimbun-geocrawler-group-alist' $B$KEPO?$7$F(B
+     $B$/$@$5$$!#(B
+
+Mailing list ARChives (http://marc.theaimsgroup.com/)
+     Mailing list ARChives (MARC) $B$KJ]B8$5$l$F$$$kA4$F$N%a!<%j%s%0%j%9(B
+     $B%H$r1\Mw$G$-$^$9!#1\Mw$7$?$$%0%k!<%W$N%0%k!<%WL>$H(B URL $B$r!"JQ?t(B
+     `shimbun-marc-aims-group-alist' $B$KEPO?$7$F$/$@$5$$!#(B
+
+RedHat Mailing List (http://sources.redhat.com/ml/)
+     redhat.automake redhat.bug-automake redhat.automake-prs
+     redhat.automake-cvs redhat.binutils redhat.binutils-cvs
+     redhat.c++-embedded redhat.crossgcc redhat.cgen redhat.cgen-prs
+     redhat.cgen-cvs redhat.cygwin redhat.cygwin-xfree
+     redhat.cygwin-announce redhat.cygwin-xfree-announce
+     redhat.cygwin-apps redhat.cygwin-patches redhat.cygwin-developers
+     redhat.cygwin-cvs redhat.cygwin-apps-cvs
+     redhat.docbook-tools-discuss redhat.docbook-tools-announce
+     redhat.docbook-tools-cvs redhat.docbook redhat.dssslist
+     redhat.sgml-tools redhat.docbook-apps redhat.ecos-announce
+     redhat.ecos-devel redhat.ecos-discuss redhat.ecos-maintainers
+     redhat.ecos-patches redhat.elix redhat.elix-announce redhat.gdb
+     redhat.gdb-announce redhat.gdb-testers redhat.gdb-testresults
+     redhat.gdb-patches redhat.gdb-cvs redhat.bug-gdb redhat.gdb-prs
+     redhat.libc-alpha redhat.libc-hacker redhat.bug-glibc
+     redhat.glibc-cvs redhat.glibc-linux redhat.bug-gnats
+     redhat.gnats-devel redhat.gnats-announce redhat.gnats-cvs
+     redhat.gsl-discuss redhat.gsl-announce redhat.gsl-cvs
+     redhat.guile redhat.guile-emacs redhat.guile-prs redhat.guile-gtk
+     redhat.bug-guile redhat.guile-cvs redhat.guile-emacs-cvs
+     redhat.insight redhat.insight-announce redhat.insight-prs
+     redhat.installshell redhat.inti redhat.kawa redhat.libffi-discuss
+     redhat.libffi-announce redhat.libstdc++ redhat.libstdc++-cvs
+     redhat.libstdc++-prs redhat.mauve-discuss redhat.mauve-announce
+     redhat.newlib redhat.pthreads-win32 redhat.rhdb
+     redhat.rhdb-announce redhat.rhug-rhats redhat.rpm2html-cvs
+     redhat.rpm2html-prs redhat.rpm2html redhat.sid
+     redhat.sid-announce redhat.sid-cvs redhat.sourcenav
+     redhat.sourcenav-announce redhat.sourcenav-prs redhat.win32-x11
+     redhat.xconq7 redhat.xconq-announce redhat.xconq-cvs
+
+MacOSX JP Mailing List (http://www.tech-arts.co.jp/macosx/)
+     macosx-jp.macosx-jp macosx-jp.macosx-dev-jp
+     macosx-jp.macosx-ws-jp macosx-jp.webobjects-jp
+
+SourceForge JP (http://sourceforge.jp)
+     SourceForge JP $B$KJ]B8$5$l$F$$$k%a!<%j%s%0%j%9%H$NA4$F$N8x3+=q8K$r(B
+     $B1\Mw$G$-$^$9!#1\Mw$7$?$$%0%k!<%W$rJQ?t(B
+     `shimbun-sourceforge-jp-mailing-lists' $B$KEPO?$7$F$/$@$5$$!#(B
+
+Elips Mailing List (http://heimat.jp/~nakaji/elips/)
+     elips.elips
+
+Squeak-ja Mailing List (http://lists.squeakfoundation.org/pipermail/squeak-ja/)
+     squeak-ja.main
+
+Smalltalkers' Salon Mailing List (http://www.sra.co.jp/smalltalk/SML/archives/)
+     sml.main
+
+Squeak-dev Mailing List (http://lists.squeakfoundation.org/pipermail/squeak-dev/)
+     squeak-dev.main
+
+Plucker Mailing List (http://www.mail-archive.com/plucker-*@rubberchicken.org/maillist.html)
+     plucker.announce plucker.list plucker.dev
+
+pilot-link Mailing List (http://www.pilot-link.org/pipermail/)
+     pilot-link.announce pilot-link.devel pilot-link.general
+     pilot-link.unix-ng
+
+Coldsync Mailing List (http://www.thedotin.net/maillists/coldsync-hackers/maillist.html)
+     coldsync.main
+
+J-Pilot Mailing List (http://www.jpilot.org/pipermail/jpilot/)
+     jpilot.main
+
+pilot-mailsync Mailing List (http://lists.gnu-designs.com/pipermail/pilot-mailsync/)
+     pilot-mailsync.main
+
+Mozilla Users Mailing List in Japan (http://www.mozilla.gr.jp/ml/logs/moz-users/)
+     mozilla-jp.users
+
+     $B$J$*!"(B`mozilla-jp.users' $B$O%"%I%l%92s<}%m%\%C%HBP:v$G(B userid $B$H(B
+     passowrd $B$r5a$a$i$l$k$N$G(B `~/.w3m/passwd' $B$K(B
+
+          machine www.mozilla.gr.jp
+          realm Please Enter mozilla mozilla
+          login mozilla
+          passwd mozilla
+
+     $B$H=q$-!">e5-%U%!%$%k$+$i(B group, others $B$N%"%/%;%98"$r<h$j=|$$$F$*(B
+     $B$/I,MW$,$"$j$^$9!#(B
+
+tDiary Developers Mailing List in Japan (http://www.tdiary.org/)
+     tdiary-ml.devel tdiary-ml.theme
+
+arch.bluegate.org Mailing Lists (http://arch.bluegate.org/mailman/listinfo)
+     arch-bluegate.subversion-jp arch-bluegate.arch-jp
+     arch-bluegate.mailman arch-bluegate.viewarch
+
+Tigris.org:Open Source Software Engineering (http://www.tigris.org/)
+     Tigris.org $B$KJ]B8$5$l$F$$$kA4$F$N%a!<%j%s%0%j%9%H$r1\Mw$G$-$^$9!#(B
+     $B1\Mw$7$?$$%0%k!<%W$rJQ?t(B `shimbun-tigris-group-alist' $B$KEPO?$7$F$/(B
+     $B$@$5$$!#%0%k!<%WL>$O(B tigris.<project>.<mailinglist> $B$K$J$j$^$9!#(B
+
+www.SciPy.net Mailing Lists (http://www.scipy.net/mailman/listinfo)
+     scipy.astropy scipy.ipython-user scipy.ipython-dev
+     scipy.scipy-user scipy.scipy-dev scipy.scipy-testlog
+     scipy.scipy-chaco scipy.scipy-cvs
+
+
+
+

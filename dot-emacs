@@ -1,0 +1,903 @@
+;; -*- mode: emacs-lisp; indent-tabs-mode: nil -*-
+;;.emacs file for Nelson Elhage (nelhage@mit.edu)
+;; Probably requires emacs 22 or higher
+
+;; minimal backwards compatibility with Emacs 21
+(unless (boundp 'magic-mode-alist)
+  (defvar magic-mode-alist nil "Dummy magic-mode-alist so Emacs
+  21 doesn't choke on assignments to it."))
+
+(add-to-list 'load-path "~/.elisp")
+(cd "~/.elisp")
+(load "~/.elisp/subdirs.el")
+(cd "~")
+
+(require 'uniquify)
+(require 'utils)
+(require 'structured)
+(require 'dirvars)
+
+;;Global key bindings
+(global-set-key (kbd "C-z") nil)
+(global-set-key "\M-g" 'goto-line)
+(global-set-key "\C-m" 'newline-and-indent)
+(global-set-key "\M-k" 'kill-word)
+(global-set-key "\C-cc" 'compile)
+(global-set-key "\C-a" 'beginning-of-line-dwim)
+(global-set-key "\C-co" 'other-window)
+(global-set-key [f5] 'call-last-kbd-macro)
+(global-set-key (kbd "TAB") 'indent-and-complete-symbol-generic)
+(global-set-key (kbd "M-r") 're-search-backward)
+(global-set-key (kbd "M-s") 're-search-forward)
+(global-set-key [up] 'increment-number-at-point)
+(global-set-key [down] 'decrement-number-at-point)
+
+(setq window-number-prefix "\C-c")
+(require 'window-number)
+(window-number-mode 1)
+
+(setq display-time-24hr-format t)
+(display-time-mode)
+(display-battery-mode)
+;(zone-when-idle 60)
+
+(global-set-key (kbd "C-x 4 C-f") 'window-number-find-file)
+
+(setq lpr-switches "-h")
+(setq ps-left-header '(ps-get-buffer-name user-full-name))
+(setq woman-use-own-frame nil)
+
+(fset 'rm 'delete-file)
+(fset 'mv 'rename-file)
+(fset 'cp 'copy-file)
+(fset 'mkdir 'make-directory)
+(fset 'rmdir 'delete-directory)
+
+(autoload 'nethack "nethack" "Play Nethack." t)
+(setq nethack-program "/usr/games/nethack-lisp")
+
+(defun strip-lf ()
+  (interactive)
+  (save-excursion
+    (replace-string "" "" nil (point-min) (point-max))))
+
+(defvar complete-symbol-function nil "Function to be called to
+complete a symbol in the current buffer. Should perform
+completion at point and return. If nil, the current mode is
+unable to perform symbol completion.")
+
+(make-variable-buffer-local 'complete-symbol-function)
+
+(defun indent-and-complete-symbol-generic ()
+  "Indent the current line and perform symbol completion using
+  `complete-symbol-function'. First indent the line, and if
+  indenting doesn't move point, complete the symbol at point."
+  (interactive)
+  (let ((pt (point)))
+    (funcall indent-line-function)
+    (when (and (not (null complete-symbol-function))
+               (= pt (point))
+               (save-excursion (re-search-backward "[^() \n\t\r]+\\=" nil t))
+               (looking-at "\\Sw"))
+      (funcall complete-symbol-function))))
+
+;;Set up fonts and colors
+(when (fboundp 'global-font-lock-mode)
+  (setq font-lock-face-attributes
+        '((font-lock-comment-face  "OrangeRed")
+          (font-lock-function-name-face "blue")
+          (font-lock-keyword-face "Cyan1")
+          (font-lock-string-face "orange")))
+  (require 'font-lock)
+  (require 'show-wspace)
+  (set-face-background 'pesche-tab "#111133")
+  (set-face-background 'pesche-space "#331111")
+  (toggle-tabs-font-lock)
+  (toggle-trailing-whitespace-font-lock)
+  (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
+  (setq font-lock-maximum-decoration t)
+  (global-font-lock-mode 1))
+
+(eval-after-load 'flymake
+  '(progn
+    (set-face-background 'flymake-errline "#CC3333")
+    (set-face-background 'flymake-warnline "#3333CC")))
+
+
+(defun set-projector-faces ()
+  (interactive)
+  (set-face-attribute 'default nil
+                      :height 150
+                      :foreground "black"
+                      :background "white")
+  (set-face-attribute 'font-lock-comment-face nil
+                      :foreground "dark green")
+  (set-face-attribute 'font-lock-keyword-face nil
+                      :foreground "blue"
+                      :weight 'bold)
+  (set-face-attribute 'font-lock-string-face nil
+                      :foreground "dark red")
+  (set-face-attribute 'pesche-tab nil
+                      :background "white")
+  (set-face-attribute 'pesche-space nil
+                      :background "white"))
+
+(defun set-normal-faces ()
+  (interactive)
+  (set-face-attribute 'default nil
+                      :foreground "#1F1"
+                      :background "black")
+  (set-face-attribute 'font-lock-comment-face nil
+                      :foreground "OrangeRed")
+  (set-face-attribute 'font-lock-keyword-face nil
+                      :foreground "Cyan1"
+                      :weight 'normal)
+  (set-face-attribute 'font-lock-string-face nil
+                      :foreground "orange")
+  (set-default-font  "Mono-9")
+  (set-face-attribute 'pesche-tab nil
+                      :background "#113")
+  (set-face-attribute 'pesche-space nil
+                      :background "#311"))
+
+(setq default-frame-alist
+      '((menu-bar-lines . 0)
+        (foreground-color . "#1F1")
+        (background-color . "black")
+        (background-mode . 'dark)
+        (font . "Mono-9")
+        (vertical-scroll-bars . nil)
+        (tool-bar-lines . 0)))
+
+(defun safe-funcall (func &rest args)
+  "Call FUNC on ARGS if and only if FUNC is defined as a function."
+  (when (fboundp func) (apply func args)))
+
+(setq inhibit-startup-message t)
+
+(safe-funcall 'set-scroll-bar-mode nil)
+(safe-funcall 'tool-bar-mode -1)
+(safe-funcall 'auto-compression-mode 1)
+(safe-funcall 'column-number-mode 1)
+(safe-funcall 'fringe-mode '(0 . nil))
+
+(setq c-basic-offset 4
+      mouse-wheel-follow-mouse nil
+      mouse-wheel-progressive-speed nil
+      confirm-kill-emacs 'yes-or-no-p
+      x-select-enable-clipboard t
+      uniquify-buffer-name-style 'post-forward-angle-brackets
+      outline-regexp "\\s *\\*+"
+      comint-prompt-read-only t
+      diff-switches "-u"
+      compile-command "find-makefile")
+
+(setq-default tab-width 8
+              truncate-lines t
+              truncate-partial-width-windows nil
+              indent-tabs-mode nil)
+
+(setq tramp-default-method "ssh")
+
+;; (require 'paren)
+;; (when (fboundp 'show-paren-mode)
+;;   (setq show-paren-delay 0)
+;;   (show-paren-mode 1))
+
+(require 'shell)
+(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+(add-hook 'shell-mode 'my-shell-mode-hook)
+
+(defun my-shell-mode-hook ()
+  nil)
+
+(defun named-shell (name directory)
+  (interactive "MShell name: \nDIn directory: ")
+  (switch-to-buffer (concat "*" name "*"))
+  (cd directory)
+  (shell (current-buffer)))
+
+(add-hook 'term-mode-hook 'my-term-mode-hook)
+
+(defun my-term-mode-hook ()
+  (define-key term-mode-map (kbd "C-x M-x") 'execute-extended-command))
+
+(defun named-term (name directory)
+  (interactive "MTerminal name: \nDIn directory: ")
+  (let ((default-directory directory))
+    (ansi-term (getenv "SHELL") name)))
+
+(defun dedicate-window (&optional window)
+  (interactive)
+  (if (null window)
+      (setq window (get-buffer-window (current-buffer))))
+  (set-window-dedicated-p window t))
+
+(defun undedicate-window (&optional window)
+  (interactive)
+  (if (null window)
+      (setq window (get-buffer-window (current-buffer))))
+  (set-window-dedicated-p window nil))
+
+(require 'mmm-auto)
+(setq mmm-global-mode 'maybe
+      mmm-submode-decoration-level 0)
+
+(require 'dired-x)
+(safe-funcall 'dired-omit-mode 1)
+(setq dired-listing-switches "-l")
+
+(define-key ctl-x-map (kbd "C-d") 'find-file)
+
+(require 'iswitchb)
+(iswitchb-mode t)
+(global-set-key "\C-x\C-b" 'ibuffer-list-buffers)
+
+(defadvice iswitchb-visit-buffer (before iswitchb-undedicate-window)
+  (undedicate-window))
+(ad-activate 'iswitchb-visit-buffer)
+
+;(require 'ido)
+;(ido-mode nil)
+
+(defun iswitchb-local-keys ()
+  (mapc (lambda (K) 
+          (let* ((key (car K)) (fun (cdr K)))
+            (define-key iswitchb-mode-map (edmacro-parse-keys key) fun)))
+        '(("<right>" . iswitchb-next-match)
+          ("<left>"  . iswitchb-prev-match)
+          ("<up>"    . ignore             )
+          ("<down>"  . ignore             )
+          ("\C-n"    . iswitchb-next-match)
+          ("\C-p"    . iswitchb-prev-match))))
+
+(add-hook 'iswitchb-minibuffer-setup-hook 'iswitchb-local-keys)
+
+(require 'windmove)
+(windmove-default-keybindings)
+
+;;Templates
+(require 'template)
+(template-initialize)
+(setq template-auto-insert t)
+
+(add-to-list 'template-expansion-alist
+             (list "AUTHOR"
+                   '(insert (concat
+                             user-full-name
+                             " <" user-mail-address "> "))))
+
+(defun define-bracket-keys ()
+  (local-set-key "{" 'insert-brackets)
+  (local-set-key "}" 'insert-close))
+
+;;Version control
+(defmacro advise-to-save-windows (func)
+  `(progn
+     (defadvice ,func (around ,(intern (concat (symbol-name func) "-save-windows")))
+       (save-window-excursion ad-do-it))
+     (ad-activate ',func)))
+
+(advise-to-save-windows log-edit-done)
+(advise-to-save-windows vc-revert-buffer)
+;(advise-to-save-windows vc-diff)
+
+(condition-case nil
+    (require 'psvn)
+  ('file-error . nil))
+
+(require 'vc-svk)
+(add-to-list 'load-path (expand-file-name "/usr/share/doc/git-core/contrib/emacs"))
+(require 'vc-git)
+(when (featurep 'vc-git) (add-to-list 'vc-handled-backends 'git))
+(require 'git)
+; (require 'git-blame)
+
+(require 'vc-hg)
+(add-to-list 'vc-handled-backends 'hg)
+
+;;Perl configuration
+(defalias 'perl-mode 'cperl-mode)
+(add-hook 'cperl-mode-hook 'my-perl-mode-hook)
+(setq cperl-invalid-face nil
+      cperl-font-lock t
+      cperl-indent-parens-as-block t
+      cperl-indent-level 4
+      cperl-continued-statement-offset 0
+      cperl-brace-offset -2
+      cperl-indent-region-fix-constructs nil)
+
+(put 'cperl-indent-level 'safe-local-variable 'integerp)
+
+(autoload 'perldoc "perl-utils" "Look up documentation on a perl module" t)
+(autoload 'run-perl "inf-perl" "Run perl interactively" t)
+(setq inf-perl-shell-program "/usr/local/bin/re.pl")
+
+(defun my-perl-mode-hook ()
+  (require 'perl-utils)
+  (local-set-key "\C-cp" 'perl-check-pod)
+  (local-set-key "{" 'perl-insert-brackets)
+  (local-set-key "}" 'insert-close)
+  (local-set-key "\C-c\C-d" (make-sparse-keymap))
+  (local-set-key "\C-c\C-dh" 'cperl-perldoc)
+  (local-set-key "\C-ct" 'perl-add-test)
+  (local-set-key (kbd "C-M-\\") 'perltidy-region)
+  (local-set-key "\C-c\C-v" 'cperl-build-manpage)
+  (setq indent-tabs-mode nil))
+
+(add-to-list 'template-expansion-alist
+             (list "PERL_PACKAGE"
+                   '(insert (perl-guess-package
+                             (concat (car template-file)
+                                     (cadr template-file))))))
+
+(add-to-list 'auto-mode-alist (cons "\\.t$" 'perl-mode))
+(add-to-list 'auto-mode-alist (cons "\\.xs$" 'c-mode))
+
+;;Python mode
+(add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
+(autoload 'python-mode "python-mode"
+  "Major mode for editing Python code." t)
+(setq python-command "ipython")
+(add-hook 'python-mode-hook 'flymake-mode)
+
+(when (load "flymake" t)
+  (defun flymake-pylint-init ()
+    (let* ((temp-file (flymake-init-create-temp-buffer-copy
+                       'flymake-create-temp-inplace))
+           (local-file (file-relative-name
+                        temp-file
+                        (file-name-directory buffer-file-name))))
+      (list "epylint" (list local-file))))
+  (add-to-list 'flymake-allowed-file-name-masks
+               '("\\.py\\'" flymake-pylint-init)))
+
+
+(defun pydoc (word)
+  "Run `pydoc' on WORD and display it in a buffer"
+  (interactive "Mpydoc entry: ")
+  (require 'man)
+  (let ((manual-program "pydoc"))
+    (Man-getpage-in-background word)))
+
+;;JSIM mode
+(autoload 'jsim-mode "jsim" nil t)
+(setq auto-mode-alist (cons '("\.jsim$" . jsim-mode) auto-mode-alist))
+
+;;PHP mode
+(add-to-list 'auto-mode-alist '("\\.php[34s]?$" . php-mode))
+(add-to-list 'magic-mode-alist '("<\\?php" . php-mode))
+(autoload 'php-mode "php-mode" "Major mode for editing php." t)
+
+;;Smarty template mode
+(require 'smarty-mode)
+
+;;CSS mode
+(setq c-emacs-features nil)     ;;; Workaround a bug in css-mode.el
+(add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
+(autoload 'css-mode "css-mode" "Major mode for editing CSS files" t)
+
+;;OCaml
+(add-to-list 'auto-mode-alist '("\\.ml[iylp]?$" . caml-mode))
+(autoload 'caml-mode "caml" "Major mode for editing Caml code." t)
+(autoload 'run-caml "inf-caml" "Run an inferior Caml process." t)
+
+;;Lua
+(add-to-list 'auto-mode-alist '("\\.lua" . lua-mode))
+(add-to-list 'interpreter-mode-alist '("lua" . lua-mode))
+(autoload 'lua-mode "lua-mode" "Major mode for editing Lua code." t)
+
+(add-hook 'caml-mode-hook 'my-caml-mode-hook)
+(defun my-caml-mode-hook ()
+  (require 'caml-font))
+
+;;C and c derivatives
+(defun my-c-mode-common-hook ()
+  ;; my customizations for all of c-mode, c++-mode, objc-mode, java-mode
+  (c-set-offset 'substatement-open 0)
+  (setq c-basic-offset 4)
+  (setq complete-symbol-function (lambda ()
+                                   (interactive)
+                                   (complete-symbol nil))))
+
+(add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
+(add-hook 'c-mode-common-hook 'define-bracket-keys)
+
+;;;Java
+(add-hook 'java-mode-hook 'define-bracket-keys)
+(add-hook 'java-mode-hook 'my-java-mode-hook)
+
+(defun my-java-mode-hook ()
+  (setq *javadoc-base-url* "file:///usr/share/doc/sun-java5-doc/html/api/")
+  (require 'javadoc) 
+  (require 'java-utils) 
+  (javadoc-load-classes)
+  (define-key java-mode-map "\C-c\C-d" (make-sparse-keymap))
+  (define-key java-mode-map "\C-c\C-dh" 'javadoc-lookup-class)
+  (make-local-variable 'dabbrev-case-fold-search)
+  (setq dabbrev-case-fold-search nil
+        complete-symbol-function 'dabbrev-completion))
+
+;;; ANTLR
+(autoload 'antlr-mode "antlr-mode" nil t)
+(setq auto-mode-alist (cons '("\\.g\\'" . antlr-mode) auto-mode-alist)) 
+
+;; Javascript
+; (autoload 'moz-minor-mode "moz" "Mozilla Minor and Inferior Mozilla Modes" t)
+(autoload 'js-mode "js-mode" "Javascript major mode" t)
+(add-to-list 'auto-mode-alist '("\\.js$" . js-mode))
+(add-hook 'js-mode-hook 'my-js-mode-hook)
+(defun my-js-mode-hook ()
+  (moz-minor-mode 1))
+
+;;;LaTeX
+(add-hook 'latex-mode-hook 'my-latex-mode-hook)
+(add-hook 'LaTeX-mode-hook 'my-latex-mode-hook)
+(add-hook 'TeX-mode-hook 'my-latex-mode-hook)
+(add-hook 'tex-mode-hook 'my-latex-mode-hook)
+
+(defun my-latex-mode-hook ()
+  (local-set-key "{" '(lambda ()
+                        (interactive)
+                        (let ((parens-require-spaces nil))
+                          (insert-pair))))
+  (local-set-key "}" 'insert-close)
+  ;; (define-key latex-mode-map "[" 'insert-pair)
+  ;; (define-key latex-mode-map "]" 'insert-close)
+  )
+
+(load "auctex.el" nil t t)
+(load "preview-latex.el" nil t t)
+
+(eval-after-load 'tex
+  '(progn
+    (setq TeX-command-list
+     (cons '("Gv" "gv %s.ps" TeX-run-background t t :help "Run gv on postscript")
+      TeX-command-list))
+    (setq TeX-command-list
+     (cons '("Evince" "evince %s.ps" TeX-run-background t t :help "Run evince on postscript")
+      TeX-command-list))
+    (setq TeX-command-list
+     (cons '("PDF" "dvipdf %s.dvi" TeX-run-background t t :help "Generate a PDF")
+      TeX-command-list))
+    (setq TeX-command-list
+     (cons '("PDFLatex" "pdflatex %s.tex" TeX-run-background t t :help "Run pdflatex")
+      TeX-command-list))
+    (setq TeX-print-command "dvips %d -o - | lpr -P%p -h")))
+
+(eval-after-load 'info '(setq Info-directory-list
+                         (cons "~/.elisp/auctex/doc" Info-default-directory-list)))
+
+;;;Lisps
+;;;Scheme
+
+(defun pretty-lambdas ()
+  (font-lock-add-keywords
+   nil `(("\\<lambda\\>"
+          (0 (progn (compose-region (match-beginning 0) (match-end 0)
+                                    ,(make-char 'greek-iso8859-7 107))
+                    nil))))))
+
+(require 'quack)
+
+(setq quack-programs '()
+      quack-fontify-style 'emacs)
+
+(defmacro define-scheme-implementation (name &optional args)
+  `(setq quack-programs (cons ,(if args (concat name " " args) name) quack-programs)))
+;  `(defun ,(intern (concat "scheme-use-" name)) ()
+;    (interactive)
+;    (setq scheme-program-name ,(concat name " " (or args "")))))
+
+(define-scheme-implementation "mzscheme")
+(define-scheme-implementation "mechanics")
+(define-scheme-implementation "guile" "--debug -- -emacs")
+(define-scheme-implementation "mit-scheme")
+(define-scheme-implementation "kawa")
+(define-scheme-implementation "csi")
+(define-scheme-implementation "scheme48")
+
+(add-to-list 'auto-mode-alist
+             (cons (concat "/\\."
+                           (regexp-opt '("guile"
+                                         "mzscheme"
+                                         "kawarc.scm"
+                                         "scheme.init"
+                                         "edwin") t)
+                           "$") 'scheme-mode))
+
+(autoload 'run-scheme "cmuscheme" "Run an inferior scheme process." t)
+
+(setq save-abbrevs nil)
+
+(defun my-scheme-mode-hook ()
+  (pretty-lambdas)
+  (setq complete-symbol-function 'dabbrev-completion))
+
+(add-hook 'scheme-mode-hook 'define-lisp-keys t)
+(add-hook 'inferior-scheme-mode-hook 'define-lisp-keys t)
+(add-hook 'scheme-mode-hook 'my-scheme-mode-hook)
+(add-hook 'inferior-scheme-mode-hook 'my-scheme-mode-hook)
+
+(setq comint-scroll-to-bottom-on-ouput t)
+
+;;;SLIME
+(autoload 'slime "slime" t t)
+(autoload 'slime-connect "slime" t t)
+
+(defadvice slime (around slime-switch-to-repl-if-connected)
+  (if (safe-funcall 'slime-connected-p)
+      (slime-switch-to-output-buffer)
+      ad-do-it))
+
+(ad-activate 'slime)
+
+(setq slime-startup-animation nil
+      slime-complete-symbol-function 'slime-complete-symbol*)
+
+(defun slime-use-sbcl ()
+  (interactive)
+  (setq inferior-lisp-program "sbcl"))
+
+(defun slime-use-cmucl ()
+  (interactive)
+  (setq inferior-lisp-program "cmucl"))
+
+(slime-use-sbcl)
+
+(add-to-list 'auto-mode-alist
+             (cons (concat "/\\."
+                           (regexp-opt '("sbclrc"
+                                         "cmucl-init"
+                                         "clrc") t)
+                           "$") 'lisp-mode))
+
+(add-hook 'lisp-mode-hook 'my-lisp-mode-hook)
+(add-hook 'lisp-mode-hook 'define-slime-keys)
+(add-hook 'lisp-mode-hook 'my-lisp-mode-common-hook)
+(add-hook 'lisp-mode-hook 'pretty-lambdas)
+(add-hook 'slime-repl-mode-hook 'define-slime-keys)
+(add-hook 'slime-repl-mode-hook 'my-lisp-mode-common-hook)
+(add-hook 'slime-repl-mode-hook 'pretty-lambdas)
+
+(defun my-lisp-mode-hook ()
+  (unless (safe-funcall 'slime-connected-p)
+    (save-excursion (slime))) 
+  (slime-mode t)
+  (setq complete-symbol-function slime-complete-symbol-function))
+
+
+(setq common-lisp-hyperspec-root "file:///usr/share/doc/hyperspec/")
+
+(add-to-list 'auto-mode-alist (cons "\\.asd\\'" 'lisp-mode))
+
+;;;elisp
+(add-hook 'emacs-lisp-mode-hook 'define-elisp-keys)
+(add-hook 'emacs-lisp-mode-hook 'my-lisp-mode-common-hook)
+(add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
+(add-hook 'lisp-interaction-mode-hook 'define-elisp-keys)
+(add-hook 'lisp-interaction-mode-hook 'my-lisp-mode-common-hook)
+(add-hook 'lisp-interaction-mode-hook 'pretty-lambdas)
+
+;;Lisp keybindings
+(global-set-key "\C-cs" 'slime-selector)
+
+(defun define-lisp-keys ()
+;;   (local-set-key "[" 'insert-parentheses)
+;;   (local-set-key "]" (lambda () (interactive) (insert-close "")))
+;;   (local-set-key "(" (lambda () (interactive) (insert "[")))
+;;  (local-set-key ")" (lambda () (interactive) (insert "]")))
+
+  (local-set-key "(" 'insert-parentheses)
+  (local-set-key ")" 'insert-close)
+
+  (local-set-key (kbd "M-t") 'transpose-sexps)
+  (local-set-key (kbd "M-b") 'backward-sexp)
+  (local-set-key (kbd "M-f") 'forward-sexp)
+  (local-set-key (kbd "M-a") 'beginning-of-defun)
+  (local-set-key (kbd "M-e") 'end-of-defun)
+  (local-set-key (kbd "M-_") 'unwrap-next-sexp)
+  (local-set-key (kbd "M-q") 'indent-sexp)
+  (local-set-key (kbd "M-(") 'blink-matching-open)
+  (local-set-key (kbd "M-u") 'backward-up-list)
+  (local-set-key (kbd "M-d") 'down-list)
+  (local-set-key (kbd "M-k") 'kill-sexp)
+  (local-set-key (kbd "M-DEL") 'backward-kill-sexp)
+  (local-set-key (kbd "DEL") 'backspace-unwrap-sexp)
+
+  (local-set-key (kbd "C-M-q") 'fill-paragraph)
+  (local-set-key (kbd "TAB") 'indent-and-complete-symbol-generic))
+
+(defun define-slime-keys ()
+  (define-lisp-keys)
+  (setq lisp-indent-function 'common-lisp-indent-function)
+  (local-set-key (kbd "TAB") 'slime-indent-and-complete-symbol))
+
+(defun define-elisp-keys ()
+  (define-lisp-keys)
+  (setq complete-symbol-function 'lisp-complete-symbol))
+
+(defun my-lisp-mode-common-hook ()
+  (setq indent-tabs-mode nil))
+
+;;;Haskell
+
+(require 'haskell-mode)
+(require 'inf-haskell)
+(add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
+(add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
+(add-to-list 'auto-mode-alist (cons "\\.l?hsc?$" 'haskell-mode))
+
+(setq haskell-program-name "ghci")
+
+;; ruby
+(autoload 'ruby-mode "ruby-mode" "" t)
+(add-to-list 'auto-mode-alist (cons "\\.rb$" 'ruby-mode))
+(add-to-list 'interpreter-mode-alist (cons "ruby" 'ruby-mode))
+
+(autoload 'run-ruby "inf-ruby" "Run an inferior ruby process" t)
+(autoload 'inf-ruby-keys "inf-ruby" "Set local key defs for inf-ruby in ruby-mode")
+(add-hook 'ruby-mode-hook 'inf-ruby-keys)
+(add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
+(defun my-ruby-mode-hook ()
+  nil)
+
+(autoload 'matlab-mode "matlab" "Enter MATLAB mode." t)
+(setq auto-mode-alist (cons '("\\.m\\'" . matlab-mode) auto-mode-alist))
+(autoload 'matlab-shell "matlab" "Interactive MATLAB mode." t)
+
+;; This feels wrong.
+(setq matlab-shell-command "linux32")
+(setq matlab-shell-command-switches '("matlab" "-nodesktop"))
+
+;; google calendar client
+
+(load-library "g")
+(setq g-user-email "nelhage@gmail.com")
+(setq g-html-handler 'browse-url-of-buffer)
+
+;;Evil DOS file endings, eeeeeeeeevil
+(add-hook 'find-file-hook 'find-file-check-line-endings)
+
+(defun dos-file-endings-p ()
+  (string-match "dos" (symbol-name buffer-file-coding-system)))
+
+(defun find-file-check-line-endings ()
+  (when (dos-file-endings-p)
+    ;(set-buffer-file-coding-system 'undecided-unix)
+    ;(set-buffer-modified-p nil)
+    ))
+
+;;nxml-mode
+(load "~/.elisp/nxml/rng-auto.el")
+(fset 'xml-mode 'nxml-mode)
+(add-to-list 'auto-mode-alist
+             (cons (concat "\\."
+                           (regexp-opt '("xml" "xsd" "sch"
+                                         "rng" "xslt" "svg"
+                                         "rss" "plist") t) "\\'")
+                   'nxml-mode))
+
+(add-to-list 'magic-mode-alist
+             (cons "<\\?xml" 'nxml-mode))
+
+(add-hook 'nxml-mode-hook 'my-nxml-mode-hook)
+
+(defun my-nxml-mode-hook ()
+  (local-set-key (kbd "C-c C-e") 'nxml-finish-element)
+  (local-set-key (kbd "C-M-f") 'nxml-forward-element)
+  (local-set-key (kbd "C-M-b") 'nxml-backward-element)
+  (local-set-key (kbd "C-M-u") 'nxml-up-element)
+  (local-set-key (kbd "C-M-d") 'nxml-down-element)
+  (local-set-key (kbd "C-M-k") 'nxml-kill-element))
+
+(defadvice nxml-up-element (after nxml-up-element-goto-start)
+  "Make nxml-up-element go to the start, not end, of the
+surrounding xml expression"
+  (nxml-backward-element))
+
+(ad-activate 'nxml-up-element)
+
+(defun nxml-kill-element ()
+  (interactive)
+  (let ((start (point)))
+    (nxml-forward-element)
+    (kill-region start (point))))
+
+;;;Mason-mode
+(defun mason-mode ()
+  (interactive)
+  (html-mode)
+  (mmm-ify-by-class 'mason))
+
+;;Jifty mason components
+(add-to-list 'auto-mode-alist '("web/templates/[^.]*$" . mason-mode))
+(add-to-list 'magic-mode-alist `(,(concat
+                                   "<%" (regexp-opt '("args" "init") t) ">")
+                                 . mason-mode))
+(add-to-list 'magic-mode-alist '("\\`<&" . mason-mode))
+;(mmm-add-mode-ext-class 'sgml-mode "web/templates/[^.]*$" 'mason)
+
+;; html
+(add-hook 'html-mode-hook 'my-html-mode-hook)
+
+(defun my-html-mode-hook ()
+  (local-set-key (kbd "C-c C-e") 'sgml-close-tag))
+
+;; dot-mode
+(add-to-list 'auto-mode-alist '("\\.dot\\'" . graphviz-dot-mode))
+(autoload 'graphviz-dot-mode "graphviz-dot-mode" "Major mode for editing Graphviz dot files" t)
+
+
+;;Don't generate backup files on esp's server
+(defvar no-backup-patterns '("^/mnt/esp"))
+
+(defun find-file-conditional-disable-backups ()
+  (dolist (pat no-backup-patterns)
+    (if (string-match pat (buffer-file-name))
+        (progn
+          (make-local-variable 'backup-inhibited)
+          (setq backup-inhibited t)))))
+
+(add-hook 'find-file-hook 'find-file-conditional-disable-backups)
+
+;;;Mail
+
+(defun fetchmail ()
+  (interactive)
+  (shell-command "fetchmail"))
+
+(add-hook 'mail-mode-hook 'auto-fill-mode)
+(add-hook 'mail-mode-hook 'my-mail-mode-hook)
+
+(defun my-mail-mode-hook ()
+  (define-key mail-mode-map (kbd "C-c a") 'mail-attach-file)
+  (define-key mail-mode-map (kbd "C-c TAB") 'bbdb-complete-name)
+  (define-key mail-mode-map (kbd "C-c C-]") 'mail-dont-send)
+  (define-key mail-mode-map (kbd "TAB") 'mail-complete-for-tab-command)
+  (cd "~/mail"))
+
+(defun mail-complete-for-tab-command ()
+  (interactive)
+  (if (save-excursion
+        (beginning-of-line)
+        (looking-at (concat
+                     "^" (regexp-opt '("To" "Cc" "Bcc" "From") t ) ":")))
+      (bbdb-complete-name)))
+
+;;BBDB
+(require 'bbdb)
+(require 'bbdb-autoloads)
+(bbdb-initialize)
+
+(add-hook 'bbdb-after-change-hook (lambda (arg) (bbdb-save-db nil nil)))
+
+(setq user-mail-address "nelhage@mit.edu"
+      mail-envelope-from "nelhage@mit.edu"
+      mail-specify-envelope-from t
+      mail-host-address "mit.edu"
+      mail-archive-file-name "~/mail/sent")
+
+;;vm
+
+(add-to-list 'auto-mode-alist
+             (cons "/\\.vm$" 'emacs-lisp-mode))
+
+(autoload 'vm "vm" "Start VM on your primary inbox." t)
+(autoload 'vm-other-frame "vm" "Like `vm' but starts in another frame." t)
+(autoload 'vm-visit-folder "vm" "Start VM on an arbitrary folder." t)
+(autoload 'vm-visit-virtual-folder "vm" "Visit a VM virtual folder." t)
+(autoload 'vm-mode "vm" "Run VM major mode on a buffer" t)
+(autoload 'vm-mail "vm" "Send a mail message using VM." t)
+(autoload 'vm-submit-bug-report "vm" "Send a bug report about VM." t)
+
+;;Mailcrypt
+(require 'mailcrypt)
+(mc-setversion "gpg")
+
+;;elscreen
+;(require 'elscreen)
+;(elscreen-toggle-display-tab)
+
+;(define-key elscreen-map (kbd "SPC") 'elscreen-next)
+;(define-key elscreen-map (kbd "C-z") 'elscreen-swap)
+
+(setq ediff-split-window-function 'split-window-horizontally)
+
+;; Org mode
+
+(setq org-hide-leading-stars t)
+(eval-after-load 'org
+  '(progn
+     (define-key org-mode-map (kbd "RET") 'org-meta-return)
+     (define-key org-mode-map (kbd "C-c t") 'org-todo)
+     (set-face-foreground 'org-todo "#FF6666")
+     (set-face-foreground 'org-done "#00FF00")))
+
+;;Livejournal
+(autoload 'lj-login "ljupdate" "Log in to Livejournal" t)
+
+;;Disabled commands
+(put 'upcase-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
+(put 'scroll-left 'disabled nil)
+
+;;Setup my working emacs session
+
+(defvar emacs-is-mua nil "Is emacs running as a dedicated MUA?")
+(add-to-list 'command-switch-alist
+             '("mail" . set-mua-mode))
+
+(defun set-mua-mode (mail)
+  (setq emacs-is-mua t))
+
+(add-hook 'emacs-startup-hook 'my-startup-hook)
+
+(defun my-startup-hook ()
+  (if emacs-is-mua
+      (progn
+        (setq mouse-autoselect-window t)
+        ;; (setq vm-frame-per-folder t)
+        (setq initial-frame-alist
+              '((title . "Emacs - Mail")))
+        ;; (let ((vm-frame-per-folder nil))
+        ;;  (vm))
+        (gnus))
+    (progn
+      (setq initial-frame-alist
+            '((top . 20) (left . 20)
+              (width . 180) (height . 75)))
+
+      (server-start)
+      (find-file-noselect "~/.emacs")
+      (save-window-excursion (shell)))))
+
+;;; Misc stuff
+(defun jifty-dev ()
+  (interactive)
+  (named-shell "jifty-test" "~/code/jifty/trunk")
+  (named-shell "jifty" "~/code/jifty/trunk"))
+
+(defun jifty-app-dev (name path)
+  (interactive "MApplication Name: \nDIn directory: ")
+  (named-shell name path)
+  (named-shell (concat name "-server") path)
+  (named-shell (concat name "-test") path)
+  (switch-to-buffer (concat "*" name "*")))
+
+(require 'kerberos)
+
+(setq asm-comment-char ?#)
+(add-to-list 'auto-mode-alist (cons "/Makefrag$" 'makefile-mode))
+
+(autoload 'w3m "w3m" "w3m" t t)
+(autoload 'w3m-find-file "w3m" "w3m" t t)
+(add-hook 'w3m-mode-hook 'my-w3m-mode-hook)
+
+(defun my-w3m-mode-hook ()
+  (local-set-key (kbd "C-c t") 'w3m-view-this-url-new-session))
+
+;; (eval-after-load "w3m"
+;;   (progn
+;;     (set-face-font 'w3m-default-face "Sans-8")
+;;     (set-face-foreground 'w3m-default-face "#000000")
+;;     (set-face-background 'w3m-default-face "#FFFFFF")
+;;    (set-face-foreground 'w3m-anchor-face "#3333FF")))
+
+(defun w3m-other-window (url &optional new-window)
+  (other-window 1)
+  (w3m url))
+
+(defun w3m-other-window-new-session (url &optional new-window)
+  (other-window 1)
+  (w3m url t))
+
+(setq browse-url-browser-function 'w3m-other-window-new-session)
+; (set browse-url-browser-function 'browse-url-firefox)
+(setq w3m-home-page "http://google.com")
+
+(put 'asm-comment-char 'safe-local-variable 'characterp)
+
+(condition-case nil
+    (load-library "minutes")
+  ('file-error . nil))

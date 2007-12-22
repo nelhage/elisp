@@ -1,0 +1,20 @@
+(
+(crypttext . "
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+This is a plaintext message
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.2.0 (GNU/Linux)
+
+iD8DBQE9kQMnC1iHBDnBlUgRAmDGAJ94HHa1/0LB0OBcd+tz0CsrsewpLgCeN36B
+HNUSElOp2euiXIU5fBuN2HM=
+=HBWU
+-----END PGP SIGNATURE-----
+")
+(error . nil)
+(name . "CS.s4")
+(plaintext . "This is a plaintext message
+")
+(signature_status . "cannot check signature from keyid 0B58870439C19548")
+)
