@@ -166,6 +166,7 @@ unable to perform symbol completion.")
 (safe-funcall 'auto-compression-mode 1)
 (safe-funcall 'column-number-mode 1)
 (safe-funcall 'fringe-mode '(0 . nil))
+(safe-funcall 'menu-bar-mode 0)
 
 (setq c-basic-offset 4
       mouse-wheel-follow-mouse nil
