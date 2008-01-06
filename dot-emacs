@@ -287,11 +287,14 @@ unable to perform symbol completion.")
   ('file-error . nil))
 
 (require 'vc-svk)
-(add-to-list 'load-path (expand-file-name "/usr/share/doc/git-core/contrib/emacs"))
-(require 'vc-git)
-(when (featurep 'vc-git) (add-to-list 'vc-handled-backends 'git))
-(require 'git)
+
+(condition-case nil
+    (add-to-list 'load-path (expand-file-name "/usr/share/doc/git-core/contrib/emacs"))
+  (require 'vc-git)
+  (when (featurep 'vc-git) (add-to-list 'vc-handled-backends 'git))
+  (require 'git)
 ; (require 'git-blame)
+  ('file-error . nil))
 
 (require 'vc-hg)
 (add-to-list 'vc-handled-backends 'hg)
