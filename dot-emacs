@@ -103,6 +103,21 @@ unable to perform symbol completion.")
     (set-face-background 'flymake-errline "#CC3333")
     (set-face-background 'flymake-warnline "#3333CC")))
 
+(defvar default-font "Mono-9" "The default font")
+
+(when window-system
+  (when (not (font-info default-font))
+    (setq default-font "-adobe-courier-medium-r-*-*-12-*-*-*-*-70-iso8859-1")))
+
+(setq default-frame-alist
+      '((menu-bar-lines . 0)
+        (foreground-color . "#1F1")
+        (background-color . "black")
+        (background-mode . 'dark)
+        (font . "Mono-9")
+        (vertical-scroll-bars . nil)
+        (tool-bar-lines . 0)))
+
 
 (defun set-projector-faces ()
   (interactive)
@@ -134,20 +149,11 @@ unable to perform symbol completion.")
                       :weight 'normal)
   (set-face-attribute 'font-lock-string-face nil
                       :foreground "orange")
-  (set-default-font  "Mono-9")
+  (set-default-font default-font)
   (set-face-attribute 'pesche-tab nil
                       :background "#113")
   (set-face-attribute 'pesche-space nil
                       :background "#311"))
-
-(setq default-frame-alist
-      '((menu-bar-lines . 0)
-        (foreground-color . "#1F1")
-        (background-color . "black")
-        (background-mode . 'dark)
-        (font . "Mono-9")
-        (vertical-scroll-bars . nil)
-        (tool-bar-lines . 0)))
 
 (defun safe-funcall (func &rest args)
   "Call FUNC on ARGS if and only if FUNC is defined as a function."
@@ -827,33 +833,13 @@ surrounding xml expression"
 
 ;;Setup my working emacs session
 
-(defvar emacs-is-mua nil "Is emacs running as a dedicated MUA?")
-(add-to-list 'command-switch-alist
-             '("mail" . set-mua-mode))
-
-(defun set-mua-mode (mail)
-  (setq emacs-is-mua t))
-
 (add-hook 'emacs-startup-hook 'my-startup-hook)
 
 (defun my-startup-hook ()
-  (if emacs-is-mua
-      (progn
-        (setq mouse-autoselect-window t)
-        ;; (setq vm-frame-per-folder t)
-        (setq initial-frame-alist
-              '((title . "Emacs - Mail")))
-        ;; (let ((vm-frame-per-folder nil))
-        ;;  (vm))
-        (gnus))
-    (progn
-      (setq initial-frame-alist
-            '((top . 20) (left . 20)
-              (width . 180) (height . 75)))
-
-      (server-start)
-      (find-file-noselect "~/.emacs")
-      (save-window-excursion (shell)))))
+  (set-default-font default-font)
+  (server-start)
+  (find-file-noselect "~/.elisp/dot-emacs")
+  (save-window-excursion (shell)))
 
 ;;; Misc stuff
 (defun jifty-dev ()
