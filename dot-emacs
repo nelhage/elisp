@@ -103,7 +103,7 @@ unable to perform symbol completion.")
     (set-face-background 'flymake-errline "#CC3333")
     (set-face-background 'flymake-warnline "#3333CC")))
 
-(defvar default-font "Mono-9" "The default font")
+(defvar default-font "Mono-8" "The default font")
 
 (when window-system
   (when (not (font-info default-font))
@@ -114,7 +114,6 @@ unable to perform symbol completion.")
         (foreground-color . "#1F1")
         (background-color . "black")
         (background-mode . 'dark)
-        (font . "Mono-9")
         (vertical-scroll-bars . nil)
         (tool-bar-lines . 0)))
 
