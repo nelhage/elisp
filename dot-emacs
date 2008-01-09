@@ -467,6 +467,9 @@ unable to perform symbol completion.")
      (cons '("Evince" "evince %s.ps" TeX-run-background t t :help "Run evince on postscript")
       TeX-command-list))
     (setq TeX-command-list
+     (cons '("xpdf" "xpdf %s.pdf" TeX-run-background t t :help "Run xpdf on PDF")
+      TeX-command-list))
+    (setq TeX-command-list
      (cons '("PDF" "dvipdf %s.dvi" TeX-run-background t t :help "Generate a PDF")
       TeX-command-list))
     (setq TeX-command-list
