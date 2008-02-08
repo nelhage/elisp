@@ -295,11 +295,11 @@ unable to perform symbol completion.")
 (require 'vc-svk)
 
 (condition-case nil
-    (add-to-list 'load-path (expand-file-name "/usr/share/doc/git-core/contrib/emacs"))
-  (require 'vc-git)
-  (when (featurep 'vc-git) (add-to-list 'vc-handled-backends 'git))
-  (require 'git)
-; (require 'git-blame)
+    (progn (add-to-list 'load-path (expand-file-name "/usr/share/doc/git-core/contrib/emacs"))
+           (require 'vc-git)
+           (when (featurep 'vc-git) (add-to-list 'vc-handled-backends 'git))
+           (require 'git))
+  ;; (require 'git-blame)
   ('file-error . nil))
 
 (require 'vc-hg)
@@ -517,6 +517,9 @@ unable to perform symbol completion.")
                                          "scheme.init"
                                          "edwin") t)
                            "$") 'scheme-mode))
+
+(add-to-list 'auto-mode-alist
+             (cons "\\.arc$" 'scheme-mode))
 
 (autoload 'run-scheme "cmuscheme" "Run an inferior scheme process." t)
 
@@ -859,7 +862,13 @@ surrounding xml expression"
 
 (require 'kerberos)
 
-(setq asm-comment-char ?#)
+(setq asm-comment-char ?\;)
+
+(add-hook 'asm-mode-hook 'my-asm-mode-hook)
+
+(defun my-asm-mode-hook ()
+  (define-key asm-mode-map (kbd "#") 'self-insert-command)))
+
 (add-to-list 'auto-mode-alist (cons "/Makefrag$" 'makefile-mode))
 
 (autoload 'w3m "w3m" "w3m" t t)
