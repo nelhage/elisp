@@ -824,7 +824,7 @@ surrounding xml expression"
 (setq org-hide-leading-stars t)
 (eval-after-load 'org
   '(progn
-     (define-key org-mode-map (kbd "RET") 'org-meta-return)
+     (define-key org-mode-map (kbd "RET") 'org-return)
      (define-key org-mode-map (kbd "C-c t") 'org-todo)
      (set-face-foreground 'org-todo "#FF6666")
      (set-face-foreground 'org-done "#00FF00")))
@@ -867,7 +867,7 @@ surrounding xml expression"
 (add-hook 'asm-mode-hook 'my-asm-mode-hook)
 
 (defun my-asm-mode-hook ()
-  (define-key asm-mode-map (kbd "#") 'self-insert-command)))
+  (define-key asm-mode-map (kbd "#") 'self-insert-command))
 
 (add-to-list 'auto-mode-alist (cons "/Makefrag$" 'makefile-mode))
 
