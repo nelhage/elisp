@@ -18,6 +18,8 @@
 (require 'dirvars)
 
 ;;Global key bindings
+(global-set-key (kbd "<deletechar>") 'backward-delete-char)
+(global-set-key (kbd "ESC <deletechar>") 'backward-kill-word)
 (global-set-key (kbd "C-z") nil)
 (global-set-key "\M-g" 'goto-line)
 (global-set-key "\C-m" 'newline-and-indent)
