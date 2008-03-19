@@ -18,6 +18,8 @@
 (require 'dirvars)
 
 ;;Global key bindings
+(global-set-key (kbd "<deletechar>") 'backward-delete-char)
+(global-set-key (kbd "ESC <deletechar>") 'backward-kill-word)
 (global-set-key (kbd "C-z") nil)
 (global-set-key "\M-g" 'goto-line)
 (global-set-key "\C-m" 'newline-and-indent)
@@ -43,7 +45,7 @@
 
 (global-set-key (kbd "C-x 4 C-f") 'window-number-find-file)
 
-(setq lpr-switches '("-h"))
+(setq lpr-switches "-h")
 (setq ps-left-header '(ps-get-buffer-name user-full-name))
 (setq woman-use-own-frame nil)
 
@@ -103,15 +105,14 @@ unable to perform symbol completion.")
     (set-face-background 'flymake-errline "#CC3333")
     (set-face-background 'flymake-warnline "#3333CC")))
 
-(defvar default-font "Mono-7" "The default font")
+(defvar default-font "Mono-8" "The default font")
 
 (when window-system
   (when (not (font-info default-font))
     (setq default-font "-adobe-courier-medium-r-*-*-12-*-*-*-*-70-iso8859-1")))
 
 (setq default-frame-alist
-      `((menu-bar-lines . 0)
-        (font . ,default-font)
+      '((menu-bar-lines . 0)
         (foreground-color . "#1F1")
         (background-color . "black")
         (background-mode . 'dark)
@@ -167,7 +168,6 @@ unable to perform symbol completion.")
 (safe-funcall 'column-number-mode 1)
 (safe-funcall 'fringe-mode '(0 . nil))
 (safe-funcall 'menu-bar-mode 0)
-(transient-mark-mode 0)
 
 (setq c-basic-offset 4
       mouse-wheel-follow-mouse nil
@@ -294,17 +294,14 @@ unable to perform symbol completion.")
     (require 'psvn)
   ('file-error . nil))
 
-(eval-after-load "smerge-mode"
-  '(set-face-background 'smerge-refined-change "#003333"))
-
 (require 'vc-svk)
 
 (condition-case nil
-    (progn (add-to-list 'load-path (expand-file-name "/usr/share/doc/git-core/contrib/emacs"))
-           (require 'vc-git)
-           (when (featurep 'vc-git) (add-to-list 'vc-handled-backends 'git))
-           (require 'git))
-  ;; (require 'git-blame)
+    (add-to-list 'load-path (expand-file-name "/usr/share/doc/git-core/contrib/emacs"))
+  (require 'vc-git)
+  (when (featurep 'vc-git) (add-to-list 'vc-handled-backends 'git))
+  (require 'git)
+; (require 'git-blame)
   ('file-error . nil))
 
 (require 'vc-hg)
@@ -417,12 +414,6 @@ unable to perform symbol completion.")
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 (add-hook 'c-mode-common-hook 'define-bracket-keys)
 
-(defun pidof (name)
-  (with-temp-buffer
-    (if (zerop (shell-command (concat "pidof " name) (current-buffer)))
-        (string-to-number (buffer-string))
-      nil)))
-
 ;;;Java
 (add-hook 'java-mode-hook 'define-bracket-keys)
 (add-hook 'java-mode-hook 'my-java-mode-hook)
@@ -528,9 +519,6 @@ unable to perform symbol completion.")
                                          "scheme.init"
                                          "edwin") t)
                            "$") 'scheme-mode))
-
-(add-to-list 'auto-mode-alist
-             (cons "\\.arc$" 'scheme-mode))
 
 (autoload 'run-scheme "cmuscheme" "Run an inferior scheme process." t)
 
@@ -835,6 +823,7 @@ surrounding xml expression"
 (setq org-hide-leading-stars t)
 (eval-after-load 'org
   '(progn
+     (define-key org-mode-map (kbd "RET") 'org-meta-return)
      (define-key org-mode-map (kbd "C-c t") 'org-todo)
      (set-face-foreground 'org-todo "#FF6666")
      (set-face-foreground 'org-done "#00FF00")))
@@ -872,13 +861,7 @@ surrounding xml expression"
 
 (require 'kerberos)
 
-(setq asm-comment-char ?\;)
-
-(add-hook 'asm-mode-hook 'my-asm-mode-hook)
-
-(defun my-asm-mode-hook ()
-  (define-key asm-mode-map (kbd "#") 'self-insert-command))
-
+(setq asm-comment-char ?#)
 (add-to-list 'auto-mode-alist (cons "/Makefrag$" 'makefile-mode))
 
 (autoload 'w3m "w3m" "w3m" t t)
