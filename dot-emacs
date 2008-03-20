@@ -465,8 +465,9 @@ unable to perform symbol completion.")
   ;; (define-key latex-mode-map "]" 'insert-close)
   )
 
-(load "auctex.el" nil t t)
-(load "preview-latex.el" nil t t)
+(load-library "auctex")
+(load-library "preview-latex")
+(require 'reftex)
 
 (eval-after-load 'tex
   '(progn
@@ -486,6 +487,18 @@ unable to perform symbol completion.")
      (cons '("PDFLatex" "pdflatex %s.tex" TeX-run-background t t :help "Run pdflatex")
       TeX-command-list))
     (setq TeX-print-command "dvips %d -o - | lpr -P%p -h")))
+
+(add-hook 'LaTeX-mode-hook 'reftex-mode)
+
+(let ((pdfview (assoc-string "^pdf$" TeX-output-view-style)))
+  (setcdr (cdr pdfview) (list "evince %o")))
+
+(TeX-global-PDF-mode)
+
+(defun TeX-cout-words ()
+  (interactive)
+  (save-excursion
+    (shell-command-on-region (point-min) (point-max) "detex | wc -w")))
 
 (eval-after-load 'info '(setq Info-directory-list
                          (cons "~/.elisp/auctex/doc" Info-default-directory-list)))
