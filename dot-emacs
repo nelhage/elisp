@@ -456,44 +456,39 @@ unable to perform symbol completion.")
 (add-hook 'tex-mode-hook 'my-latex-mode-hook)
 
 (defun my-latex-mode-hook ()
+  (require 'reftex)
   (local-set-key "{" '(lambda ()
                         (interactive)
                         (let ((parens-require-spaces nil))
                           (insert-pair))))
   (local-set-key "}" 'insert-close)
-  ;; (define-key latex-mode-map "[" 'insert-pair)
-  ;; (define-key latex-mode-map "]" 'insert-close)
+  (reftex-mode)
   )
 
 (load-library "auctex")
 (load-library "preview-latex")
-(require 'reftex)
 
 (eval-after-load 'tex
   '(progn
-    (setq TeX-command-list
-     (cons '("Gv" "gv %s.ps" TeX-run-background t t :help "Run gv on postscript")
-      TeX-command-list))
-    (setq TeX-command-list
-     (cons '("Evince" "evince %s.ps" TeX-run-background t t :help "Run evince on postscript")
-      TeX-command-list))
-    (setq TeX-command-list
-     (cons '("xpdf" "xpdf %s.pdf" TeX-run-background t t :help "Run xpdf on PDF")
-      TeX-command-list))
-    (setq TeX-command-list
-     (cons '("PDF" "dvipdf %s.dvi" TeX-run-background t t :help "Generate a PDF")
-      TeX-command-list))
-    (setq TeX-command-list
-     (cons '("PDFLatex" "pdflatex %s.tex" TeX-run-background t t :help "Run pdflatex")
-      TeX-command-list))
-    (setq TeX-print-command "dvips %d -o - | lpr -P%p -h")))
-
-(add-hook 'LaTeX-mode-hook 'reftex-mode)
-
-(let ((pdfview (assoc-string "^pdf$" TeX-output-view-style)))
-  (setcdr (cdr pdfview) (list "evince %o")))
-
-(TeX-global-PDF-mode)
+     (setq TeX-command-list
+           (cons '("Gv" "gv %s.ps" TeX-run-background t t :help "Run gv on postscript")
+                 TeX-command-list))
+     (setq TeX-command-list
+           (cons '("Evince" "evince %s.ps" TeX-run-background t t :help "Run evince on postscript")
+                 TeX-command-list))
+     (setq TeX-command-list
+           (cons '("xpdf" "xpdf %s.pdf" TeX-run-background t t :help "Run xpdf on PDF")
+                 TeX-command-list))
+     (setq TeX-command-list
+           (cons '("PDF" "dvipdf %s.dvi" TeX-run-background t t :help "Generate a PDF")
+                 TeX-command-list))
+     (setq TeX-command-list
+           (cons '("PDFLatex" "pdflatex %s.tex" TeX-run-background t t :help "Run pdflatex")
+                 TeX-command-list))
+     (let ((pdfview (assoc-string "^pdf$" TeX-output-view-style)))
+       (setcdr (cdr pdfview) (list "evince %o")))
+     (setq TeX-print-command "pdf2ps %s.pdf - | lpr -P%p -h")
+     (TeX-global-PDF-mode)))
 
 (defun TeX-count-words ()
   (interactive)
