@@ -495,7 +495,7 @@ unable to perform symbol completion.")
 
 (TeX-global-PDF-mode)
 
-(defun TeX-cout-words ()
+(defun TeX-count-words ()
   (interactive)
   (save-excursion
     (shell-command-on-region (point-min) (point-max) "detex | wc -w")))
