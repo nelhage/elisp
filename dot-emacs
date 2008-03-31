@@ -102,8 +102,16 @@ unable to perform symbol completion.")
 
 (eval-after-load 'flymake
   '(progn
-    (set-face-background 'flymake-errline "#CC3333")
-    (set-face-background 'flymake-warnline "#3333CC")))
+    (global-set-key (kbd "C-c f") (make-sparse-keymap))
+    (global-set-key (kbd "C-c f n") 'flymake-goto-next-error)
+    (global-set-key (kbd "C-c f p") 'flymake-goto-prev-error)
+    (global-set-key (kbd "C-c f .") 'flymake-display-err-menu-for-current-line)
+    (set-face-attribute 'flymake-errline nil
+                        :underline "OrangeRed")
+    (set-face-attribute 'flymake-warnline nil
+                        :underline "cyan")
+    (set-face-background 'flymake-errline nil)
+    (set-face-background 'flymake-warnline nil)))
 
 (defvar default-font "Mono-7" "The default font")
 
@@ -445,9 +453,12 @@ unable to perform symbol completion.")
 
 ;; Javascript
 (autoload 'moz-minor-mode "moz" "Mozilla Minor and Inferior Mozilla Modes" t)
-;(autoload 'js-mode "js-mode" "Javascript major mode" t)
 (autoload 'javascript-mode "javascript" nil t)
 (add-to-list 'auto-mode-alist '("\\.js$" . javascript-mode))
+(add-hook 'javascript-mode-hook 'moz-minor-mode)
+
+(defun my-javascript-mode-hook ()
+  (require 'moz))
 
 ;;;LaTeX
 (add-hook 'latex-mode-hook 'my-latex-mode-hook)
@@ -463,7 +474,7 @@ unable to perform symbol completion.")
                           (insert-pair))))
   (local-set-key "}" 'insert-close)
   (reftex-mode)
-  )
+  (flyspell-mode 1))
 
 (load-library "auctex")
 (load-library "preview-latex")
@@ -915,6 +926,7 @@ surrounding xml expression"
 (setq w3m-home-page "http://google.com")
 
 (put 'asm-comment-char 'safe-local-variable 'characterp)
+(put 'c-indentation-style 'safe-local-variable 'symbolp)
 
 (condition-case nil
     (load-library "minutes")
