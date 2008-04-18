@@ -103,8 +103,8 @@ unable to perform symbol completion.")
 (eval-after-load 'flymake
   '(progn
     (global-set-key (kbd "C-c f") (make-sparse-keymap))
-    (global-set-key (kbd "C-c f n") 'flymake-goto-next-error)
-    (global-set-key (kbd "C-c f p") 'flymake-goto-prev-error)
+    (global-set-key (kbd "C-c f n") 'my-flymake-goto-next-error)
+    (global-set-key (kbd "C-c f p") 'my-flymake-goto-prev-error)
     (global-set-key (kbd "C-c f .") 'flymake-display-err-menu-for-current-line)
     (set-face-attribute 'flymake-errline nil
                         :underline "OrangeRed")
@@ -112,6 +112,23 @@ unable to perform symbol completion.")
                         :underline "cyan")
     (set-face-background 'flymake-errline nil)
     (set-face-background 'flymake-warnline nil)))
+
+(defun my-flymake-goto-next-error ()
+  (interactive)
+  (flymake-goto-next-error)
+  (message (get-char-property (point) 'help-echo)))
+
+(defun my-flymake-goto-prev-error ()
+  (interactive)
+  (flymake-goto-prev-error)
+  (message (get-char-property (point) 'help-echo)))
+
+(defun my-echo-help-text ()
+  (let ((help-echo (get-char-property (point) 'help-echo)))
+    (when help-echo
+      (message help-echo))))
+
+(setq my-echo-help-timer (run-with-idle-timer 1 t 'my-echo-help-text))
 
 (defvar default-font "Mono-7" "The default font")
 
@@ -453,9 +470,10 @@ unable to perform symbol completion.")
 
 ;; Javascript
 (autoload 'moz-minor-mode "moz" "Mozilla Minor and Inferior Mozilla Modes" t)
-(autoload 'javascript-mode "javascript" nil t)
-(add-to-list 'auto-mode-alist '("\\.js$" . javascript-mode))
-(add-hook 'javascript-mode-hook 'moz-minor-mode)
+(autoload 'js2-mode "js2" nil t)
+(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+(add-hook 'js2-mode-hook 'moz-minor-mode)
+(setq js2-use-font-lock-faces t)
 
 (defun my-javascript-mode-hook ()
   (require 'moz))
@@ -473,7 +491,7 @@ unable to perform symbol completion.")
                         (let ((parens-require-spaces nil))
                           (insert-pair))))
   (local-set-key "}" 'insert-close)
-  (reftex-mode)
+  (reftex-mode 1)
   (flyspell-mode 1))
 
 (load-library "auctex")
