@@ -58,6 +58,13 @@
 (autoload 'nethack "nethack" "Play Nethack." t)
 (setq nethack-program "/usr/games/nethack-lisp")
 
+;; DocView / Image Viewer
+(define-key doc-view-mode-map (kbd "C-v") 'doc-view-scroll-up-or-next-page)
+(define-key doc-view-mode-map (kbd "M-v") 'doc-view-scroll-down-or-previous-page)
+(define-key doc-view-mode-map (kbd "C-e") 'image-eol)
+(define-key doc-view-mode-map (kbd "C-a") 'image-bol)
+(define-key doc-view-mode-map (kbd "C-c t") 'doc-view-open-text)
+
 (defun strip-lf ()
   (interactive)
   (save-excursion
@@ -125,8 +132,8 @@ unable to perform symbol completion.")
 
 (defun my-echo-help-text ()
   (let ((help-echo (get-char-property (point) 'help-echo)))
-    (when help-echo
-      (message help-echo))))
+    (when (and help-echo flymake-mode)
+      (message help-echo)))) 
 
 (setq my-echo-help-timer (run-with-idle-timer 1 t 'my-echo-help-text))
 
