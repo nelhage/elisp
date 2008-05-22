@@ -482,6 +482,11 @@ unable to perform symbol completion.")
 (add-hook 'js2-mode-hook 'moz-minor-mode)
 (setq js2-use-font-lock-faces t)
 
+(eval-after-load 'js2-mode
+  '(progn
+     (set-face-attribute 'js2-warning-face nil :underline "cyan")
+     (set-face-attribute 'js2-error-face nil   :underline "OrangeRed")))
+
 (defun my-javascript-mode-hook ()
   (require 'moz))
 
