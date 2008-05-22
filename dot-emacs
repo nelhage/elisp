@@ -370,6 +370,7 @@ unable to perform symbol completion.")
   (local-set-key "\C-ct" 'perl-add-test)
   (local-set-key (kbd "C-M-\\") 'perltidy-region)
   (local-set-key "\C-c\C-v" 'cperl-build-manpage)
+  (local-set-key "\C-c\C-c" 'cperl-build-manpage)
   (setq indent-tabs-mode nil))
 
 (add-to-list 'template-expansion-alist
