@@ -312,6 +312,7 @@ unable to perform symbol completion.")
                              " <" user-mail-address "> "))))
 
 (defun define-bracket-keys ()
+  (interactive)
   (local-set-key "{" 'insert-brackets)
   (local-set-key "}" 'insert-close))
 
@@ -483,12 +484,18 @@ unable to perform symbol completion.")
 (autoload 'js2-mode "js2" nil t)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 (add-hook 'js2-mode-hook 'moz-minor-mode)
+(add-hook 'js2-mode-hook 'js2-enter-mirror-mode)
+(add-hook 'js2-mode-hook 'my-js2-mode-hook)
+(add-hook 'js2-mode-hook 'define-bracket-keys)
 (setq js2-use-font-lock-faces t)
 
 (eval-after-load 'js2-mode
   '(progn
      (set-face-attribute 'js2-warning-face nil :underline "cyan")
      (set-face-attribute 'js2-error-face nil   :underline "OrangeRed")))
+
+(defun my-js2-mode-hook ()
+  (setq forward-sexp-function nil))
 
 (defun my-javascript-mode-hook ()
   (require 'moz))
