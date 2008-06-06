@@ -487,7 +487,15 @@ unable to perform symbol completion.")
 (add-hook 'js2-mode-hook 'js2-enter-mirror-mode)
 (add-hook 'js2-mode-hook 'my-js2-mode-hook)
 (add-hook 'js2-mode-hook 'define-bracket-keys)
-(setq js2-use-font-lock-faces t)
+(setq js2-use-font-lock-faces t
+      js2-bounce-indent-flag nil
+      js2-allow-keywords-as-property-names t
+      js2-mode-show-strict-warnings nil)
+
+(defadvice js2-enter-key (after js2-enter-key-indent)
+  (let ((js2-bounce-indent-flag nil))
+    (js2-indent-line)))
+(ad-activate 'js2-enter-key)
 
 (eval-after-load 'js2-mode
   '(progn
@@ -495,6 +503,7 @@ unable to perform symbol completion.")
      (set-face-attribute 'js2-error-face nil   :underline "OrangeRed")))
 
 (defun my-js2-mode-hook ()
+  (local-set-key (kbd "C-a") 'beginning-of-line-dwim)
   (setq forward-sexp-function nil))
 
 (defun my-javascript-mode-hook ()
