@@ -327,21 +327,26 @@ unable to perform symbol completion.")
 (advise-to-save-windows vc-revert-buffer)
 ;(advise-to-save-windows vc-diff)
 
-(condition-case nil
-    (require 'psvn)
-  ('file-error . nil))
-
 (eval-after-load "smerge-mode"
   '(set-face-background 'smerge-refined-change "#003333"))
 
-(require 'vc-svk)
+(defun safe-require (feature)
+  "Require FEATURE, failing silently if it does not exist"
+  (condition-case nil
+      (require feature)
+    ('file-error . nil)))
 
-(condition-case nil
-    (progn (require 'vc-git)
-           (when (featurep 'vc-git) (add-to-list 'vc-handled-backends 'git))
-           (require 'git))
-  ;; (require 'git-blame)
-  ('file-error . nil))
+(defun safe-require (feature)
+  "Require FEATURE, failing silently if it does not exist"
+  (condition-case nil
+      (require feature)
+    ('file-error . nil)))
+
+(safe-require 'psvn)
+(safe-require 'vc-svk)
+(safe-require 'vc-git)
+(safe-require 'git)
+(when (featurep 'vc-git) (add-to-list 'vc-handled-backends 'git))
 
 (require 'vc-hg)
 (add-to-list 'vc-handled-backends 'hg)
@@ -977,6 +982,4 @@ surrounding xml expression"
 (put 'asm-comment-char 'safe-local-variable 'characterp)
 (put 'c-indentation-style 'safe-local-variable 'symbolp)
 
-(condition-case nil
-    (load-library "minutes")
-  ('file-error . nil))
+(safe-require 'sipb-minutes)
