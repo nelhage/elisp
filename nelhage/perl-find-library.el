@@ -77,6 +77,11 @@ value of @INC"
             (find-lisp-find-files dir (rx (seq "." (| "pod" "pm" ) string-end)))))
          *perl-lib-path*)))
 
+(defun perldoc-reload-cache ()
+  (interactive)
+  (message "Rebuilding perldoc file cache...")
+  (perl-find-all-libraries))
+
 (defun perldoc (library)
   "Invoke `cperl-perldoc' on LIBRARY, but do completion using *PERL-LIBRARIES*
 when run interactively"
