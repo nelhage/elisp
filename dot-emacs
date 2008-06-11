@@ -504,6 +504,7 @@ unable to perform symbol completion.")
 
 (defun my-js2-mode-hook ()
   (local-set-key (kbd "C-a") 'beginning-of-line-dwim)
+  (local-set-key (kbd "C-x `") 'next-error)
   (setq forward-sexp-function nil))
 
 (defun my-javascript-mode-hook ()
@@ -857,6 +858,8 @@ surrounding xml expression"
         (looking-at (concat
                      "^" (regexp-opt '("To" "Cc" "Bcc" "From") t ) ":")))
       (bbdb-complete-name)))
+
+(add-to-list 'magic-mode-alist (cons "\\`From" 'mail-mode))
 
 ;;BBDB
 (require 'bbdb)
