@@ -1,11 +1,6 @@
 ;; -*- mode: emacs-lisp; indent-tabs-mode: nil -*-
 ;;.emacs file for Nelson Elhage (nelhage@mit.edu)
-;; Probably requires emacs 22 or higher
-
-;; minimal backwards compatibility with Emacs 21
-(unless (boundp 'magic-mode-alist)
-  (defvar magic-mode-alist nil "Dummy magic-mode-alist so Emacs
-  21 doesn't choke on assignments to it."))
+;; Requires emacs 22 or higher
 
 (add-to-list 'load-path "~/.elisp")
 (cd "~/.elisp")
