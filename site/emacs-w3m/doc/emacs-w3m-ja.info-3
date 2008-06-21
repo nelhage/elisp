@@ -54,7 +54,7 @@ document's maintainer or write to: The Free Software Foundation, Inc.;
 
 File: emacs-w3m-ja.info, Node: VM, Prev: SEMI MUAs, Up: Hooking into MUAs
 
-VM (vieW maiL) $A$O(B Wanderlust $A$K$"$i$:(B
+VM (vieW maiL) $B$O(B Wanderlust $B$K$"$i$:(B
 =====================================
 
 Emacs-w3m $B$O(B VM $B$r@Q6KE*$K%5%]!<%H$7$F$$$^$;$s!#$=$l$OC1$K(B emacs-w3m $B%A!<(B
@@ -76,7 +76,7 @@ VM $B$N$I$l$+$N%P%C%U%!$K$$$k$H$-$K!"%W%l%<%s%F!<%7%g%s!&%P%C%U%!$N2hA|I=(B
 
 File: emacs-w3m-ja.info, Node: Frequently Asked Questions, Next: Known Problems, Prev: Hooking into MUAs, Up: Top
 
-$A1X$:4p$,$"$k$H$OO^$i$J$$(B
+$BI,$:Ez$,$"$k$H$O8B$i$J$$(B
 ************************
 
 * Menu:
@@ -89,7 +89,7 @@ File: emacs-w3m-ja.info, Node: Frequently Asked Questions, Next: Known Problems,
 
 File: emacs-w3m-ja.info, Node: General FAQ, Next: Trouble FAQ, Prev: Frequently Asked Questions, Up: Frequently Asked Questions
 
-$AR;0c5D$J$(Go3YB(B
+$B0lHLE*$J<ALd(B
 ============
 
    * Q. emacs-w3m $B$C$F2?$G$9$+(B?
@@ -145,7 +145,7 @@ File: emacs-w3m-ja.info, Node: General FAQ, Next: Trouble FAQ, Prev: Frequently 
 
 File: emacs-w3m-ja.info, Node: Trouble FAQ, Next: Shimbun FAQ, Prev: General FAQ, Up: Frequently Asked Questions
 
-$A%H%i%V%k(B
+$B%H%i%V%k(B
 ========
 
    * Q. $BG'>Z$NI,MW$J%Z!<%8$N%Q%9%o!<%I$,F~NO$G$-$^$;$s!#(B
@@ -339,7 +339,7 @@ File: emacs-w3m-ja.info  Node: Trouble FAQ-Footnotes, Up: Trouble FAQ
 
 File: emacs-w3m-ja.info, Node: Shimbun FAQ, Prev: Trouble FAQ, Up: Frequently Asked Questions
 
-Shimbun $A$K$(IJ=$A$9$k$(Go3YB(B
+Shimbun $B$K4X$9$k<ALd(B
 ====================
 
    * Q. $B$J$<(B `shimbun' $B%b%8%e!<%k$,%$%s%9%H!<%k$5$l$J$$$N$G$9$+(B?
@@ -360,7 +360,7 @@ Shimbun $A$K$(IJ=$A$9$k$(Go3YB(B
 
 File: emacs-w3m-ja.info, Node: Known Problems, Next: Shimbun Library, Prev: Frequently Asked Questions, Up: Top
 
-$A$"$J$?$J$i$-$C$H=b$(GJn$A$G$-$k(B
+$B$"$J$?$J$i$-$C$H2r7h$G$-$k(B
 **************************
 
 
@@ -368,7 +368,7 @@ File: emacs-w3m-ja.info, Node: Known Problems, Next: Shimbun Library, Prev: Freq
 
 File: emacs-w3m-ja.info, Node: Shimbun Library, Next: Tips, Prev: Known Problems, Up: Top
 
-$A%&%'%VIO$NPB$(GjL$A$r$BFI$A$`$?$a$N5@>_(B
+$B%&%'%V>e$N?7J9$rFI$`$?$a$NF;6q(B
 ******************************
 
 $B%&%'%V$G$O!"$^$9$^$9B?$/$N?7J9!"%a!<%j%s%0%j%9%H$N%"!<%+%$%V!"7G<(HD!"(B
@@ -426,7 +426,7 @@ APEL $B%Q%C%1!<%8$,I,MW$G$9!#$"$J$?$O(B *Note Other Requirements:: $B$b8+$k$Y
 
 File: emacs-w3m-ja.info, Node: Nnshimbun, Next: Mew Shimbun, Prev: Shimbun Library, Up: Shimbun Library
 
-Gnus $A$r%&%'%V%V%i%&%6$K$9$k(B!
+Gnus $B$r%&%'%V%V%i%&%6$K$9$k(B!
 ============================
 
 `Nnshimbun' $B$O(B Gnus $B$N%P%C%/%(%s%I$G$9!#$7$+$7$J$,$i!"Nc30E*$K(B Gnus $B$G(B
@@ -462,7 +462,7 @@ emacs-w3m $B$r;H$o$J$1$l$P$$$1$J$$$3$H$KCm0U$7$F2<$5$$!#(B
 $B$9$k$H!"(B`M-x gnus-group-make-shimbun-group' $B$NBe$o$j$K(B `G n' $B$r;H$&$3$H(B
 $B$,$G$-$^$9!#(B
 
-*$(Go!$A$+$3$N%-$B!<$A$r(B Gnus $A%?%o$B!<$A$KSh$(GR|$A$7$F$/$l$^$;$s$+(B?*
+*$BC/$+$3$N%-!<$r(B Gnus $B%?%o!<$KM=Ls$7$F$/$l$^$;$s$+(B?*
 
 
 $B$3$NB>$K!"(B`gnus-group-make-shimbun-groups' $B%3%^%s%I$r;H$C$F!";XDj$7$?%5!<(B
@@ -482,7 +482,7 @@ emacs-w3m $B$r;H$o$J$1$l$P$$$1$J$$$3$H$KCm0U$7$F2<$5$$!#(B
      Article Backlog: (gnus)Article Backlog.) $B$r>e=q$-$7$^$9!#$b$7(B
      `nnshimbun-keep-backlog' $B$r?t;z(B N $B$K@_Dj$9$k$H!"(B`nnshimbun' $B$O:GBg(B
      $B$G(B N $B$N8E$$5-;v$r8e$N:F<hF@$N$?$a$K%P%C%U%!$KN/$a$F$*$-$^$9!#$3$N(B
-     $BJQ?t$,(B `nil' $B$G$O$J$/!"?t;z$G$b$J$$>l9g!"(B`nnshimbun' $B$O(B *$AH+$F(B* $B$N(B
+     $BJQ?t$,(B `nil' $B$G$O$J$/!"?t;z$G$b$J$$>l9g!"(B`nnshimbun' $B$O(B *$BA4$F(B* $B$N(B
      $B4{FI5-;v$rC_$($^$9(B ($B$3$l$ONI$$9M$($G$O$"$j$^$;$s(B)$B!#%G%U%)%k%HCM$O(B
      300 $B$G$9!#(B
 
@@ -667,38 +667,38 @@ NOV $B%U%!%$%k(B (3) (*Note Nnshimbun-Footnotes::) $B$N!">C5n$5$l$k5-;v$K3:Ev
 
 File: emacs-w3m-ja.info  Node: Nnshimbun-Footnotes, Up: Nnshimbun
 
-(1) $A%0%k$B!<$A%W%Q%i%a$B!<$A%?$r$(G]C$A6($9$k$?$a$NWn$bJV$(I?I$A$J7=7($O!"%0%k$B!<$A%W%P%C%U%!(B
-$A$G!"$(G]C$A6($7$?$$%0%k$B!<$A%W$N$(G^[$AKy$KRF$(GY/$A$7$F$+$i(B `G c' $A$r%?%$%W$9$k$3$H$G(B
-$A$9(B (*Note Group Parameters: (gnus)Group Parameters.)$A!#(B
+(1) $B%0%k!<%W%Q%i%a!<%?$r@_Dj$9$k$?$a$N:G$b<j7Z$JJ}K!$O!"%0%k!<%W%P%C%U%!(B
+$B$G!"@_Dj$7$?$$%0%k!<%W$N>l=j$K0\F0$7$F$+$i(B `G c' $B$r%?%$%W$9$k$3$H$G(B
+$B$9(B (*Note Group Parameters: (gnus)Group Parameters.)$B!#(B
 
-(2) `Nnshimbun' $A%0%k$B!<$A%W$GWT$(GY/$AFZO^GP$lO{H%$rPP$J$&7=7($OVw$K6~$D$"(B
-$A$j$^$9!#R;$D$O%0%k$B!<$A%WC{$NU}$(G]=$A1m$(G\"(B ("^nnshimbun\\+" $A$GJ<$^$i$J$1$l$P$J(B
-$A$j$^$;$s(B) $A$r$(I+y$AJ}(B `gnus-auto-expirable-newsgroups' $A$KW7<S$7$F!"O{H%(B
-$A$9$k$^$G$NHUJ}$r8w%0%k$B!<$A%W$(I#z$A$K(B `nnmail-expiry-wait-function' $A$GV8(B
-$A6($9$k$3$H$G$9!#$b$&R;$D$O!"WT$(GY/$AFZO^GP$lO{H%$rPP$J$o$;$?$$$?$$$9$Y$F$N(B
-`nnshimbun' $A%0%k$B!<$A%W$G!"%0%k$B!<$A%W%Q%i%a$B!<$A%?(B `auto-expire' $A$r(B
-`t' $A$K$(G]C$A6($7$F!"%0%k$B!<$A%W%Q%i%a$B!<$A%?(B `expiry-wait' $A$GO{H%$9$k$^(B
-$A$G$NFZO^$rV86($9$k$d$j7=$G$9!#$(Gf[$A$7$$$3$H$O(B *Note (gnus)Expiring Mail:: $A$r(B
-$A2NUU$7$FOB$5$$!#(B`expiry-wait' $A%0%k$B!<$A%W%Q%i%a$B!<$A%?$,$(G]C$A6($5$l$F$$$J$$(B
-$A%0%k$B!<$A%W$G$O!"%G%U%)%k%H$N$(I/N$A$,$(GoK$ASC$5$l$^$9!#(B
+(2) `Nnshimbun' $B%0%k!<%W$G<+F04|8B@Z$l>C5n$r9T$J$&J}K!$O<g$KFs$D$"(B
+$B$j$^$9!#0l$D$O%0%k!<%WL>$N@55,I=8=(B ("^nnshimbun\\+" $B$G;O$^$i$J$1$l$P$J(B
+$B$j$^$;$s(B) $B$rJQ?t(B `gnus-auto-expirable-newsgroups' $B$KDI2C$7$F!">C5n(B
+$B$9$k$^$G$NF|?t$r3F%0%k!<%WKh$K(B `nnmail-expiry-wait-function' $B$G;X(B
+$BDj$9$k$3$H$G$9!#$b$&0l$D$O!"<+F04|8B@Z$l>C5n$r9T$J$o$;$?$$$?$$$9$Y$F$N(B
+`nnshimbun' $B%0%k!<%W$G!"%0%k!<%W%Q%i%a!<%?(B `auto-expire' $B$r(B
+`t' $B$K@_Dj$7$F!"%0%k!<%W%Q%i%a!<%?(B `expiry-wait' $B$G>C5n$9$k$^(B
+$B$G$N4|8B$r;XDj$9$k$d$jJ}$G$9!#>\$7$$$3$H$O(B *Note (gnus)Expiring Mail:: $B$r(B
+$B;2>H$7$F2<$5$$!#(B`expiry-wait' $B%0%k!<%W%Q%i%a!<%?$,@_Dj$5$l$F$$$J$$(B
+$B%0%k!<%W$G$O!"%G%U%)%k%H$NCM$,E,MQ$5$l$^$9!#(B
 
-(3) `Nnshimbun'$ASC$N(B NOV $A%U%!%$%k(B
-$A$O(B~/News/shimbun/asahi/national/.overview" $A$N$h$&$JC{G0$G$9!#(B
+(3) `Nnshimbun' $BMQ$N(B NOV $B%U%!%$%k(B
+$B$O(B~/News/shimbun/asahi/national/.overview" $B$N$h$&$JL>A0$G$9!#(B
 
-(4) $A$J$<(B `auto-expire' $A$J$I$,(B `nnshimbun' $B@l$ASC$N%0%k$B!<$A%W(B
-$A%Q%i%a$B!<$A%?$K:,$^$l$J$$$N(B? $A$H$$$&$(GYB$A$$$K$(I%\$A$9$k4p$($r$9$G$KSCRb$7$F$$(B
-$A$^$9!#$=$N4p$($H$O!"(B`expiry-wait' $A$,(B `nnshimbun' $A%P%C%/(B
-$A%(%s%I$K$h$C$FH!$j$(H$/$A$o$l$k$N$K$(I%\$A$7$F!"(B`auto-expire' $A$O(B Gnus
-$A$NVPJ`$,H!$j$(H$/$A$$$^$9!#$7$?$,$C$F!"(BGnus $A$,R;$D$NLX6($N%P%C%/%(%s%I(B
-$A$N$?$a$K$(I@>$A$/(B ($A$9$J$o$A!"(B`nnshimbun' $B@l$ASC$N%0%k$B!<$A%W%Q%i%a$B!<$A%?(B
-$A$+$i$(I/N$A$r$BFI$A$`(B) $A$h$&$K(B Gnus $A$NVPJ`$(Gq"$AD\$r$(I)/$(GZ/$A$9$k$3$H$O!"(BGnus $A$N$(G]CSS(B
-$A%]%j%7$B!<$A$K74$9$k$N$G$9!#(B
+(4) $B$J$<(B `auto-expire' $B$J$I$,(B `nnshimbun' $B@lMQ$N%0%k!<%W(B
+$B%Q%i%a!<%?$K4^$^$l$J$$$N(B? $B$H$$$&Ld$$$KBP$9$kEz$($r$9$G$KMQ0U$7$F$$(B
+$B$^$9!#$=$NEz$($H$O!"(B`expiry-wait' $B$,(B `nnshimbun' $B%P%C%/(B
+$B%(%s%I$K$h$C$F<h$j07$o$l$k$N$KBP$7$F!"(B`auto-expire' $B$O(B Gnus
+$B$NCf?u$,<h$j07$$$^$9!#$7$?$,$C$F!"(BGnus $B$,0l$D$NFCDj$N%P%C%/%(%s%I(B
+$B$N$?$a$KF/$/(B ($B$9$J$o$A!"(B`nnshimbun' $B@lMQ$N%0%k!<%W%Q%i%a!<%?(B
+$B$+$iCM$rFI$`(B) $B$h$&$K(B Gnus $B$NCf?u5!G=$r3HD%$9$k$3$H$O!"(BGnus $B$N@_7W(B
+$B%]%j%7!<$KH?$9$k$N$G$9!#(B
 
 
 
 File: emacs-w3m-ja.info, Node: Mew Shimbun, Next: Shimbun with Wanderlust, Prev: Nnshimbun, Up: Shimbun Library
 
-Mew $A$GPB$(GjL$A$r$BFI$A$`(B
+Mew $B$G?7J9$rFI$`(B
 ================
 
 Mew Shimbun $B$O(B `shimbun' $B$H(B Mew (version 2.1 $B0J9_(B) $B$H$H$b$K;H$&$3$H$r0U(B
@@ -814,10 +814,10 @@ Mew Shimbun $B$O(B `shimbun' $B$H(B Mew (version 2.1 $B0J9_(B) $B$H$H$b$K
 
      Mew $B$N=*N;;~$d(B folder $B$N(B kill $B;~(B (`C-c C-q' $B$r;H$C$?$H$-(B) $B$K(B
      `shimbun' folder $B$O<+F0E*$K(B `.mew-cache' $B%U%!%$%k$rJ]B8$9$k$h$&$K(B
-     $B$J$j$^$9!#$?$@$7!"3N<B(B (2) (*Note Mew Shimbun-Footnotes::)$B$KJ]B8$9(B
-     $B$k$o$1$G$O$"$j$^$;$s!#4{FI$K$J$C$?>pJs$r3N<B$K(B cache $B$KJ]B8$9$k$K(B
-     $B$O!"$=$N(B folder $B$rFI$_=*$o$C$?$H$-$K(B `scan update' $B$r$9$k=,47$r$D(B
-     $B$1$k$HNI$$$G$7$g$&!#(B
+     $B$J$j$^$9!#$?$@$7!"3N<B(B (2) (*Note Mew Shimbun-Footnotes::) $B$KJ]B8(B
+     $B$9$k$o$1$G$O$"$j$^$;$s!#4{FI$K$J$C$?>pJs$r3N<B$K(B cache $B$KJ]B8$9$k(B
+     $B$K$O!"$=$N(B folder $B$rFI$_=*$o$C$?$H$-$K(B `scan update' $B$r$9$k=,47$r(B
+     $B$D$1$k$HNI$$$G$7$g$&!#(B
 
      $BL$FI$K;H$&%^!<%/$,(B `*' $B$8$c%@%a!"$H$$$&J}$O!"JQ?t(B
      `mew-shimbun-mark-unseen' $B$r%+%9%?%^%$%:$7$F2<$5$$(B ($B>e=R(B)$B!#(B`C-u
@@ -900,18 +900,18 @@ Mew Shimbun $B$O(B `shimbun' $B$H(B Mew (version 2.1 $B0J9_(B) $B$H$H$b$K
 
 File: emacs-w3m-ja.info  Node: Mew Shimbun-Footnotes, Up: Mew Shimbun
 
-(1) $AN4$BFI$A9\@m$r$9$k$H$-$O%3%a%s%H$rMb$7$FOB$5$$!#$3$N$(I+y$AJ}$O1X$:(B
-`(require 'mew-shimbun)' $A$NG0$G$(G]C$A6($7$J$$$H$$$1$^$;$s!#(B
+(1) $BL$FI4IM}$r$9$k$H$-$O%3%a%s%H$r30$7$F2<$5$$!#$3$NJQ?t$OI,$:(B
+`(require 'mew-shimbun)' $B$NA0$G@_Dj$7$J$$$H$$$1$^$;$s!#(B
 
-(2) `mew-touch-folder-p' $A$,(B `t' $A$NHK$O$[$\(B 100% $A1#4f$G$-(B
-$A$^$9$,!"(B`nil' $A$NHK$,1#4f$G$-$k?ID\PT$O$[$H$s$I(B 0% $A$@$HK<$o$l(B
-$A$^$9!#(B
+(2) `mew-touch-folder-p' $B$,(B `t' $B$N?M$O$[$\(B 100% $BJ]B8$G$-(B
+$B$^$9$,!"(B`nil' $B$N?M$,J]B8$G$-$k2DG=@-$O$[$H$s$I(B 0% $B$@$H;W$o$l(B
+$B$^$9!#(B
 
 
 
 File: emacs-w3m-ja.info, Node: Shimbun with Wanderlust, Next: Shimbun Sites, Prev: Mew Shimbun, Up: Shimbun Library
 
-Wanderlust $A$GPB$(GjL$A$r$BFI$A$`(B
+Wanderlust $B$G?7J9$rFI$`(B
 =======================
 
 Wanderlust $B$K$O(B ELMO $B%b%8%e!<%k$N0l$D$H$7$F(B `elmo-shimbun' $B$,4^$^$l$F$$(B
@@ -922,7 +922,7 @@ Wanderlust $B$K$O(B ELMO $B%b%8%e!<%k$N0l$D$H$7$F(B `elmo-shimbun' $B$,4^$^
 
 File: emacs-w3m-ja.info, Node: Shimbun Sites, Next: Shimbun Basics, Prev: Shimbun with Wanderlust, Up: Shimbun Library
 
-$APB$(GjL$A$,$BFI$A$a$k%5%$%H(B
+$B?7J9$,FI$a$k%5%$%H(B
 ==================
 
 `Shimbun' $B%i%$%V%i%j$,BP1~$7$F$$$k%5%$%H$N0lMwI=$G$9!#(B
@@ -939,12 +939,12 @@ File: emacs-w3m-ja.info, Node: Shimbun Sites, Next: Shimbun Basics, Prev: Shimbu
 
 File: emacs-w3m-ja.info, Node: Newspapers Supported by Shimbun, Next: News Sites Supported by Shimbun, Prev: Shimbun Sites, Up: Shimbun Sites
 
-$APB$(GjL$AIg(B
+$B?7J9<R(B
 ------
 
 `Shimbun' $B%i%$%V%i%j$,BP1~$7$F$$$k?7J9<R$G$9!#(B
 
-$A3/HUPB$(GjL(B (http://www.asahi.com/)
+$BD+F|?7J9(B (http://www.asahi.com/)
      asahi.book.author asahi.book.bestseller asahi.book.booktimes
      asahi.book.bunko asahi.book.comic asahi.book.edu
      asahi.book.hondana asahi.book.navi asahi.book.news
@@ -993,12 +993,12 @@ File: emacs-w3m-ja.info, Node: Newspapers Supported by Shimbun, Next: News Sites
      $B$b$G$-$^$9!#$=$l$r;H$&$K$O!"Nc$($P%0%k!<%WL>$H$7$F(B
      `asahi.business' $B$NBe$o$j$K(B `asahi-html.business' $B$r;XDj$7$F2<$5$$!#(B
 
-$A3/HUPB$(GjL(B (http://mytown.asahi.com/)
+$BD+F|?7J9(B (http://mytown.asahi.com/)
      asahi-mytown.(hokkaido...okinawa) asahi-mytown.usa
 
      $BJF9q$HF|K\$NA4ETF;I\8)$rLVMe$9$kD+F|?7J9$NCOJ}HG$G$9!#(B
 
-$(I#z$AHUPB$(GjL(B (http://www.mainichi-msn.co.jp/)
+$BKhF|?7J9(B (http://www.mainichi-msn.co.jp/)
      mainichi.entertainment mainichi.entertainment.car
      mainichi.entertainment.cinema mainichi.entertainment.game
      mainichi.entertainment.geinou mainichi.entertainment.igo
@@ -1041,13 +1041,13 @@ File: emacs-w3m-ja.info, Node: Newspapers Supported by Shimbun, Next: News Sites
 
           (setq shimbun-mainichi-prefer-text-plain t)
 
-$AHU?/%9%]$B!<$A%D(B (http://www.nikkansports.com/)
+$BF|4)%9%]!<%D(B (http://www.nikkansports.com/)
      nikkansports.baseball nikkansports.mlb nikkansports.soccer
      nikkansports.world-soccer nikkansports.sports nikkansports.battle
      nikkansports.horseracing nikkansports.entertainment
      nikkansports.society nikkansports.leisure
 
-$AHU1>$(I8+6v$APB$(GjL(B (http://www.nikkei.co.jp/)
+$BF|K\7P:Q?7J9(B (http://www.nikkei.co.jp/)
      nikkei.top nikkei.main nikkei.keizai nikkei.sangyo nikkei.tento
      nikkei.zinzi nikkei.report nikkei.kansai nikkei.it.business
      nikkei.it.busi_gyoukai nikkei.it.biz-system nikkei.it.sox
@@ -1093,11 +1093,11 @@ File: emacs-w3m-ja.info, Node: Newspapers Supported by Shimbun, Next: News Sites
      nikkei.release.const.house nikkei.release.const.etc
      nikkei.shasetsu nikkei.okuyami
 
-$A%9%]%K%A(B (http://www.sponichi.co.jp/)
+$B%9%]%K%A(B (http://www.sponichi.co.jp/)
      sponichi.baseball sponichi.soccer sponichi.usa sponichi.others
      sponichi.society sponichi.entertainment sponichi.horseracing
 
-$(G{t$(I%D$APB$(GjL(B (http://www.yomiuri.co.jp/)
+$Bl&Gd?7J9(B (http://www.yomiuri.co.jp/)
      yomiuri.atmoney yomiuri.entertainment yomiuri.editorial
      yomiuri.kyoiku yomiuri.national yomiuri.obit yomiuri.politics
      yomiuri.science yomiuri.sports yomiuri.world
@@ -1113,7 +1113,7 @@ File: emacs-w3m-ja.info, Node: Newspapers Supported by Shimbun, Next: News Sites
      `yomiuri.atmoney' $B$NBe$o$j$K(B `yomiuri-html.atmoney' $B$r;XDj$7$F2<$5(B
      $B$$!#(B
 
-$(I7E8+$APB$(GjL(B (http://www.sankei.co.jp/)
+$B;:7P?7J9(B (http://www.sankei.co.jp/)
      sankei.news.shakai sankei.news.kokusai sankei.news.seiji
      sankei.news.keizai sankei.news.seikatsu sankei.news.kyouiku
      sankei.news.sports sankei.news.cutlure sankei.news.chiho
@@ -1128,7 +1128,7 @@ BBC (http://www.bbc.co.uk/)
 Spiegel Online (http://www.spiegel.de/)
      spiegel.news
 
-$A%2%s%@%$%M%C%H(B (http://gendai.net/)
+$B%2%s%@%$%M%C%H(B (http://gendai.net/)
      gendai-net.today gendai-net.syakai gendai-net.sports
      gendai-net.geino gendai-net.wadai gendai-net.kenko
      gendai-net.syoku gendai-net.book
@@ -1137,7 +1137,7 @@ Spiegel Online (http://www.spiegel.de/)
 
 File: emacs-w3m-ja.info, Node: News Sites Supported by Shimbun, Next: Mailing Lists Supported by Shimbun, Prev: Newspapers Supported by Shimbun, Up: Shimbun Sites
 
-$A%K%e$B!<$A%9%5%$%H(B
+$B%K%e!<%9%5%$%H(B
 --------------
 
 `Shimbun' $B%i%$%V%i%j$,BP1~$7$F$$$k%K%e!<%9%5%$%H$G$9!#(B
@@ -1161,7 +1161,7 @@ CNN Japan (http://www.cnn.co.jp/)
 Engadget Japanese (http://japanese.engadget.com/)
      engadget-ja.top
 
-$A%(%-%5%$%H(B $A%K%e$B!<$A%9(B (http://www.excite.co.jp/)
+$B%(%-%5%$%H(B $B%K%e!<%9(B (http://www.excite.co.jp/)
      excite.bit-koneta excite.world-odd
 
 FAU-IAA (http://www.fau.org/)
@@ -1173,7 +1173,7 @@ Heise Online (http://www.heise.de/)
 Infoshop News (http://news.infoshop.org/)
      infoshop.news
 
-$A%$%s%W%l%9(B (http://www.watch.impress.co.jp/)
+$B%$%s%W%l%9(B (http://www.watch.impress.co.jp/)
      impress.enterprise impress.pc impress.dc impress.akiba impress.av
      impress.game impress.k-tai impress.internet impress.bb
      impress.forest impress.robot
@@ -1263,7 +1263,7 @@ Die Zeit (http://www.zeit.de/)
      zeit-de.reisen zeit-de.schule zeit-de.sport zeit-de.studium
      zeit-de.wirtschaft zeit-de.wissen zeit-de.zuender
 
-$A%*$B!<$A%^%$%K%e$B!<$A%9(B (http://ohmynews.co.jp/)
+$B%*!<%^%$%K%e!<%9(B (http://ohmynews.co.jp/)
      ohmynews-jp.shakai ohmynews-jp.keizai ohmynews-jp.seiji
      ohmynews-jp.kokusai ohmynews-jp.entame ohmynews-jp.life
      ohmynews-jp.science ohmynews-jp.sports ohmynews-jp.books
@@ -1276,7 +1276,7 @@ The Onion (http://www.theonion.com/)
 
 File: emacs-w3m-ja.info, Node: Mailing Lists Supported by Shimbun, Next: Sport Sites Supported by Shimbun, Prev: News Sites Supported by Shimbun, Up: Shimbun Sites
 
-$A%a$B!<$A%j%s%0%j%9%H(B
+$B%a!<%j%s%0%j%9%H(B
 ----------------
 
 $B:G6a$G$O!"%a!<%j%s%0%j%9%H$KEj9F$5$l$?2a5n5-;v$N%"!<%+%$%V$,(B WEB $B>e$K4v(B
@@ -1312,7 +1312,7 @@ GNOME Mailing List (http://mail.gnome.org/archives/)
      gnome.orbit-list gnome.vote gnome.wm-spec-list gnome.xml
      gnome.xslt
 
-Java $A%+%s%U%!%l%s%9(B Mailing List (http://www.java-conf.gr.jp/archives/)
+Java $B%+%s%U%!%l%s%9(B Mailing List (http://www.java-conf.gr.jp/archives/)
      javaconf.servlet-ml javaconf.business-ml
      javaconf.duke-in-the-box-ml javaconf.jfriends-ml javaconf.JGT-ml
      javaconf.jini-ml javaconf.ejb-ml javaconf.cm-ml javaconf.horb-ml
@@ -1368,7 +1368,7 @@ XEmacs Mailing List (http://list-archive.xemacs.org/)
      xemacs.xemacs-design xemacs.xemacs-mule xemacs.xemacs-nt
      xemacs.xemacs-patches xemacs.xemacs-users-ja xemacs.xemacs
 
-$A%;%-%e%j%F%#$B!<(BMEMO Mailing List (http://memo.st.ryukoku.ac.jp/archive/)
+$B%;%-%e%j%F%#!<(BMEMO Mailing List (http://memo.st.ryukoku.ac.jp/archive/)
      security-memo.memo security-memo.free-memo
      security-memo.social-memo
 

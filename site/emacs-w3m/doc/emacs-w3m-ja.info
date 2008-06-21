@@ -56,8 +56,8 @@ Indirect:
 emacs-w3m-ja.info-1: 1634
 emacs-w3m-ja.info-2: 50591
 emacs-w3m-ja.info-3: 102368
-emacs-w3m-ja.info-4: 156919
-emacs-w3m-ja.info-5: 207721
+emacs-w3m-ja.info-4: 156921
+emacs-w3m-ja.info-5: 207620
 
 Tag table:
 (Indirect)
@@ -133,30 +133,30 @@ Node: Shimbun FAQ110012
 Node: Known Problems110568
 Node: Shimbun Library110727
 Node: Nnshimbun112434
-Node: Mew Shimbun120850
-Node: Shimbun with Wanderlust128297
-Node: Shimbun Sites128615
-Node: Newspapers Supported by Shimbun129042
-Node: News Sites Supported by Shimbun138602
-Node: Mailing Lists Supported by Shimbun143938
-Node: Sport Sites Supported by Shimbun156922
-Node: Misc Sites Supported by Shimbun157667
-Node: Shimbun Basics166874
-Node: Overview167448
-Node: Getting web page and header information169723
-Node: Displaying an article174393
-Node: Inheriting shimbun module176406
-Node: Making text/plain articles178289
-Node: Coding convention of Shimbun179953
-Node: Tips180794
-Node: Mailing List184921
-Node: Emacs-w3m Functions185807
-Node: External Packages185967
-Node: Authors186776
-Node: Index187000
-Node: Concept Index187236
-Node: Key Index192190
-Node: Variable Index196440
-Node: Function Index207724
+Node: Mew Shimbun120851
+Node: Shimbun with Wanderlust128299
+Node: Shimbun Sites128617
+Node: Newspapers Supported by Shimbun129044
+Node: News Sites Supported by Shimbun138604
+Node: Mailing Lists Supported by Shimbun143940
+Node: Sport Sites Supported by Shimbun156924
+Node: Misc Sites Supported by Shimbun157669
+Node: Shimbun Basics166876
+Node: Overview167450
+Node: Getting web page and header information169725
+Node: Displaying an article174395
+Node: Inheriting shimbun module176408
+Node: Making text/plain articles178292
+Node: Coding convention of Shimbun179956
+Node: Tips180797
+Node: Mailing List184924
+Node: Emacs-w3m Functions185810
+Node: External Packages185970
+Node: Authors186779
+Node: Index187003
+Node: Concept Index187239
+Node: Key Index192089
+Node: Variable Index196339
+Node: Function Index207623
 
 End tag table

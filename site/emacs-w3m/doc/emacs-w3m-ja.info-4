@@ -54,7 +54,7 @@ document's maintainer or write to: The Free Software Foundation, Inc.;
 
 File: emacs-w3m-ja.info, Node: Sport Sites Supported by Shimbun, Next: Misc Sites Supported by Shimbun, Prev: Mailing Lists Supported by Shimbun, Up: Shimbun Sites
 
-$A%9%]$B!<$A%D(B
+$B%9%]!<%D(B
 --------
 
 `Shimbun' $B%i%$%V%i%j$,BP1~$7$F$$$k%9%]!<%D4X78$N%5%$%H$G$9!#(B
@@ -62,14 +62,14 @@ File: emacs-w3m-ja.info, Node: Sport Sites Supported by Shimbun, Next: Misc Site
 makanai (http://www.makanai.com/)
      makanai.f1news
 
-F1 $A%U%!%s(B (http://www.ksky.ne.jp/~tahara/f1/)
+F1 $B%U%!%s(B (http://www.ksky.ne.jp/~tahara/f1/)
      f1fan.news
 
-@nifty:$A%b$B!<$A%?$B!<$A%9%]$B!<$A%D(B (http://forum.nifty.com/fmotor/)
+@nifty:$B%b!<%?!<%9%]!<%D(B (http://forum.nifty.com/fmotor/)
      msports-nifty.F1 msports-nifty.IRL msports-nifty.WRC
      msports-nifty.Europe msports-nifty.USA
 
-Yahoo!$A%9%]$B!<$A%D(B (http://sports.yahoo.co.jp/)
+Yahoo!$B%9%]!<%D(B (http://sports.yahoo.co.jp/)
      yahoo-sports.F1 yahoo-sports.baseball yahoo-sports.keiba
      yahoo-sports.NBA yahoo-sports.NFL yahoo-sports.rugby
 
@@ -80,24 +80,24 @@ Yahoo!$A%9%]$B!<$A%D(B (http://sports.yahoo.co.jp/)
 
 File: emacs-w3m-ja.info, Node: Misc Sites Supported by Shimbun, Prev: Sport Sites Supported by Shimbun, Up: Shimbun Sites
 
-$A$=$NK{(B
+$B$=$NB>(B
 ------
 
 `Shimbun' $B%i%$%V%i%j$NBP1~$7$F$$$k$=$NB>$N%5%$%H$G$9!#7G<(HD$d!"O":\5-(B
 $B;v$r<gBN$H$9$k$h$&$J%5%$%H$,4^$^$l$F$$$^$9!#(B
 
-Tea Cup $(I6-$AJ>0e(B (http://www.tcup.com/)
+Tea Cup $B7G<(HD(B (http://www.tcup.com/)
      Tea Cup Communication $B$K$h$C$FDs6!$5$l$k!"MM!9$J7G<(HD$r9VFI$9$k$3(B
      $B$H$,$G$-$^$9!#%G%U%)%k%H$G$O!"0J2<$N;0$D$N7G<(HD$,MQ0U$5$l$F$$$^$9!#(B
 
      tcup.meadow
-          Meadow $(I6-$AJ>0e(B (http://www66.tcup.com/6629/yutopia.html)
+          Meadow $B7G<(HD(B (http://www66.tcup.com/6629/yutopia.html)
 
      tcup.skk
-          SKK $(I6-$AJ>0e(B (http://www67.tcup.com/6718/yutopia.html)
+          SKK $B7G<(HD(B (http://www67.tcup.com/6718/yutopia.html)
 
      tcup.yutopia
-          $A$f$&,Ftopia$(I6-$AJ>0e(B (http://www61.tcup.com/6116/yutopia.html)
+          $B$f$&&S&O&P&I&A7G<(HD(B (http://www61.tcup.com/6116/yutopia.html)
 
      $B?7$?$K7G<(HD$r%j%9%H$KDI2C$9$k$K$O!"$=$l$i$NL>A0$H(B URL $B$rD4$Y$F!"(B
      `shimbun-tcup-group-alist' $B$rJQ99$7$F2<$5$$!#Fs$D$N7G<(HD(B `foo' $B$H(B
@@ -119,12 +119,12 @@ Tea Cup $(I6-$AJ>0e(B (http://www.tcup.com/)
                   ("emacs-w3m" .
                    "http://pc.2ch.net/test/read.cgi/unix/1013710106")))
 
-CGI_Board $A$rJ9$C$F$$$k$(I6-$AJ>0e(B (http://www.math.tohoku.ac.jp/~kuroki/support/)
+CGI_Board $B$r;H$C$F$$$k7G<(HD(B (http://www.math.tohoku.ac.jp/~kuroki/support/)
 
      CGI_Board $B$r;H$C$F$$$k7G<(HD$N(B URL $B$rD4$Y$F!"(B
      `shimbun-cgi-board-group-alist' $B$KE,@Z$J@_Dj$r2C$($F;H$$$^$9!#(B
 
-HNS $A$K$h$kHU$(GX4(B
+HNS $B$K$h$kF|5-(B
      $B1\Mw$7$?$$F|5-$N(B URL $B$rD4$Y$F!"0J2<$N$h$&$K@_Dj$7$F;H$$$^$9!#(B
 
           (setq shimbun-hns-group-alist
@@ -135,7 +135,7 @@ HNS $A$K$h$kHU$(GX4(B
                    "http://www.be.wakwak.com/cgi-bin/sbox/~miyoshi/hns/"
                    "miyoshi@meadowy.org")))
 
-tDiary $A$K$h$kHU$(GX4(B
+tDiary $B$K$h$kF|5-(B
      $B1\Mw$7$?$$F|5-$N(B URL $B$rD4$Y$F!"0J2<$N$h$&$K@_Dj$7$F;H$$$^$9!#(B
 
           (setq shimbun-tdiary-group-alist
@@ -144,7 +144,7 @@ tDiary $A$K$h$kHU$(GX4(B
                   ("yoichi"
                    "http://yoichi.geiin.org/d/")))
 
-chalow $A$K$h$kHU$(GX4(B
+chalow $B$K$h$kF|5-(B
      $B1\Mw$7$?$$F|5-$N(B URL $B$rD4$Y$F!"0J2<$N$h$&$K@_Dj$7$F;H$$$^$9!#(B
 
           (setq shimbun-chalow-group-alist
@@ -153,7 +153,7 @@ chalow $A$K$h$kHU$(GX4(B
                    "yto@nais.to")                      ;; $B%a!<%k%"%I%l%9(B
                   ))
 
-$(IA{$ALl$(I"H$(G^[(B (http://plaza.rakuten.co.jp/) $A$NHU$(GX4(B
+$B3ZE79->l(B (http://plaza.rakuten.co.jp/) $B$NF|5-(B
      $B1\Mw$7$?$$F|5-$r3+@_$7$F$$$k?M$N3ZE7(B ID $B$H%a!<%k%"%I%l%9$rD4$Y$F!"(B
      $B0J2<$N$h$&$K@_Dj$7$F;H$$$^$9!#(B
 
@@ -163,7 +163,7 @@ chalow $A$K$h$kHU$(GX4(B
 EmacsWiKi (http://www.emacswiki.org/)
      emacswiki.changes emacswiki.diff
 
-$A%3%s%F%s%D$r:,$`(B RSS $A%U%#$B!<$A%I(B
+$B%3%s%F%s%D$r4^$`(B RSS $B%U%#!<%I(B
      $B1\Mw$7$?$$7G:\%3%s%F%s%D$,4^$^$l$k$h$&$J(B RSS $B%U%#!<%I$rD4$Y$F!"(B
      `shimbun-rss-hash-group-path-alist' $BJQ?t$r0J2<$N$h$&$K@_Dj$7$F;H$$(B
      $B$^$9!#%P%C%/%(%s%IL>$O(B `rss-hash' $B$G$9!#<g$K8D?M$N%V%m%0$J$I$,BP>](B
@@ -183,7 +183,7 @@ EmacsWiKi (http://www.emacswiki.org/)
                   ("sampleblog2" "http://www.example.com/index2.rss"
                    t "</title>" "<!-- start ads")))
 
-$A%3%s%F%s%D$r:,$`(B Atom $A%U%#$B!<$A%I(B
+$B%3%s%F%s%D$r4^$`(B Atom $B%U%#!<%I(B
      $BA09`(B ($B%3%s%F%s%D$r4^$`(B RSS $B%U%#!<%I(B) $B$HF1MM$K!"7G:\$5$l$?%3%s%F%s(B
      $B%D$r4^$`(B Atom $B%U%#!<%I$b1\Mw$9$k$3$H$,$G$-$^$9!#$=$l$r9T$J$&$K$O!"(B
      shimbun-rss-hash-* $B$HF1MM$N$d$jJ}$GJQ?t(B
@@ -191,7 +191,7 @@ EmacsWiKi (http://www.emacswiki.org/)
      `shimbun-atom-hash-x-face-alist' $B$J$I$b(B) $B$r@_Dj$7$F2<$5$$!#%P%C%/(B
      $B%(%s%IL>$O(B `atom-hash' $B$G$9!#(B
 
-Wiki $A%3%s%F%s%D(B
+Wiki $B%3%s%F%s%D(B
      $B1\Mw$7$?$$(B Wiki $B$N(B URL $B$rD4$Y$F!"0J2<$N$h$&$K@_Dj$7$F;H$$$^$9!#(B
      PukiWiki $B$H(B Hiki $B$KBP1~$7$F$$$^$9!#$b$7!"3FFbB&$N%j%9%H$N(B 4 $BHVL\!"(B
      5 $BHVL\$NMWAG$N@55,I=8=$K2?$r;XDj$7$FNI$$$+J,$+$i$J$$$H$-$O!"(B`nil'
@@ -219,7 +219,7 @@ Wiki $A%3%s%F%s%D(B
                    "<div class=\"sidebar\">")
                   ))
 
-Yahoo!$A%*$B!<$A%/%7%g%s(B (http://auctions.yahoo.co.jp/)
+Yahoo!$B%*!<%/%7%g%s(B (http://auctions.yahoo.co.jp/)
      $B1\Mw$7$?$$%+%F%4%j$d8!:w7k2L$N(B URL $B$rD4$Y$F!"0J2<$N$h$&$K@_Dj$7$F(B
      $B;H$$$^$9!#(B
 
@@ -234,13 +234,13 @@ VineLinux Errata (http://www.vinelinux.org/)
      vinelinux.errata.2x.ppc vinelinux.errata.2x.sparc
      vinelinux.errata.2x.alpha vinelinux.errata.1x
 
-$A0"2?DZ$(Gk^$A%a$B!<$A%k%^%,%8%s(B (http://www.kantei.go.jp/)
+$B0$ItFb3U%a!<%k%^%,%8%s(B (http://www.kantei.go.jp/)
      kantei.m-magazine-en kantei.m-magazine-ja
      kantei.m-magazine-ja.koizumi
 
      $B8eJ}8_49@-$N$?$a!"(B`kantei.m-magazine' $B$bMxMQ2DG=$K$J$C$F$$$^$9!#(B
 
-$ALX$(G]B$(I"G(B (http://www.jpo.go.jp/)
+$BFC5vD#(B (http://www.jpo.go.jp/)
      jpo.news jpo.revision jpo.lawguide jpo.details
 
 IBM developerWorks (http://www-6.ibm.com/jp/developerworks/)
@@ -256,7 +256,7 @@ Wincefan (http://www.wince.ne.jp/)
 PalmFan (http://www.palmfan.com/)
      palmfan.news
 
-$(GgY$BG>$A=V$N$(G\"^[$A%l%]$B!<$A%H(B (http://homepage1.nifty.com/akiba/plat.html)
+$BEEG>39$N8=>l%l%]!<%H(B (http://homepage1.nifty.com/akiba/plat.html)
      dennou.report
 
 PCWEB COLUMN Square (http://pcweb.mycom.co.jp/column/)
@@ -269,18 +269,18 @@ PCWEB COLUMN Square (http://pcweb.mycom.co.jp/column/)
      pcweb-column.svalley pcweb-column.toolexp pcweb-column.winxp
      pcweb-column.yetanother
 
-$A%N$B!<$A%D$(G]s$AAP$(Gs((B (http://tsuruo.dominohosting.biz/members/tsuruo/)
+$B%N!<%DDDNs4[(B (http://tsuruo.dominohosting.biz/members/tsuruo/)
      lotusex.news lotusex.library lotusex.operation lotusex.primer
      lotusex.tips lotusex.practical lotusex.qanda lotusex.lounge
      lotusex.bbs
 
-$A#@(BIT$A%U%)$B!<$A%i%`(B (http://www.atmarkit.co.jp)
+$B!w(BIT$B%U%)!<%i%`(B (http://www.atmarkit.co.jp)
      atmarkit.news atmarkit.fwin2k atmarkit.fdotnet atmarkit.fsys
      atmarkit.fxml atmarkit.fdb atmarkit.flinux atmarkit.fnetwork
      atmarkit.fjava atmarkit.fsecurity atmarkit.farc atmarkit.fbiz
      atmarkit.fwcr atmarkit.jibun
 
-TeX Q&A $(I6-$AJ>0e(B (http://www.matsusaka-u.ac.jp/~okumura/texfaq/qa/)
+TeX Q&A $B7G<(HD(B (http://www.matsusaka-u.ac.jp/~okumura/texfaq/qa/)
      texfaq.qanda
 
 X51.org (http://x51.org/)
@@ -312,7 +312,7 @@ Foundation for a Free Information Infrastructure (http://www.ffii.org/)
      ffii.fr.brevets-logiciels.ffii ffii.nl.softwarepatenten
      ffii.nl.softwarepatenten.ffii
 
-$A%U%)$B!<$A%i%`(B@nifty (http://bbs.com.nifty.com/mes/)
+$B%U%)!<%i%`(B@nifty (http://bbs.com.nifty.com/mes/)
      nifty-forum.fphys12 nifty-forum.fphys13 nifty-forum.fphys14
      nifty-forum.fphys15 nifty-forum.fphys16 nifty-forum.fphys17
      nifty-forum.fphys18 nifty-forum.fphys24 nifty-forum.fphys25
@@ -328,7 +328,7 @@ Foundation for a Free Information Infrastructure (http://www.ffii.org/)
 
 File: emacs-w3m-ja.info, Node: Shimbun Basics, Prev: Shimbun Sites, Up: Shimbun Library
 
-$APB$(GjL$A%b%8%e$B!<$A%k$NWw$j7=(B
+$B?7J9%b%8%e!<%k$N:n$jJ}(B
 ======================
 
 `Shimbun' $B$O(B emacs-w3m $B$NIUB0%i%$%V%i%j$G!"(BGnus $B$d(B Wanderlust$B!"(BMew $B$J$I(B
@@ -349,7 +349,7 @@ File: emacs-w3m-ja.info, Node: Shimbun Basics, Prev: Shimbun Sites, Up: Shimbun 
 
 File: emacs-w3m-ja.info, Node: Overview, Next: Getting web page and header information, Prev: Shimbun Basics, Up: Shimbun Basics
 
-$A8EBT(B
+$B35N,(B
 ----
 
 `http://www.foobar.net' $B$N%3%s%F%s%D$r1\Mw$9$k?7$?$J(B `shimbun' $B%b%8%e!<(B
@@ -419,13 +419,13 @@ Overview-Footnotes::) $B$rMxMQ$7$F=q$+$l$F$$$^$9!#(B
 
 File: emacs-w3m-ja.info  Node: Overview-Footnotes, Up: Overview
 
-(1) FLIM $A$K:,$^$l$F$$$^$9!#(B
+(1) FLIM $B$K4^$^$l$F$$$^$9!#(B
 
 
 
 File: emacs-w3m-ja.info, Node: Getting web page and header information, Next: Displaying an article, Prev: Overview, Up: Shimbun Basics
 
-$A%&%'%V%Z$B!<$A%8$N%=$B!<$A%9<0$S%X%C%@Gi$(G^^$A$rH!5C$9$k(B
+$B%&%'%V%Z!<%8$N%=!<%95Z$S%X%C%@>pJs$r<hF@$9$k(B
 --------------------------------------------
 
 $B$^$:5-;v8+=P$7$r<hF@$9$kBP>]$H$J$k%&%'%V%Z!<%8$r7h$a$k$3$H$+$i;O$a$^$9!#(B
@@ -555,18 +555,18 @@ File: emacs-w3m-ja.info, Node: Getting web page and header information, Next: Di
 
 File: emacs-w3m-ja.info  Node: Getting web page and header information-Footnotes, Up: Getting web page and header information
 
-(1) `Shimbun' $A%b%8%e$B!<$A%kR;$D$K$D$-!"Wn5M$G$bR;$D$N%0%k$B!<$A%W$,1XR*$G(B
-$A$9!#(B
+(1) `Shimbun' $B%b%8%e!<%k0l$D$K$D$-!":GDc$G$b0l$D$N%0%k!<%W$,I,MW$G(B
+$B$9!#(B
 
-(2) shimbun $A$NR;2?$N$(GX4$AJB$,$BFI$A$a$J$$$@$1$J$i$^$@$7$b!"OBJV$K(B
-`message-id' $A$rWw3I$9$k$H!"$(Gb8$A7=$,J\$(Gkk$A$9$k4sJB$J%a$B!<$A%k$N$=$l$H$+$A(B
-$A:O$C$F$7$^$$!"$=$N%a$B!<$A%k$,$BFI$A$a$J$/$J$k?ID\PT$9$i$"$j$^$9!#(B
+(2) shimbun $B$N0lIt$N5-;v$,FI$a$J$$$@$1$J$i$^$@$7$b!"2<<j$K(B
+`message-id' $B$r:n@.$9$k$H!"5.J}$,<uNN$9$kBg;v$J%a!<%k$N$=$l$H$+$A(B
+$B9g$C$F$7$^$$!"$=$N%a!<%k$,FI$a$J$/$J$k2DG=@-$9$i$"$j$^$9!#(B
 
 
 
 File: emacs-w3m-ja.info, Node: Displaying an article, Next: Inheriting shimbun module, Prev: Getting web page and header information, Up: Shimbun Basics
 
-$(GX4$AJB$N1mJ>(B
+$B5-;v$NI=<((B
 ----------
 
 `shimbun.el' $B$KDj5A$5$l$?(B `shimbun-article' $B%a%=%C%I$O!"%X%C%@>pJs$+$i(B
@@ -625,7 +625,7 @@ web page $B$N<hF@$OI,MW$K$J$j$^$;$s$N$G!"$?$@(B Emacs $B$N%a%b%j$+$i<h$j=P$7
 
 File: emacs-w3m-ja.info, Node: Inheriting shimbun module, Next: Making text/plain articles, Prev: Displaying an article, Up: Shimbun Basics
 
-Shimbun $A%b%8%e$B!<$A%k$N$(ICc$A3P(B
+Shimbun $B%b%8%e!<%k$N7Q>5(B
 ------------------------
 
 $B%a!<%j%s%0%j%9%H%^%M!<%8%c(B ($B%"!<%+%$%P(B) $B$H$7$FM-L>$J$b$N$,$$$/$D$+$"$j(B
@@ -635,13 +635,13 @@ Shimbun $A%b%8%e$B!<$A%k$N$(ICc$A3P(B
      $B$F$$$^$7$?!#>\:Y$O(B
      `http://www.gnu.org/software/mailman/index.html' $B$r$4Mw2<$5$$!#(B
 
-   * MHonArc$B>\:Y$O(B `http://www.oac.uci.edu/indiv/ehood/mhonarc.html' $B$r(B
-     $B$4Mw2<$5$$!#(B
+   * MHonArc $B>\:Y$O(B `http://www.oac.uci.edu/indiv/ehood/mhonarc.html'
+     $B$r$4Mw2<$5$$!#(B
 
    * fml fml mailing list server/manager.  $B>\:Y$O(B
      `http://www.fml.org/software/fml/' $B$r$4Mw2<$5$$!#(B
 
-   * mailarc$B>\:Y$O(B `http://cvs.namazu.org/mailarc/' $B$r$4Mw2<$5$$!#(B
+   * mailarc $B>\:Y$O(B `http://cvs.namazu.org/mailarc/' $B$r$4Mw2<$5$$!#(B
 
 $B5.J}$,(B *Note Getting web page and header information:: $B$N%9%F%C%W$G<hF@(B
 $B$7$?%&%'%V%Z!<%8$N%=!<%9$rJ,@O$7$F$$$k$H$-$K!"$=$N%=!<%9$NCf$K$3$l$i%a!<(B
@@ -677,16 +677,16 @@ module-Footnotes::)$B!"(B`shimbun-foobar' $B$NCf$G$O!"(B`sb-mailman.el' $B$
 
 File: emacs-w3m-ja.info  Node: Inheriting shimbun module-Footnotes, Up: Inheriting shimbun module
 
-(1) $A%&%'%V%Z$B!<$A%8$N%=$B!<$A%9$NVP$K$3$l$i%a$B!<$A%j%s%0%j%9%H%^%M$B!<$A%8%c$NC{G0$,(B
-$A1mJ>$5$l$F$$$k$3$H$,6`$$$G$9!#(B
+(1) $B%&%'%V%Z!<%8$N%=!<%9$NCf$K$3$l$i%a!<%j%s%0%j%9%H%^%M!<%8%c$NL>A0$,(B
+$BI=<($5$l$F$$$k$3$H$,B?$$$G$9!#(B
 
-(2) $A$D$^$j(B `shimbun-mailman' $A%/%i%9$,$(Gr5$A%/%i%9$K$J$j$^$9!#(B
+(2) $B$D$^$j(B `shimbun-mailman' $B%/%i%9$,?F%/%i%9$K$J$j$^$9!#(B
 
 
 
 File: emacs-w3m-ja.info, Node: Making text/plain articles, Next: Coding convention of Shimbun, Prev: Inheriting shimbun module, Up: Shimbun Basics
 
-text/plain $A$N$(GX4$AJB$rWw$k$K$O(B
+text/plain $B$N5-;v$r:n$k$K$O(B
 ---------------------------
 
 $B$?$H$((B MUA $B$,(B HTML $B$N5-;v$rFI$`$3$H$,$G$-$k$h$&$K(B emacs-w3m $B$K$h$C$F6/(B
@@ -734,10 +734,10 @@ text/plain $A$N$(GX4$AJB$rWw$k$K$O(B
 
 File: emacs-w3m-ja.info, Node: Coding convention of Shimbun, Prev: Making text/plain articles, Up: Shimbun Basics
 
-Shimbun $A%i%$%V%i%j$N%3$B!<$A%G%#%s%0$(G]=R|(B
+Shimbun $B%i%$%V%i%j$N%3!<%G%#%s%05,Ls(B
 ------------------------------------
 
-   * `shimbun.el' $B$G$O!"(Bemacs-w3m $B$N4X?t$r(B*$AWTSI$K(B*$B;H$C$FNI$$!#(B
+   * `shimbun.el' $B$G$O!"(Bemacs-w3m $B$N4X?t$r(B*$B<+M3$K(B*$B;H$C$FNI$$!#(B
 
    * `sb-*.el' $B$G$O!"$3$l$^$G$HF1MM$K(B emacs-w3m $B$N4X?t$rD>@\8F$S=P$9$3(B
      $B$H$O$7$J$$!#(B`sb-*.el' $B$GI,MW$K$J$k(B emacs-w3m $B$N4X?t$K$D$$$F$O(B
@@ -762,7 +762,7 @@ Shimbun $A%i%$%V%i%j$N%3$B!<$A%G%#%s%0$(G]=R|(B
 
 File: emacs-w3m-ja.info, Node: Tips, Next: Mailing List, Prev: Shimbun Library, Up: Top
 
-Emacs-w3m $A$rJ9$&HwBd$?P!No$?$A(B
+Emacs-w3m $B$r;H$&^/Mn$?>.J*$?$A(B
 ******************************
 
 $BB>$N(B Emacs $B$N1~MQ5!G=$H$H$b$K(B emacs-w3m $B$rJXMx$K;H$&$?$a$N%R%s%H=8$G$9!#(B
@@ -888,7 +888,7 @@ Emacs-w3m $A$rJ9$&HwBd$?P!No$?$A(B
 
 File: emacs-w3m-ja.info, Node: Mailing List, Next: Emacs-w3m Functions, Prev: Tips, Up: Top
 
-$A%a$B!<$A%j%s%0%j%9%H!"%P%0%j%]$B!<$A%H(B
+$B%a!<%j%s%0%j%9%H!"%P%0%j%]!<%H(B
 ******************************
 
 Emacs-w3m $B$K4X$9$k$9$Y$F$N$3$H$,$i$rOC$79g$&$?$a$N%a!<%j%s%0%j%9%H$,MQ(B
@@ -925,7 +925,7 @@ Emacs-w3m $B$K4X$9$k$9$Y$F$N$3$H$,$i$rOC$79g$&$?$a$N%a!<%j%s%0%j%9%H$,MQ(B
 
 File: emacs-w3m-ja.info, Node: Emacs-w3m Functions, Next: External Packages, Prev: Mailing List, Up: Top
 
-Emacs-w3m $A$N$(IJ=$AJ}$N$(Gf[$A$7$$$(IIf$ACw(B
+Emacs-w3m $B$N4X?t$N>\$7$$@bL@(B
 ****************************
 
 
@@ -933,7 +933,7 @@ Emacs-w3m $A$N$(IJ=$AJ}$N$(Gf[$A$7$$$(IIf$ACw(B
 
 File: emacs-w3m-ja.info, Node: External Packages, Next: Authors, Prev: Emacs-w3m Functions, Up: Top
 
-$A$*VY$(Gbf$A$N%Q%C%1$B!<$A%8$?$A(B
+$B$*Cg4V$N%Q%C%1!<%8$?$A(B
 **********************
 
 Emacs-w3m $B$O=aBt$J5!G=$rDs6!$7$^$9$,!"$5$i$KJXMx$K$9$k$?$a$K0J2<$N30It(B
@@ -965,7 +965,7 @@ Emacs-w3m $B$O=aBt$J5!G=$rDs6!$7$^$9$,!"$5$i$KJXMx$K$9$k$?$a$K0J2<$N30It(B
 
 File: emacs-w3m-ja.info, Node: Authors, Next: Index, Prev: External Packages, Up: Top
 
-$A$3$N%^%K%e%"%k$r$(GUs$A$$$?HK$?$A(B
+$B$3$N%^%K%e%"%k$r=q$$$??M$?$A(B
 ****************************
 
    * $BGr0f(B $B=(9T(B
@@ -980,7 +980,7 @@ File: emacs-w3m-ja.info, Node: Authors, Next: Index, Prev: External Packages, Up
 
 File: emacs-w3m-ja.info, Node: Index, Prev: Authors, Up: Top
 
-$AKwR}(B
+$B:w0z(B
 ****
 
 * Menu:
@@ -994,29 +994,29 @@ File: emacs-w3m-ja.info, Node: Index, Prev: Authors, Up: Top
 
 File: emacs-w3m-ja.info, Node: Concept Index, Next: Key Index, Prev: Index, Up: Index
 
-$A8EDnKwR}(B
+$B35G0:w0z(B
 ========
 
 * Menu:
 
 * about://antenna/:             Using Antenna.          (line   5)
-* $A%/%C%-$B!<$A$K$(IJ=$(G]Y$A$7$?$(I+y$AJ}(B:       Cookie Variables.       (line   5)
 * Adding a bookmark:            Adding Bookmarks.       (line   5)
 * Adding autoload settings:     Minimal Settings.       (line  12)
 * Adding new search engines:    Adding New Search Engines.  (line   5)
-* $A$=$NK{$N$(I+y$AJ}(B:                 Other Variables.        (line   5)
 * Antenna:                      Using Antenna.          (line   5)
-* $A;-Oq$K$(IJ=$(G]Y$A$7$?$(I+y$AJ}(B:           Image Variables.        (line   5)
 * APEL package:                 Other Requirements.     (line   5)
-* $AR;0c5D$J$(I+y$AJ}(B:                 General Variables.      (line   5)
 * Arrived URLs:                 Tracing History.        (line   5)
 * article expiry:               Nnshimbun.              (line 155)
-* $A%U%)$B!<$A%`$K$(IJ=$(G]Y$A$7$?$(I+y$AJ}(B:       Form Variables.         (line   5)
-* $A%U%C%/(B:                       Hooks.                  (line   5)
 * auto-expire:                  Nnshimbun.              (line 155)
-* $A%V%C%/%^$B!<$A%/$K$(IJ=$(G]Y$A$7$?$(I+y$AJ}(B:   Bookmark Variables.     (line   5)
+* $B0lHLE*$JJQ?t(B:                 General Variables.      (line   5)
+* $B2hA|$K4XO"$7$?JQ?t(B:           Image Variables.        (line   5)
+* $B%/%C%-!<$K4XO"$7$?JQ?t(B:       Cookie Variables.       (line   5)
+* $B$=$NB>$NJQ?t(B:                 Other Variables.        (line   5)
 * Bookmarks:                    Managing Bookmarks.     (line   5)
 * Browsing history:             Tracing History.        (line   5)
+* $B%U%C%/(B:                       Hooks.                  (line   5)
+* $B%U%)!<%`$K4XO"$7$?JQ?t(B:       Form Variables.         (line   5)
+* $B%V%C%/%^!<%/$K4XO"$7$?JQ?t(B:   Bookmark Variables.     (line   5)
 * codepage-ex:                  Other Requirements.     (line   5)
 * Consulting bookmarks:         Consulting Bookmarks.   (line   5)
 * Creating new buffers:         Creating and killing buffers.  (line   5)
@@ -1073,7 +1073,7 @@ File: emacs-w3m-ja.info, Node: Concept Index, Next: Key Index, Prev: Index, Up: 
 
 File: emacs-w3m-ja.info, Node: Key Index, Next: Variable Index, Prev: Concept Index, Up: Index
 
-$A%-$B!<$A%P%$%s%IKwR}(B
+$B%-!<%P%$%s%I:w0z(B
 ================
 
 * Menu:
@@ -1143,7 +1143,7 @@ File: emacs-w3m-ja.info, Node: Key Index, Next: Variable Index, Prev: Concept In
 
 File: emacs-w3m-ja.info, Node: Variable Index, Next: Function Index, Prev: Key Index, Up: Index
 
-$(I+y$AJ}KwR}(B
+$BJQ?t:w0z(B
 ========
 
 * Menu:

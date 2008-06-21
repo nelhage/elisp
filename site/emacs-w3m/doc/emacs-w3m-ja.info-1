@@ -54,7 +54,7 @@ document's maintainer or write to: The Free Software Foundation, Inc.;
 
 File: emacs-w3m-ja.info, Node: Top, Next: Introduction, Prev: (dir), Up: (dir)
 
-Emacs-w3m $A%f$B!<$A%6%^%K%e%"%k(B
+Emacs-w3m $B%f!<%6%^%K%e%"%k(B
 **************************
 
                                                   Emacs-w3m $B3+H/%A!<%`(B
@@ -166,7 +166,7 @@ Emacs-w3m Functions
 
 File: emacs-w3m-ja.info, Node: Introduction, Next: Getting Started, Prev: Top, Up: Top
 
-$A$O$8$a$K(B
+$B$O$8$a$K(B
 ********
 
 Emacs/W3 (http://www.cs.indiana.edu/elisp/w3/docs.html) $B$O!"$+$D$F$O(B
@@ -182,14 +182,14 @@ Emacs $B>e$GF0:n$9$k:G$b%]%T%e%i!<$J(B web $B%V%i%&%6!<$G$7$?!#$7$+$7F0:n$,Hs
 $B;d$?$A(B (emacs-w3m $B3+H/%A!<%`(B) $B$K$"$j$^$9!#$b$C$H$b!"J]>Z$O$^$C$?$/$"$j(B
 $B$^$;$s$,!#(BEmacs-w3m $B$O(B 2000$BG/(B6$B7n$KEZ202mL-$K$h$C$FAO;O$5$l$^$7$?!#(B
 
-Emacs-w3m $A$N9+J=%Z$B!<$A%8(B (http://emacs-w3m.namazu.org/) $B$bJ;$;$F$4Mw2<$5(B
+Emacs-w3m $B$N8x<0%Z!<%8(B (http://emacs-w3m.namazu.org/) $B$bJ;$;$F$4Mw2<$5(B
 $B$$!#(B
 
 
 
 File: emacs-w3m-ja.info, Node: Getting Started, Next: Basic Usage, Prev: Introduction, Up: Top
 
-Emacs-w3m $A$rJ9$$J<$a$k$N$O$H$C$F$b$(Gv|$(I+J(B
+Emacs-w3m $B$r;H$$;O$a$k$N$O$H$C$F$b4JC1(B
 **************************************
 
 $B$R$g$C$H$9$k$H!"$"$J$?$N%7%9%F%`$K$O(B emacs-w3m $B$,$9$G$K%$%s%9%H!<%k$5$l(B
@@ -210,7 +210,7 @@ Emacs-w3m $A$rJ9$$J<$a$k$N$O$H$C$F$b$(Gv|$(I+J(B
 
 File: emacs-w3m-ja.info, Node: Required Emacs Version, Next: You Need w3m, Prev: Getting Started, Up: Getting Started
 
-$A$I$s$J%P$B!<$A%8%g%s$N(B Emacs $A$GJ9$($k$N(B?
+$B$I$s$J%P!<%8%g%s$N(B Emacs $B$G;H$($k$N(B?
 ====================================
 
 $B0J2<$K5s$2$?$$$m$$$m$J%P!<%8%g%s$N(B Emacsen $B$G(B emacs-w3m $B$rF0:n$5$;$k$3(B
@@ -230,7 +230,7 @@ File: emacs-w3m-ja.info, Node: Required Emacs Version, Next: You Need w3m, Prev:
      `mailto' url $B$r2r@O$9$k$?$a$N(B `rfc2368.el' $B%b%8%e!<%k$r%$%s%9%H!<(B
      $B%k$7$F$*$$$?J}$,NI$$$G$7$g$&(B (*Note Other Requirements::)$B!#(B
 
-`Emacs 20.x, Emacs 19.34 ($A:,(B Mule 2.3)'
+`Emacs 20.x, Emacs 19.34 ($B4^(B Mule 2.3)'
      $B$3$l$i$N(B Emacs $B$r(B emacs-w3m $B$O%5%]!<%H$7$^$;$s!#(B
 
 GNU Emacs $B$N3+H/HG(B ("Emacs 22") $B$r;H$C$F$$$k$N$G$"$l$P!"$*$=$i$/(BCVS $BHG(B
@@ -241,7 +241,7 @@ GNU Emacs $B$N3+H/HG(B ("Emacs 22") $B$r;H$C$F$$$k$N$G$"$l$P!"$*$=$i$/(BCVS 
 
 File: emacs-w3m-ja.info, Node: You Need w3m, Next: Other Requirements, Prev: Required Emacs Version, Up: Getting Started
 
-w3m $A$rJ9$$$^$9(B: emacs-w3m $A$,KY$$$o$1(B
+w3m $B$r;H$$$^$9(B: emacs-w3m $B$,B.$$$o$1(B
 ====================================
 
 Emacs-w3m $B$O30It%3%^%s%I(B w3m $B$r!"%&%'%V%3%s%F%s%D$r<hF@$9$k$?$a$N%P%C%/(B
@@ -258,7 +258,7 @@ Emacs-w3m $B$O30It%3%^%s%I(B w3m $B$r!"%&%'%V%3%s%F%s%D$r<hF@$9$k$?$a$N%P%C%/
 
 File: emacs-w3m-ja.info, Node: Other Requirements, Next: Installing Emacs-w3m, Prev: You Need w3m, Up: Getting Started
 
-Emacs-w3m $A$r$(GY/$AWw$5$;$k$N$K1XR*$J$b$N(B
+Emacs-w3m $B$rF0:n$5$;$k$N$KI,MW$J$b$N(B
 ====================================
 
 $B;HMQ$7$F$$$k(B Emacs $B$N%P!<%8%g%s$K$h$C$F$O!"%5!<%I%Q!<%F%#$N%Q%C%1!<%8$,(B
@@ -332,7 +332,7 @@ Emacs-w3m $A$r$(GY/$AWw$5$;$k$N$K1XR*$J$b$N(B
 
      `ftp://ftp.m17n.org/pub/mule/Mule-UCS/Mule-UCS-0.84.tar.gz'
 
-     Emacs-21.2 $B$GMxMQ$9$k>l9g$O!"(BMule-UCS $B$K(B $A$3$N%Q%C%A(B
+     Emacs-21.2 $B$GMxMQ$9$k>l9g$O!"(BMule-UCS $B$K(B $B$3$N%Q%C%A(B
      (http://www.m17n.org/mlarchive/mule/200203/msg00000.html) $B$rE,MQ$7(B
      $B$?$[$&$,$$$$$G$7$g$&!#(B
 
@@ -366,7 +366,7 @@ Emacs-w3m $A$r$(GY/$AWw$5$;$k$N$K1XR*$J$b$N(B
 
 File: emacs-w3m-ja.info, Node: Installing Emacs-w3m, Next: Non-UNIX-like systems, Prev: Other Requirements, Up: Getting Started
 
-Emacs-w3m $A$r%$%s%9%H$B!<$A%k$9$k(B
+Emacs-w3m $B$r%$%s%9%H!<%k$9$k(B
 ============================
 
 Emacs-w3m $B$N<hF@$K4X$7$F$O8x<0%Z!<%8(B `http://emacs-w3m.namazu.org/' $B$r(B
@@ -389,7 +389,7 @@ Emacs-w3m $B$N<hF@$K4X$7$F$O8x<0%Z!<%8(B `http://emacs-w3m.namazu.org/' $B$r
 
           % ./configure
 
-     *Gnus $A%f$B!<$A%6$X$NVXR*$J$*V*$i$;(B*:
+     *Gnus $B%f!<%6$X$N=EMW$J$*CN$i$;(B*:
 
      $BJ#?t$N%P!<%8%g%s$N(B Gnus $B$,%$%s%9%H!<%k$5$l$F$$$k>l9g(B ($B%j%j!<%9HG$H(B
      $B3+H/HG$N(B Gnus $B$,$"$k$+$b$7$l$^$;$s(B) $B$O!"(B`load-path' $B$K$"$J$?$,;H$&(B
@@ -464,7 +464,7 @@ Emacs-w3m $B$N<hF@$K4X$7$F$O8x<0%Z!<%8(B `http://emacs-w3m.namazu.org/' $B$r
 
 File: emacs-w3m-ja.info, Node: Non-UNIX-like systems, Next: Minimal Settings, Prev: Installing Emacs-w3m, Up: Getting Started
 
-$A7G(B UNIX $AO5$(Gt?$A>3$G$N%$%s%9%H$B!<$A%k(B
+$BHs(B UNIX $B7O4D6-$G$N%$%s%9%H!<%k(B
 ==============================
 
 $B$"$J$?$N%7%9%F%`$G(B `configure' $B%9%/%j%W%H$r<B9T$9$k$3$H$,$G$-$J$$$+!"(B
@@ -482,7 +482,7 @@ APEL$B!"(BFLIM ($B$^$?$OB>$N2?$+(B) $B$,IaDL$N>l=j$K%$%s%9%H!<%k$5$l$F$$$J$
 
 File: emacs-w3m-ja.info, Node: Minimal Settings, Prev: Non-UNIX-like systems, Up: Getting Started
 
-$(G]C$A6($7$J$1$l$P$J$i$J$$Wn5MO^$N$b$N(B
+$B@_Dj$7$J$1$l$P$J$i$J$$:GDc8B$N$b$N(B
 ==================================
 
 $B$3$N9`$G$O4pK\E*$J(B emacs-w3m $B$N@_Dj$N$$$/$D$+$r@bL@$7$^$9!#$-$a:Y$+$J@_(B
@@ -542,7 +542,7 @@ Customizable Variables:: $B$G8+$D$1$k$3$H$,$G$-$k$G$7$g$&!#(B
 
 File: emacs-w3m-ja.info, Node: Basic Usage, Next: Pretty Good Features, Prev: Getting Started, Up: Top
 
-$A;y1>5D$JJ9$$7=(B
+$B4pK\E*$J;H$$J}(B
 **************
 
 * Menu:
@@ -561,7 +561,7 @@ File: emacs-w3m-ja.info, Node: Basic Usage, Next: Pretty Good Features, Prev: Ge
 
 File: emacs-w3m-ja.info, Node: Browsing Web Pages, Next: Inline Images, Prev: Basic Usage, Up: Basic Usage
 
-$A%M%C%H%5$B!<$A%U%#%s$7$h$&(B!
+$B%M%C%H%5!<%U%#%s$7$h$&(B!
 =======================
 
 Emacs-w3m $B$G$N%&%'%V%V%i%&%8%s%0$O!"8f4|BTDL$j!"%-!<A`:n$GA4$F9T$J$&$3(B
@@ -595,7 +595,7 @@ Emacs-w3m $B$G$N%&%'%V%V%i%&%8%s%0$O!"8f4|BTDL$j!"%-!<A`:n$GA4$F9T$J$&$3(B
 
 File: emacs-w3m-ja.info, Node: Launching and Jumping, Next: Moving in a page, Prev: Browsing Web Pages, Up: Browsing Web Pages
 
-$A$H$K$+$/$(GY/$A$+$7$F$_$h$&(B
+$B$H$K$+$/F0$+$7$F$_$h$&(B
 ----------------------
 
 $B0J2<$K5s$2$k;0$D$N0c$&%3%^%s%I$r;H$C$F(B emacs-w3m $B$r5/F0$9$k$3$H$,$G$-$^(B
@@ -704,7 +704,7 @@ Emacs-w3m $B$N%P%C%U%!$G$O!"F~NO$7$??7$7$$(B URL $B$N%Z!<%8$K9T$/$?$a$N0lHLE*
 
 File: emacs-w3m-ja.info, Node: Moving in a page, Next: Moving over pages, Prev: Launching and Jumping, Up: Browsing Web Pages
 
-$A%Z$B!<$A%8DZ$r$(GSy$A$S$^$o$k(B
+$B%Z!<%8Fb$rHt$S$^$o$k(B
 --------------------
 
 Emacs $B$G0\F0MQ$K3d$jEv$F$i$l$F$$$kFk@w$_?<$$%-!<$,%&%'%V%Z!<%8$N1\MwCf(B
@@ -795,14 +795,14 @@ TAB
 
 File: emacs-w3m-ja.info  Node: Moving in a page-Footnotes, Up: Moving in a page
 
-(1) $AFUM($=$s$JRt$O$7$J$$$1$l$I$M!#S"$(Gk#$A0f$N(B Tadaa! $A$OB~;-$J$I$GJ9$o$l$k(B
-$(Gsi$ARt$G!"$=$NW4$(GNS$A$K$(I%w$A$8$F$$$m$$$m$K$BLu$A$5$l$^$9!#(B
+(1) $BIaDL$=$s$J2;$O$7$J$$$1$l$I$M!#1Q8lHG$N(B Tadaa! $B$OL!2h$J$I$G;H$o$l$k(B
+$B5<2;$G!"$=$N>u67$K1~$8$F$$$m$$$m$KLu$5$l$^$9!#(B
 
 
 
 File: emacs-w3m-ja.info, Node: Moving over pages, Next: Browsing With Mouse Operations, Prev: Moving in a page, Up: Browsing Web Pages
 
-$A%Z$B!<$A%8$(Gbf$A$r6I$j$(I)V$A$/(B
+$B%Z!<%84V$rEO$jJb$/(B
 ------------------
 
 $B$3$N9`$G$O%Z!<%8$+$i%Z!<%8$K0\F0$9$k$d$jJ}$r@bL@$7$^$9!#%j%s%/$r$?$I$C(B
@@ -911,7 +911,7 @@ DEL
 
 File: emacs-w3m-ja.info, Node: Browsing With Mouse Operations, Next: Going back to daily hacking and/or daily writing, Prev: Moving over pages, Up: Browsing Web Pages
 
-$A%^%&%9$rJ9$C$F%5$B!<$A%U%#%s(B
+$B%^%&%9$r;H$C$F%5!<%U%#%s(B
 ------------------------
 
 Emacs-w3m $B$N3+H/<TC#$O!"(BEmacs $B%.!<%/(B (1) (*Note Browsing With Mouse
@@ -951,13 +951,13 @@ Emacs-w3m $B$N%9%/%m!<%k%P!<!"%a%K%e!<5Z$S%D!<%k%P!<$O!"%^%&%9$r;H$&>l9g(B
 
 File: emacs-w3m-ja.info  Node: Browsing With Mouse Operations-Footnotes, Up: Browsing With Mouse Operations
 
-(1) $AS"$(Gk#$A0f$N(B Info $A$G$O(B Emacs otaku
+(1) $B1Q8lHG$N(B Info $B$G$O(B Emacs otaku
 
 
 
 File: emacs-w3m-ja.info, Node: Going back to daily hacking and/or daily writing, Prev: Browsing With Mouse Operations, Up: Browsing Web Pages
 
-$AFU6N$NIz;n$K$(I&($A$k$K$O(B
+$BIaCJ$N@83h$KLa$k$K$O(B
 --------------------
 
 $B;W$$=P$7$F2<$5$$!#$*$=$i$/$"$J$?$O%&%'%V$r8+$k$?$a$K(B Emacs $B$r;O$a$?$N$G(B
@@ -984,7 +984,7 @@ File: emacs-w3m-ja.info, Node: Going back to daily hacking and/or daily writing,
 
 File: emacs-w3m-ja.info, Node: Inline Images, Next: Tracing History, Prev: Browsing Web Pages, Up: Basic Usage
 
-$A;-Oq1mJ>$r(B ON/OFF $A$9$k(B
+$B2hA|I=<($r(B ON/OFF $B$9$k(B
 ======================
 
 $B$"$J$?$,;H$C$F$$$k%P!<%8%g%s$N(B Emacs $B$,%P%C%U%!$K2hA|$rI=<($9$k$3$H$,$G(B
@@ -1032,7 +1032,7 @@ emacs-w3m $B$O%&%'%V%Z!<%8$K$=$l$i$rI=<($9$k$3$H$,$G$-$^$9!#2<5-$N%3%^%s(B
 
 File: emacs-w3m-ja.info, Node: Tracing History, Next: Managing Bookmarks, Prev: Inline Images, Up: Basic Usage
 
-$(GUk$A?U$r$(IJ&$A$k(B
+$B;~6u$rAL$k(B
 ==========
 
 Emacs-w3m $B$K$O!"0JA0$KK,Ld$7$?$9$Y$F$N%Z!<%8$N%j%9%H$rDs<($9$k$?$a$N!"(B
@@ -1126,7 +1126,7 @@ URLs$B!W$G$9!#$3$l$O$"$J$?$,(B emacs-w3m $B$GK,Ld$7$?!":G8e$N(B 500$B8D(B!
 
 File: emacs-w3m-ja.info, Node: Managing Bookmarks, Next: Using Tabs, Prev: Tracing History, Up: Basic Usage
 
-$A$\$/$N(B/$A$o$?$7$N$*$B5$$A$KHk$j(B
+$B$\$/$N(B/$B$o$?$7$N$*5$$KF~$j(B
 =========================
 
 $B8=BeE*$J$"$^$?$N%V%i%&%6$NNc$KO3$l$:!"(Bemacs-w3m $B$K$O@h?J$N%V%C%/%^!<%/(B
@@ -1145,7 +1145,7 @@ File: emacs-w3m-ja.info, Node: Managing Bookmarks, Next: Using Tabs, Prev: Traci
 
 File: emacs-w3m-ja.info, Node: Adding Bookmarks, Next: Consulting Bookmarks, Prev: Managing Bookmarks, Up: Managing Bookmarks
 
-$A$*$B5$$A$KHk$j$K(B URL $A$r<S$($k(B
+$B$*5$$KF~$j$K(B URL $B$r2C$($k(B
 -------------------------
 
 $B%V%C%/%^!<%/$K(B URL $B$r2C$($k$K$O!"$$$/$D$+$N$d$jJ}$,$"$j$^$9!#:G=i$N0l$D(B
@@ -1179,7 +1179,7 @@ File: emacs-w3m-ja.info, Node: Adding Bookmarks, Next: Consulting Bookmarks, Pre
 
 File: emacs-w3m-ja.info, Node: Consulting Bookmarks, Next: Editing Bookmarks, Prev: Adding Bookmarks, Up: Managing Bookmarks
 
-$A%V%C%/%^$B!<$A%/$r$(IOURf$A$9$k(B
+$B%V%C%/%^!<%/$r1\Mw$9$k(B
 ----------------------
 
 $B%V%C%/%^!<%/$5$l$?%Z!<%8$r1\Mw$9$k:G$b4JC1$JJ}K!$O!"(Bemacs-w3m $B$N%P%C%U%!(B
@@ -1200,7 +1200,7 @@ Bookmarks::.
 
 File: emacs-w3m-ja.info, Node: Editing Bookmarks, Prev: Consulting Bookmarks, Up: Managing Bookmarks
 
-$A%V%C%/%^$B!<$A%/$r$(I+y$A8|$9$k$K$O(B?
+$B%V%C%/%^!<%/$rJQ99$9$k$K$O(B?
 ---------------------------
 
 Bookmark $B%^%$%J!<%b!<%I(B (*Note Consulting Bookmarks::) $B$O!"%V%C%/%^!<%/(B
@@ -1228,7 +1228,7 @@ Bookmark $B%^%$%J!<%b!<%I(B (*Note Consulting Bookmarks::) $B$O!"%V%C%/%^!<%/
 
 File: emacs-w3m-ja.info, Node: Using Tabs, Next: Working with buffers, Prev: Managing Bookmarks, Up: Basic Usage
 
-$A$_$s$J%?%V$,:C$-$@$h$M(B
+$B$_$s$J%?%V$,9%$-$@$h$M(B
 ======================
 
 $B$[$H$s$I$NB>$N%F%-%9%H%Y!<%9$N%V%i%&%6!<$H0[$J$j!"(Bemacs-w3m $B$O%?%V$K$h(B
@@ -1275,17 +1275,17 @@ Tabs-Footnotes::)$B!#Nc$($P%Y!<%8$r<h$j9~$s$G$$$k:GCf$O%F%-%9%H$O@V$/$J$C(B
 
 File: emacs-w3m-ja.info  Node: Using Tabs-Footnotes, Up: Using Tabs
 
-(1) XEmacs $A$O$9$Y$F$N%?%V$r$$$D$bM,$8I+$G1mJ>$7$^$9$,!"$(GrY$(I&1$A$5$l$?%?%V$H(B
-$AK{$N$b$N$rGx$(GI1$A$7$?$j!"%b$B!<$A%I%i%$%s$G$(G\"$ATZ$N%Z$B!<$A%8$NW4$(Ghh$A$rV*$k$3$H$O$(Gv|$(I+J(B
-$A$G$9!#(B
+(1) XEmacs $B$O$9$Y$F$N%?%V$r$$$D$bF1$8?'$GI=<($7$^$9$,!"A*Br$5$l$?%?%V$H(B
+$BB>$N$b$N$r6hJL$7$?$j!"%b!<%I%i%$%s$G8=:_$N%Z!<%8$N>uBV$rCN$k$3$H$O4JC1(B
+$B$G$9!#(B
 
-(2) XEmacs $A$G$O=q$N$H$3$m%?%VPP$K(B favicon $A$O1mJ>$5$l$^$;$s!#(B
+(2) XEmacs $B$G$O:#$N$H$3$m%?%V9T$K(B favicon $B$OI=<($5$l$^$;$s!#(B
 
 
 
 File: emacs-w3m-ja.info, Node: Working with buffers, Next: Downloading, Prev: Using Tabs, Up: Basic Usage
 
-$A%P%C%U%!$rWw$k(B/$AO{$9(B/$ARF$(GY/$A$9$k(B
+$B%P%C%U%!$r:n$k(B/$B>C$9(B/$B0\F0$9$k(B
 ============================
 
 $BCY$+$lAa$+$l$"$J$?$O(B emacs-w3m $BCfFG$K$J$C$F!"$9$Y$F$N%&%'%V$N1\Mw$r$=$l(B
@@ -1303,7 +1303,7 @@ File: emacs-w3m-ja.info, Node: Working with buffers, Next: Downloading, Prev: Us
 
 File: emacs-w3m-ja.info, Node: Creating and killing buffers, Next: Moving across buffers, Prev: Working with buffers, Up: Working with buffers
 
-$A%P%C%U%!$rWw$C$?$jO{$7$?$j(B
+$B%P%C%U%!$r:n$C$?$j>C$7$?$j(B
 --------------------------
 
 $B;~$K!"%&%'%V%Z!<%8$r3+$+$J$$$GC1$K?7$7$$%P%C%U%!!<$r:n$k$3$H$,Lr$KN)$D(B
@@ -1331,7 +1331,7 @@ File: emacs-w3m-ja.info, Node: Creating and killing buffers, Next: Moving across
 
 File: emacs-w3m-ja.info, Node: Moving across buffers, Next: Selecting buffers, Prev: Creating and killing buffers, Up: Working with buffers
 
-$A%P%C%U%!$(Gbf$A$NRF$(GY/(B
+$B%P%C%U%!4V$N0\F0(B
 ----------------
 
 $B:G$bIQHK$K;H$&%3%^%s%I$,$?$V$sNY$N%P%C%U%!$K9T$/$b$N$G$"$m$&$3$H$O!"@$(B
@@ -1367,20 +1367,20 @@ buffers-Footnotes::)$B!#(B
 
 File: emacs-w3m-ja.info  Node: Moving across buffers-Footnotes, Up: Moving across buffers
 
-(1) $A$$$D$b$N$h$&$K!"(B`2 C-c C-n' $A$N4z$o$j$K(B `C-u 2 C-c C-n' $A$rJ9$C(B
-$A$F$bA<$$$N$G$9$,!"(Bemacs-w3m $A$N%P%C%U%!$G$O$9$Y$F$NJ}WV%-$B!<$A$H%^%$%J%9$(GX4(B
-$A:E$,J}$N=S$(Gs$$AR}J}$K8n$j51$F$i$l$F$$$k$3$H$r$(I>t$A$($F$*$$$FOB$5$$!#(B
+(1) $B$$$D$b$N$h$&$K!"(B`2 C-c C-n' $B$NBe$o$j$K(B `C-u 2 C-c C-n' $B$r;H$C(B
+$B$F$bNI$$$N$G$9$,!"(Bemacs-w3m $B$N%P%C%U%!$G$O$9$Y$F$N?t;z%-!<$H%^%$%J%95-(B
+$B9f$,?t$N@\F,0z?t$K3d$jEv$F$i$l$F$$$k$3$H$r3P$($F$*$$$F2<$5$$!#(B
 
 
 
 File: emacs-w3m-ja.info, Node: Selecting buffers, Prev: Moving across buffers, Up: Working with buffers
 
-$A%j%9%H$+$i%P%C%U%!$r$(GrY$A$V(B
+$B%j%9%H$+$i%P%C%U%!$rA*$V(B
 ------------------------
 
 $B%j%9%H$+$i(B emacs-w3m $B$N%P%C%U%!$rA*$V$?$a$NFs$D$N$d$jJ}$,$"$j$^$9!#0l$D(B
 $BL\$O!"(B`C-c C-a' $B$G8F$S=P$5$l$k%_%K%P%C%U%!!&%Y!<%9$N%$%s%?!<%U%'!<%9$G(B
-$B$9!#I=<($7$?$$%P%C%U%!$r!"(B`M-p' $B$H(B `M-n' $B%-!<(B ($B$^$?$O(B `$A!|(B' $B$H(B `$A!}(B' $B%-!<(B)
+$B$9!#I=<($7$?$$%P%C%U%!$r!"(B`M-p' $B$H(B `M-n' $B%-!<(B ($B$^$?$O(B `$B",(B' $B$H(B `$B"-(B' $B%-!<(B)
 $B$r;H$C$FA*$V$3$H$,$G$-!"$=$l$i$O%j%9%H$NCf$G=[4D$7$^$9!#$^$?!"%W%m%s%W(B
 $B%H$rJT=8$7$F!"(B`TAB' $B$NJd40$r;H$C$F4{B8$N%&%'%V%Z!<%8$N%?%$%H%k$r=q$-9~(B
 $B$`$3$H$b$G$-$^$9!#Nc$($P!"(B"Google Search" $B$N%Z!<%8$r3+$$$F$"$k$J$i$P!"(B
@@ -1425,7 +1425,7 @@ Goo" $B$KB3$1$F(B `TAB' $B$rC!$/$3$H$K$h$C$F!"$=$N%Z!<%8$N%?%$%H%k$,40@.$7$^
 
 File: emacs-w3m-ja.info, Node: Downloading, Next: Submitting Forms, Prev: Working with buffers, Up: Basic Usage
 
-$A%U%!%$%k$r%@%&%s%m$B!<$A%I$9$k(B
+$B%U%!%$%k$r%@%&%s%m!<%I$9$k(B
 ==========================
 
 $B$I$s$J%&%'%V%Z!<%8$d%U%!%$%k$b(B emacs-w3m $B$G%@%&%s%m!<%I(B ($B$9$J$o$A<hF@!"(B
@@ -1449,7 +1449,7 @@ emacs-wget" $B$rGA$$$F$_$^$7$g$&!#$=$N%[!<%`%Z!<%8$O$3$3(B
 
 File: emacs-w3m-ja.info, Node: Submitting Forms, Next: HTML File Information, Prev: Downloading, Up: Basic Usage
 
-HTML $A%U%)$B!<$A%`$K$(GX4$AHk$9$k(B
+HTML $B%U%)!<%`$K5-F~$9$k(B
 =======================
 
 $B$3$l$i$N(B emacs-w3m $B%3%^%s%I$O!"C1=c$J%-!<%P%$%s%I$H@lMQ$N(B Emacs $B$N%&%#(B
@@ -1498,7 +1498,7 @@ textarea $B$GF~NO$7$?%F%-%9%H$r8e$G:FMxMQ$G$-$k$h$&$K!"%P%C%/%"%C%W!&%U%!(B
 
 File: emacs-w3m-ja.info, Node: HTML File Information, Prev: Submitting Forms, Up: Basic Usage
 
-$A%&%'%V%Z$B!<$A%8Ww$j$H%O%C%/$N$*JV$(H!s$A$$(B
+$B%&%'%V%Z!<%8:n$j$H%O%C%/$N$*<jEA$$(B
 ==================================
 
 $B$$$D$b%I%-%e%a%s%H$N<9I.4D6-$H$7$F!"$"$k$$$O%=%U%H%&%'%"$N3+H/4D6-$H$7(B
@@ -1550,7 +1550,7 @@ emacs-w3m $B$rO"7H$5$;$kJ}K!$r(B *Note Tips:: $B$K$F>R2p$7$F$$$k$N$G!";29M$K
 
 File: emacs-w3m-ja.info, Node: Pretty Good Features, Next: Customizable Variables, Prev: Basic Usage, Up: Top
 
-$A$?$/$5$s$N$9$0$l$b$N(B
+$B$?$/$5$s$N$9$0$l$b$N(B
 ********************
 
 * Menu:
@@ -1569,7 +1569,7 @@ File: emacs-w3m-ja.info, Node: Pretty Good Features, Next: Customizable Variable
 
 File: emacs-w3m-ja.info, Node: Using Search Engines, Next: Grouping URLs, Prev: Pretty Good Features, Up: Pretty Good Features
 
-$AJ9$$$d$9$$%&%'%V$(I<D$AKw(B
+$B;H$$$d$9$$%&%'%V8!:w(B
 ====================
 
 Emacs-w3m $B$K$O8!:w%(%s%8%s$rMxMQ$9$k$?$a$N@h?J$N5!G=$,$"$j!";0$D$N%$%s(B
@@ -1602,7 +1602,7 @@ Emacs-w3m $B$K$O8!:w%(%s%8%s$rMxMQ$9$k$?$a$N@h?J$N5!G=$,$"$j!";0$D$N%$%s(B
 
 File: emacs-w3m-ja.info, Node: The Search Interface, Next: Quick Searching, Prev: Using Search Engines, Up: Using Search Engines
 
-Emacs-w3m $A$K$h$k$(I<D$AKw$N$d$j7=(B
+Emacs-w3m $B$K$h$k8!:w$N$d$jJ}(B
 ----------------------------
 
 Emacs-w3m $B$N%P%C%U%!$G(B `S' $B%-!<$r;H$&$3$H$K$h$j(B ($B%G%U%)%k%H$N%-!<%^%C%W(B
@@ -1634,7 +1634,7 @@ Variables:: $B;2>H(B) $B$r%+%9%?%^%$%:$9$k$3$H$K$h$C$F!"$3$N?6$kIq$$$rJQ99$9
 
 File: emacs-w3m-ja.info, Node: Quick Searching, Next: Adding New Search Engines, Prev: The Search Interface, Up: Using Search Engines
 
-$A$b$&R;$D$N(B ($A$=$7$FKY$$(B) $A%&%'%V$(I<D$AKw(B
+$B$b$&0l$D$N(B ($B$=$7$FB.$$(B) $B%&%'%V8!:w(B
 ----------------------------------
 
 $B%&%'%V!&%Q%o!<%f!<%6(B ($B$3$l$rFI$s$G$$$k$"$J$?(B) $B$K$O!"?WB.$G8zN(E*$J8!:w(B
@@ -1681,7 +1681,7 @@ Google $B$K$O(B "gg"$B!"(BGoogle Groups $BMQ$K$O(B "ggg"$B!"(BYahoo! $B
 
 File: emacs-w3m-ja.info, Node: Adding New Search Engines, Prev: Quick Searching, Up: Using Search Engines
 
-$A$*$B5$$A$KHk$j$N%(%s%8%s$rJ9$&$K$O(B?
+$B$*5$$KF~$j$N%(%s%8%s$r;H$&$K$O(B?
 -------------------------------
 
 Emacs-w3m $B$OMxMQ2DG=$JB?$/$N8!:w%(%s%8%s$r;}$C$F$$$^$9!#$"$J$?$N$*5$$K(B
@@ -1737,7 +1737,7 @@ Emacs-w3m $B$OMxMQ2DG=$JB?$/$N8!:w%(%s%8%s$r;}$C$F$$$^$9!#$"$J$?$N$*5$$K(B
 
 File: emacs-w3m-ja.info, Node: Grouping URLs, Next: Weather Information, Prev: Using Search Engines, Up: Pretty Good Features
 
-$AR;$D$N(B URL $A$G$(Gno$AJ}$N%&%'%V%Z$B!<$A%8$r$(GKD$A$k(B
+$B0l$D$N(B URL $B$GJ#?t$N%&%'%V%Z!<%8$r8+$k(B
 =====================================
 
 Emacs-w3m $B$O(B "group URLs" $B$H$$$&!"J#?t$N<B:]$N(B URL $B$r0l$D$K$^$H$a$?FCJL(B

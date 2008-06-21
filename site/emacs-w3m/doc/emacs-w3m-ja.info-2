@@ -54,7 +54,7 @@ document's maintainer or write to: The Free Software Foundation, Inc.;
 
 File: emacs-w3m-ja.info, Node: Weather Information, Next: Using Antenna, Prev: Grouping URLs, Up: Pretty Good Features
 
-$ACwHU$NLl$B5$$A$OGg$l$G$7$g$&(B
+$BL@F|$NE75$$O@2$l$G$7$g$&(B
 ========================
 
 
@@ -62,7 +62,7 @@ File: emacs-w3m-ja.info, Node: Weather Information, Next: Using Antenna, Prev: G
 
 File: emacs-w3m-ja.info, Node: Using Antenna, Next: Showing Directory Tree, Prev: Weather Information, Up: Pretty Good Features
 
-$A%"%s%F%J$r$(GZ/$A$jQ2$i$=$&(B
+$B%"%s%F%J$rD%$j=d$i$=$&(B
 ======================
 
 $B%"%s%F%J$O%&%'%V%Z!<%8$NJQ2=$rDI@W$9$k$?$a$NF;6q$G$9!#%"%s%F%J$r;H$&$H!"(B
@@ -82,7 +82,7 @@ File: emacs-w3m-ja.info, Node: Using Antenna, Next: Showing Directory Tree, Prev
 
 File: emacs-w3m-ja.info, Node: Setting up Antenna, Next: Daily web tracking, Prev: Using Antenna, Up: Using Antenna
 
-$A%&%'%V%5%$%H$r%"%s%F%J$K<S$($k$K$O(B?
+$B%&%'%V%5%$%H$r%"%s%F%J$K2C$($k$K$O(B?
 -----------------------------------
 
 $B8=$KI=<(Cf$N%&%'%V%Z!<%8$r%"%s%F%J$K2C$($k$K$O!"C1=c$K(B `+' $B%-!<$r2!$7$F(B
@@ -99,7 +99,7 @@ for future sessions" $B$H(B "Finish" $B$N%\%?%s$r2!$;$PNI$$$N$G$9!#(B
 
 File: emacs-w3m-ja.info, Node: Daily web tracking, Prev: Setting up Antenna, Up: Using Antenna
 
-$A%"%s%F%J$G$(I+y$A;/$rW7$(Gfx$A$9$k(B
+$B%"%s%F%J$GJQ2=$rDI@W$9$k(B
 ------------------------
 
 $B%"%s%F%J!&%Z!<%8$K$OFs$D$N9`L\$,8=$l$^$9!#0l$D$O(B "Updated" $B$H8F$P$l!"$b(B
@@ -137,7 +137,7 @@ File: emacs-w3m-ja.info, Node: Daily web tracking, Prev: Setting up Antenna, Up:
 
 File: emacs-w3m-ja.info, Node: Showing Directory Tree, Next: Viewing Perl Documents, Prev: Using Antenna, Up: Pretty Good Features
 
-$A%G%#%l%/%H%j$ND>$(Gi,$ATl$r1mJ>$9$k(B
+$B%G%#%l%/%H%j$NLZ9=B$$rI=<($9$k(B
 ==============================
 
 `w3m-dtree' $B%3%^%s%I$r;H$&$H!"%m!<%+%k%G%#%l%/%H%j$N$9$Y$F$N%5%V%G%#%l(B
@@ -190,7 +190,7 @@ Emacs-w3m dtree $B$,$I$s$J$U$&$KF0:n$9$k$+$NNc$G$9(B:
 
 File: emacs-w3m-ja.info, Node: Viewing Perl Documents, Next: Using Namazu, Prev: Showing Directory Tree, Up: Pretty Good Features
 
-Perl $A$N%I%-%e%a%s%H$r$(GKD$A$k(B
+Perl $B$N%I%-%e%a%s%H$r8+$k(B
 =========================
 
 
@@ -198,7 +198,7 @@ Perl $A$N%I%-%e%a%s%H$r$(GKD$A$k(B
 
 File: emacs-w3m-ja.info, Node: Using Namazu, Next: Octet, Prev: Viewing Perl Documents, Up: Pretty Good Features
 
-Namazu $A$G%U%!%$%k$r$(I<D$AKw$9$k(B
+Namazu $B$G%U%!%$%k$r8!:w$9$k(B
 ===========================
 
 emacs-w3m $B$O!"A4J88!:w%=%U%H(B Namazu $B$r;H$C$F%U%!%$%k$r8!:w$9$k$3$H$b$G(B
@@ -245,7 +245,7 @@ Namazu $B$r;H$&$?$a$K$O!"<B:]$K8!:w$r9T$&A0$K!"8!:wBP>]$H$J$k%U%!%$%k$K4^(B
 
 File: emacs-w3m-ja.info, Node: Octet, Next: Frame Local Buffers, Prev: Using Namazu, Up: Pretty Good Features
 
-application/octet-stream $A%G$B!<$A%?$r$(GKD$A$k(B
+application/octet-stream $B%G!<%?$r8+$k(B
 =====================================
 
 ($B:n@.Cf(B)
@@ -260,7 +260,7 @@ application/octet-stream $A%G$B!<$A%?$r$(GKD$A$k(B
 
 File: emacs-w3m-ja.info, Node: Frame Local Buffers, Prev: Octet, Up: Pretty Good Features
 
-$A6`J}$N%;%C%7%g%s$r%U%l$B!<$A%`$G%0%k$B!<$A%W7V$1$9$k(B
+$BB??t$N%;%C%7%g%s$r%U%l!<%`$G%0%k!<%WJ,$1$9$k(B
 ============================================
 
 $BB??t$N(B emacs-w3m $B$N%;%C%7%g%s$r%0%k!<%WKh$KJL!9$N%U%l!<%`$KJ,3d$9$k$3$H(B
@@ -293,7 +293,7 @@ Emacs-w3m $B$O$?$/$5$s$N%Z!<%8$rF1;~$K8+$k$?$a$N$$$/$D$+$N5!G=$rDs6!$7$^(B
 
 File: emacs-w3m-ja.info, Node: Customizable Variables, Next: Hooking into MUAs, Prev: Pretty Good Features, Up: Top
 
-$A%G%U%)%k%H$N$^$^$G$b$(Ga8i,$AA<$$$HK<$&$1$l$I(B
+$B%G%U%)%k%H$N$^$^$G$b7k9=NI$$$H;W$&$1$l$I(B
 ****************************************
 
 $B$?$/$5$s$N(B emacs-w3m $B$NJQ?t$,!"(BCustom $B$N;E3]$1$K$h$C$F%+%9%?%^%$%:$9$k(B
@@ -352,7 +352,7 @@ emacs-w3m $B=i4|@_Dj%U%!%$%k$K=q$-9~$`$3$H$,$G$-$^$9!#%G%U%)%k%H$N%U%!%$(B
 
 File: emacs-w3m-ja.info, Node: General Variables, Next: Image Variables, Prev: Customizable Variables, Up: Customizable Variables
 
-$AR;0c5D$J$(I+y$AJ}(B
+$B0lHLE*$JJQ?t(B
 ============
 
 `w3m-accept-languages'
@@ -938,7 +938,7 @@ File: emacs-w3m-ja.info, Node: General Variables, Next: Image Variables, Prev: C
 
 File: emacs-w3m-ja.info, Node: Image Variables, Next: Form Variables, Prev: General Variables, Up: Customizable Variables
 
-$A;-Oq$K$(IJ=$(G]Y$A$7$?$(I+y$AJ}(B
+$B2hA|$K4XO"$7$?JQ?t(B
 ==================
 
 `w3m-default-display-inline-images'
@@ -1038,7 +1038,7 @@ File: emacs-w3m-ja.info, Node: Image Variables, Next: Form Variables, Prev: Gene
 
 File: emacs-w3m-ja.info, Node: Form Variables, Next: Cookie Variables, Prev: Image Variables, Up: Customizable Variables
 
-$A%U%)$B!<$A%`$K$(IJ=$(G]Y$A$7$?$(I+y$AJ}(B
+$B%U%)!<%`$K4XO"$7$?JQ?t(B
 ======================
 
 `w3m-form-input-map-buffer-lines'
@@ -1069,7 +1069,7 @@ File: emacs-w3m-ja.info, Node: Form Variables, Next: Cookie Variables, Prev: Ima
 
 File: emacs-w3m-ja.info, Node: Cookie Variables, Next: Bookmark Variables, Prev: Form Variables, Up: Customizable Variables
 
-$A%/%C%-$B!<$A$K$(IJ=$(G]Y$A$7$?$(I+y$AJ}(B
+$B%/%C%-!<$K4XO"$7$?JQ?t(B
 ======================
 
 `w3m-cookie-accept-bad-cookies'
@@ -1093,7 +1093,7 @@ File: emacs-w3m-ja.info, Node: Cookie Variables, Next: Bookmark Variables, Prev:
 
 File: emacs-w3m-ja.info, Node: Bookmark Variables, Next: Search Variables, Prev: Cookie Variables, Up: Customizable Variables
 
-$A%V%C%/%^$B!<$A%/$K$(IJ=$(G]Y$A$7$?$(I+y$AJ}(B
+$B%V%C%/%^!<%/$K4XO"$7$?JQ?t(B
 ==========================
 
 `w3m-bookmark-file'
@@ -1117,7 +1117,7 @@ File: emacs-w3m-ja.info, Node: Bookmark Variables, Next: Search Variables, Prev:
 
 File: emacs-w3m-ja.info, Node: Search Variables, Next: Weather Variables, Prev: Bookmark Variables, Up: Customizable Variables
 
-$A%&%'%V$(I<D$AKw$K$(IJ=$(G]Y$A$7$?$(I+y$AJ}(B
+$B%&%'%V8!:w$K4XO"$7$?JQ?t(B
 ========================
 
 
@@ -1125,7 +1125,7 @@ File: emacs-w3m-ja.info, Node: Search Variables, Next: Weather Variables, Prev: 
 
 File: emacs-w3m-ja.info, Node: Weather Variables, Next: Dtree Variables, Prev: Search Variables, Up: Customizable Variables
 
-$ALl$B5$$ASh$(G^^$A$K$(IJ=$(G]Y$A$7$?$(I+y$AJ}(B
+$BE75$M=Js$K4XO"$7$?JQ?t(B
 ======================
 
 
@@ -1133,7 +1133,7 @@ File: emacs-w3m-ja.info, Node: Weather Variables, Next: Dtree Variables, Prev: S
 
 File: emacs-w3m-ja.info, Node: Dtree Variables, Next: Antenna Variables, Prev: Weather Variables, Up: Customizable Variables
 
-dtree $A$K$(IJ=$(G]Y$A$7$?$(I+y$AJ}(B
+dtree $B$K4XO"$7$?JQ?t(B
 ====================
 
 
@@ -1141,7 +1141,7 @@ dtree $A$K$(IJ=$(G]Y$A$7$?$(I+y$AJ}(B
 
 File: emacs-w3m-ja.info, Node: Antenna Variables, Next: Perldoc Variables, Prev: Dtree Variables, Up: Customizable Variables
 
-$A%"%s%F%J$K$(IJ=$(G]Y$A$7$?$(I+y$AJ}(B
+$B%"%s%F%J$K4XO"$7$?JQ?t(B
 ======================
 
 
@@ -1149,7 +1149,7 @@ File: emacs-w3m-ja.info, Node: Antenna Variables, Next: Perldoc Variables, Prev:
 
 File: emacs-w3m-ja.info, Node: Perldoc Variables, Next: Namazu Variables, Prev: Antenna Variables, Up: Customizable Variables
 
-Perldoc $A$K$(IJ=$(G]Y$A$7$?$(I+y$AJ}(B
+Perldoc $B$K4XO"$7$?JQ?t(B
 ======================
 
 
@@ -1157,7 +1157,7 @@ Perldoc $A$K$(IJ=$(G]Y$A$7$?$(I+y$AJ}(B
 
 File: emacs-w3m-ja.info, Node: Namazu Variables, Next: Octet Variables, Prev: Perldoc Variables, Up: Customizable Variables
 
-Namazu $A$K$(IJ=$(G]Y$A$7$?$(I+y$AJ}(B
+Namazu $B$K4XO"$7$?JQ?t(B
 =====================
 
 
@@ -1165,7 +1165,7 @@ Namazu $A$K$(IJ=$(G]Y$A$7$?$(I+y$AJ}(B
 
 File: emacs-w3m-ja.info, Node: Octet Variables, Next: Hooks, Prev: Namazu Variables, Up: Customizable Variables
 
-Octet $A$K$(IJ=$(G]Y$A$7$?$(I+y$AJ}(B
+Octet $B$K4XO"$7$?JQ?t(B
 ====================
 
 
@@ -1173,7 +1173,7 @@ Octet $A$K$(IJ=$(G]Y$A$7$?$(I+y$AJ}(B
 
 File: emacs-w3m-ja.info, Node: Hooks, Next: Other Variables, Prev: Octet Variables, Up: Customizable Variables
 
-$A%U%C%/(B
+$B%U%C%/(B
 ======
 
 `w3m-after-cursor-move-hook'
@@ -1232,7 +1232,7 @@ File: emacs-w3m-ja.info, Node: Hooks, Next: Other Variables, Prev: Octet Variabl
 
 File: emacs-w3m-ja.info, Node: Other Variables, Prev: Hooks, Up: Customizable Variables
 
-$A$=$NK{$N$(I+y$AJ}(B
+$B$=$NB>$NJQ?t(B
 ============
 
 `w3m-async-exec'
@@ -1292,7 +1292,7 @@ File: emacs-w3m-ja.info, Node: Other Variables, Prev: Hooks, Up: Customizable Va
 
 File: emacs-w3m-ja.info, Node: Hooking into MUAs, Next: Frequently Asked Questions, Prev: Customizable Variables, Up: Top
 
-$A%a$B!<$A%k(B/$A%K%e$B!<$A%9%j$B!<$A%@$B!<$A$GJ9$&(B
+$B%a!<%k(B/$B%K%e!<%9%j!<%@!<$G;H$&(B
 *****************************
 
 $B$3$3$G$O;0<oN`$N(B MUA (Message User Agent) $B$r>R2p$7$^$9!#$=$l$i$N(B MUA $B$O(B
@@ -1318,7 +1318,7 @@ File: emacs-w3m-ja.info, Node: Hooking into MUAs, Next: Frequently Asked Questio
 
 File: emacs-w3m-ja.info, Node: Gnus, Next: Mew, Prev: Hooking into MUAs, Up: Hooking into MUAs
 
-Gnus $A$G(B HTML $A%a$B!<$A%k$r$BFI$A$`(B
+Gnus $B$G(B HTML $B%a!<%k$rFI$`(B
 =========================
 
 Gnus (Emacs $B$N%K%e!<%:%j!<%@!<(B) $B$,(B emacs-w3m $B$r%5%]!<%H$7$F$$$k$C$F!"CN$C(B
@@ -1416,7 +1416,7 @@ Gnus (Emacs $B$N%K%e!<%:%j!<%@!<(B) $B$,(B emacs-w3m $B$r%5%]!<%H$7$F$$$k$C
 
 File: emacs-w3m-ja.info, Node: Mew, Next: SEMI MUAs, Prev: Gnus, Up: Hooking into MUAs
 
-Mew $A$G(B HTML $A%a$B!<$A%k$r$BFI$A$`(B
+Mew $B$G(B HTML $B%a!<%k$rFI$`(B
 ========================
 
 Emacs-w3m $B$r;H$&$3$H$K$h$C$F!"(BText/Html $B$r(B Message $B%b!<%I$KI=<($G$-$k$h(B
@@ -1474,7 +1474,7 @@ Mew $B$K4XO"$9$k$$$/$D$+$N%+%9%?%^%$%:2DG=$JJQ?t$,$"$j$^$9(B:
 
 File: emacs-w3m-ja.info, Node: SEMI MUAs, Next: VM, Prev: Mew, Up: Hooking into MUAs
 
-SEMI MUA $A$G(B HTML $A%a$B!<$A%k$r$BFI$A$`(B
+SEMI MUA $B$G(B HTML $B%a!<%k$rFI$`(B
 =============================
 
 Emacs-w3m $B$H(B SEMI MUA$B!"Nc$($P(B Wanderlust $B$d(B T-gnus $B$J$I$r;H$&$3$H$K$h$C(B
