@@ -28,6 +28,7 @@
 (global-set-key (kbd "M-s") 're-search-forward)
 (global-set-key [up] 'increment-number-at-point)
 (global-set-key [down] 'decrement-number-at-point)
+(global-set-key (kbd "C-x C-c") 'server-edit)
 
 (setq window-number-prefix "\C-c")
 (require 'window-number)
@@ -39,6 +40,7 @@
 ;(zone-when-idle 60)
 
 (global-set-key (kbd "C-x 4 C-f") 'window-number-find-file)
+(global-set-key (kbd "C-x 4 f") 'window-number-find-file)
 
 (setq lpr-switches '("-h"))
 (setq ps-left-header '(ps-get-buffer-name user-full-name))
@@ -239,7 +241,8 @@ unable to perform symbol completion.")
 (add-hook 'term-mode-hook 'my-term-mode-hook)
 
 (defun my-term-mode-hook ()
-  (define-key term-mode-map (kbd "C-x M-x") 'execute-extended-command))
+  (define-key term-mode-map (kbd "C-x M-x") 'execute-extended-command)
+  (define-key term-raw-map (kbd "C-z") elscreen-map))
 
 (defun named-term (name directory)
   (interactive "MTerminal name: \nDIn directory: ")
@@ -415,6 +418,13 @@ unable to perform symbol completion.")
 (autoload 'jsim-mode "jsim" nil t)
 (setq auto-mode-alist (cons '("\.jsim$" . jsim-mode) auto-mode-alist))
 
+(add-to-list 'auto-mode-alist (cons "\.uasm$" 'uasm-mode))
+(defun uasm-mode ()
+  (interactive)
+  (make-local-variable 'asm-comment-char)
+  (setq asm-comment-char ?|)
+  (asm-mode))
+
 ;;PHP mode
 (add-to-list 'auto-mode-alist '("\\.php[34s]?$" . php-mode))
 (add-to-list 'magic-mode-alist '("<\\?php" . php-mode))
@@ -449,10 +459,17 @@ unable to perform symbol completion.")
   (setq c-basic-offset 4)
   (setq complete-symbol-function (lambda ()
                                    (interactive)
-                                   (complete-symbol nil))))
+                                   (complete-symbol nil)))
+  (cscope-minor-mode))
+
+
+(require 'xcscope)
 
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 (add-hook 'c-mode-common-hook 'define-bracket-keys)
+
+(define-key cscope:map (kbd "C-c .") 'cscope-find-global-definition-no-prompting)
+(define-key cscope:map (kbd "C-c *") 'cscope-pop-mark)
 
 (defun pidof (name)
   (with-temp-buffer
