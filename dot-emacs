@@ -242,7 +242,8 @@ unable to perform symbol completion.")
 
 (defun my-term-mode-hook ()
   (define-key term-mode-map (kbd "C-x M-x") 'execute-extended-command)
-  (define-key term-raw-map (kbd "C-z") elscreen-map))
+  (define-key term-raw-map (kbd "C-z") elscreen-map)
+  (font-lock-mode -1))
 
 (defun named-term (name directory)
   (interactive "MTerminal name: \nDIn directory: ")
