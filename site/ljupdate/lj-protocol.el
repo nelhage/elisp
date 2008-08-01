@@ -61,14 +61,13 @@ returns nil ."
       ;; (if (and (stringp http-status-code) (= http-status-code 200)) ; HTTP 200 OK
       (let ((response (make-hash-table :test 'equal))
 	    (have-frobbed nil))
-        (decode-coding-region (point-min) (point-max) lj-coding-system)
         (goto-char (point-min))
         (let ((on-variable-name-line t)
               var)
           (while (< (point) (point-max))
             (cond (on-variable-name-line (setq var (lj-this-line)))
                   (t
-                   (puthash var (lj-this-line) response)
+		   (puthash var (decode-coding-string (string-make-unibyte (lj-this-line)) lj-coding-system) response)
                    (setq have-frobbed t)))
             (forward-line 1)
             (setq on-variable-name-line (not on-variable-name-line))))

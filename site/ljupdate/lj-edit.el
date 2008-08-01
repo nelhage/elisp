@@ -81,7 +81,7 @@
         (goto-char (- 1 (lj-compose-find-separator)))
         (lj-add-props edit-response edit-server edit-username)
         (goto-char (+ 1 (lj-compose-find-separator)))
-        (insert (replace-regexp-in-string "\r" "" (lj-html-decode-string (gethash "events_1_event" edit-response))))
+        (insert (replace-regexp-in-string "\r" "" (decode-coding-string (string-make-unibyte (lj-html-decode-string (gethash "events_1_event" edit-response))) lj-coding-system)))
 	)))(delete-windows-on "lj-list"))
 
 (defun lj-add-prop (prop value)

@@ -29,6 +29,11 @@ in this directory should be sufficient. If the http-FOO.el libraries are
 in some other directory, invoking make with LOAD_PATH=/path/to/that/dir
 will point Emacs at them when compiling.
 
+** Subversion users
+
+N.B., if you've checked ljupdate out from Subversion, running `make'
+isn't optional.
+
 * Usage
 
 Add this `ljupdate' directory to your `load-path'. If you put the
