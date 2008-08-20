@@ -83,9 +83,9 @@
           (string :tag "username@gmail.com" ""))
   :group 'g)
 
-(defcustom g-auth-lifetime '(0 1800 0)
+(defcustom g-auth-lifetime '(18 30057 25269)
   "Lifetime of authentication token as a list suitable for
-`current-time'."
+`current-time'. Approximately 2 weeks."
   :type 'sexp
   :group 'g-auth)
 
@@ -96,7 +96,7 @@
   "Scratch buffer we do authentication work.")
 
 (defvar g-auth-url-pattern
-  "https://www.google.com/accounts/ClientLogin?service=%s"
+  "'https://www.google.com/accounts/ClientLogin?service=%s'"
   "URL to login to Google services.")
 
 (defsubst g-auth-url (service)
@@ -116,7 +116,7 @@
   email
   password
   token
-  session-id ;gsession-id
+  session-id                            ;gsession-id
   cookie-alist
   service
   (lifetime  g-auth-lifetime)
@@ -130,15 +130,14 @@
     (when pair (cdr pair))))
 
 (defconst g-authorization-header-format
-  "--header 'Authorization: GoogleLogin auth=%s'  \
---header 'Content-Type: application/atom+xml' "
-  "HTTP headers to send.")
+  "--header 'Authorization: GoogleLogin auth=%s'"
+  "HTTP authorization headers to send.")
 
 (defsubst g-authorization (auth-handle)
   "Return authorization header."
   (declare (special g-authorization-header-format))
   (format g-authorization-header-format
-              (g-cookie "Auth" auth-handle)))
+          (g-cookie "Auth" auth-handle)))
 
 (defsubst g-auth-expired-p (auth-handle)
   "Check if  token for specified service has expired."
@@ -157,6 +156,7 @@
   "Authenticate    using credentials in auth-handle.
 Populate auth-handle with the returned cookies and token."
   (declare (special g-auth-scratch-buffer g-curl-program
+                    g-curl-common-options
                     g-user-email))
   (let* ((post-auth-action (g-auth-post-auth-action auth-handle))
          (email (or (g-auth-email auth-handle)
@@ -181,8 +181,8 @@ Populate auth-handle with the returned cookies and token."
                (g-url-encode password)))
       (shell-command-on-region
        (point-min) (point-max)
-       (format "%s %s -X POST --data-binary @- '%s' 2>/dev/null"
-               g-curl-program g-cookie-options
+       (format "%s %s %s -X POST --data-binary @- %s 2>/dev/null"
+               g-curl-program g-cookie-options g-curl-common-options
                (g-auth-url (g-auth-service auth-handle)))
        (current-buffer)
        'replace)

@@ -58,10 +58,6 @@
 ;;; gblogger-edit-entry -- Edit previously posted entry
 ;;; gblogger-delete-entry -- Delete previously posted entry
 
-
-
-
-
 ;;; Commands prompt for the URI of the entry being manipulated ---
 ;;; this is the service.edit URI.
 ;;; You can customize things via custom.
@@ -73,6 +69,7 @@
 (require 'derived)
 (require 'g-utils)
 (require 'g-auth)
+(require 'g-app)
 
 ;;}}}
 ;;{{{ customizations
@@ -97,7 +94,7 @@
 (defcustom gblogger-author (user-full-name)
   "Author name under which we post."
   :type 'string
-  :group 'atom-blogger)
+  :group 'gblogger)
 
 (defvar gblogger-generator-name "http://purl.org/net/emacs-gblogger/"
   "Name of this generator.")
@@ -129,11 +126,6 @@
   "http://www.blogger.com/feeds/default/blogs"
   "Base url for blogger access.")
 
-
-
-
-
-
 (defsubst gblogger-p (service)
   "Check if this is blogger."
   (declare (special gblogger-service-name))
@@ -149,29 +141,12 @@
   (make-g-auth :service gblogger-service-name
                :email gblogger-user-email
                :password gblogger-user-password))
+
 (defvar gblogger-auth-handle
   (make-gblogger-auth)
   "Gblogger auth handle.
 Holds user's email address, password, and the auth token received
 from the server.")
-
-;;}}}
-;;{{{ Define gblogger mode:
-
-(define-derived-mode gblogger-mode xml-mode
-  "Atom Blogger Interaction"
-  "Major mode for Blogger interaction\n\n
-\\{gblogger-mode-map"
-  (auto-fill-mode 1))
-
-(declaim (special gblogger-mode-map))
-(define-key gblogger-mode-map "\C-c\C-c" 'gblogger-publish)
-
-
-(defvar gblogger-this-url nil
-  "Buffer local variable that records URL we came from.")
-
-(make-variable-buffer-local 'gblogger-this-url)
 
 ;;}}}
 ;;{{{ Interactive Commands:
@@ -181,58 +156,26 @@ from the server.")
   "Retrieve and display feed of feeds after authenticating."
   (interactive)
   (declare (special gblogger-auth-handle
-                    g-atom-view-xsl
-                    g-curl-program g-curl-common-options
-                    g-cookie-options))
-  (g-auth-ensure-token gblogger-auth-handle)
-  (g-display-result
-   (format
-    "%s --location --header 'Authorization: GoogleLogin auth=%s' '%s' 2>/dev/null"
-    g-curl-program
-    (g-cookie "Auth" gblogger-auth-handle)
-    gblogger-base-url)
-   g-atom-view-xsl))
+                    gblogger-base-url))
+  (g-app-view gblogger-auth-handle gblogger-base-url))
+
 ;;;###autoload
-(defun gblogger-atom-display (url)
+(defun gblogger-atom-display (feed-url)
   "Retrieve and display specified feed after authenticating."
   (interactive
    (list
     (read-from-minibuffer "Feed: "
                           (browse-url-url-at-point))))
-  (declare (special gblogger-auth-handle
-                    g-atom-view-xsl
-                    g-curl-program g-curl-common-options
-                    g-cookie-options))
-  (g-auth-ensure-token gblogger-auth-handle)
-  (g-display-result
-   (format
-    "%s --location --header 'Authorization: GoogleLogin auth=%s' '%s' 2>/dev/null"
-    g-curl-program
-    (g-cookie "Auth" gblogger-auth-handle)
-    url)
-   g-atom-view-xsl))
+  (declare (special gblogger-auth-handle))
+  (g-app-view gblogger-auth-handle feed-url))
 
 (defun gblogger-get-entry (url)
   "Retrieve specified entry.
 `url' is the URL of the entry"
-  (declare (special gblogger-auth-handle
-                    g-curl-program g-curl-common-options))
-  (g-auth-ensure-token gblogger-auth-handle)
-  (let ((buffer (get-buffer-create "*atom entry*"))
-        (nxml-auto-insert-xml-declaration-flag nil))
+  (declare (special gblogger-auth-handle))
     (save-excursion
-      (set-buffer buffer)
-      (insert
-       (g-get-result
-        (format
-         "%s %s %s  %s 2>/dev/null"
-         g-curl-program g-curl-common-options
-         (g-authorization gblogger-auth-handle)
-         url)))
-      (g-html-unescape-region (point-min) (point-max))
-      (gblogger-mode)
-      (setq gblogger-this-url url)
-      buffer)))
+      (set-buffer (g-app-get-entry gblogger-auth-handle url))
+    (current-buffer)))
 
 ;;;###autoload
 (defun gblogger-edit-entry (url)
@@ -242,22 +185,25 @@ The retrieved entry is placed in a buffer ready for editing.
   (interactive
    (list
     (read-from-minibuffer "Entry URL:")))
-  (declare (special gblogger-auth-handle
-                    g-curl-program g-curl-common-options))
-  (let ((buffer (gblogger-get-entry url)))
+  (declare (special gblogger-auth-handle))
+  (let ((buffer (g-app-get-entry gblogger-auth-handle  url)))
     (save-excursion
       (set-buffer buffer)
-      (setq gblogger-publish-action 'gblogger-put-entry)
+      (setq g-app-publish-action 'g-app-put-entry)
       (g-xsl-transform-region (point-min) (point-max)
-                              g-atom-edit-filter))
+                              g-atom-edit-filter)
+      (goto-char (point-min))
+      (flush-lines "^ *$"))
     (switch-to-buffer buffer)
     (goto-char (point-min))
-    (flush-lines "^ *$")
-    (goto-char (point-min))
-    (search-forward "<content" nil t)
-    (forward-line 1)
-    (message
-     (substitute-command-keys "Use \\[gblogger-publish] to publish your edits ."))))
+    (search-forward "content" nil t)
+    ;(search-backward "<content")
+    ;(mark-sexp)
+    ;(g-html-unescape-region (point) (mark))
+    ;(search-forward "<content" nil t)
+    (forward-line 1))
+  (message
+   (substitute-command-keys "Use \\[g-app-publish] to publish your edits .")))
 
 ;;;###autoload
 (defun gblogger-new-entry (url)
@@ -266,81 +212,34 @@ The retrieved entry is placed in a buffer ready for editing.
    (list
     (read-from-minibuffer "Post URL:")))
   (declare (special gblogger-auth-handle gblogger-new-entry-template
-                    gblogger-generator-name gblogger-publish-action))
+                    gblogger-generator-name ))
   (g-auth-ensure-token gblogger-auth-handle)
   (let* ((title (read-string "Title: "))
          (buffer (get-buffer-create title)))
     (save-excursion
       (set-buffer buffer)
       (erase-buffer)
-      (gblogger-mode)
-      (setq gblogger-this-url url)
-      (goto-char (point-max))
+      (g-app-mode)
+      (setq g-app-this-url url
+            g-app-auth-handle gblogger-auth-handle
+            g-app-publish-action 'g-app-post-entry)      (goto-char (point-max))
       (insert
        (format gblogger-new-entry-template
                gblogger-generator-name gblogger-generator-name
                gblogger-author title)))
     (switch-to-buffer buffer)
-    (setq gblogger-publish-action 'gblogger-post-entry)
     (search-backward "<div" nil t)
     (forward-line 1)
     (message
-     (substitute-command-keys "Use \\[gblogger-publish] to
-publish your edits ."))))
-
-
-(defun gblogger-send-buffer-contents (http-method)
-  "Publish the Blog entry in the current buffer.
-http-method is either POST or PUT"
-  (declare (special g-cookie-options gblogger-auth-handle
-                    g-curl-program g-curl-common-options))
-  (unless (and (eq major-mode 'gblogger-mode)
-               gblogger-this-url)
-    (error "Not in a correctly initialized Atom Entry."))
-  (goto-char (point-min))
-  (let ((cl (format "-H Content-length:%s" (buffer-size))))
-    (shell-command-on-region
-     (point-min) (point-max)
-     (format
-      "%s %s %s %s %s -i -X %s --data-binary @- '%s' 2>/dev/null"
-      g-curl-program g-curl-common-options cl
-      (g-authorization gblogger-auth-handle)
-      g-cookie-options
-      http-method
-      gblogger-this-url)
-     (current-buffer) 'replace)
-    (list (g-http-headers (point-min) (point-max))
-          (g-http-body (point-min) (point-max)))))
+     (substitute-command-keys
+      "Use \\[g-app-publish] to publish your edits ."))))
 
 ;;;###autoload
-(defun gblogger-post-entry ()
-  "Post buffer contents  as  updated entry."
-  (interactive)
-  (gblogger-send-buffer-contents "POST"))
-
-;;;###autoload
-(defun gblogger-put-entry ()
-  "PUT buffer contents as new entry."
-  (interactive)
-  (gblogger-send-buffer-contents "PUT"))
-
-;;;### autoload
-
-
-;;;### autoload
-;;;###autoload
-(defun gblogger-publish ()
-  "Publish current entry."
-  (interactive)
-  (declare (special gblogger-this-url gblogger-auth-handle
-                    gblogger-publish-action))
-  (unless (and (eq major-mode 'gblogger-mode)
-               gblogger-publish-action
-               (commandp gblogger-publish-action)
-               gblogger-this-url)
-    (error "Not in a correctly initialized Atom Entry."))
-  (call-interactively gblogger-publish-action)
-  (message "Publishing  to %s" gblogger-this-url))
+(defun gblogger-delete-entry (edit-url)
+  "Delete item at specified edit URL."
+  (interactive "sDelete: ")
+  (declare (special gblogger-auth-handle))
+  (g-app-delete-entry gblogger-auth-handle edit-url))
 
 ;;;### autoload
 (defun gblogger-delete-entry (url)
@@ -349,16 +248,49 @@ http-method is either POST or PUT"
    (list
     (read-from-minibuffer "Entry URL:")))
   (declare (special gblogger-auth-handle))
-  (g-auth-ensure-token gblogger-auth-handle)
-  (shell-command
-   (format "%s %s %s -X DELETE %s %s"
-           g-curl-program g-curl-common-options
-           (g-authorization gblogger-auth-handle)
-           url
-           (g-curl-debug))))
+  (g-app-delete-entry gblogger-auth-handle url))
+;;;###autoload
+(defun gblogger-add-label (label)
+  "Adds labels to gblogger entry being editted."
+  (interactive "sLabel: ")
+  (save-excursion
+    (goto-char (point-min))
+    (search-forward "</title>")
+    (insert
+     (format "
+     <category scheme='http://www.blogger.com/atom/ns#' term='%s'/>"
+             label))))
+
+
+
 
 ;;}}}
-(provide 'atom-blogger)
+;;{{{ Reset auth handle:
+
+;;;###autoload
+(defun gblogger-sign-out()
+  "Resets client so you can start with a different userid."
+  (interactive)
+  (declare (special gblogger-auth-handle
+                    gblogger-user-email gblogger-user-password))
+  (message "Signing out %s from blogger"
+           (g-auth-email gblogger-auth-handle))
+  (setq gblogger-user-email nil
+        gblogger-user-password nil)
+  (setq gblogger-auth-handle (make-gblogger-auth)))
+
+;;;###autoload
+(defun gblogger-sign-in()
+  "Resets client so you can start with a different userid."
+  (interactive)
+  (declare (special gblogger-auth-handle gblogger-user-email ))
+  (setq gblogger-user-email
+        (read-from-minibuffer "User Email:"))
+  (setq gblogger-auth-handle (make-gblogger-auth))
+  (g-authenticate gblogger-auth-handle))
+
+;;}}}
+(provide 'gblogger)
 ;;{{{ end of file
 
 ;;; local variables:

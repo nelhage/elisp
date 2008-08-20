@@ -52,6 +52,10 @@
 (fset 'mkdir 'make-directory)
 (fset 'rmdir 'delete-directory)
 
+; Apparently I'm not supposed to set this globally, but if you're not
+; going to tell me why, too bad.
+(setq epa-armor t)
+
 (autoload 'nethack "nethack" "Play Nethack." t)
 (setq nethack-program "/usr/games/nethack-lisp")
 
@@ -393,7 +397,7 @@ unable to perform symbol completion.")
 (add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
 (autoload 'python-mode "python-mode"
   "Major mode for editing Python code." t)
-(setq python-command "ipython")
+
 (add-hook 'python-mode-hook 'flymake-mode)
 
 (when (load "flymake" t)
@@ -457,10 +461,9 @@ unable to perform symbol completion.")
 (defun my-c-mode-common-hook ()
   ;; my customizations for all of c-mode, c++-mode, objc-mode, java-mode
   (c-set-offset 'substatement-open 0)
-  (setq c-basic-offset 4)
-  (setq complete-symbol-function (lambda ()
-                                   (interactive)
-                                   (complete-symbol nil)))
+  (setq c-basic-offset 4
+        dabbrev-case-fold-search nil
+        complete-symbol-function 'dabbrev-completion)
   (cscope-minor-mode))
 
 
@@ -489,9 +492,7 @@ unable to perform symbol completion.")
   (javadoc-load-classes)
   (define-key java-mode-map "\C-c\C-d" (make-sparse-keymap))
   (define-key java-mode-map "\C-c\C-dh" 'javadoc-lookup-class)
-  (make-local-variable 'dabbrev-case-fold-search)
-  (setq dabbrev-case-fold-search nil
-        complete-symbol-function 'dabbrev-completion))
+  (make-local-variable 'dabbrev-case-fold-search))
 
 ;;; ANTLR
 (autoload 'antlr-mode "antlr-mode" nil t)
@@ -877,7 +878,7 @@ surrounding xml expression"
                      "^" (regexp-opt '("To" "Cc" "Bcc" "From") t ) ":")))
       (bbdb-complete-name)))
 
-(add-to-list 'magic-mode-alist (cons "\\`From" 'mail-mode))
+;(add-to-list 'magic-mode-alist (cons "\\`From" 'mail-mode) t)
 
 ;;BBDB
 (require 'bbdb)
@@ -908,6 +909,8 @@ surrounding xml expression"
 ;;Mailcrypt
 (require 'mailcrypt)
 (mc-setversion "gpg")
+
+(require 'pgg)
 
 ;;elscreen
 (require 'elscreen)
