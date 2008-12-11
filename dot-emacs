@@ -110,6 +110,10 @@ unable to perform symbol completion.")
   (setq font-lock-maximum-decoration t)
   (global-font-lock-mode 1))
 
+(eval-after-load 'diff-mode
+  '(progn
+       (set-face-background 'diff-refine-change "gray20")))
+
 (eval-after-load 'flymake
   '(progn
     (global-set-key (kbd "C-c f") (make-sparse-keymap))
@@ -847,7 +851,8 @@ surrounding xml expression"
 
 (eval-after-load 'graphviz-dot-mode
   '(progn
-     (define-key graphviz-dot-mode-map (kbd ";") 'self-insert-command)))
+     (define-key graphviz-dot-mode-map (kbd ";") 'self-insert-command)
+     (define-key graphviz-dot-mode-map (kbd "C-c C-c") 'graphviz-dot-preview)))
 
 
 ;;Don't generate backup files on esp's server
@@ -981,9 +986,9 @@ surrounding xml expression"
 
 (add-to-list 'auto-mode-alist (cons "/Makefrag$" 'makefile-mode))
 
-(desktop-save-mode 1)
-(setq desktop-dirname (expand-file-name "~"))
-(add-hook 'find-file-hook 'desktop-save-in-desktop-dir)
+; (desktop-save-mode 1)
+; (setq desktop-dirname (expand-file-name "~"))
+; (add-hook 'find-file-hook 'desktop-save-in-desktop-dir)
 
 (autoload 'w3m "w3m" "w3m" t t)
 (autoload 'w3m-find-file "w3m" "w3m" t t)
