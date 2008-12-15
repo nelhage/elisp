@@ -35,9 +35,6 @@
 (window-number-mode 1)
 
 (setq display-time-24hr-format t)
-(display-time-mode)
-(display-battery-mode)
-;(zone-when-idle 60)
 
 (global-set-key (kbd "C-x 4 C-f") 'window-number-find-file)
 (global-set-key (kbd "C-x 4 f") 'window-number-find-file)
@@ -208,6 +205,9 @@ unable to perform symbol completion.")
 (safe-funcall 'column-number-mode 1)
 (safe-funcall 'fringe-mode '(0 . nil))
 (safe-funcall 'menu-bar-mode 0)
+(safe-funcall 'display-time-mode)
+(save-funcall 'display-battery-mode)
+
 (transient-mark-mode 0)
 
 (setq c-basic-offset 4
@@ -478,6 +478,7 @@ unable to perform symbol completion.")
 
 (define-key cscope:map (kbd "C-c .") 'cscope-find-global-definition-no-prompting)
 (define-key cscope:map (kbd "C-c *") 'cscope-pop-mark)
+(setq cscope-do-not-update-database t)
 
 (defun pidof (name)
   (with-temp-buffer
