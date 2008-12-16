@@ -206,7 +206,7 @@ unable to perform symbol completion.")
 (safe-funcall 'fringe-mode '(0 . nil))
 (safe-funcall 'menu-bar-mode 0)
 (safe-funcall 'display-time-mode)
-(save-funcall 'display-battery-mode)
+(safe-funcall 'display-battery-mode)
 
 (transient-mark-mode 0)
 
