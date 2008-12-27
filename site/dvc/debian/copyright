@@ -1,0 +1,69 @@
+This package was debianized by Matthieu Moy <Matthieu.Moy@imag.fr> on
+Sun, 17 Oct 2004 17:15:25 +0200. Small additional changes were made by
+Milan Zamazal <pdm@debian.org> and Daniel Dehennin
+<daniel.dehennin@baby-gnu.org> completely repackage it.
+
+It was downloaded from http://download.gna.org/dvc.
+
+
+Copyright (C) 2004, 2005, 2006, 2007, 2008 DVC team
+
+Upstream authors:
+
+Alan Shutko <ats@acm.org>
+Andrea Russo <rastandy@inventati.org>
+Andre Kuehne <andre.kuehne@gmx.net>
+Bojan Nikolic <bojan@bnikolic.co.uk>
+Chris Gray <christopher.grayb@mail.mcgill.ca>
+Christian Ohler <ohler+mtn@fastmail.net>
+Daniel Dehennin <daniel.dehennin@baby-gnu.org>
+Mark Triggs <mark@dishevelled.net>
+Martin Brett Pool
+Masatake YAMATO <jet@gyve.org>
+Matthieu MOY <matthieu.moy@imag.fr>
+Michael Olson <mwolson@gnu.org>
+Milan Zamazal <pdm@zamazal.org>
+Miles Bader <miles@gnu.org>
+Robert Widhopf-Fenk <hack@robf.de>
+Sam Steingold <sds@gnu.org>
+Sascha Wilde <wilde@sha-bang.de>
+Stefan Reichoer <stefan@xsteve.at>
+Stephen Leake <stephen_leake@stephe-leake.org>
+Steve Youngs <steve@sxemacs.org>
+Takuzo O'hara <takuzo.ohara@gmail.com>
+Vincent LADEUIL
+
+License:
+
+   This package is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; version 2 dated June, 1991.
+
+   This package is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this package; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+   02110-1301, USA.
+
+On Debian systems, the complete text of the GNU General
+Public License can be found in `/usr/share/common-licenses/GPL'.
+
+License for dvc.texinfo:
+
+   Permission is granted to make and distribute verbatim copies of this
+   manual provided the copyright notice and this permission notice are
+   preserved on all copies.
+   
+   Permission is granted to copy and distribute modified versions of
+   this manual under the conditions for verbatim copying, provided that
+   the entire resulting derived work is distributed under the terms of a
+   permission notice identical to this one.
+   
+   Permission is granted to copy and distribute translations of this
+   manual into another language, under the above conditions for modified
+   versions, except that this permission notice may be stated in a
+   translation approved by the author.

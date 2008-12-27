@@ -1,0 +1,285 @@
+-*- mode: text -*-
+
+TODO/Wish list for xtla.el
+==========================
+
+Mostly DONE section:
+====================
+
+* Some like file-diff-rev from the aba which gives you the changes to a
+  file between two specified revisions using the following:
+    diff -u $(tla file-find file.cpp $(tla tree-version)--patch-X)
+            $(tla file-find file.cpp $(tla tree-version)--patch-Y)
+  => This is the function tla-file-ediff-rev. There should also be a
+     version without ediff, just showing the diff output with
+     diff-mode.
+
+* Integration with ediff, which I usually prefer to diff-mode.
+  - This is done for M-x tla-ediff-buffer, `e' in *tla-changes*, 'd
+    e' in *tla-inventory*
+  - There is more to do from the *tla-revisions* buffer for example
+    (retrieve any two revisions and ediff them)
+  - a 3 way merge with ediff3 would be perfect. (Actually, ediff3
+    isn't sufficient because it shows you the differences even in the
+    absence of conflict.). smerge-mode, integrated in Emacs 21,
+    already does a very good job for this
+
+* En entry "Branch from version" to create a symbolic tag from the
+  *tla-versions* buffer.
+  - Done for *tla-revisions*.
+
+* Code cleaning. There are a lot of duplicates.
+  => Some big code cleaning have been carried out, but such item can
+  never go to the "completely DONE" section ;-)
+
+DONE section:
+=============
+
+* One line log from minibuffer to commit.
+  => This should be handled in vc-arch.el?
+
+* Add good doc strings for the functions
+  => Most functions have one now.
+
+* Recursive commands for projects using configurations.
+  => implemented for tla-changes and tla-update
+
+* Name reader should support complete location notation like:
+
+  Location: Matthieu.Moy@imag.fr--public/xtla--main--0.1
+
+  Current partial and incremental location reading is supported
+  like:
+
+  Archive: Matthieu.Moy@imag.fr--public
+  Category: xtla
+  Branch: main
+  Version: 0.1
+
+  => The engine is implemented. Apply it to interactive functions.
+
+* Add a texinfo file
+  - What should be the structure of this file?
+    => Very short. Just a starting point for the users, but xtla should
+       be self-documented. Menus and docstrings should be sufficient
+       most of the time.
+       A demo with screenshots would be nice too. (to let people get
+       an idea of what xtla is in less than a minute.)
+  - Should we guide through the tla tutorial?
+     (Be carefull. I don't like people to learn a tool from the
+      front-end. I prefer let them understand the concepts with the
+      command line, and learn the front-end after. It takes a bit more
+      time but is much more pedagogical)
+
+* M-x xtla should provide the buttons to jump tla-inventory,
+  tla-bookmarks and so on. This should be integrated with the command central?
+
+* Optimize tla-archive-tree manipulator when it is updated.
+  I think using rbrowse and/or abrowse output is better than current
+  implementation.[Masatake] Not so much, because browsing a small
+  branch in a big archive would be slow (discussed on the ML)
+  [Matthieu]
+
+* tla log font-lock (like ChangeLog)
+
+* A "revert file" feature. Most of the code is already in
+  tla-file-ediff. (done in tla-file-revert)
+
+* Archive mirroring.
+  [Matthieu Moy: I'm taking care of this]
+
+* Prompt for saving buffer visiting files of the current tree for most
+  operations: commit, update, changes, ... (Which other ones ?)
+
+* M-x xtla-update. Possibility to update from the bookmarks buffer.
+
+* Merge xtla-fully-qualified-revision and xtla-name-construct.
+  [Masatake YAMATO]
+
+* M-x tla-missing RET should be merged with tla-bookmarks-missing
+
+* Bridge between smerge-mode and xtla.el.
+  [Masatake YAMATO
+  (Should completely replace my code -- Matthieu)
+  (No, I shouldn't. Each function has each necessity.)
+
+* When there are no changes anymore, the `g' command in the
+  *tla-changes* buffer just prints a message in the echo area, and
+  doesn't update the buffer, which can be confusing; it would be
+  better to erase the buffer and perhaps insert the "No changes"
+  description to make it clear what's going on (so work slightly
+  differently than `M-x tla-changes' invoked from another buffer -- in
+  that case, just a message is good).
+  => tla-changes now clears the *tla-changes* buffer before doing
+  anything else.
+
+* More diff-mode commands should be bound in the *tla-changes* buffer,
+  e.g., `P', and `N'; maybe it can just inherit from the diff-mode
+  keymap?
+  => We are already inheriting from  diff-mode. However, the way the keymap
+     is managed in diff-mode is really strange, and you're right,
+     we're not inheriting `N'  and `P'. But  still, diff-file-next is
+     available with M-N for example. Strange ...
+     => initializing tla-changes-mode-map from diff-mode-shared-map
+        did it.
+
+* It would be nice if the `g' command in a *tla-changes* buffer would
+  would retain any existing marks (I often want to check the changes
+  just one last time before committing).
+
+* Perhaps when `tla-make-log-function' is non-nil, `tla-make-log' should
+  check the return value, and if nil, make a normal log file. That way
+  the user's special version can only worry about special cases.
+
+  => I (Matthieu MOY) did something a bit different.
+     tla-make-log-function now defaults to
+     tla-default-make-log-function, which calls "tla make-log". The
+     user can just write a wrapper around this function.
+
+* Wrapper for tla import.
+
+  - From the working directory, M-x tla-start-project RET should run
+        . tla init-tree
+        . tla import --setup
+        . call tla-edit-log
+    [Mark Triggs: This is pretty much what I have done, except I have
+       used tla-inventory instead of tla-edit-log.]
+
+  - From the archive browser, there should be an option to offer the
+    user to create a new project, as you can already create new empty
+    categories, branches, and versions.
+
+* There could be a menu to navigate buffers based on the variable
+  tla--buffers-tree. This could also be included in tla-browse.el
+  using tree-widget.
+  => pulldown/popup menu is implemented. Maybe enough -- Masatake.
+
+* undo modifications in local copy at tla-inventory buffer
+  Matthieu gave hit in the mailing list:
+
+	  What I meant by "undo" was
+
+          cp `tla file-find foo.c` .
+
+* Run missing, replay and star-merge against specified version.
+
+* Eliminate all occurence of tla--run-arch.
+
+* If not in a project tree, `tla-changes' should prompt for the tree
+  name similar to tla-inventory -- often I'd rather start out with
+  `changes' and skip `inventory' entirely.
+
+* Modeline : I'd like to see something like the "compiling" item in
+  the modeline while compiling with M-x compile RET.
+
+* An interface to tla help, giving the list of commands, and running
+    "tla <command> -H" on demand.
+
+* Create archives with --listing and/or --signed
+
+* make tla-inventory-toggle-* customizable
+  M-x customize-variable RET tla-inventory-display-* RET
+
+* After committing from a *tla-changes* buffer, it would be good to
+  automatically update the buffer, so there's a clear indication
+  what's changed.
+
+* Better management of buffers. xtla buffers should have a unique name
+  based on the directory or archive to which it refers. It should be
+  possible to run several tla-{change|inventory|revisions|...} in
+  different trees. We should keep a list of xtla related buffer to be
+  able to delete them afterwards. (The current regexp-based algorithm
+  is not satisfying in my opinion)
+  => The function is there : tla--get-buffer-create, and used for
+     tla-changes and tla-inventory. It's used by default by
+     tla--show-last-process-buffer and tla--show-error-buffer.
+
+* Tree widget based archive browser. [see tla-browse.el. -- Masatake]
+  - Libraries should be handled here.
+
+* C-u C-c C-m generates buggy summary line patch numbers.
+
+* Allow cherry picking by marking a set of revisions in a *tla-revisions*
+  buffer and the run replay with all of the marked revisions as argument. I
+  (Robert) just had a case where I would need this, i.e. I have a hacking
+  branch with related revisions (but they are interleaved by others) which I
+  want to combine into a single change set for the main branch.  "tla delta"
+  does not help here.
+
+* tla-browse should be stronger against errors.
+  Currently, when an error occur, a tree becomes broken.
+  [Masatake]
+
+* Should we do something for revision libraries ?
+
+  Yes [Masatake].
+  - Revisions should be marked in *tla-revisions*(done)
+  - Adding(done)
+  - tla-library-tree is needed(done).
+
+* Interface to store a changeset to a file(tla changeset?) in revisions buffer.
+  [?> ?=] or  [?d ?>]
+
+* Interface to apply a changeset directory to a local copy in inventory buffer.
+  [?M ?=] or [?< ?=] but ?< is serverd for mirror.
+
+* M-x tla-review-last-patch RET. See my recent post "Improving
+  tla-changes and related commands." on xtla-el-dev@gna.org.
+  (Matthieu)
+  => finally, I've called it tla-changes-last-revision
+
+* I (Matthieu) have added a variable tla-buffer-refresh-function and
+  a function tla-generic-refresh calling it. This could be used in
+  all xtla modes.
+
+* Define xtla own faces. These faces should be
+  derived from font-lock's standard face set.
+
+* Don't use a string to refer xtla's buffer. Instead use symbol.
+  e.g.
+  Don't use: (get-buffer-create "*tla-missing*")
+  Use: (cdr (assoc 'missing tla--buffer-type-alist))
+
+* Handle file renaming in changes buffer. Here is the example output:
+
+  [jet@localhost symresolver]$ tla changes
+  * looking for jet@gyve.org--inspector/symresolver--prototype--0.0--patch-9 to compare with
+  * comparing to jet@gyve.org--inspector/symresolver--prototype--0.0--patch-9
+  M  Makefile.am
+  => .arch-ids/symresolver.c.id	.arch-ids/lib.c.id
+  => symresolver.c	lib.c
+
+  `=>' should be parsed.
+
+* Interface to add entries to .arch-inventory
+
+* Switching "default tree version " in inventory buffer
+
+* Don't do (concat file "/"). Do (file-name-as-directory file) instead.
+
+** Check the faces on non X, terminal environment
+   => [Matthieu] I use xtla most of the time in text mode, but I have
+      a rather much customized Emacs. I've just checked with emacs -q,
+      both in dark and light background.
+
+* We should definitely switch to ewoc.el to manage lists. This is what
+  pcl-cvs, dired and so are using. We would get a lot of feature (in
+  particular, mouse reactivity) almost for free. The code for marking
+  revisions could also be really improved by this. I already did this
+  for the *tla-bookmarks* buffer (Matthieu MOY) and for
+  *tla-bookmarks-missing* and *tla-revisions*, it's fairly easy to
+  use.
+
+* Name read engine
+  -- Integrate with other parts of xtla
+  --- Get completion from bookmarks
+
+* Run lint under a dedicated mode, so the user can jump to the position
+  where the lint reports the problem is.
+  => There is now a tla tree-lint mode. It's almost finished by now,
+     but still not well tested and incomplete (no context menu[done], ...)
+
+** (Again) Check `cd' usage. Its changes the default-directory of current buffer.
+   Sometimes it will cause bugs. (let ((default-directory ...))) may be
+   enough in many cases. [Matthieu] Should be OK now.
+

@@ -1,0 +1,99 @@
+; -*- mode: text -*-
+
+Subject: Xtla 1.2 is out!!
+
+The Xtla development team is proud to announce the release of Xtla,
+version 1.2.
+
+Xtla is the Emacs front-end to GNU Arch client (either tla or bazaar
+branch, at your option). It mainly provides user-friendly wrappers for
+native commands.
+
+The 1.2 version of Xtla will most probably be the last version of Xtla
+to contain new features. We are currently moving to a more generic
+architecture, that we called DVC, which will support other RCS as
+back-ends. We already have preliminary support for Mercurial and
+Bazaar 2.
+
+The main features are:
+
+  * PCL-CVS like interface for tla inventory and tla changes
+
+  * Archive browser - navigate painlessly through archives, categories,
+    branches, versions, etc.
+
+  * Good integration in Emacs - almost everything can be done from
+    within the editor
+
+  * Bookmark manager - keep the most frequently used arch locations in
+    your bookmark buffer
+
+  * Integration with ediff, Emacs's graphical diff tool
+      - to view changes made in a local tree.
+      - to view and resolve conflicts after a merge.
+
+  * Interface to view missing patches from all your partners with a
+    single command
+
+  * An Emacs mode for arch-related files (log files, =tagging-method,
+    "build-config" files)
+
+  * Support for baz, and for baz added commands like "switch",
+    "annotate", "status", "resolved"
+
+  * Integraton with Gnus.
+
+The main new features for the 1.2 version are:
+
+  * M-x baz-update RET can use either merge, replay, or update
+
+  * changelog buffer, cat-log-mode buffers, and *Article* buffers (in
+    Gnus) show clickable buttons for revision names (and other Arch
+    names).
+
+  * A mail notification is available from the Changelog buffer (bound
+    to "M")
+
+  * Several bazaaz 1.5 compatibility issues solved
+
+  * Many bugfixes
+
+Information about Xtla can be found here:
+
+  http://wiki.gnuarch.org/xtla
+
+We also have a project page on http://gna.org (savannah.gnu.org-like),
+where you can find information about the mailing list, the online
+manual, the download area, and the bug tracker (also used for feature
+requests):
+
+  https://gna.org/projects/xtla-el
+
+You can install Xtla is from the archive found here:
+
+  https://www-verimag.imag.fr/~moy/arch/public
+
+The version is
+
+  Matthieu.Moy@imag.fr--public/xtla--main--1.2
+
+Xtla can also be downloaded as a tarball from here
+
+  http://download.gna.org/xtla-el/
+
+Or installed as a Debian package. The package is now in Debian
+unstable. You can also get it by adding
+
+  deb http://download.gna.org/xtla-el/apt/ unstable/
+
+to your sources.list file if you use another .deb-based distribution.
+
+
+Many thanks to all contributors and testers, in particular, for this
+version:
+
+  Stefan Reichör, Original author of Xtla and integrator
+  Masatake Yamato, GNU Emacs hacker
+;  Robert Widhopf-Fenk, XEmacs integration and testing
+  Milan Zamazal, Debian developer
+  Mark Triggs

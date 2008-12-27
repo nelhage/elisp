@@ -1,0 +1,210 @@
+Some possible keybindings:
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; Bookmarks key bindings
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(when (not tla-bookmarks-mode-map)
+  (setq tla-bookmarks-mode-map (make-sparse-keymap))
+
+  ;;; Commands for merging (M)
+  (define-key tla-bookmarks-mode-map [?M ?s] 'tla-bookmarks-star-merge)
+  (define-key tla-bookmarks-mode-map [?M ?m] 'tla-bookmarks-missing)
+  (define-key tla-bookmarks-mode-map [?M ?r] 'tla-bookmarks-replay)
+
+
+  ;;; Commands for marking (*)
+  (define-key tla-bookmarks-mode-map "\M-\C-?" 'tla-bookmarks-unmark-all)
+  (define-key tla-bookmarks-mode-map [?* ?!] 'tla-bookmarks-unmark-all)
+  (define-key tla-bookmarks-mode-map [?* ?u] 'tla-bookmarks-unmark)
+  (define-key tla-bookmarks-mode-map [?* ?m] 'tla-bookmarks-mark)
+
+
+  ;;; Navigation
+  (define-key tla-bookmarks-mode-map [?n] 'tla-bookmarks-next)
+  (define-key tla-bookmarks-mode-map [?p] 'tla-bookmarks-previous)
+
+
+  ;;; Bookmark specific commands
+  (define-key tla-bookmarks-mode-map "\C-m" 'tla-bookmarks-goto)
+  (define-key tla-bookmarks-mode-map [?a] 'tla-bookmarks-add)
+  (define-key tla-bookmarks-mode-map [?e] 'tla-bookmarks-edit)
+  (define-key tla-bookmarks-mode-map [?d] 'tla-bookmarks-delete)
+  (define-key tla-bookmarks-mode-map [?o] 'tla-bookmarks-open-tree)
+  (define-key tla-bookmarks-mode-map [?i] 'tla-bookmarks-inventory)
+  (define-key tla-bookmarks-mode-map [?q] 'tla-buffer-quit)
+  (define-key tla-bookmarks-mode-map [?+ ?b] 'tla-bookmarks-add)
+  (define-key tla-bookmarks-mode-map [?+ ?t] 'tla-bookmarks-add-tree-interactive)
+  (define-key tla-bookmarks-mode-map [?- ?t] 'tla-bookmarks-delete-tree-interactive)
+  (define-key tla-bookmarks-mode-map [?+ ?p] 'tla-bookmarks-add-partner-interactive)
+  (define-key tla-bookmarks-mode-map [?- ?p] 'tla-bookmarks-delete-partner-interactive)
+  (define-key tla-bookmarks-mode-map [?+ ?g] 'tla-bookmarks-add-group-interactive)
+  (define-key tla-bookmarks-mode-map [?- ?g] 'tla-bookmarks-delete-group-interactive)
+  (define-key tla-bookmarks-mode-map [?* ?g] 'tla-bookmarks-select-by-group)
+  (define-key tla-bookmarks-mode-map [?N] 'tla-bookmarks-move-down)
+  (define-key tla-bookmarks-mode-map [?P] 'tla-bookmarks-move-up)
+
+
+  ;;; Archive commands (A)
+  (define-key tla-bookmarks-mode-map [?>] 'tla-bookmarks-get)
+  (define-key tla-bookmarks-mode-map [?A ?g] 'tla-bookmarks-get)
+
+
+  ;;; Toggle commands (T)
+  (define-key tla-bookmarks-mode-map [?T t] 'tla-bookmarks-toggle-details)
+
+
+  ;;; Debugging commands (D)
+  (define-key tla-bookmarks-mode-map [?D p] 'tla-show-process-buffer)
+  ;; Add me!
+  ;; (define-key tla-bookmarks-mode-map [?D l] 'tla-show-tla-log)
+
+
+  ;;; Misc
+  (define-key tla-bookmarks-mode-map [??] 'describe-mode)
+  (define-key tla-bookmarks-mode-map [(meta p)]
+    'tla-bookmarks-marked-are-partners)
+  )
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; Inventory key bindings
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(when (not tla-inventory-mode-map)
+  (setq tla-inventory-mode-map (make-sparse-keymap))
+
+  ;;; Commands for merging (M)
+  (define-key tla-inventory-mode-map [?M ?s] 'tla-inventory-star-merge)
+  (define-key tla-inventory-mode-map [?M ?r] 'tla-inventory-replay)
+
+
+  ;;; Commands for marking (*)
+  (define-key tla-inventory-mode-map "\M-\C-?" 'tla-inventory-unmark-all)
+  (define-key tla-inventory-mode-map [?* ?m] 'tla-inventory-mark-file)
+  (define-key tla-inventory-mode-map [?* ?u] 'tla-inventory-unmark-file)
+  (define-key tla-inventory-mode-map [?* ?!] 'tla-inventory-unmark-all)
+
+
+  ;;; Navigation
+  (define-key tla-inventory-mode-map [?n] 'tla-inventory-next)
+  (define-key tla-inventory-mode-map [?p] 'tla-inventory-previous)
+  (define-key tla-inventory-mode-map [?^] 'tla-inventory-parent-directory)
+  (define-key tla-inventory-mode-map [left] 'tla-inventory-parent-directory)
+
+
+  ;;; Inventory specific commands
+  (define-key tla-inventory-mode-map [?+ ?f] 'tla-inventory-add)
+  (define-key tla-inventory-mode-map [?- ?f] 'tla-inventory-remove)
+  (define-key tla-inventory-mode-map [?R] 'tla-inventory-move)
+  (define-key tla-inventory-mode-map [?e] 'tla-inventory-file-ediff)
+  (define-key tla-inventory-mode-map [?c] 'tla-inventory-edit-log) ;; mnemonic for commit
+  (define-key tla-inventory-mode-map [?f] 'tla-inventory-find-file)
+  (define-key tla-inventory-mode-map [return] 'tla-inventory-find-file)
+  (define-key tla-inventory-mode-map [right] 'tla-inventory-find-file)
+  (define-key tla-inventory-mode-map "\C-m" 'tla-inventory-find-file)
+  (define-key tla-inventory-mode-map [?o] 'tla-inventory-find-file-other-window)
+  (define-key tla-inventory-mode-map [?v] 'tla-inventory-view-file)
+  ;;  (define-key tla-inventory-mode-map [?d ?e] 'tla-inventory-file-ediff)
+  (define-key tla-inventory-mode-map [?d ?m] 'tla-inventory-missing)
+  (define-key tla-inventory-mode-map [?=] 'tla-changes)
+  (define-key tla-inventory-mode-map [?l] 'tla-changelog)
+  (define-key tla-inventory-mode-map [?L] 'tla-logs)
+
+
+  ;;; Archive commands (A)
+  (define-key tla-inventory-mode-map [?A ?m] 'tla-inventory-mirror)
+
+
+  ;;; Toggle commands (T)
+  (dolist (type-arg tla-inventory-file-types-manipulators)
+    (define-key tla-inventory-mode-map `[?T ,(cadddr type-arg)] (caddr type-arg)))
+  (define-key tla-inventory-mode-map [?T ?+] 'tla-inventory-set-all-toggle-variables)
+  (define-key tla-inventory-mode-map [?T ?-] 'tla-inventory-reset-all-toggle-variables)
+  (define-key tla-inventory-mode-map [?T ?~] 'tla-inventory-toggle-all-toggle-variables)
+
+  ;;; Debugging commands (D)
+  (define-key tla-inventory-mode-map [?D p] 'tla-show-process-buffer)
+  ;; Add me!
+  ;; (define-key tla-inventory-mode-map [?D l] 'tla-show-tla-log)
+
+  ;;; Misc
+  (define-key tla-inventory-mode-map [??] 'describe-mode)
+  (define-key tla-inventory-mode-map [?g] 'tla-generic-refresh)
+  (define-key tla-inventory-mode-map [?q] 'tla-buffer-quit)
+)
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;; Revision key bindings
+;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(when (not tla-revision-list-mode-map)
+  (setq tla-revision-list-mode-map (make-sparse-keymap))
+
+  ;;; Commands for merging/branching (M)
+  (define-key tla-revision-list-mode-map [?M ?s] 'tla-revision-star-merge)
+  (define-key tla-revision-list-mode-map [?M ?t] 'tla-revision-tag)
+  (define-key tla-revision-list-mode-map [?M ?r] 'tla-revision-replay)
+
+
+  ;;; Commands for marking (*)
+  (define-key tla-revision-list-mode-map [?* ?m] 'tla-revision-mark-revision)
+  ;; Add me!
+  ;; (define-key tla-revision-list-mode-map [?* ?u]
+  ;;   'tla-revision-unmark-revision)
+
+
+  ;;; Navigation
+  (define-key tla-revision-list-mode-map [?^]
+    'tla-revision-list-parent-version)
+  (define-key tla-revision-list-mode-map [left]
+    'tla-revision-list-parent-version)
+  (define-key tla-revision-list-mode-map [down] 'tla-bookmarks-missing-next)
+  (define-key tla-revision-list-mode-map [up] 'tla-bookmarks-missing-prev)
+  (define-key tla-revision-list-mode-map [?n] 'tla-bookmarks-missing-next)
+  (define-key tla-revision-list-mode-map [?p] 'tla-bookmarks-missing-prev)
+
+
+  ;;; Archive commands (A)
+  (define-key tla-revision-list-mode-map [?> ?g] 'tla-revision-get-revision)
+  (define-key tla-revision-list-mode-map [?> ?C] 'tla-revision-cache-revision)
+  (define-key tla-revision-list-mode-map [?> ?L] 'tla-revision-add-to-library)
+  (define-key tla-revision-list-mode-map [?A ?g] 'tla-revision-get-revision)
+  (define-key tla-revision-list-mode-map [?A ?c] 'tla-revision-cache-revision)
+  (define-key tla-revision-list-mode-map [?A ?l] 'tla-revision-add-to-library)
+
+
+  ;;; Toggle commands (T)
+  (define-key tla-revision-list-mode-map [?T ?d] 'tla-revision-toggle-date)
+  (define-key tla-revision-list-mode-map [?T ?c] 'tla-revision-toggle-creator)
+  (define-key tla-revision-list-mode-map [?T ?s] 'tla-revision-toggle-summary)
+  (define-key tla-revision-list-mode-map [?T ?r] 'tla-revision-toggle-reverse)
+  ;; ?t ?? is reserved. Not implemented yet.
+  (define-key tla-revision-list-mode-map [?T ??] 'tla-revision-list-toggles)
+
+
+  ;;; Debugging commands (D)
+  (define-key tla-revision-list-mode-map [?D p] 'tla-show-process-buffer)
+  ;; Add me!
+  ;; (define-key tla-revision-mode-map [?D l] 'tla-show-tla-log)
+
+
+  ;;; Revision specific commands
+  (define-key tla-revision-list-mode-map [?l] 'tla-revision-cat-log)
+  (define-key tla-revision-list-mode-map [?u] 'tla-revision-update)
+  (define-key tla-revision-list-mode-map "\C-m" 'tla-revision-return)
+  (define-key tla-revision-list-mode-map [return] 'tla-revision-return)
+  (define-key tla-revision-list-mode-map [right] 'tla-revision-return)
+  (define-key tla-revision-list-mode-map [?d] 'tla-revision-delta)
+  (define-key tla-revision-list-mode-map [?=] 'tla-revision-changeset)
+  (define-key tla-revision-list-mode-map [?i] 'tla-pop-to-inventory)
+  (define-key tla-revision-list-mode-map [?.] 'tla-revision-bookmarks-add)
+
+
+  ;;; Misc
+  (define-key tla-revision-list-mode-map [?g] 'tla-generic-refresh)
+  (define-key tla-revision-list-mode-map [?q] 'tla-buffer-quit)
+)

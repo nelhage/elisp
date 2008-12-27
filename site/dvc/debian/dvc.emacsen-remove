@@ -1,0 +1,29 @@
+#!/bin/sh -e
+# /usr/lib/emacsen-common/packages/remove/dvc
+
+FLAVOR=$1
+PACKAGE=dvc
+
+if [ "x$FLAVOR" = "x" ]; then
+    echo Need argument to determin FLAVOR of emacs;
+    exit 1
+fi
+
+if [ "x$PACKAGE" = "x" ]; then
+    echo Internal error: need package name;
+    exit 1;
+fi
+
+case "$FLAVOR" in
+    emacs | emacs20)
+	echo "Ignoring flavour ${FLAVOR}"
+	;;
+    *)
+
+	echo "remove/${PACKAGE}: purging byte-compiled files for ${FLAVOR}"
+	rm -rf /usr/share/${FLAVOR}/site-lisp/${PACKAGE}
+	;;
+esac
+
+exit 0
+

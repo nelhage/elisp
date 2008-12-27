@@ -1,0 +1,263 @@
+-*- mode: text -*-
+
+Developers
+==========
+
+DVC will be merged to GNU Emacs(we hope).
+So the developers should be able to sign to FSF about
+copyright assignment. In other words, we can accept
+only patches whose author agrees to sign to FSF.
+CONTRIBUTORS file is for tracking the contributors
+and their copyright assignments.
+
+CONTRIBUTORS file is maintained by Michael Olson.
+
+GNU Emacs, XEmacs and its version
+=================================
+
+We will support both Emacs and XEmacs. The developers are using:
+
+Stefan Reichoer <stefan at xsteve . at>: GNU Emacs 21.3.1, GNU Emacs in CVS repository
+Matthieu Moy <Matthieu.Moy at imag . fr>: GNU Emacs 21.2 (Solaris and Linux)
+Masatake YAMATO <jet at gyve . org>: GNU Emacs in CVS repository
+Milan Zamazal <pdm at zamazal . org>: GNU Emacs 21.3, GNU Emacs CVS
+Martin Pool <mbp at sourcefrog . net>: ???
+Robert Widhopf-Fenk <hack at robf . de>: XEmacs 21.4.5
+Mark Triggs <mst at dishevelled . net>: GNU Emacs in CVS repository
+
+gnuarch version
+===============
+
+gnuarch version which xtla's developers are using:
+
+Stefan Reichoer <stefan at xsteve . at>:
+
+Matthieu Moy <Matthieu.Moy at imag . fr>:
+tla 1.2, tla 1.2.2rc2
+
+Masatake YAMATO <jet at gyve . org>:
+tla lord@emf.net--2004/dists--devo--1.0--patch-9(configs/emf.net-tla/devo.tla-1.2) from regexps.com
+
+Milan Zamazal <pdm at zamazal . org>: tla, from Debian/testing.
+
+Martin Pool <mbp at sourcefrog . net>:
+
+Robert Widhopf-Fenk <hack at robf . de>:
+
+Mark Triggs <mst at dishevelled . net>:
+
+
+Key bind conventions
+====================
+
+See xtla-defs.el.
+
+Symbol name conventions
+=======================
+
+- Face: Do not use a `-face' suffix for face names.
+
+(About the reason, see
+ http://mail.gnu.org/archive/html/emacs-devel/2004-03/msg00077.html)
+
+- Functions and variables internal to xtla should be named tla--XXX
+  Functions and variables used by the user should be named tla-XXX
+
+Menu item conventions
+=====================
+
+See xtla-defs.el.
+
+Mail conversions
+================
+
+Matthieu MOY <Matthieu.Moy at imag dot fr> wrote
+in Message-ID: <1084790609.40a8975194dcd@webmail.imag.fr>
+
+    I usually send a mail for a merge request only when the change
+    involves a big portion of the file, to tell everybody to make sure
+    they merge before doing any changes.
+
+    However, when you send a mail, your suggestion of [MERGE REQUEST] flag
+    is good.
+
+Coding style
+============
+
+Robert Widhopf-Fenk <hack at robf dot de> wrote
+in Message-ID: <16552.35294.211101.658893@gargle.gargle.HOWL>
+
+    I really would like to see no lines longer than 80 chars in xtla.el.
+
+Please, strip trailing whitespaces from your source files.
+
+;; remove trailing whitespaces when saving.
+(add-hook 'write-file-hooks 'delete-trailing-whitespace)
+
+in your ~/.emacs.el can help.
+
+Also, don't include any tabs in your source code. You should use
+
+(setq indent-tabs-mode nil)
+
+If you do not want to enable it in general, use something like the following
+in your ~/.emacs:
+
+(defun rf-dvc-find-file-hook ()
+  (when (and (buffer-file-name)
+             (string-match "xtla\\|dvc" (buffer-file-name)))
+    (message "Enabled Xtla/DVC settings for buffer %s" (buffer-name))
+    (make-local-hook 'write-file-hooks)
+    (add-hook 'write-file-hooks 'delete-trailing-whitespace nil t)
+    (setq indent-tabs-mode nil)))
+
+(add-hook 'find-file-hooks 'rf-dvc-find-file-hook)
+
+Non-trivial macros should include the form:
+  (declare (indent INDENT-SPEC) (debug DEBUG-SPEC))
+The INDENT-SPEC tells Emacs' indentation commands how to indent the form,
+whereas DEBUG-SPEC tells Edebug how to instrument the form for debugging.
+See: (info "(elisp) Indenting Macros") and
+     (info "(elisp) Edebug and Macros") for more info.
+
+Indentation is not (completely) arbitrary.  There are three steps,
+the first of which need be done only once per editing session.
+
+ - Make sure you evaluate *all* `defmacro' forms so that Emacs knows
+   about each form's indentation spec (if any).
+
+ - Use C-M-q at top-level open-paren to canonicalize indentation.
+
+ - Apply stylistic exceptions (manual override).  Common cases:
+   - `flet', `labels', `macrolet' -- Emacs does a poor job here, indenting
+     too much, so overriding it is almost a requirement (many examples);
+   - deliberate flush-left (to column 0) so that C-M-x "continues to work"
+     on an inner form (eg: dvc-capturing-lambda);
+   - end-of-line ";;"-comment alignment (eg: defstruct dvc-fileinfo-file).
+
+
+Process management
+==================
+
+The function dvc--run-arch now creates two buffer each time it is
+called: a process buffer, and an error buffer. If the process is ran
+synchronously, then the buffers are scheduled for deletion. If not,
+the scheduling for deletion occurs in the process sentinel.
+
+This means you will need to clone the buffer if you need to run arch
+again while parsing the output buffers. (This was already necessary
+with the old mechanism)
+
+The variables tla--last-process-buffer and tla--last-error-buffer are
+set each time a new process or error buffer is created. The value is
+therefore meaningfull only until a new process is started. Avoid using
+them when you're not sure the piece of code you're writting will not
+one day be made asynchronous: This become meaningless in a process
+sentinel.
+
+I (Mark) have thrown in my two cents on the process management
+stuff. I've added two functions: one for running tla synchronously
+(tla--run-tla-sync), and one for running it asynchronously
+(tla--run-tla-async). Their syntax is pretty much identical, which is as
+follows:
+
+  (tla--run-tla-(a)sync '("tla-arg1" "tla-arg2" .. "tla-argn")
+                        :finished (lambda (output-buffer error-buffer status)
+                                    ..)
+                        :killed (lambda (output-buffer error-buffer status)
+                                  ..)
+                        :error (lambda (output-buffer error-buffer status)
+                                 ..)
+                        :output-buffer some-buffer
+                        :error-buffer some-buffer
+                        :related-buffer some-buffer)
+
+The keywords :FINISHED, :KILLED and :ERROR supply callbacks, which are
+functions that take four arguments:
+
+  * the buffer containing the process output
+  * the buffer containing the process error output; and
+  * some indicator of the processes status (which can either be a
+    return code or a string).
+  * the argument list that the command was run with (e.g. ("undo"))
+
+The :FINISHED callback is called in the case where the program finishes
+successfully. The :KILLED callback is called when the program was
+unexpectedly killed while running, and the :ERROR callback is called
+when the program fails for some reason.
+
+If :OUTPUT-BUFFER or :ERROR-BUFFER are supplied, the process will write
+its standard/error output to these instead of generating buffers
+automatically. Where these keywords are not given, new buffers will be
+created, filled with program output and passed to the callback
+functions.
+
+Although it shouldn't ordinarily matter, it is worth noting that if
+:OUTPUT-BUFFER or :ERROR-BUFFER are not given, the temporary buffers
+that are created will be killed immediately after the callback
+exits. This just means that if you plan on keeping those buffers around
+for longer than just the scope of the callback, you'll need to clone
+them first.
+
+As a quick example, here is how you could asynchronously run a "tla
+abrowse -s" and send the output to a printer (I'm not sure why you would
+want to do this, but that's the great thing about contrived examples!):
+
+  (defun print-archive (archive &optional postscript-output-file)
+    "Run an abrowse on ARCHIVE and send the result to the printer."
+    (tla--run-tla-async (list "abrowse" "-s" "-A" archive)
+                        :finished `(lambda (output-buffer error-buffer
+                                            status arguments)
+                                     (with-current-buffer output-buffer
+                                       (ps-print-buffer ,postscript-output-file)
+                                       (message "Printed abrowse to %s."
+                                                (or ,postscript-output-file
+                                                    "printer"))))))
+
+The only really noteworthy thing is the use of the backquoted
+lambda. This is kind of like a poor man's lexical scoping, but it's a
+useful way of capturing variables from the containing environment.
+
+Name manipulator
+================
+See xtla-core.el.
+
+
+Release & distribution process
+==============================
+
+* Development version
+---------------------
+
+The prefered way to get a development version is to use either
+Bazaar or Git to clone the latest repo.
+
+Programs for maintainers:
+ (required) autoconf, tar, gzip, makeinfo
+ (optional) texi2dvi, etags
+
+With the exception of gzip (which is invoked simply as "gzip"),
+the invocation of each of these programs is influenced by a
+makefile variable of the same name, but all upcased.  For example,
+you can choose a different tar for "make dist" using the command:
+  make dist TAR=/path/to/my/tar
+The default values for these variables is simply the program name.
+
+Historical note: We used to AC_PATH_PROG them in configure.ac, but
+that did not benefit the end user (./configure && make all install),
+so we stopped mid-2008.
+
+* Official releases
+-------------------
+
+Official releases will be made by the release manager, after
+discussion on the mailing list.
+
+The release manager will modify configure.ac to set the second
+arg of AC_INIT to 1.1, for example, and then type the commands
+
+  autoreconf
+  ./configure (or ./config.status --recheck)
+  make
+  make dist
+

@@ -1,0 +1,165 @@
+#!/bin/sh
+#| -*- scheme -*- |#
+:; exec gosh -- $0 "$@"
+;;
+;; We want to merge dvc tree to GNU Emacs.  Thus, every contributor
+;; must assign copyright for this changes to the FSF.  This file
+;; tracks contributors and their copyright assignment status.
+;;
+;; Before reporting your patch for merging DVC official source tree,
+;; add your name to this file.  The entry format is as follows:
+;;
+;; (contributor :name "yourname"
+;;              :signed done--or--not-yet--or--tiny-change
+;;              :mail-addresses "addr1@example1.com")
+;;
+;; or
+;;
+;; (contributor :name "yourname"
+;;              :signed done--or--not-yet--or--tiny-change
+;;              :mail-addresses ("addr1@example1.com" "addr2@example2.com" ...))
+;;
+;; You can use # instead of @ for circumventing the email-gathering
+;; web spiders that spammers use.  If you use a list for the
+;; :mail-addresses field, the car is used for contacting the FSF.
+;;
+;; The first time :signed field may be `not-yet'. Then we will contact
+;; you via email and send a copyright assignment templalte, which is
+;; to be emailed to the FSF (at this point, :signed is changed to
+;; `in-progress').  They will then send you the papers to sign.  After
+;; completing a paper work for it and getting the notification from
+;; FSF, the :signed field will be changed to `done'.
+
+;;
+;; *The order is not meaningful.*
+;;
+(define contributors
+  '(
+    (contributor :name "Stefan Reichoer"
+                 :signed done
+                 :mail-addresses ("stefan#xsteve.at"
+                                  "stefan#pyramide"
+                                  "xsteve#nit.at"))
+    (contributor :name "Matthieu MOY"
+                 :signed done
+                 :mail-addresses ("Matthieu.Moy#imag.fr"
+                                  "matthieu.moy#imag.fr"
+                                  "moy#ecrins"
+                                  "moy#moy"))
+    (contributor :name "Miles Bader"
+                 :signed done
+                 :mail-addresses "miles#gnu.org")
+    (contributor :name "Andre Kuehne"
+                 :signed done
+                 :mail-addresses "andre.kuehne#gmx.net")
+    (contributor :name "Vincent LADEUIL"
+                 :signed done)
+    (contributor :name "Stephen Leake"
+                 :signed done
+                 :mail-addresses ("stephen_leake#stephe-leake.org"
+                                  "stephe#ACS1100007992"
+                                  "stephe#LM000850872"))
+    (contributor :name "Takuzo O'hara"
+                 :signed done
+                 :mail-addresses "takuzo.ohara#gmail.com")
+    (contributor :name "Michael Olson"
+                 :signed done
+                 :mail-addresses ("mwolson#member.fsf.org"
+                                  "mwolson#gnu.org"
+                                  "mwolson#exabyte"))
+    (contributor :name "Martin Brett Pool"
+                 :signed done)
+    (contributor :name "Andrea Russo"
+                 :signed done
+                 :mail-addresses ("rastandy#inventati.org"
+                                  "rast4ndy#gmail.com"))
+    (contributor :name "Alan Shutko"
+                 :signed done-emacs-only
+                 :mail-addresses "ats#acm.org")
+    (contributor :name "Sam Steingold"
+                 :signed done
+                 :mail-addresses "sds#gnu.org")
+    (contributor :name "Mark Triggs"
+                 :signed done
+                 :mail-addresses "mark#dishevelled.net")
+    (contributor :name "Robert Widhopf-Fenk"
+                 :signed done
+                 :mail-addresses "hack#robf.de")
+    (contributor :name "Sascha Wilde"
+                 :signed done-emacs-only
+                 :mail-addresses "wilde#sha-bang.de")
+    (contributor :name "Masatake YAMATO"
+                 :signed done
+                 :mail-addresses ("jet#gyve.org"
+                                  "jet#gps06"))
+    (contributor :name "Steve Youngs"
+                 :signed done-emacs-only
+                 :mail-addresses "steve#sxemacs.org")
+    (contributor :name "Milan Zamazal"
+                 :signed done
+                 :mail-addresses ("pdm#zamazal.org" "pdm#debian.org"))
+
+    ;;
+    ;; Assignment in progress
+    ;;
+
+    ;;
+    ;; Does not need assignment yet
+    ;;
+    (contributor :name "Daniel Dehennin"
+                 :contacted yes
+                 :changed-elisp no
+                 :signed not-yet
+                 :mail-addresses "daniel.dehennin@baby-gnu.org")
+
+    ;;
+    ;; Needs assignment (or investigation into changes made)
+    ;;
+    (contributor :name "Christian Ohler"
+                 :signed not-yet
+                 :contacted yes
+                 :mail-addresses "ohler+mtn#fastmail.net")
+    (contributor :signed "Chris Gray"
+                 :signed not-yet
+                 :contacted email-invalid
+                 :mail-addresses "christopher.grayb#mail.mcgill.ca")
+    (contributor :signed "Bojan Nikolic"
+                 :signed in-progress
+                 :contacted yes
+                 :mail-addresses "bojan#bnikolic.co.uk")
+    (contributor :name "James LewisMoss"
+                 :signed tiny-change
+                 :mail-addresses "jim@lewismoss.org")
+    ;;
+    ;; ADD YOUR NAME HERE.
+    ;;
+    ))
+
+
+;;
+;; This is a program to pick something like mail addresses from the output of
+;; tla and bzr. The contributors mail address listed above are removed from the
+;; picked addresses.
+;;
+;; tla changelog | docs/CONTRIBUTORS | sort | uniq
+;; bzr log | docs/CONTRIBUTORS | sort | uniq
+;;
+(use srfi-1)
+(let* ((droplist '("dvc-dev#gna.org"))
+       (addresses (map
+                   (cute regexp-replace #/#/ <> "@")
+                   (apply append droplist
+                          (map (lambda (c)
+                                 (let1 addrs (get-keyword :mail-addresses (cdr c) (list))
+                                   (if (string? addrs) (list addrs) addrs)))
+                               contributors))))
+       (registered? (lambda (line)
+                      (any (lambda (a)
+                             (string-scan line a))
+                           addresses))))
+  (let loop ((line (read-line)))
+    (unless (eof-object? line)
+      (when (string-scan line "@")
+        (unless (registered? line)
+          (print line)))
+      (loop (read-line)))))

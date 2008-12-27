@@ -1,0 +1,36 @@
+;; -*-emacs-lisp-*-
+;;
+;; Emacs startup file for the Debian dvc package
+;;
+;; Originally contributed by Nils Naumann <naumann@unileoben.ac.at>
+;; Modified by Dirk Eddelbuettel <edd@debian.org>
+;; Adapted for dh-make by Jim Van Zandt <jrv@vanzandt.mv.com>
+
+;; The dvc package follows the Debian/GNU Linux 'emacsen' policy and
+;; byte-compiles its elisp files for each 'emacs flavor' (emacs19,
+;; xemacs19, emacs20, xemacs20...).  The compiled code is then
+;; installed in a subdirectory of the respective site-lisp directory.
+;; We have to add this to the load-path:
+
+(let ((list (append '((lisp . "dvc") (source . "dvc/lisp")))))
+  (while list
+    (let ((elt (car list)))
+      (cond
+       ((equal 'lisp (car elt))
+	(let ((dir (concat "/usr/share/"
+			   (symbol-name debian-emacs-flavor)
+			   "/site-lisp/" (cdr elt))))
+	  (when (file-directory-p dir)
+	    (if (fboundp 'debian-pkg-add-load-path-item)
+		(debian-pkg-add-load-path-item dir)
+	      (add-to-list 'load-path dir 'append)))))
+       ((equal 'source (car elt))
+	(let ((dir (concat "/usr/share/emacs/site-lisp/" (cdr elt))))
+	  (when (file-directory-p dir)
+	    (add-to-list 'load-path dir 'append))))))
+    (setq list (cdr list))))
+
+(if (featurep 'xemacs)
+    (require 'auto-autoloads)
+  (require 'dvc-autoloads))
+

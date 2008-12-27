@@ -1,0 +1,81 @@
+#! /bin/sh -e
+# /usr/lib/emacsen-common/packages/install/dvc
+
+# Written by Jim Van Zandt <jrv@vanzandt.mv.com>, borrowing heavily
+# from the install scripts for gettext by Santiago Vila
+# <sanvila@ctv.es> and octave by Dirk Eddelbuettel <edd@debian.org>.
+
+set -e
+
+FLAVOR=$1
+PACKAGE=dvc
+
+if [ "x$FLAVOR" = "x" ]; then
+    echo Need argument to determin FLAVOR of emacs;
+    exit 1
+fi
+
+if [ "x$PACKAGE" = "x" ]; then
+    echo Internal error: need package name;
+    exit 1;
+fi
+
+ELDIR=/usr/share/emacs/site-lisp/${PACKAGE}
+ELCDIR=/usr/share/${FLAVOR}/site-lisp/${PACKAGE}
+
+case "$FLAVOR" in
+    emacs |emacs20)
+        echo "Ignoring flavor ${FLAVOR}"
+	;;
+    *)
+	echo -n "install/${PACKAGE}: Handling install for emacsen flavor ${FLAVOR}... "
+# 	if ! which $FLAVOR 2>&1 > /dev/null; then
+# 	    echo "Could not find $FLAVOR. Exiting"
+# 	    exit 0;
+# 	fi
+
+	if [ -d "$ELCDIR" ]; then
+            rm -rf $ELCDIR || true;
+	fi
+	install -m 755 -d ${ELCDIR}
+
+	cd ${ELDIR}/lisp
+
+ 	LOG=`tempfile`;
+ 	trap "test ! -f $LOG || mv -f $LOG $ELCDIR/install.log > /dev/null 2>&1" EXIT
+
+	make EMACS_PROG=/usr/bin/$FLAVOR > $LOG 2>&1
+	COMPILED=$(ls -1 *.elc)
+	if [ "x$COMPILED" = "x" ]; then
+	    echo >&2 "No compiled files exist!!"
+	    echo >&2 "Aborting!!"
+	    echo     "No compiled files exist!!"  >> $LOG;
+	    echo     "Aborting!!"                 >> $LOG;
+	    mv -f $LOG  $ELCDIR/install.log
+	    exit 1
+	fi
+
+	for file in *.elc; do
+	    echo "Installing $file in $ELCDIR" >> $LOG
+	    install -m 644 $file $ELCDIR;
+	done
+
+	# Include files in contrib/ if any
+	if ls contrib/*.elc > /dev/null 2>&1; then
+	    for file in contrib/*.elc; do
+		echo "Installing $file in $ELCDIR" >> $LOG
+		install -m 644 $file $ELCDIR;
+	    done
+	fi
+
+	rm -f dvc-version.el *autoloads.el custom-load.el *.elc contrib/*.elc|| true;
+
+	mv -f $LOG $ELCDIR/install.log;
+	chmod 644 $ELCDIR/install.log;
+
+	echo "done."
+	;;
+esac
+
+exit 0
+

@@ -1,0 +1,30 @@
+Source: dvc
+Section: devel
+Priority: optional
+Maintainer: Daniel Dehennin <daniel.dehennin@baby-gnu.org>
+Build-Depends: cdbs (>= 0.4.50), debhelper
+Build-Depends-Indep: autoconf, emacs22 | emacs21 | xemacs21 | emacsen, texinfo
+Standards-Version: 3.8.0.1
+Vcs-Bzr: http://bzr.xsteve.at/dvc/
+Homepage: http://download.gna.org/dvc/
+
+Package: dvc
+Architecture: all
+Depends: emacs22 | emacs21 | xemacs21 | emacs-snapshot
+Recommends: tla | bazaar | bzr | git | mercurial | darcs | monotone
+Description: Emacs front-end to distributed version control systems
+ DVC is an attempt to build a common infrastructure for various
+ distributed revision control systems. Actually supported are tla,
+ bazaar, bzr, git, mercurial, darcs and monotone.
+ .
+ DVC main features are:
+   * dvc-status: Intuitive interface for status viewing.
+   * dvc-log: Log viewer.
+   * dvc-diff: View uncommitted changes in your working directory.
+   * dvc-bookmarks: Bookmark manager with partner support.
+   * Integration with ediff, Emacs's graphical diff tool.
+   * dvc-missing: Interface to view missing patches from all your
+     partners with a single command.
+   * Send/receive/apply patches via the Gnus email client.
+   * Run many version control commands from Emacs (such as init and
+     pull).

@@ -358,6 +358,8 @@ unable to perform symbol completion.")
 (require 'vc-hg)
 (add-to-list 'vc-handled-backends 'hg)
 
+(load-library "dvc-load")
+
 ;;Perl configuration
 (defalias 'perl-mode 'cperl-mode)
 (add-hook 'cperl-mode-hook 'my-perl-mode-hook)

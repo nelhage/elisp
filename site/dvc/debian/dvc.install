@@ -1,0 +1,7 @@
+config.status /usr/share/emacs/site-lisp/dvc
+Makefile* /usr/share/emacs/site-lisp/dvc
+lisp/Makefile* /usr/share/emacs/site-lisp/dvc/lisp/
+lisp/Makefile* /usr/share/emacs/site-lisp/dvc/lisp/
+lisp/*.el /usr/share/emacs/site-lisp/dvc/lisp/
+lisp/dvc-site.el.in /usr/share/emacs/site-lisp/dvc/lisp/
+lisp/contrib/*.el /usr/share/emacs/site-lisp/dvc/lisp/contrib/
