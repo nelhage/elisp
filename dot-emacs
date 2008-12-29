@@ -359,6 +359,7 @@ unable to perform symbol completion.")
 (add-to-list 'vc-handled-backends 'hg)
 
 (load-library "dvc-load")
+(setq xgit-use-index 'always)
 
 ;;Perl configuration
 (defalias 'perl-mode 'cperl-mode)
