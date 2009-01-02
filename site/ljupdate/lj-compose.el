@@ -172,6 +172,10 @@
       (when (and comments (string-match "[Nn][Oo]" comments))
         (add-to-list 'request '("prop_opt_nocomments" . "1"))))
 
+    (let ((preformatted (lj-compose-fetch-field "Preformatted")))
+      (when (and preformatted (string-match "[Yy][Ee][Ss]" preformatted))
+        (add-to-list 'request '("prop_opt_preformatted" . "1"))))
+
     (let ((email (lj-compose-fetch-field "Receive-Mail-Notification")))
       (when (and email (string-match "[Nn][Oo]" email))
         (add-to-list 'request '("prop_opt_noemail" . "1"))))
