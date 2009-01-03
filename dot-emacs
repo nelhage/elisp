@@ -343,12 +343,6 @@ unable to perform symbol completion.")
       (require feature)
     ('file-error . nil)))
 
-(defun safe-require (feature)
-  "Require FEATURE, failing silently if it does not exist"
-  (condition-case nil
-      (require feature)
-    ('file-error . nil)))
-
 (safe-require 'psvn)
 (safe-require 'vc-svk)
 (safe-require 'vc-git)
