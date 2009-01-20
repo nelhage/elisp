@@ -87,7 +87,8 @@ unable to perform symbol completion.")
     (when (and (not (null complete-symbol-function))
                (= pt (point))
                (save-excursion (re-search-backward "[^() \n\t\r]+\\=" nil t))
-               (looking-at "\\Sw"))
+               (or (looking-at "\\Sw")
+                   (= (point) (point-max))))
       (funcall complete-symbol-function))))
 
 ;;Set up fonts and colors
