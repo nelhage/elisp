@@ -892,7 +892,7 @@ surrounding xml expression"
                      "^" (regexp-opt '("To" "Cc" "Bcc" "From") t ) ":")))
       (bbdb-complete-name)))
 
-;(add-to-list 'magic-mode-alist (cons "\\`From" 'mail-mode) t)
+(add-to-list 'magic-mode-alist (cons "\\`From:" 'mail-mode) t)
 
 ;;BBDB
 (require 'bbdb)
