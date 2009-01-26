@@ -237,10 +237,23 @@ unable to perform symbol completion.")
 
 (require 'shell)
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
-(add-hook 'shell-mode 'my-shell-mode-hook)
+(add-hook 'shell-mode-hook 'my-shell-mode-hook)
 
 (defun my-shell-mode-hook ()
-  nil)
+  (setq dirtrack-list '("|Pr0mPT|\\([^|]*\\)|" 1 nil))
+  (shell-dirtrack-mode 0)
+  ;; (dirtrack-mode 1)
+  (setq dirtrack-mode t)
+  (add-hook 'comint-preoutput-filter-functions 'dirtrack nil t)
+  (add-hook 'comint-preoutput-filter-functions
+            'dirtrack-filter-out-pwd-prompt t t))
+
+(defun dirtrack-filter-out-pwd-prompt (string)
+  "dirtrack-mode doesn't remove the PWD match from the prompt.  This does."
+  ;; TODO: support dirtrack-mode's multiline regexp.
+  (if (and (stringp string) (string-match (first dirtrack-list) string))
+      (replace-match "" t t string 0)
+    string))
 
 (defun named-shell (name directory)
   (interactive "MShell name: \nDIn directory: ")
