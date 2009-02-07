@@ -1,6 +1,6 @@
 ;;; sb-impress.el --- shimbun backend for www.watch.impress.co.jp -*- coding: iso-2022-7bit; -*-
 
-;; Copyright (C) 2001, 2002, 2003, 2004, 2005
+;; Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2008
 ;; Yuuichi Teranishi <teranisi@gohome.org>
 
 ;; Author: Yuuichi Teranishi <teranisi@gohome.org>
@@ -19,9 +19,9 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's maintainer or write to: The Free Software Foundation,
-;; Inc.; 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 
@@ -64,15 +64,16 @@
     ("bb" rss
      "<!-- ?本文開始 ?-->" "<!-- ?本文終了 ?-->"
      "http://bb.watch.impress.co.jp/cda/rss/broadband.rdf")
-    ("forest"
-     "<a href=\"\\(/?article/\\([0-9][0-9][0-9][0-9]\\)/\\([0-9][0-9]\\)/\
-\\([0-9][0-9]\\)/\\([^>]*\\)\\)\">"
+    ("forest" rss
      "<!-- ?\\(▲▲▲ダイレクト関連▲▲▲\\|本文開始\\) ?-->"
      "<!-- ?\\(本文終了\\|■■■■本文セル右スペースセル■■■■\\|■goostick開始■\\) ?-->"
-     "http://www.forest.impress.co.jp/")
+     "http://www.forest.impress.co.jp/rss.xml")
     ("robot" rss
      "<!-- 本文開始 -->" "<!-- 本文終了 -->"
      "http://robot.watch.impress.co.jp/cda/rss/robot.rdf")
+    ("kaden" rss
+     "<!-- 本文開始 -->" "<!-- 本文終了 -->"
+     "http://kaden.watch.impress.co.jp/cda/rss/kaden.rdf")
     ))
 
 (defvar shimbun-impress-groups (mapcar 'car shimbun-impress-groups-alist))
@@ -83,6 +84,7 @@ oSoe'Y.gU#(EqHA5K}v}2ah,QlHa[S^}5ZuTefR\n ZA[pF1_ZNlDB5D_D\
 JzTbXTM!V{ecn<+l,RDM&H3CKdu8tWENJlbRm)a|Hk+limu}hMtR\\E!%r\
 9wC\"6\n ebr5rj1[UJ5zDEDsfo`N7~s%;P`\\JK'#y.w^>K]E~{`wZru")))
 ;;(defvar shimbun-impress-expiration-days 7)
+(defvar shimbun-impress-ignored-subject "^\\(AD\\|PR\\):")
 
 (luna-define-method shimbun-index-url ((shimbun shimbun-impress))
   (or (nth 4 (assoc (shimbun-current-group-internal shimbun)
@@ -145,14 +147,7 @@ JzTbXTM!V{ecn<+l,RDM&H3CKdu8tWENJlbRm)a|Hk+limu}hMtR\\E!%r\
   (if (eq (nth 1 (assoc (shimbun-current-group-internal shimbun)
 			shimbun-impress-groups-alist))
 	  'rss)
-      (delq nil
-	    (mapcar
-	     (lambda (header)
-	       (let ((subject (shimbun-header-subject header)))
-		 (unless (and subject (>= (length subject) 3)
-			      (string= (substring subject 0 3) "AD:"))
-		   header)))
-	     (luna-call-next-method)))
+      (luna-call-next-method)
     (with-temp-buffer
       (shimbun-fetch-url shimbun (shimbun-index-url shimbun) t)
       (shimbun-remove-tags "<!--" "-->") ;; clear comment-outed html source

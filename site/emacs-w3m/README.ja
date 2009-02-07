@@ -29,9 +29,9 @@
 
    emacs-w3m を動かすには最新の w3m (バージョン 0.3.1 以上) が必要です．
    このプログラムは w3m のバージョンに強く依存しているので，既に w3m を
-   インストールしてある場合は，それを確認して下さい．また，w3m のより新
-   しいバージョンがリリースされているかどうかをチェックするために，公式
-   の w3m ウェブページを訪問することをお勧めします:
+   インストールしてある場合は，それを確認してください．また，w3m のより
+   新しいバージョンがリリースされているかどうかをチェックするために，公
+   式の w3m ウェブページを訪問することをお勧めします:
 
        http://prdownloads.sourceforge.net/w3m/
 
@@ -45,32 +45,33 @@
 
    b) XEmacs 21.x
       第一に，emacs-w3m は XEmacs 21.4.17 以上，および XEmacs 21.5-b19
-      以上だけをサポートすることに注意して下さい．加えて，timer-funcs.el
-      を含む最新の xemacs-base パッケージをインストールしておく必要があ
-      ります．
+      以上だけをサポートすることに注意してください．加えて，
+      timer-funcs.el を含む最新の xemacs-base パッケージをインストールし
+      ておく必要があります．
 
-      APEL を前もってインストールしておく必要があります．
+      APEL を前もってインストールしておく必要があります．次の場所にある
+      最新のものを使ってください．
 
-          ftp://ftp.m17n.org/pub/mule/apel/apel-10.6.tar.gz
+      http://kanji.zinbun.kyoto-u.ac.jp/~tomo/lemi/dist/apel/
 
       注意: APEL XEmacs パッケージ (SUMO に含まれています) のバージョン
        1.32 より古いものは使えません．もしすでにそのような版のパッケージ
        がインストールされているならば，それを更新するか，または上記のリ
-       ンクで示した APEL で置き換えるために，以下の命令を使って下さい
+       ンクで示した APEL で置き換えるために，以下の命令を使ってください
        (新規に APEL をインストールする場合も同じ命令を使うことができます):
 
           % rm -fr /usr/local/lib/xemacs/xemacs-packages/lisp/apel
-          % cd apel-10.6
+          % cd apel-10.7
           % make install-package XEMACS=xemacs-21.4.x\
             PACKAGEDIR=/usr/local/lib/xemacs/xemacs-packages
 
       XEmacs 21.x に emacs-w3m をインストールする場合は，必ず gifsicle
-      プログラムもインストールして下さい．現在すべての XEmacs 21.x には
-      オプティマイズされたアニメーション gif が正常に表示されなかったり
-      ある種のインターレース gif を表示しようとするとクラッシュしてしま
-      うバグがあります．emacs-w3m は gifsicle を利用して，gif データを
-      XEmacs 21.x で扱える形式に変換します．これは次の場所から入手するこ
-      とができます．
+      プログラムもインストールしてください．現在すべての XEmacs 21.x に
+      はオプティマイズされたアニメーション gif が正常に表示されなかった
+      り，ある種のインターレース gif を表示しようとするとクラッシュして
+      しまうバグがあります．emacs-w3m は gifsicle を利用して，gif データ
+      を XEmacs 21.x で扱える形式に変換します．これは次の場所から入手す
+      ることができます．
 
           http://www.lcdf.org/gifsicle/
 
@@ -86,20 +87,25 @@
 
          % ./configure
 
+     もし、 configure スクリプトが見つかられなければ、 autoconf コマンド
+     を実行してください。 これは、 configure スクリプトを作成します。
+
+         % autoconf
+
      Gnus ユーザへの重要なお知らせ:
      ==============================
      いろいろなバージョンの Gnus がインストールされている場合 (リリース
      版と開発版の Gnus があるかもしれません) は，あなたが使う gnus.elc
      ファイルがインストールされているディレクトリが load-path の中で優先
-     されるようにして下さい．それには以下のように `--with-addpath' オプ
-     ションを使って下さい．
+     されるようにしてください．それには以下のように `--with-addpath' オ
+     プションを使ってください．
 
          % ./configure --with-addpath=/usr/local/share/emacs/site-lisp/gnus
 
      APEL や FLIM などの必要なモジュールが，標準的ではないディレクトリに
      インストールされている場合には，`--with-addpath' オプションを使って，
-     そのディレクトリを指定する必要があります (さらに，それに `:' で分け
-     られた Gnus のディレクトリを含めても構いません)．
+     そのディレクトリを指定する必要があります (さらに，それに Gnus のディ
+     レクトリを `:' で分けて含めても構いません)．
 
          % ./configure --with-addpath=/opt/share/apel:/opt/share/flim
 
@@ -150,7 +156,7 @@
    は `w3m-init-file' という変数のデフォルト値です) の利用を推奨します．
    このファイルは ~/.emacs と似ていますが，こちらは emacs-w3m が起動する
    ときに読み込まれます．しかし，例えば w3m-command のように，そこに書く
-   ことができないオプションがあることに注意して下さい．
+   ことができないオプションがあることに注意してください．
 
 4.1. 基本
 
@@ -193,7 +199,7 @@
         (setq w3m-no-proxy-domains '("local.com" "neighbor.com"))
 
      no-proxy ホストの設定に正規表現を使うには，オプション
-     `w3m-command-arguments-alist' のドキュメントを見て下さい．
+     `w3m-command-arguments-alist' のドキュメントを見てください．
 
 
 5. 連絡先
@@ -213,11 +219,12 @@
 7. 関連情報
 
    [1] APEL
-       ftp://ftp.m17n.org/pub/mule/apel/ から入手できます．
+       http://kanji.zinbun.kyoto-u.ac.jp/~tomo/lemi/dist/apel/ から
+       入手できます．
 
    [2] FLIM
-       ftp://ftp.m17n.org/pub/mule/flim/ から入手できます．APEL に依存し
-       ています．
+       http://kanji.zinbun.kyoto-u.ac.jp/~tomo/lemi/dist/flim/flim-1.14/
+       から入手できます．APEL に依存しています．
 
    [3] gifsicle
        http://www.lcdf.org/gifsicle/ から入手できます．

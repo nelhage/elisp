@@ -8,6 +8,17 @@ AC_DEFUN(AC_SET_VANILLA_FLAG,
   fi
   AC_SUBST(VANILLA_FLAG)])
 
+AC_DEFUN(AC_SET_XEMACSDEBUG,
+ [dnl Set the XEMACSDEBUG environment variable, which is eval'd when
+  dnl XEmacs 21.5 starts, in order to suppress warnings for Lisp shadows
+  dnl when XEmacs 21.5 starts.
+  if test "${VANILLA_FLAG}" = "-vanilla"; then
+	XEMACSDEBUG='XEMACSDEBUG='\''(setq log-warning-minimum-level (quote error))'\'' '
+  else
+	XEMACSDEBUG=
+  fi
+  AC_SUBST(XEMACSDEBUG)])
+
 AC_DEFUN(AC_EMACS_LISP, [
 elisp="$2"
 if test -z "$3"; then
@@ -15,8 +26,8 @@ if test -z "$3"; then
 fi
 AC_CACHE_VAL(EMACS_cv_SYS_$1,[
 	OUTPUT=./conftest-$$
-	echo ${EMACS}' '${VANILLA_FLAG}' -batch -eval '\''(let ((x '"${elisp}"')) (write-region (if (stringp x) (princ x) (prin1-to-string x)) nil "'${OUTPUT}'" nil 5))'\' >& AC_FD_CC 2>&1
-	eval ${EMACS}' '${VANILLA_FLAG}' -batch -eval '\''(let ((x '"${elisp}"')) (write-region (if (stringp x) (princ x) (prin1-to-string x)) nil "'${OUTPUT}'" nil 5))'\' >& AC_FD_CC 2>&1
+	echo ${XEMACSDEBUG}${EMACS}' '${VANILLA_FLAG}' -batch -eval '\''(let ((x '"${elisp}"')) (write-region (if (stringp x) (princ x) (prin1-to-string x)) nil "'${OUTPUT}'" nil 5))'\' >& AC_FD_CC 2>&1
+	eval ${XEMACSDEBUG}${EMACS}' '${VANILLA_FLAG}' -batch -eval '\''(let ((x '"${elisp}"')) (write-region (if (stringp x) (princ x) (prin1-to-string x)) nil "'${OUTPUT}'" nil 5))'\' >& AC_FD_CC 2>&1
 	retval="`cat ${OUTPUT}`"
 	echo "=> ${retval}" >& AC_FD_CC 2>&1
 	rm -f ${OUTPUT}
@@ -55,6 +66,7 @@ AC_DEFUN(AC_PATH_EMACS,
   test -z "${EMACS}" && AC_PATH_PROGS(EMACS, emacs xemacs, emacs)
   AC_SUBST(EMACS)
   AC_SET_VANILLA_FLAG
+  AC_SET_XEMACSDEBUG
 
   AC_MSG_CHECKING([what a flavor does ${EMACS} have])
   AC_EMACS_LISP(flavor,
@@ -93,7 +105,13 @@ AC_DEFUN(AC_PATH_EMACS,
 	    (if (string-match (char-to-string 41) v)\
 		(substring v 0 (match-end 0))\
 	      \"Old XEmacs\")))\
-      (format \"Emacs %d.%d\" emacs-major-version emacs-minor-version)),
+      (concat \"Emacs \"\
+	      (mapconcat (function identity)\
+			 (nreverse\
+			  (cdr (nreverse\
+				(split-string emacs-version\
+					      (concat (vector 92 46))))))\
+			 \".\"))),
     noecho)
   case "${flavor}" in
   XEmacs)
@@ -179,12 +197,12 @@ AC_DEFUN(AC_PATH_LISPDIR, [
   else
 	tribe=${EMACS_FLAVOR}
   fi
-  if test ${prefix} = NONE; then
-	AC_MSG_CHECKING([prefix for ${EMACS}])
+  AC_MSG_CHECKING([prefix for ${EMACS}])
+  if test "${prefix}" = NONE; then
 	AC_EMACS_LISP(prefix,(expand-file-name \"..\" invocation-directory),noecho)
 	prefix=${EMACS_cv_SYS_prefix}
-	AC_MSG_RESULT(${prefix})
   fi
+  AC_MSG_RESULT(${prefix})
   AC_ARG_WITH(lispdir,
     [  --with-lispdir=DIR      where lisp files should go
                           (use --with-packagedir for XEmacs package)],
@@ -192,14 +210,15 @@ AC_DEFUN(AC_PATH_LISPDIR, [
   AC_MSG_CHECKING([where lisp files should go])
   if test -z "${lispdir}"; then
     dnl Set the default value.
-    theprefix=${prefix}
-    if test x${theprefix} = xNONE; then
+    theprefix="${prefix}"
+    if test "${theprefix}" = NONE; then
 	theprefix=${ac_default_prefix}
     fi
     lispdir="\$(datadir)/${tribe}/site-lisp/w3m"
     for thedir in share lib; do
 	potential=
-	if test -d ${theprefix}/${thedir}/${tribe}/site-lisp; then
+	dnl The directory name should be quoted because it might contain spaces.
+	if test -d "${theprefix}/${thedir}/${tribe}/site-lisp"; then
 	   lispdir="\$(prefix)/${thedir}/${tribe}/site-lisp/w3m"
 	   break
 	fi
@@ -259,9 +278,9 @@ AC_DEFUN(AC_ADD_LOAD_PATH,
 	ADDITIONAL_LOAD_PATH="${withval}"
       else
 	if test x"$USER" != xroot -a x"$HOME" != x -a -f "$HOME"/.emacs; then
-          ADDITIONAL_LOAD_PATH=`"$EMACS" -batch -l "$HOME"/.emacs -l w3mhack.el NONE -f w3mhack-load-path 2>/dev/null | $EGREP -v '^$'`
+          ADDITIONAL_LOAD_PATH=`${XEMACSDEBUG}${EMACS} -batch -l "$HOME"/.emacs -l w3mhack.el NONE -f w3mhack-load-path 2>/dev/null | $EGREP -v '^$'`
         else
-          ADDITIONAL_LOAD_PATH=`"$EMACS" -batch -l w3mhack.el NONE -f w3mhack-load-path 2>/dev/null | $EGREP -v '^$'`
+          ADDITIONAL_LOAD_PATH=`${XEMACSDEBUG}${EMACS} -batch -l w3mhack.el NONE -f w3mhack-load-path 2>/dev/null | $EGREP -v '^$'`
         fi
       fi
       AC_MSG_RESULT(${ADDITIONAL_LOAD_PATH})],
@@ -276,7 +295,7 @@ AC_DEFUN(AC_ADD_LOAD_PATH,
         ADDITIONAL_LOAD_PATH=${ADDITIONAL_LOAD_PATH}:`pwd`/attic
       fi
     fi])
-  retval=`eval $EMACS' '${VANILLA_FLAG}' -batch -l w3mhack.el '${ADDITIONAL_LOAD_PATH}' -f w3mhack-print-status'`
+  retval=`eval ${XEMACSDEBUG}${EMACS}' '${VANILLA_FLAG}' -batch -l w3mhack.el '${ADDITIONAL_LOAD_PATH}' -f w3mhack-print-status'`
   if test x"$retval" != xOK; then
     AC_MSG_ERROR([Process couldn't proceed.  See the above messages.])
   fi

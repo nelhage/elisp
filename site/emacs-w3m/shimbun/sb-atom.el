@@ -1,6 +1,6 @@
 ;;; sb-atom.el --- shimbun backend for ATOM (Rich Site Summary).
 
-;; Copyright (C) 2006 Tsuyoshi CHO <tsuyoshi_cho@ybb.ne.jp>
+;; Copyright (C) 2006, 2008 Tsuyoshi CHO <tsuyoshi_cho@ybb.ne.jp>
 
 ;; Author: Tsuyoshi CHO <tsuyoshi_cho@ybb.ne.jp>
 ;; Keywords: news
@@ -19,9 +19,9 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's maintainer or write to: The Free Software Foundation,
-;; Inc.; 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 
@@ -81,6 +81,11 @@ But clarify need ignored URL return nil.")
 				  "alternate")
 		     (throw 'url (shimbun-atom-attribute-value
 				  (intern (concat atom-ns "href")) link)))))))
+	  (unless url
+	    (setq url (shimbun-atom-attribute-value
+		       (intern (concat atom-ns "href"))
+		       (car (shimbun-rss-find-el
+			     (intern (concat atom-ns "link")) entry)))))
 	  (when url
 	    (let* ((date (or (shimbun-rss-get-date shimbun url)
 			     (shimbun-rss-node-text atom-ns 'modified entry)

@@ -1,6 +1,6 @@
 ;;; w3m-bookmark.el --- Functions to operate bookmark file of w3m
 
-;; Copyright (C) 2001, 2002, 2003, 2005, 2006
+;; Copyright (C) 2001, 2002, 2003, 2005, 2006, 2007
 ;; TSUCHIYA Masatoshi <tsuchiya@namazu.org>
 
 ;; Authors: Shun-ichi GOTO     <gotoh@taiyo.co.jp>,
@@ -20,9 +20,9 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's maintainer or write to: The Free Software Foundation,
-;; Inc.; 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 
 ;;; Commentary:
@@ -143,14 +143,10 @@ Minor mode to edit bookmark.
 (add-hook 'w3m-display-functions 'w3m-bookmark-mode-setter)
 
 (defun w3m-bookmark-file-modtime ()
-  "Return the bookmark file modification time.
-The value is a list of the form (HIGH . LOW), like the time values
-that `visited-file-modtime' returns.  When the bookmark file does not
-exist, returns (0 . 0)."
-  (if (file-exists-p w3m-bookmark-file)
-      (let ((time (nth 5 (file-attributes w3m-bookmark-file))))
-	(cons (car time) (cadr time)))
-    (cons 0 0)))
+  "Return the modification time of the bookmark file `w3m-bookmark-file'.
+The value is a list of two time values `(HIGH LOW)' if the bookmark
+file exists, otherwise nil."
+  (nth 5 (file-attributes w3m-bookmark-file)))
 
 (defun w3m-bookmark-buffer (&optional no-verify-modtime)
   "Return the buffer reading `w3m-bookmark-file' current."
@@ -164,7 +160,7 @@ exist, returns (0 . 0)."
       (with-current-buffer (w3m-get-buffer-create " *w3m bookmark*")
 	(unless (and w3m-bookmark-buffer-file-name
 		     (or no-verify-modtime
-			 (equal (visited-file-modtime)
+			 (equal (w3m-visited-file-modtime)
 				(w3m-bookmark-file-modtime))))
 	  (when (file-readable-p w3m-bookmark-file)
 	    (buffer-disable-undo)
@@ -185,7 +181,7 @@ exist, returns (0 . 0)."
 	(current-buffer)))))
 
 (defun w3m-bookmark-verify-modtime ()
-  (unless (equal (visited-file-modtime)
+  (unless (equal (w3m-visited-file-modtime)
 		 (w3m-bookmark-file-modtime))
     (if (buffer-file-name)
 	(ask-user-about-supersession-threat w3m-bookmark-file)
@@ -485,9 +481,6 @@ The car is used if `w3m-bookmark-mode' is nil, otherwise the cdr is used.")
 	(easy-menu-define w3m-bookmark-menu w3m-mode-map
 	  "" '("Bookmark" ["(empty)" ignore nil]))
 	(easy-menu-add w3m-bookmark-menu)
-	(setq current-menubar
-	      (cons w3m-bookmark-menu
-		    (delq (assoc "Bookmark" current-menubar) current-menubar)))
 	(add-hook 'activate-menubar-hook 'w3m-bookmark-menubar-update))
     (unless (lookup-key w3m-mode-map [menu-bar Bookmark])
       (easy-menu-define w3m-bookmark-menu w3m-mode-map "" '("Bookmark"))

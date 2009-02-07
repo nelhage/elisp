@@ -1,6 +1,6 @@
 ;;; sb-elips.el --- shimbun backend for the Elips mailing list
 
-;; Copyright(C) 2003 Katsumi Yamaoka
+;; Copyright(C) 2003, 2008 Katsumi Yamaoka
 
 ;; Author: Katsumi Yamaoka <yamaoka@jpl.org>
 ;; Keywords: news
@@ -18,20 +18,20 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's maintainer or write to: The Free Software Foundation,
-;; Inc.; 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 
 ;;; Code:
 
 (require 'shimbun)
-(require 'sb-fml)
+(require 'sb-mailman)
 
-(luna-define-class shimbun-elips (shimbun-fml) ())
+(luna-define-class shimbun-elips (shimbun-mailman-ja) ())
 
-(defvar shimbun-elips-url "http://heimat.jp/~nakaji/elips/")
+(defvar shimbun-elips-url "http://www.heimat.gr.jp/pipermail/elips/")
 (defvar shimbun-elips-groups '("elips"))
 (defvar shimbun-elips-x-face-alist
   '(("default" . "X-Face: 4(*_4GGM'.9>v7]}eY@L8:2Zn7:&ANIR4778Vg*'(f\

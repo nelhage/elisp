@@ -1,6 +1,6 @@
 ;;; w3m-ucs.el --- CCL programs to process Unicode.
 
-;; Copyright (C) 2001, 2005 TSUCHIYA Masatoshi <tsuchiya@namazu.org>
+;; Copyright (C) 2001, 2005, 2007 TSUCHIYA Masatoshi <tsuchiya@namazu.org>
 
 ;; Authors: TSUCHIYA Masatoshi <tsuchiya@namazu.org>,
 ;;          ARISAWA Akihiro <ari@mbf.sphere.ne.jp>
@@ -19,9 +19,9 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's maintainer or write to: The Free Software Foundation,
-;; Inc.; 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 
@@ -40,6 +40,7 @@
 (eval-when-compile
   (if (featurep 'xemacs)
       (let ((mucs-ignore-version-incompatibilities t))
+	(defvar font-ccl-encoder-alist nil)
 	(require 'un-define))))
 
 (require 'un-define)

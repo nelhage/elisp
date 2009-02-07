@@ -1,6 +1,7 @@
 ;;; sb-airs.el --- shimbun backend for lists.airs.net
 
-;; Copyright (C) 2001, 2002, 2003, 2005 Yuuichi Teranishi <teranisi@gohome.org>
+;; Copyright (C) 2001, 2002, 2003, 2005, 2007
+;; Yuuichi Teranishi <teranisi@gohome.org>
 
 ;; Author: Yuuichi Teranishi  <teranisi@gohome.org>
 ;; Keywords: news
@@ -18,9 +19,9 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's maintainer or write to: The Free Software Foundation,
-;; Inc.; 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 
@@ -48,11 +49,11 @@
   "<STRONG><a name=\"\\([0-9]+\\)\" href=\"\\(msg[0-9]+.html\\)\">\\([^<]+\\)</a></STRONG> <EM>\\([^<]+\\)</EM>")
 
 (defmacro shimbun-airs-concat-url (shimbun url)
-  (` (concat (shimbun-url-internal (, shimbun))
-	     (nth 1 (assoc (shimbun-current-group-internal (, shimbun))
-			   shimbun-airs-group-path-alist))
-	     "/"
-	     (, url))))
+  `(concat (shimbun-url-internal ,shimbun)
+	   (nth 1 (assoc (shimbun-current-group-internal ,shimbun)
+			 shimbun-airs-group-path-alist))
+	   "/"
+	   ,url))
 
 (luna-define-method shimbun-index-url ((shimbun shimbun-airs))
   (shimbun-airs-concat-url shimbun "index.html"))

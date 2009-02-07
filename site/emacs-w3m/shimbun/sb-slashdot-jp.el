@@ -1,6 +1,7 @@
 ;;; sb-slashdot-jp.el --- shimbun backend for slashdot.jp -*- coding: iso-2022-7bit; -*-
 
-;; Copyright (C) 2003, 2004, 2005, 2006 NAKAJIMA Mikio <minakaji@namazu.org>
+;; Copyright (C) 2003, 2004, 2005, 2006, 2007
+;; NAKAJIMA Mikio <minakaji@namazu.org>
 
 ;; Author: NAKAJIMA Mikio <minakaji@namazu.org>
 ;; Keywords: news
@@ -19,9 +20,9 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's maintainer or write to: The Free Software Foundation,
-;; Inc.; 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 
@@ -77,12 +78,14 @@
     ("bsd"	   . "http://slashdot.jp/bsd.rss")
     ("developers"  . "http://slashdot.jp/developers.rss")
     ("interview"   . "http://slashdot.jp/interview.rss")
-    ("linuxkernel" . "http://slashdot.jp/linuxkernel.rss")
+    ("linux"       . "http://slashdot.jp/linux.rss")
     ("mac"	   . "http://slashdot.jp/mac.rss")
     ("mobile"	   . "http://slashdot.jp/mobile.rss")
     ("science"	   . "http://slashdot.jp/science.rss")
     ("security"	   . "http://slashdot.jp/security.rss")
     ("slash"	   . "http://slashdot.jp/slash.rss")
+    ("it"          . "http://slashdot.jp/it.rss")
+    ("hardware"    . "http://slashdot.jp/hardware.rss")
     ("diary.oliver" .
      "http://slashdot.jp/~Oliver/journal/rss"))
   "*Alist of slashdot groups and their RSS feeds."
@@ -116,7 +119,7 @@
   ((shimbun shimbun-slashdot-jp) url date)
   (cond
    ((string-match
-     "\\`http://slashdot\\.jp/\\([a-zA-Z0-9]+\\)?/?article\\.pl\\?sid=\\([/0-9]+\\)&"
+     "\\`http://slashdot\\.jp/\\([a-zA-Z0-9]+\\)?/?article\\.pl\\?sid=\\([/0-9]+\\)\\(&\\|\\'\\)"
      url)
     (if (match-string-no-properties 1 url)
 	(concat "<" (match-string-no-properties 1 url)

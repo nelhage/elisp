@@ -1,6 +1,7 @@
 ;;; sb-zeit-de.el --- shimbun backend for <http://www.zeit.de>
 
-;; Copyright (C) 2004, 2005, 2006 Andreas Seltenreich <seltenreich@gmx.de>
+;; Copyright (C) 2004, 2005, 2006, 2008
+;; Andreas Seltenreich <seltenreich@gmx.de>
 
 ;; Author: Andreas Seltenreich <seltenreich@gmx.de>
 ;; Keywords: news
@@ -17,9 +18,9 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's maintainer or write to: The Free Software Foundation,
-;; Inc.; 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 
@@ -39,6 +40,10 @@
     "international" "leben" "literatur" "musik" "news" "reisen"
     "schule" "sport" "studium" "wirtschaft" "wissen" "zuender"))
 
+(defvar shimbun-zeit-de-x-face-alist
+  '(("default" . "X-Face: +@u:6eD3Nq>u{P_Ev&\"A6eW=EA{5H[OqH;|oz7H>atafNFsUS-&7\
+%\\qo;KFS%E`=t5Z)'q~lhfl6<7rQ=]")))
+
 (defvar shimbun-zeit-de-content-start
   "title\">\\|<!--content starts here-->\\(?:<table[^>]+>\\)?")
 
@@ -46,7 +51,7 @@
   (concat
    "</body>\\|</html>\\|navigation[^><]*>[^A]\\|"
    "<script language=\"JavaScript1\.2\" type=\"text/javascript\">\\|"
-   "<div[^>]+class=\"comments"))
+   "<div[^>]+\\(class\\|id\\)=\"comments"))
 
 (defvar shimbun-zeit-de-from-address "DieZeit@zeit.de")
 
@@ -62,6 +67,9 @@
   (mapc
    (lambda (header)
      (let ((url (shimbun-header-xref header)))
+       ;; remove the "?from=rss" parameter
+       (when (string-match "\\(.*\\)\\?from=rss$" url)
+         (setq url (match-string 1 url)))
        (cond ((string-match "\\`http://www\\.zeit\\.de" url)
 	      (shimbun-header-set-xref header (concat url "?page=all")))
 	     ((string-match "\\`/" url)
@@ -101,6 +109,7 @@
 						    header)
 
   ;;  remove advertisements and 1-pixel-images aka webbugs
+  (shimbun-remove-tags "<!--START: LESERMEINUNG-->" "<!--ENDE: LESERMEINUNG-->")
   (shimbun-remove-tags "<div[^>]*class=\"?\\(?:ad\\|most_read\\)" "</div>")
   (shimbun-remove-tags "<a[^>]*doubleclick.net" "</a>")
   (shimbun-remove-tags "<IFRAME[^>]*doubleclick.net[^>]*>")

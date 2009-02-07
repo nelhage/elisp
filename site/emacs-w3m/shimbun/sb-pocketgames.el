@@ -1,11 +1,11 @@
 ;;; sb-pocketgames.el --- shimbun backend class for www.pocketgames.jp. -*- coding: iso-2022-7bit; -*-
 
-;; Copyright (C) 2003, 2004, 2005 NAKAJIMA Mikio <minakaji@namazu.org>
+;; Copyright (C) 2003, 2004, 2005, 2008 NAKAJIMA Mikio <minakaji@namazu.org>
 
 ;; Author: NAKAJIMA Mikio <minakaji@namazu.org>
 ;; Keywords: news
-;; Version: $Id: sb-pocketgames.el,v 1.16 2005/07/05 23:52:29 yamaoka Exp $
-;; Last Modified: $Date: 2005/07/05 23:52:29 $
+;; Version: $Id: sb-pocketgames.el,v 1.18 2008-01-17 23:38:36 yamaoka Exp $
+;; Last Modified: $Date: 2008-01-17 23:38:36 $
 
 ;; This file is a part of shimbun.
 
@@ -20,9 +20,9 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's maintainer or write to: The Free Software Foundation,
-;; Inc.; 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Code:
 
@@ -83,7 +83,7 @@
 	  (shimbun-remove-markup)
 	  (setq subject (buffer-string)))
 	(setq url (shimbun-expand-url
-		   (w3m-decode-anchor-string url)
+		   (shimbun-decode-anchor-string url)
 		   (concat (shimbun-index-url shimbun) "/")))
 	(push (shimbun-make-header
 	       0 (shimbun-mime-encode-string subject)

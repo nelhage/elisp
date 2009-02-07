@@ -1,6 +1,6 @@
 ;;; sb-javaconf.el --- shimbun backend class for java-conference archive.
 
-;; Copyright (C) 2001, 2002, 2003, 2004 ABE Yasushi <yasushi@stbbs.net>
+;; Copyright (C) 2001, 2002, 2003, 2004, 2007 ABE Yasushi <yasushi@stbbs.net>
 
 ;; Author: ABE Yasushi <yasushi@stbbs.net>
 ;; Keywords: news
@@ -18,9 +18,9 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's maintainer or write to: The Free Software Foundation,
-;; Inc.; 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 
@@ -43,10 +43,10 @@
   "<strong><a NAME=\"\\([0-9]+\\)\" HREF=\"\\(msg[0-9]+\.html\\)\">\\([^<]+\\)\n</a></strong> <em>\\([^<]+\\)\n</em>")
 
 (defmacro shimbun-javaconf-concat-url (shimbun url)
-  (` (concat (shimbun-url-internal (, shimbun))
-	     (shimbun-current-group-internal shimbun)
-	     "/"
-	     (, url))))
+  `(concat (shimbun-url-internal ,shimbun)
+	   (shimbun-current-group-internal ,shimbun)
+	   "/"
+	   ,url))
 
 (luna-define-method shimbun-get-headers ((shimbun shimbun-javaconf)
 					 &optional range)

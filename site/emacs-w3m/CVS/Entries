@@ -1,46 +1,53 @@
-/.cvsignore/1.13/Tue Apr 27 07:01:41 2004//
 /BUGS.ja/1.52/Fri Dec  8 06:28:19 2006//
-/COPYING/1.4/Tue Jul  5 23:52:27 2005//
-/ChangeLog/1.2853/Fri Dec 15 00:26:45 2006//
-/ChangeLog.1/1.2/Fri Nov 15 05:10:43 2002//
-/Makefile.in/1.69/Tue May 10 10:33:52 2005//
-/README/1.75/Mon Apr 24 04:04:02 2006//
-/README.ja/1.71/Mon Apr 24 04:04:02 2006//
-/aclocal.m4/1.29/Mon Dec 11 01:49:30 2006//
-/configure.in/1.11/Mon Jan 16 11:49:49 2006//
-/install-sh/1.4/Fri Nov 15 05:10:43 2002//
-/mew-w3m.el/1.60/Sat Nov 25 02:01:29 2006//
-/mime-w3m.el/1.61/Wed Sep 21 01:05:02 2005//
-/mkinstalldirs/1.2/Fri Nov 15 05:10:43 2002//
-/octet.el/1.34/Mon Aug  1 08:36:57 2005//
-/w3m-antenna.el/1.57/Thu Dec 22 13:52:18 2005//
-/w3m-bookmark.el/1.43/Mon Oct  9 04:44:17 2006//
-/w3m-bug.el/1.12/Tue Jul  5 23:52:27 2005//
-/w3m-ccl.el/1.11/Wed Mar 15 00:27:29 2006//
-/w3m-cookie.el/1.21/Fri Nov 24 02:38:02 2006//
-/w3m-dtree.el/1.30/Mon May 22 09:20:56 2006//
-/w3m-e21.el/1.153/Fri Sep 22 11:26:50 2006//
 /w3m-e23.el/1.13/Fri Sep 22 11:26:50 2006//
-/w3m-favicon.el/1.36/Sun Nov 20 15:19:47 2005//
 /w3m-fb.el/1.4/Wed Sep 20 09:26:42 2006//
-/w3m-filter.el/1.20/Tue Jul  5 23:52:27 2005//
-/w3m-form.el/1.156/Sat Dec  9 14:53:44 2006//
-/w3m-fsf.el/1.12/Tue Jul  5 23:52:27 2005//
-/w3m-hist.el/1.59/Tue Jul  5 23:52:27 2005//
-/w3m-image.el/1.18/Tue Jul  5 23:52:27 2005//
-/w3m-lnum.el/1.14/Sun May 14 12:42:47 2006//
-/w3m-mail.el/1.20/Mon Nov 20 01:23:12 2006//
-/w3m-namazu.el/1.17/Tue Jul  5 23:52:27 2005//
-/w3m-perldoc.el/1.9/Tue Jul  5 23:52:27 2005//
-/w3m-proc.el/1.59/Thu Sep 29 10:44:53 2005//
-/w3m-rss.el/1.9/Tue Jul  5 23:52:27 2005//
-/w3m-search.el/1.61/Wed Dec 13 03:08:52 2006//
-/w3m-symbol.el/1.13/Mon May 22 09:20:56 2006//
-/w3m-tabmenu.el/1.19/Mon Jun 19 10:22:07 2006//
-/w3m-ucs.el/1.19/Mon Aug 29 06:26:26 2005//
-/w3m-util.el/1.115/Mon Oct  2 10:34:11 2006//
-/w3m-weather.el/1.29/Tue Jul  5 23:52:27 2005//
-/w3m-xmas.el/1.133/Sat Jul  9 14:28:30 2005//
-/w3m.el/1.1233/Sat Dec  9 14:53:44 2006//
-/w3mhack.el/1.158/Mon Apr 24 04:15:02 2006//
-D
+D/attic////
+D/doc////
+D/icons////
+D/icons30////
+D/patches////
+D/shimbun////
+/.cvsignore/1.13/Thu May 22 17:50:10 2008//
+/COPYING/1.4/Thu May 22 17:50:10 2008//
+/ChangeLog/1.3200/Sat Jan 31 18:10:12 2009//
+/ChangeLog.1/1.4/Sat Jan 31 18:10:12 2009//
+/Makefile.in/1.80/Sat Jan 31 18:10:12 2009//
+/NEWS/1.20/Wed Feb  6 02:24:21 2008//
+/NEWS.ja/1.9/Wed Feb  6 02:24:21 2008//
+/README/1.79/Sat Jan 31 18:10:12 2009//
+/README.ja/1.76/Sat Jan 31 18:10:12 2009//
+/aclocal.m4/1.34/Sat Jan 31 18:10:12 2009//
+/configure.in/1.11/Thu May 22 17:50:10 2008//
+/install-sh/1.4/Thu May 22 17:50:10 2008//
+/mew-w3m.el/1.63/Sat Jan 31 18:10:12 2009//
+/mime-w3m.el/1.62/Sat Jan 31 18:10:12 2009//
+/mkinstalldirs/1.3/Sat Jan 31 18:10:12 2009//
+/octet.el/1.34/Thu May 22 17:50:10 2008//
+/w3m-antenna.el/1.60/Sat Jan 31 18:10:12 2009//
+/w3m-bookmark.el/1.46/Sat Jan 31 18:10:12 2009//
+/w3m-bug.el/1.16/Sat Jan 31 18:10:12 2009//
+/w3m-ccl.el/1.13/Sat Jan 31 18:10:12 2009//
+/w3m-cookie.el/1.26/Sat Jan 31 18:10:12 2009//
+/w3m-dtree.el/1.32/Sat Jan 31 18:10:12 2009//
+/w3m-ems.el/1.40/Mon Dec  8 05:07:25 2008//
+/w3m-favicon.el/1.43/Sat Jan 31 18:10:12 2009//
+/w3m-filter.el/1.39/Sat Jan 31 18:10:12 2009//
+/w3m-form.el/1.177/Sat Jan 31 18:10:12 2009//
+/w3m-hist.el/1.61/Sat Jan 31 18:10:12 2009//
+/w3m-image.el/1.25/Sat Jan 31 18:10:13 2009//
+/w3m-lnum.el/1.17/Sat Jan 31 18:10:13 2009//
+/w3m-mail.el/1.21/Sat Jan 31 18:10:13 2009//
+/w3m-namazu.el/1.20/Sat Jan 31 18:10:13 2009//
+/w3m-perldoc.el/1.11/Sat Jan 31 18:10:13 2009//
+/w3m-proc.el/1.71/Sat Jan 31 18:10:13 2009//
+/w3m-rss.el/1.10/Sat Jan 31 18:10:13 2009//
+/w3m-search.el/1.70/Sat Jan 31 18:10:13 2009//
+/w3m-session.el/1.22/Wed Jan 21 02:04:58 2009//
+/w3m-symbol.el/1.16/Sat Jan 31 18:10:13 2009//
+/w3m-tabmenu.el/1.23/Sat Jan 31 18:10:13 2009//
+/w3m-ucs.el/1.21/Sat Jan 31 18:10:13 2009//
+/w3m-util.el/1.126/Sat Jan 31 18:10:13 2009//
+/w3m-weather.el/1.30/Sat Jan 31 18:10:13 2009//
+/w3m-xmas.el/1.153/Sat Jan 31 18:10:13 2009//
+/w3m.el/1.1414/Result of merge+Sat Jan 31 18:10:13 2009//
+/w3mhack.el/1.171/Sat Jan 31 18:10:13 2009//

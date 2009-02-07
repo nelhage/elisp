@@ -1,6 +1,6 @@
 ;;; w3m-search.el --- functions convenient to access web search engines
 
-;; Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006
+;; Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008
 ;; TSUCHIYA Masatoshi <tsuchiya@namazu.org>
 
 ;; Authors: Keisuke Nishida    <kxn30@po.cwru.edu>,
@@ -22,9 +22,9 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's maintainer or write to: The Free Software Foundation,
-;; Inc.; 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 
@@ -42,7 +42,9 @@
 
 (defcustom w3m-search-engine-alist
   (let* ((ja (equal "Japanese" w3m-language))
-	 (utf-8 (or (featurep 'un-define)
+	 (utf-8 (or (and (boundp 'mule-version)
+			 (not (string< (symbol-value 'mule-version) "6.0")))
+		    (featurep 'un-define)
 		    (fboundp 'utf-translate-cjk-mode)
 		    (and (not ja) (w3m-find-coding-system 'utf-8)))))
     `(,@(if ja
@@ -56,73 +58,86 @@
 	    ("yahoo-ja"
 	     "http://search.yahoo.co.jp/bin/search?p=%s"
 	     euc-japan)))
-      ("yahoo beta"
-       "http://beta.search.yahoo.co.jp/search?p=%s&ei=UTF-8&eo=UTF-8"
-       utf-8)
-      ,@(if ja
-	    '(("blog"
-	       "http://blogsearch.google.com/blogsearch?q=%s&lr=lang_ja&oe=utf-8&ie=utf-8"
-	       utf-8)
-	      ("blog-en"
-	       "http://blogsearch.google.com/blogsearch?q=%s&oe=utf-8&ie=utf-8"
-	       utf-8))
+      ("alc" "http://eow.alc.co.jp/%s/UTF-8/" utf-8)
+      ,@(cond
+	 ((and ja utf-8)
+	  '(("blog"
+	     "http://blogsearch.google.com/blogsearch?q=%s&hl=ja&lr=lang_ja&oe=utf-8&ie=utf-8"
+	     utf-8)
+	    ("blog-en"
+	     "http://blogsearch.google.com/blogsearch?q=%s&hl=en&oe=utf-8&ie=utf-8"
+	     utf-8)))
+	 (ja
+	  '(("blog"
+	     "http://blogsearch.google.com/blogsearch?q=%s&hl=ja&lr=lang_ja&ie=Shift_JIS&oe=Shift_JIS"
+	     shift_jis)
+	    ("blog-en"
+	     "http://blogsearch.google.com/blogsearch?q=%s&hl=en")))
+	 (utf-8
 	  '(("blog"
 	     "http://blogsearch.google.com/blogsearch?q=%s&oe=utf-8&ie=utf-8"
 	     utf-8)
-	    ("blog-ja"
-	     "http://blogsearch.google.com/blogsearch?q=%s&lr=lang_ja&oe=utf-8&ie=utf-8"
+	    ("blog-en"
+	     "http://blogsearch.google.com/blogsearch?q=%s&hl=en&oe=utf-8&ie=utf-8"
 	     utf-8)))
+	 (t
+	  '(("blog"
+	     "http://blogsearch.google.com/blogsearch?q=%s")
+	    ("blog-ja"
+	     "http://blogsearch.google.com/blogsearch?q=%s&lr=lang_ja&ie=Shift_JIS&oe=Shift_JIS"
+	     shift_jis))))
       ,@(cond
 	 ((and ja utf-8)
 	  '(("google"
-	     "http://www.google.com/search?q=%s&hl=ja&lr=lang_ja&ie=utf-8"
+	     "http://www.google.com/search?q=%s&hl=ja&lr=lang_ja&ie=utf-8&oe=utf-8"
 	     utf-8)
 	    ("google-en"
-	     "http://www.google.com/search?q=%s&hl=en&ie=utf-8"
+	     "http://www.google.com/search?q=%s&hl=en&ie=utf-8&oe=utf-8"
 	     utf-8)))
 	 (ja
 	  '(("google"
-	     "http://www.google.com/search?q=%s&hl=ja&lr=lang_ja&ie=Shift_JIS"
+	     "http://www.google.com/search?q=%s&hl=ja&lr=lang_ja&ie=Shift_JIS&oe=Shift_JIS"
 	     shift_jis)
 	    ("google-en"
 	     "http://www.google.com/search?q=%s&hl=en")))
 	 (utf-8
 	  '(("google"
-	     "http://www.google.com/search?q=%s&ie=utf-8"
+	     "http://www.google.com/search?q=%s&ie=utf-8&oe=utf-8"
 	     utf-8)
 	    ("google-en"
-	     "http://www.google.com/search?q=%s&hl=en&ie=utf-8"
+	     "http://www.google.com/search?q=%s&hl=en&ie=utf-8&oe=utf-8"
 	     utf-8)))
 	 (t
 	  '(("google"
 	     "http://www.google.com/search?q=%s")
 	    ("google-ja"
-	     "http://www.google.com/search?q=%s&hl=ja&lr=lang_ja&ie=Shift_JIS"
+	     "http://www.google.com/search?q=%s&hl=ja&lr=lang_ja&ie=Shift_JIS&oe=Shift_JIS"
 	     shift_jis))))
       ,@(cond
 	 ((and ja utf-8)
 	  '(("google news"
-	     "http://news.google.co.jp/news?hl=ja&ie=utf-8&q=%s"
+	     "http://news.google.co.jp/news?hl=ja&ie=utf-8&q=%s&oe=utf-8"
 	     utf-8)
 	    ("google news-en"
 	     "http://news.google.com/news?hl=en&q=%s")))
 	 (ja
 	  '(("google news"
-	     "http://news.google.co.jp/news?hl=ja&ie=Shift_JIS&q=%s"
+	     "http://news.google.co.jp/news?hl=ja&ie=Shift_JIS&q=%s&oe=Shift_JIS"
 	     shift_jis)
 	    ("google news-en"
 	     "http://news.google.com/news?hl=en&q=%s")))
 	 (utf-8
 	  '(("google news"
-	     "http://news.google.co.jp/news?hl=ja&ie=utf-8&q=%s"
+	     "http://news.google.co.jp/news?hl=ja&ie=utf-8&q=%s&oe=utf-8"
 	     utf-8)
 	    ("google news-en"
 	     "http://news.google.com/news?hl=en&q=%s")))
-	 '(("google news"
-	    "http://news.google.com/news?q=%s")
-	   ("google news-ja"
-	    "http://news.google.co.jp/news?hl=ja&ie=Shift_JIS&q=%s"
-	    shift_jis)))
+	 (t
+	  '(("google news"
+	     "http://news.google.com/news?q=%s")
+	    ("google news-ja"
+	     "http://news.google.co.jp/news?hl=ja&ie=Shift_JIS&q=%s&oe=Shift_JIS"
+	     shift_jis))))
       ("google groups"
        "http://groups.google.com/groups?q=%s")
       ,@(if ja
@@ -266,7 +281,8 @@ PROMPT-WITH-DEFAULT instead of string PROMPT."
 	  (if (w3m-region-active-p)
 	      (buffer-substring (region-beginning) (region-end))
 	    (unless (and (eq major-mode 'w3m-mode)
-			 (memq 'w3m-header-line-location-title-face
+			 (listp (get-text-property (point-at-bol) 'face))
+			 (memq 'w3m-header-line-location-title
 			       (get-text-property (point-at-bol) 'face)))
 	      (thing-at-point 'word))))
 	initial)

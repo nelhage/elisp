@@ -1,6 +1,6 @@
 ;;; sb-gendai-net.el --- shimbun backend for Gendai Net -*- coding: iso-2022-7bit; -*-
 
-;; Copyright (C) 2006 Katsumi Yamaoka
+;; Copyright (C) 2006, 2007 Katsumi Yamaoka
 
 ;; Author: Katsumi Yamaoka <yamaoka@jpl.org>
 ;; Keywords: news
@@ -18,9 +18,9 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's maintainer or write to: The Free Software Foundation,
-;; Inc.; 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 
@@ -131,7 +131,8 @@ Face: iVBORw0KGgoAAAANSUhEUgAAADAAAAAYBAMAAABO02PvAAAAGFBMVEX+6ctRUVH7qDX416T
 	(group (shimbun-current-group-internal shimbun))
 	(from (concat "ゲンダイネット (" (shimbun-current-group-name shimbun)
 		      ")"))
-	year month indices index day date url base c num subject id headers)
+	year month indices index day date num url base c subject increase id
+	headers)
     (while (re-search-forward regexp1 nil t)
       (setq year (string-to-number (match-string 2))
 	    month (string-to-number (match-string 3)))
@@ -163,47 +164,45 @@ Face: iVBORw0KGgoAAAANSUhEUgAAADAAAAAYBAMAAABO02PvAAAAGFBMVEX+6ctRUVH7qDX416T
     (setq indices (nreverse (if pages
 				(last indices pages)
 			      indices)))
-    (catch 'stop
-      (while indices
-	(setq index (pop indices)
-	      year (nth 1 index)
-	      month (nth 2 index)
-	      day (nth 3 index)
-	      index (car index)
-	      date (shimbun-make-date-string year month day))
-	(when index
-	  (erase-buffer)
-	  (shimbun-retrieve-url index))
-	(goto-char (point-max))
-	(while (re-search-backward regexp2 nil t)
-	  (setq url (match-string 1)
-		base (match-string 2)
-		c (match-string 3)
-		num (string-to-number (match-string 4))
-		subject (match-string 5)
-		id (format "<%d%02d%02d.%s.%d%%%s.%s>"
-			   year month day c num group
-			   shimbun-gendai-net-top-level-domain))
-	  (if (shimbun-search-id shimbun id)
-	      (throw 'stop nil)
-	    (push (shimbun-create-header 0 subject from date id "" 0 0 url)
-		  headers)))
-	(when (re-search-backward
-	       (eval-when-compile
-		 (let ((s0 "[\t\n\r ]*"))
-		   (concat "<td>" s0 "<b>" s0 "\\([^<]+\\)"
-			   s0 "</b>" s0 "</td")))
-	       nil t)
-	  (setq subject (match-string 1)
-		id (format "<%d%02d%02d.%s.%d%%%s.%s>"
-			   year month day c (1- num) group
-			   shimbun-gendai-net-top-level-domain))
-	  (if (shimbun-search-id shimbun id)
-	      (throw 'stop nil)
-	    (push (shimbun-create-header
-		   0 subject from date id "" 0 0
-		   (format "%s%d" base (1- num)))
-		  headers)))))
+    (while indices
+      (setq index (pop indices)
+	    year (nth 1 index)
+	    month (nth 2 index)
+	    day (nth 3 index)
+	    index (car index)
+	    date (shimbun-make-date-string year month day)
+	    num 0)
+      (when index
+	(erase-buffer)
+	(shimbun-retrieve-url index))
+      (goto-char (point-max))
+      (while (re-search-backward regexp2 nil t)
+	(setq url (match-string 1)
+	      base (match-string 2)
+	      c (match-string 3)
+	      subject (match-string 5))
+	(setq increase (string-to-number (match-string 4)))
+	(setq increase (> increase (prog1 num (setq num increase))))
+	(setq id (format "<%d%02d%02d.%s.%d%%%s.%s>"
+			 year month day c num group
+			 shimbun-gendai-net-top-level-domain))
+	(push (shimbun-create-header 0 subject from date id "" 0 0 url)
+	      headers))
+      (when (re-search-backward
+	     (eval-when-compile
+	       (let ((s0 "[\t\n\r ]*"))
+		 (concat "<td>" s0 "<b>" s0 "\\([^<]+\\)"
+			 s0 "</b>" s0 "</td")))
+	     nil t)
+	(setq subject (match-string 1)
+	      id (format "<%d%02d%02d.%s.%d%%%s.%s>"
+			 year month day c
+			 (if increase (1+ num) (1- num))
+			 group shimbun-gendai-net-top-level-domain))
+	(push (shimbun-create-header
+	       0 subject from date id "" 0 0
+	       (format "%s%d" base (if increase (1+ num) (1- num))))
+	      headers)))
     headers))
 
 (defun shimbun-gendai-net-get-headers-default (shimbun pages)
@@ -323,36 +322,42 @@ Face: iVBORw0KGgoAAAANSUhEUgAAADAAAAAYBAMAAABO02PvAAAAGFBMVEX+6ctRUVH7qDX416T
 
 (luna-define-method shimbun-make-contents :before ((shimbun shimbun-gendai-net)
 						   header)
-  (let (start end)
-    (if (string-equal (shimbun-current-group-internal shimbun) "today")
-	(when (and (re-search-forward "<!-+[\t\n\r ]*記事部[\t\n\r ]*-+>"
-				      nil t)
-		   (re-search-forward "<span[\t\n\r ]+[^>]+>[\t\n\r ]*"	nil t))
-	  (setq start (match-end 0))
-	  (when (re-search-forward "[\t\n\r ]*</span>" nil t)
-	    (setq end (match-beginning 0))))
-      (when (re-search-forward "<!-+[\t\n\r ]*記事部[\t\n\r ]*-+>[\t\n\r ]*"
-			       nil t)
-	(setq start (match-end 0))
-	(when (re-search-forward "<img[\t\n\r ]+src=[^>]+>\
+  (let (start)
+    (if (if (string-equal (shimbun-current-group-internal shimbun) "today")
+	    (when (and (re-search-forward "<!-+[\t\n\r ]*記事部[\t\n\r ]*-+>"
+					  nil t)
+		       (re-search-forward "<span[\t\n\r ]+[^>]+>[\t\n\r ]*"
+					  nil t))
+	      (setq start (match-end 0))
+	      (re-search-forward "[\t\n\r ]*</span>" nil t))
+	  (when (re-search-forward
+		 "<!-+[\t\n\r ]*記事部[\t\n\r ]*-+>[\t\n\r ]*"
+		 nil t)
+	    (setq start (match-end 0))
+	    (when (re-search-forward "<img[\t\n\r ]+src=[^>]+>\
 \\(?:[\t\n\r ]*<[^>]+>[\t\n\r ]*\\)?"
-				 nil t)
-	  (setq start (match-end 0)))
-	(when (re-search-forward "[\t\n\r ]*</span>" nil t)
-	  (setq end (match-beginning 0)))))
-    (if end
-	(save-restriction
-	  (narrow-to-region start end)
-	  (shimbun-break-long-japanese-lines)
-	  (goto-char (point-min))
-	  (insert shimbun-gendai-net-content-start)
-	  (goto-char (point-max))
-	  (insert shimbun-gendai-net-content-end))
+				     nil t)
+	      (setq start (match-end 0)))
+	    (re-search-forward "[\t\n\r ]*</span>" nil t)))
+	(progn
+	  (goto-char (match-beginning 0))
+	  (insert shimbun-gendai-net-content-end)
+	  (goto-char start)
+	  (insert shimbun-gendai-net-content-start))
       (erase-buffer)
       (insert "<html><body>\
 This article seems to have been canceled or expired.\
 </body></html>\n")))
   (goto-char (point-min)))
+
+(luna-define-method shimbun-clear-contents :around ((shimbun
+						     shimbun-gendai-net)
+						    header)
+  (when (luna-call-next-method)
+    ;; Break long lines.
+    (unless (shimbun-prefer-text-plain-internal shimbun)
+      (shimbun-break-long-japanese-lines))
+    t))
 
 (provide 'sb-gendai-net)
 

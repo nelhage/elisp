@@ -21,9 +21,9 @@
 ;; General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's maintainer or write to: The Free Software Foundation,
-;; Inc.; 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 ;; This package is `Shimbun' interface for Mew version 2.1 or later.
@@ -378,10 +378,10 @@ If called with '\\[universal-argument]', goto folder to have a few new messages.
 		     (when (re-search-forward (or mew-shimbun-unseen-regex
 						  (mew-shimbun-unseen-regex)) nil t)
 		       (setq sbflds (cons fld sbflds))))))))))))
-    (mapcar (lambda (x)
-	      (unless (member x removes)
-		(setq alst (cons (list x) alst))))
-	    sbflds)
+    (mapc (lambda (x)
+	    (unless (member x removes)
+	      (setq alst (cons (list x) alst))))
+	  sbflds)
     (let ((completion-ignore-case mew-complete-folder-ignore-case))
       (setq fld (completing-read
 		 (if args

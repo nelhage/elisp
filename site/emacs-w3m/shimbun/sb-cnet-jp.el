@@ -1,6 +1,7 @@
 ;;; sb-cnet-jp.el --- shimbun backend for CNET Japan -*- coding: iso-2022-7bit -*-
 
-;; Copyright (C) 2003, 2004, 2005 NAKAJIMA Mikio <minakaji@namazu.org>
+;; Copyright (C) 2003, 2004, 2005, 2006, 2007
+;; NAKAJIMA Mikio <minakaji@namazu.org>
 
 ;; Author: NAKAJIMA Mikio     <minakaji@namazu.org>,
 ;;         TSUCHIYA Masatoshi <tsuchiya@namazu.org>,
@@ -22,9 +23,9 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's maintainer or write to: The Free Software Foundation,
-;; Inc.; 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 
@@ -64,9 +65,11 @@
     "blog.editors"))
 
 (defvar shimbun-cnet-jp-server-name "CNET Networks,Inc.")
-(defvar shimbun-cnet-jp-content-start "<div class=\"leaf_body\">")
+(defvar shimbun-cnet-jp-content-start
+  "<div class=\"\\(?:leaf\\|article\\)_body\\(?: \\(?:article\\|leaf\\)_body\\)?\">")
 (defvar shimbun-cnet-jp-content-end
-  "\\(<div class=\"article_footer\">\\|<!--h3>トラックバック一覧</h3-->\\)")
+  "\\(<div \\(class=\"article_footer\"\\|id=\"bubble_tooltip\"\\)>\\|\
+<!--h3>トラックバック一覧</h3-->\\)")
 (defvar shimbun-cnet-jp-x-face-alist
   '(("default" . "X-Face: 0p7.+XId>z%:!$ahe?x%+AEm37Abvn]n\
 *GGh+>v=;[3`a{1lqO[$,~3C3xU_ri>[JwJ!9l0\n ~Y`b*eXAQ:*q=bBI\
@@ -97,6 +100,7 @@ _=ro*?]4:|n>]ZiLZ2LEo^2nr('C<+`lO~/!R[lH'N'4X&%\\I}8T!wt")))
   (shimbun-remove-tags "<script" "</script>")
   (shimbun-remove-tags "<noscript" "</noscript>")
   (shimbun-remove-tags "<div class=\"photor_thumb_wrap\"" "</div>")
+  (shimbun-remove-tags "<div class=\"block_infocnet_stb\">" "</div>")
   (shimbun-remove-tags "<div class=\"block_ad_print\">"
 		       "<!-- block_ad_print END -->")
   (shimbun-remove-tags "<!--AD_ART_S-->" "<!--AD_ART_S END-->"))

@@ -1,6 +1,6 @@
 ;;; sb-yahoo-auctions.el --- shimbun backend for Yahoo! AUCTIONS
 
-;; Copyright (C) 2005  ARISAWA Akihiro <ari@mbf.sphere.ne.jp>
+;; Copyright (C) 2005, 2006, 2008 ARISAWA Akihiro <ari@mbf.sphere.ne.jp>
 
 ;; Author: ARISAWA Akihiro <ari@mbf.sphere.ne.jp>
 ;; Keywords: news
@@ -18,9 +18,9 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's maintainer or write to: The Free Software Foundation,
-;; Inc.; 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Code:
 
@@ -39,8 +39,8 @@ URL is the URL for category or search result."
 		       (string :tag "Group name")
 		       (string :tag "URL"))))
 
-(defvar shimbun-yahoo-auctions-content-start "<hr SIZE=\"1\" NOSHADE>")
-(defvar shimbun-yahoo-auctions-content-end nil)
+(defvar shimbun-yahoo-auctions-content-start "<!--\nITEMSUMMARY\n-->")
+(defvar shimbun-yahoo-auctions-content-end "<!--\nS\n-->")
 
 (luna-define-method shimbun-groups ((shimbun shimbun-yahoo-auctions))
   (mapcar 'car shimbun-yahoo-auctions-group-alist))
@@ -72,26 +72,6 @@ URL is the URL for category or search result."
 (luna-define-method shimbun-article-url :around
   ((shimbun shimbun-yahoo-auctions) header)
   (shimbun-real-url (luna-call-next-method)))
-
-(luna-define-method shimbun-make-contents ((shimbun shimbun-yahoo-auctions)
-					   header)
-  (let ((start (shimbun-content-start shimbun))
-	(end (shimbun-content-end shimbun))
-	(case-fold-search t))
-    (goto-char (point-min))
-    (when (and (stringp start)
-	       (re-search-forward start nil t))
-      (delete-region (point-min) (point))
-      (insert "<html>\n<head>\n<base href=\""
-	      (shimbun-article-url shimbun header)
-	      "\">\n</head>\n<body>\n"))
-    (when (and (stringp end)
-	       (re-search-forward end nil t))
-      (delete-region (match-beginning 0) (point-max))
-      (insert (shimbun-footer shimbun header t)
-	      "\n</body>\n</html>\n")))
-  (shimbun-make-mime-article shimbun header)
-  (buffer-string))
 
 (provide 'sb-yahoo-auctions)
 

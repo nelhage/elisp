@@ -1,6 +1,6 @@
 ;;; w3m-namazu.el --- The add-on program to search files with Namazu.
 
-;; Copyright (C) 2001, 2002, 2003, 2004, 2005
+;; Copyright (C) 2001, 2002, 2003, 2004, 2005, 2007
 ;; TSUCHIYA Masatoshi <tsuchiya@namazu.org>
 
 ;; Author: TSUCHIYA Masatoshi <tsuchiya@namazu.org>
@@ -19,9 +19,9 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's maintainer or write to: The Free Software Foundation,
-;; Inc.; 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 
 ;;; Commentary:
@@ -87,11 +87,11 @@
   :type '(integer :size 0))
 
 (defconst w3m-namazu-default-index-customize-spec
-  '(` (choice
-       (const :tag "No default index" nil)
-       (,@ (mapcar (lambda (x) (list 'const (car x)))
-		   w3m-namazu-index-alist))
-       (directory :format "Index directory: %v\n" :size 0))))
+  '`(choice
+     (const :tag "No default index" nil)
+     ,@(mapcar (lambda (x) (list 'const (car x)))
+	       w3m-namazu-index-alist)
+     (directory :format "Index directory: %v\n" :size 0)))
 
 (defcustom w3m-namazu-index-alist
   (when (boundp 'namazu-dir-alist)
@@ -110,7 +110,7 @@
 		  :format "%v%i\n" :indent 8
 		  (directory :format "Index directory: %v\n" :size 0)))))
   :set (lambda (symbol value)
-	 (set-default symbol value)
+	 (custom-set-default symbol value)
 	 (put 'w3m-namazu-default-index 'custom-type
 	      (eval w3m-namazu-default-index-customize-spec))))
 

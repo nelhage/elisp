@@ -1,8 +1,10 @@
 ;;; sb-pcweb-column.el --- shimbun backend for PC WEB COLUMN Square
 
-;; Copyright (C) 2002, 2003, 2004, 2005, 2006 OHASHI Akira <bg66@koka-in.org>
+;; Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007
+;; OHASHI Akira <bg66@koka-in.org>
 
 ;; Author: OHASHI Akira <bg66@koka-in.org>
+;;         Tsuyoshi CHO <tsuyoshi_cho@ybb.ne.jp>
 ;; Keywords: news
 
 ;; This file is a part of shimbun.
@@ -18,9 +20,9 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's maintainer or write to: The Free Software Foundation,
-;; Inc.; 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 
@@ -34,11 +36,16 @@
 
 (defvar shimbun-pcweb-column-groups
   '(;; Under a series
-    "itshihonron" "osx" "yetanother" "svalley" "winxp" "sopinion"
-    "rikei" "nihongoprog" "objc" "kaden" "jisakuparts" "java"
-    "architecture" "ebook"
+    "jsr" "yume" "hreceipe" "kita" "shonanlife" "kaden" "nemurenai" "komono"
+    "js" "en" "motherboard" "svalley" "architecture" "motorlife" "nihongoprog"
+    "objc" "ide" "music" "itsecurity" "soundvisual" "osx" "sopinion" "ebook"
+    "orerobo" "zsh" "rikei" "lifehack" "world" "guutara" "volt" "textclean"
+    "person" "web20" "system"
     ;; Series end
-    "toolexp" "game" "asia" "scramble" "hitech" "bytes" "benri"))
+    "itshihonron" "yetanother" "asia" "benri" "bytes" "game" "hitech" "java"
+    "jisakuparts" "scramble" "toolexp" "winvista" "winxp" "interview" "ityougo"
+    "kimeuchi" "stratesys" "toyagain"))
+
 (defvar shimbun-pcweb-column-from-address "pcmail@pc.mycom.co.jp")
 (defvar shimbun-pcweb-column-content-start
   "<!-- #BeginEditable \"contents\" -->")
@@ -55,13 +62,14 @@
 	(headers)
 	(pattern
 	 (format
-	  "<a href=\"\\(/column/%s/\\([0-9][0-9][0-9]\\)/\\)\">\\([^<]+\\)</a>"
+	  "<a href=\"\\(/column/%s/\\([0-9][0-9][0-9]\\)\
+/?\\(index.html?\\)?\\)\">\\([^<]+\\)</a>"
 	  (regexp-quote (shimbun-current-group shimbun)))))
     (goto-char (point-min))
     (while (re-search-forward pattern nil t)
       (let ((url (match-string 1))
 	    (num (match-string 2))
-	    (subject (match-string 3))
+	    (subject (match-string 4))
 	    id)
 	;; do not modify for compatibility.
 	(setq id (format "<%s.%s.column@pcweb.mycom.co.jp>"
@@ -90,16 +98,17 @@
   (let (case-fold-search)
     (goto-char (point-min))
     (when (re-search-forward "<!-- #BeginEditable \"author\" -->\
-\\([^<]+\\)<!-- #EndEditable -->" nil t)
-      (shimbun-header-set-from header (match-string 1)))
+\\(<p[^>]*>\\)?\\([^<]+\\)\\(</p>\\)?<!-- #EndEditable -->" nil t)
+      (shimbun-header-set-from header (match-string 2)))
     (goto-char (point-min))
-    (when (re-search-forward "<!-- #BeginEditable \"ContentsDate\" -->\
-\\([0-9]+\\)/\\([0-9]+\\)/\\([0-9]+\\)<!-- #EndEditable -->" nil t)
+    (when (re-search-forward "<!-- #BeginEditable \"[Cc]ontentsDate\" -->\
+\\(<p[^>]*>\\)?\\([0-9]+\\)/\\([0-9]+\\)/\\([0-9]+\\)\\(</p>\\)?\
+<!-- #EndEditable -->" nil t)
       (shimbun-header-set-date header
 			       (shimbun-make-date-string
-				(string-to-number (match-string 1))
 				(string-to-number (match-string 2))
-				(string-to-number (match-string 3)))))))
+				(string-to-number (match-string 3))
+				(string-to-number (match-string 4)))))))
 
 (provide 'sb-pcweb-column)
 

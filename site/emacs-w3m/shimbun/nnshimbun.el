@@ -1,6 +1,6 @@
 ;;; nnshimbun.el --- interfacing with web newspapers
 
-;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006
+;; Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008
 ;; TSUCHIYA Masatoshi <tsuchiya@namazu.org>
 
 ;; Authors: TSUCHIYA Masatoshi <tsuchiya@namazu.org>,
@@ -22,9 +22,9 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's maintainer or write to: The Free Software Foundation,
-;; Inc.; 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 
@@ -86,7 +86,8 @@
 
 (eval-when-compile
   (defvar gnus-level-default-subscribed)
-  (defvar gnus-level-killed))
+  (defvar gnus-level-killed)
+  (defvar gnus-level-subscribed))
 
 (defgroup nnshimbun nil
   "Reading web contents with Gnus."
@@ -289,7 +290,7 @@ This simply provides a default value for all the nnshimbun groups.
 You can use the `encapsulate-images' nnshimbun group parameter for
 each nnshimbun group.")
 
-(defvoo nnshimbun-index-range nil
+(defvoo nnshimbun-index-range 2
   "*The number of indices that should be checked to detect new articles.
 `all' or nil is for all indices, `last' is for the last index, and an
 integer N is for the last N pages of indices.  This simply provides a
@@ -875,12 +876,13 @@ Other files in the directory are also deleted."
   (interactive "sURL: ")
   (let ((method (gnus-find-method-for-group gnus-newsgroup-name))
 	(header))
-    (and (eq 'nnshimbun (car method))
-	 (nnshimbun-possibly-change-group nil (nth 1 method))
-	 (setq header (nnshimbun-search-xref
-		       (gnus-group-short-name gnus-newsgroup-name) url))
-	 (with-current-buffer gnus-summary-buffer
-	   (gnus-summary-refer-article (shimbun-header-id header))))))
+    (or (and (eq 'nnshimbun (car method))
+	     (nnshimbun-possibly-change-group nil (nth 1 method))
+	     (setq header (nnshimbun-search-xref
+			   (gnus-group-short-name gnus-newsgroup-name) url))
+	     (with-current-buffer gnus-summary-buffer
+	       (gnus-summary-refer-article (shimbun-header-id header))))
+	'w3m-goto-url)))
 
 (defun nnshimbun-setup-article-mode ()
   (set (make-local-variable 'w3m-goto-article-function)
@@ -925,20 +927,21 @@ shimbun group."
        (setq server nil))
      (list server group current-prefix-arg)))
   (if (and server group)
-      (progn
-	(setq group (if (mm-coding-system-p 'utf-8)
-			(mm-encode-coding-string group 'utf-8)
-		      group)
-	      server (list 'nnshimbun server))
+      (let (nname)
+	(setq server (list 'nnshimbun server)
+	      nname (gnus-group-prefixed-name
+		     (if (mm-coding-system-p 'utf-8)
+			 (mm-encode-coding-string group 'utf-8)
+		       group)
+		     server))
 	(if ephemeral
-	    (gnus-group-read-ephemeral-group (gnus-group-prefixed-name group
-								       server)
-					     server t
+	    (gnus-group-read-ephemeral-group nname server t
 					     (cons (current-buffer)
 						   (if (eq major-mode
 							   'gnus-summary-mode)
 						       'summary 'group)))
-	  (gnus-kill-ephemeral-group (gnus-group-prefixed-name group server))
+	  (when (gnus-ephemeral-group-p nname)
+	    (gnus-kill-ephemeral-group nname))
 	  (let ((gnus-level-default-subscribed
 		 (or nnshimbun-default-group-level
 		     gnus-level-default-subscribed)))
@@ -960,7 +963,6 @@ shimbun group."
     (let ((gnus-level-default-subscribed (or nnshimbun-default-group-level
 					     gnus-level-default-subscribed))
 	  (gnus-verbose 0)
-	  (utf8 (mm-coding-system-p 'utf-8))
 	  (grps (reverse (shimbun-groups (shimbun-open server))))
 	  (inhibit-read-only t)
 	  grp group)
@@ -989,12 +991,36 @@ Are you sure you want to make %d groups for nnshimbun+%s:? "
 				     (progn (forward-line 1) (point))))
 		    (gnus-group-insert-group-line-info group)
 		    (forward-line -1))
-		(gnus-group-make-group
-		 (if utf8
-		     (mm-encode-coding-string grp 'utf-8)
-		   grp)
-		 (list 'nnshimbun server)))))
+		(gnus-group-make-group grp (list 'nnshimbun server)))))
 	(message "No group is found in nnshimbun+%s:" server)))))
+
+(defun nnshimbun-generate-download-script (&optional async)
+  "Generate download script for all subscribed schimbuns.
+Output will be put in a new buffer.  If called with a prefix,
+puts a '&' after each w3m command."
+  (interactive "P")
+  (switch-to-buffer
+   (get-buffer-create "*shimbun download script*"))
+  (erase-buffer)
+  (insert
+   (concat "#!/bin/sh\n# shimbun download script\n\n"
+	   "W3M=" (if w3m-command w3m-command "/usr/bin/w3m")
+	   "\nOPTS=\"-no-cookie -o accept_encoding=identity -dump_both\"\n\n"))
+  (let ((path (file-name-as-directory
+	       (expand-file-name shimbun-local-path)))
+	url fname)
+    ;; get all subscribed shimbun groups
+    (dolist (cur gnus-newsrc-alist)
+      (when (and (eq (car-safe (nth 4 cur)) 'nnshimbun)
+		 (<= (nth 1 cur) gnus-level-subscribed))
+	(when (string-match "nnshimbun\\+\\(.+\\):\\(.+\\)" (car cur))
+	  (nnshimbun-possibly-change-group (match-string 2 (car cur))
+					   (match-string 1 (car cur)))
+	  (when (setq url (shimbun-index-url nnshimbun-shimbun))
+	    (setq fname (concat path (substring (md5 url) 0 10) "_shimbun"))
+	    (insert
+	     (concat "$W3M $OPTS " (shell-quote-argument url) " > " fname
+		     (if async " &\n" "\n")))))))))
 
 (provide 'nnshimbun)
 

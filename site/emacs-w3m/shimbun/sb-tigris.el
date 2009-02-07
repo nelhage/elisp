@@ -18,9 +18,9 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's maintainer or write to: The Free Software Foundation,
-;; Inc.; 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Code:
 
@@ -174,12 +174,12 @@
 	(beg nil)
 	(end nil))
     (when (search-forward "<PRE>")
-      (next-line 1)
+      (forward-line 1)
       (beginning-of-line)
       (setq beg (point))
       (delete-region (point-min) beg))
     (when (search-forward "</PRE>")
-      (previous-line 1)
+      (forward-line -1)
       (end-of-line)
       (setq end (point))
       (delete-region end (point-max)))

@@ -1,6 +1,6 @@
-;;; w3m-xmas.el --- The stuffs to use emacs-w3m on XEmacs
+;;; w3m-xmas.el --- XEmacs stuff for emacs-w3m
 
-;; Copyright (C) 2001, 2002, 2003, 2004, 2005
+;; Copyright (C) 2001, 2002, 2003, 2004, 2005, 2007, 2008, 2009
 ;; TSUCHIYA Masatoshi <tsuchiya@namazu.org>
 
 ;; Authors: Yuuichi Teranishi  <teranisi@gohome.org>,
@@ -21,14 +21,14 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's maintainer or write to: The Free Software Foundation,
-;; Inc.; 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 
 ;;; Commentary:
 
-;; This file contains the stuffs to use emacs-w3m on XEmacs.  For more
+;; This file contains XEmacs stuff that emacs-w3m uses.  For more
 ;; detail about emacs-w3m, see:
 ;;
 ;;    http://emacs-w3m.namazu.org/
@@ -50,9 +50,9 @@
   (defvar w3m-coding-system)
   (defvar w3m-current-title)
   (defvar w3m-current-url)
-  (defvar w3m-default-coding-system)
   (defvar w3m-display-inline-images)
   (defvar w3m-icon-directory)
+  (defvar w3m-menu-on-forefront)
   (defvar w3m-menubar)
   (defvar w3m-modeline-process-status-on)
   (defvar w3m-show-graphic-icons-in-mode-line)
@@ -62,11 +62,14 @@
   (defvar w3m-use-tab-menubar)
   (defvar w3m-work-buffer-name)
   (defvar w3m-work-buffer-list)
+  (defvar w3m-default-coding-system)
+  (defvar w3m-coding-system)
   (autoload 'update-tab-in-gutter "gutter-items")
   (autoload 'w3m-image-type "w3m")
   (autoload 'w3m-retrieve "w3m")
   (autoload 'w3m-setup-tab-menu "w3m-tabmenu")
-  (autoload 'w3m-setup-bookmark-menu "w3m-bookmark"))
+  (autoload 'w3m-setup-bookmark-menu "w3m-bookmark")
+  (autoload 'w3m-setup-session-menu "w3m-session"))
 
 ;; Dummies to shut some XEmacs variants up.
 (eval-when-compile
@@ -82,12 +85,15 @@
 ;;; Handle coding system:
 (eval-when-compile
   (unless (fboundp 'find-coding-system)
-    (defalias 'find-coding-system 'ignore)))
+    (defalias 'find-coding-system 'ignore)
+    (defalias 'coding-system-name 'ignore)))
 
 (defalias 'w3m-find-coding-system
   (if (fboundp 'find-coding-system)
       (lambda (obj)
-	(and obj (find-coding-system obj)))
+	(and obj
+	     (setq obj (find-coding-system obj))
+	     (coding-system-name obj)))
     'ignore))
 
 ;; Under XEmacs 21.5-b6 and later, `make-ccl-coding-system' will
@@ -98,7 +104,7 @@
 ;;  (or (find-coding-system coding-system)
 ;;      (make-ccl-coding-system coding-system args...)))
 (eval-when-compile
-  (defmacro w3m-xmas-define-w3m-make-ccl-coding-system ()
+  (defmacro w3m-define-w3m-make-ccl-coding-system ()
     "Make the source form for the function `w3m-make-ccl-coding-system'."
     (if (and (fboundp 'make-ccl-coding-system)
 	     (fboundp 'find-coding-system))
@@ -113,7 +119,7 @@ NOTE: This function is slightly modified from `make-ccl-coding-system'
 		coding-system mnemonic docstring decoder encoder)))
       '(defalias 'w3m-make-ccl-coding-system 'ignore))))
 
-(w3m-xmas-define-w3m-make-ccl-coding-system)
+(w3m-define-w3m-make-ccl-coding-system)
 
 (eval-and-compile
   (dolist (fn '(coding-priority-list
@@ -164,50 +170,75 @@ PRIORITY-LIST is a list of coding systems ordered by priority."
   "Decode the string STR which is encoded in CODING.
 If CODING is a list, look for the coding system using it as a priority
 list."
-  (if (listp coding)
-      (with-temp-buffer
-	(insert str)
-	(let* ((orig-category-list (coding-priority-list))
-	       (orig-category-systems (mapcar #'coding-category-system
-					      orig-category-list))
-	       codesys category priority-list)
-	  (unwind-protect
-	      (progn
-		(while coding
-		  (setq codesys (car coding)
-			coding (cdr coding)
-			category (or (coding-system-category codesys)
-				     (coding-system-name codesys)))
-		  (unless (or (eq (coding-system-type codesys) 'undecided)
-			      (assq category priority-list))
-		    (set-coding-category-system category codesys)
-		    (push category priority-list)))
-		(set-coding-priority-list (nreverse priority-list))
-		;; `detect-coding-region' always returns `undecided'
-		;; ignoring `priority-list' in XEmacs 21.5-b19, but
-		;; that's okay.
-		(when (consp (setq codesys (detect-coding-region
-					    (point-min) (point-max))))
-		  (setq codesys (car codesys)))
-		(decode-coding-region (point-min) (point-max)
-				      (or codesys
-					  w3m-default-coding-system
-					  w3m-coding-system
-					  'iso-2022-7bit))
-		(buffer-string))
-	    (set-coding-priority-list orig-category-list)
-	    (while orig-category-list
-	      (set-coding-category-system (car orig-category-list)
-					  (car orig-category-systems))
-	      (setq orig-category-list (cdr orig-category-list)
-		    orig-category-systems (cdr orig-category-systems))))))
-    (decode-coding-string str coding)))
+  (w3m-static-if (and (fboundp 'find-coding-system)
+		      (subrp (symbol-function 'find-coding-system)))
+      (if (listp coding)
+	  (with-temp-buffer
+	    (insert str)
+	    (let* ((orig-category-list (coding-priority-list))
+		   (orig-category-systems (mapcar #'coding-category-system
+						  orig-category-list))
+		   codesys category priority-list)
+	      (unwind-protect
+		  (progn
+		    (while coding
+		      (setq codesys (car coding)
+			    coding (cdr coding)
+			    category (or (coding-system-category codesys)
+					 (coding-system-name codesys)))
+		      (unless (or (eq (coding-system-type codesys) 'undecided)
+				  (assq category priority-list))
+			(set-coding-category-system category codesys)
+			(push category priority-list)))
+		    (set-coding-priority-list (nreverse priority-list))
+		    ;; `detect-coding-region' always returns `undecided'
+		    ;; ignoring `priority-list' in XEmacs 21.5-b19, but
+		    ;; that's okay.
+		    (when (consp (setq codesys (detect-coding-region
+						(point-min) (point-max))))
+		      (setq codesys (car codesys)))
+		    (decode-coding-region (point-min) (point-max)
+					  (or codesys
+					      w3m-default-coding-system
+					      w3m-coding-system
+					      'iso-2022-7bit))
+		    (buffer-string))
+		(set-coding-priority-list orig-category-list)
+		(while orig-category-list
+		  (set-coding-category-system (car orig-category-list)
+					      (car orig-category-systems))
+		  (setq orig-category-list (cdr orig-category-list)
+			orig-category-systems (cdr orig-category-systems))))))
+	(decode-coding-string str coding))
+    str))
 
-(when (and (not (fboundp 'w3m-ucs-to-char))
-	   (fboundp 'unicode-to-char)
-	   (subrp (symbol-function 'unicode-to-char)))
-  (defun w3m-ucs-to-char (codepoint)
-    (unicode-to-char codepoint)))
+(eval-when-compile (autoload 'ucs-to-char "unicode"))
+
+;; This might be redefined by w3m-ucs.el.
+(cond ((and (fboundp 'unicode-to-char) ;; XEmacs 21.5.
+	    (subrp (symbol-function 'unicode-to-char)))
+       (if (featurep 'mule)
+	   (defalias 'w3m-ucs-to-char 'unicode-to-char)
+	 (defun w3m-ucs-to-char (codepoint)
+	   (or (unicode-to-char codepoint) ?~))))
+      ((featurep 'mule)
+       (defun w3m-ucs-to-char (codepoint)
+	 (if (fboundp 'ucs-to-char) ;; Mule-UCS is loaded.
+	     (progn
+	       (defalias 'w3m-ucs-to-char
+		 (lambda (codepoint)
+		   (condition-case nil
+		       (or (ucs-to-char codepoint) ?~)
+		     (error ?~))))
+	       (w3m-ucs-to-char codepoint))
+	   (condition-case nil
+	       (or (int-to-char codepoint) ?~)
+	     (error ?~)))))
+      (t
+       (defun w3m-ucs-to-char (codepoint)
+	 (condition-case nil
+	     (or (int-to-char codepoint) ?~)
+	   (error ?~)))))
 
 ;;; Handle images:
 
@@ -386,20 +417,26 @@ Third optional argument SIZE is currently ignored."
 		  size)
       (w3m-process-do-with-temp-buffer
 	  (type (condition-case err
-		    (w3m-retrieve url 'raw no-cache nil referer handler)
+		    (w3m-retrieve url nil no-cache nil referer handler)
 		  (error (message "While retrieving %s: %s" url err) nil)))
-	(when type
+	(goto-char (point-min))
+	(when (w3m-image-type-available-p
+	       (setq type
+		     (or (and (let (case-fold-search)
+				(looking-at
+				 "\\(GIF8\\)\\|\\(\377\330\\)\\|\211PNG\r\n"))
+			      (cond ((match-beginning 1) 'gif)
+				    ((match-beginning 2) 'jpeg)
+				    (t 'png)))
+			 (w3m-image-type type))))
 	  (let ((data (buffer-string))
 		glyph)
-	    (setq glyph
-		  (when (w3m-image-type-available-p
-			 (setq type (w3m-image-type type)))
-		    (or (and (eq type 'gif)
-			     (or w3m-should-unoptimize-animated-gifs
-				 w3m-should-convert-interlaced-gifs)
-			     w3m-gifsicle-program
-			     (w3m-fix-gif url data no-cache))
-			(w3m-make-glyph data type))))
+	    (setq glyph (or (and (eq type 'gif)
+				 (or w3m-should-unoptimize-animated-gifs
+				     w3m-should-convert-interlaced-gifs)
+				 w3m-gifsicle-program
+				 (w3m-fix-gif url data no-cache))
+			    (w3m-make-glyph data type)))
 	    (if (and w3m-resize-images set-size)
 		(progn
 		  (setq size (cons (glyph-width glyph)
@@ -440,7 +477,7 @@ and its cdr element is used as height."
 		  (rate rate)
 		  fmt data)
       (w3m-process-do-with-temp-buffer
-	  (type (w3m-retrieve url 'raw nil nil referer handler))
+	  (type (w3m-retrieve url nil nil nil referer handler))
 	(when (w3m-image-type-available-p (setq type (w3m-image-type type)))
 	  (setq data (buffer-string)
 		fmt type)
@@ -500,33 +537,88 @@ A buffer string between BEG and END are replaced with IMAGE."
   :group 'w3m
   :type 'boolean)
 
-(defun w3m-xmas-make-toolbar-buttons (buttons)
-  (dolist (button buttons)
-    (let ((up (expand-file-name (concat button "-up.xpm")
-				w3m-icon-directory))
-	  (down (expand-file-name (concat button "-down.xpm")
-				  w3m-icon-directory))
-	  (disabled (expand-file-name (concat button "-disabled.xpm")
-				      w3m-icon-directory))
-	  (icon (intern (concat "w3m-toolbar-" button "-icon"))))
-      (if (file-exists-p up)
-	  (set icon
-	       (toolbar-make-button-list
-		up
-		(and (file-exists-p down) down)
-		(and (file-exists-p disabled) disabled)))
-	(error "Icon file %s not found" up)))))
+(defcustom w3m-toolbar-icon-preferred-image-types '(xpm)
+  "List of image types that you prefer to use for the tool bar icons."
+  :group 'w3m
+  :type '(repeat (symbol :tag "Image type"))
+  :set (lambda (symbol value)
+	 (prog1
+	     (custom-set-default symbol value)
+	   (when (and (not noninteractive) (boundp 'w3m-toolbar-buttons))
+	     (dolist (buffer (w3m-list-buffers t))
+	       (w3m-setup-toolbar t buffer))))))
 
-(defun w3m-setup-toolbar ()
+(defcustom w3m-toolbar-use-single-image-per-icon nil
+  "Non-nil means use single image (named possibly *-up) per icon.
+If it is nil, subsidiaries, e.g., *-down and *-disabled, if any, are
+used together."
+  :group 'w3m
+  :type 'boolean
+  :set (lambda (symbol value)
+	 (prog1
+	     (custom-set-default symbol value)
+	   (when (and (not noninteractive) (boundp 'w3m-toolbar-buttons))
+	     (dolist (buffer (w3m-list-buffers t))
+	       (w3m-setup-toolbar t buffer))))))
+
+(defun w3m-find-image (name &optional directory)
+  "Find image file for NAME and return cons of file name and type.
+This function searches only in DIRECTORY, that defaults to the value of
+`w3m-icon-directory', for an image file of which the base name is NAME.
+Files of types that XEmacs does not support are ignored."
+  (unless directory
+    (setq directory w3m-icon-directory))
+  (when (and directory
+	     (file-directory-p directory)
+	     (device-on-window-system-p))
+    (let* ((case-fold-search nil)
+	   (files (directory-files directory t
+				   (concat "\\`" (regexp-quote name) "\\.")))
+	   (types (append w3m-toolbar-icon-preferred-image-types
+			  (if (boundp 'image-formats-alist)
+			      (mapcar 'cdr
+				      (symbol-value 'image-formats-alist))
+			    '(png gif jpeg tiff xbm xpm bmp))))
+	   file type rest)
+      (while files
+	(when (string-match "\\.\\([^.]+\\)\\'" (setq file (pop files)))
+	  (setq type (intern (downcase (match-string 1 file))))
+	  (setq type (or (cdr (assq type '((tif . tiff)
+					   (jpg . jpeg))))
+			 type))
+	  (when (featurep type)
+	    (push (cons file (memq type types)) rest))))
+      (setq rest (car (sort rest (lambda (a b) (> (length a) (length b))))))
+      (when (cdr rest)
+	(cons (car rest) (cadr rest))))))
+
+(defun w3m-toolbar-make-buttons (buttons &optional force)
+  (let (button icon down disabled up)
+    (while buttons
+      (setq button (pop buttons)
+	    icon (intern (concat "w3m-toolbar-" button "-icon")))
+      (when (or force (not (boundp icon)))
+	(setq down (w3m-find-image (concat button "-down"))
+	      disabled (w3m-find-image (concat button "-disabled")))
+	(if (setq up (or (w3m-find-image (concat button "-up"))
+			 (prog1
+			     (or down disabled (w3m-find-image button))
+			   (setq down nil
+				 disabled nil))))
+	    (set icon (if w3m-toolbar-use-single-image-per-icon
+			  (toolbar-make-button-list (car up))
+			(toolbar-make-button-list (car up)
+						  (car down)
+						  (car disabled))))
+	  (error "Icon file %s-up.* not found" button))))))
+
+(defun w3m-setup-toolbar (&optional force buffer)
   "Setup toolbar."
   (when (and w3m-use-toolbar
-	     w3m-icon-directory
-	     (file-directory-p w3m-icon-directory)
-	     (file-exists-p (expand-file-name "antenna-up.xpm"
-					      w3m-icon-directory)))
-    (w3m-xmas-make-toolbar-buttons w3m-toolbar-buttons)
+	     (w3m-find-image "antenna-up"))
+    (w3m-toolbar-make-buttons w3m-toolbar-buttons force)
     (set-specifier default-toolbar
-		   (cons (current-buffer) w3m-toolbar))
+		   (cons (or buffer (current-buffer)) w3m-toolbar))
     t))
 
 (defun w3m-update-toolbar ()
@@ -539,19 +631,47 @@ A buffer string between BEG and END are replaced with IMAGE."
 		   (cons (current-buffer) w3m-toolbar))))
 
 ;;; Menu:
+(defun w3m-menu-on-forefront (arg &optional curbuf)
+  "Place emacs-w3m menus on the forfront of the menu bar if ARG is non-nil.
+If CURBUF is given, this function works only in the current buffer,
+otherwise works in all the emacs-w3m buffers."
+  (if curbuf
+      (let ((w3m (car (find-menu-item current-menubar '("w3m"))))
+	    (bookmark (car (find-menu-item current-menubar '("Bookmark"))))
+	    (tab (car (find-menu-item current-menubar '("Tab"))))
+	    (session (car (find-menu-item current-menubar '("Session"))))
+	    (items (copy-sequence current-menubar)))
+	(when (or w3m bookmark tab session)
+	  (setq items (delq session (delq tab (delq bookmark (delq w3m items)))))
+	  (set-buffer-menubar
+	   (cond (arg
+		  (append (delq nil (list w3m bookmark tab session)) items))
+		 ((memq nil items)
+		  (append (nreverse (cdr (memq nil (reverse items))))
+			  (delq nil (list w3m bookmark tab session))
+			  (memq nil items)))
+		 (t
+		  (nconc items (delq nil (list w3m bookmark tab session))))))))
+    (save-current-buffer
+      (dolist (buffer (w3m-list-buffers t))
+	(set-buffer buffer)
+	(w3m-menu-on-forefront arg t)))))
+
 (defun w3m-setup-menu ()
   "Define menubar buttons for XEmacs."
   (when (and (featurep 'menubar)
 	     current-menubar
 	     (not (assoc (car w3m-menubar) current-menubar)))
+    (w3m-setup-session-menu)
     (when w3m-use-tab-menubar (w3m-setup-tab-menu))
     (w3m-setup-bookmark-menu)
-    (set-buffer-menubar (cons w3m-menubar current-menubar))))
+    (set-buffer-menubar (cons w3m-menubar current-menubar))
+    (w3m-menu-on-forefront w3m-menu-on-forefront t)))
 
 ;;; Widget:
 (eval-when-compile (require 'wid-edit))
 
-(defun w3m-xmas-define-missing-widgets ()
+(defun w3m-define-missing-widgets ()
   "Define some missing widgets."
   (unless (get 'coding-system 'widget-type)
     ;; The following codes are imported from wid-edit.el of Emacs 20.7.
@@ -600,14 +720,14 @@ as the value."
       :format "%t%n"
       :value 'other)))
 
-(eval-after-load "wid-edit" '(w3m-xmas-define-missing-widgets))
+(eval-after-load "wid-edit" '(w3m-define-missing-widgets))
 
 ;;; Header line:
 (defvar w3m-header-line-map (make-sparse-keymap))
 (define-key w3m-header-line-map 'button2 'w3m-goto-url)
 
 ;;; Gutter:
-(defcustom w3m-xmas-show-current-title-in-buffer-tab
+(defcustom w3m-show-current-title-in-buffer-tab
   (and (boundp 'gutter-buffers-tab-enabled)
        gutter-buffers-tab-enabled)
   "If non-nil, show the title strings in the buffers tab.
@@ -621,32 +741,32 @@ It has no effect if your XEmacs does not support the gutter items."
 	 (prog2
 	     (or (boundp 'gutter-buffers-tab-enabled)
 		 (setq value nil))
-	     (set-default symbol value)
+	     (custom-set-default symbol value)
 	   (if value
-	       (add-hook 'w3m-display-functions 'w3m-xmas-update-tab-in-gutter)
-	     (remove-hook 'w3m-display-functions 'w3m-xmas-update-tab-in-gutter))
+	       (add-hook 'w3m-display-functions 'w3m-update-tab-in-gutter)
+	     (remove-hook 'w3m-display-functions 'w3m-update-tab-in-gutter))
 	   (condition-case nil
 	       (progn
 		 (if value
 		     (ad-enable-advice
 		      'format-buffers-tab-line 'around
-		      'w3m-xmas-show-current-title-in-buffer-tab)
+		      'w3m-show-current-title-in-buffer-tab)
 		   (ad-disable-advice
 		    'format-buffers-tab-line 'around
-		    'w3m-xmas-show-current-title-in-buffer-tab))
+		    'w3m-show-current-title-in-buffer-tab))
 		 (if (boundp 'gutter-buffers-tab-enabled)
 		     (mapc #'update-tab-in-gutter (frame-list))))
 	     (error)))))
 
 (when (boundp 'gutter-buffers-tab-enabled)
   (defadvice format-buffers-tab-line
-    (around w3m-xmas-show-current-title-in-buffer-tab (buffer) activate)
+    (around w3m-show-current-title-in-buffer-tab (buffer) activate)
     "Advised by emacs-w3m.
 Show the current title string in the buffer tab.  Unfortunately,
 existing XEmacs does not support showing non-ascii characters.  When a
 title contains non-ascii characters, show a url name by default."
     (with-current-buffer buffer
-      (if (and w3m-xmas-show-current-title-in-buffer-tab
+      (if (and w3m-show-current-title-in-buffer-tab
 	       (symbol-value 'gutter-buffers-tab-enabled)
 	       (eq 'w3m-mode major-mode))
 	  (let* ((len (specifier-instance
@@ -677,25 +797,25 @@ title contains non-ascii characters, show a url name by default."
 		      name))))
 	ad-do-it)))
 
-  (if w3m-xmas-show-current-title-in-buffer-tab
+  (if w3m-show-current-title-in-buffer-tab
       (ad-enable-advice 'format-buffers-tab-line 'around
-			'w3m-xmas-show-current-title-in-buffer-tab)
+			'w3m-show-current-title-in-buffer-tab)
     (ad-disable-advice 'format-buffers-tab-line 'around
-		       'w3m-xmas-show-current-title-in-buffer-tab))
+		       'w3m-show-current-title-in-buffer-tab))
 
-  (defun w3m-xmas-setup-tab-in-gutter ()
+  (defun w3m-setup-tab-in-gutter ()
     "Set up buffers tab in the gutter."
     (set-specifier default-gutter-visible-p
 		   (and w3m-use-tab gutter-buffers-tab-enabled t)
 		   (current-buffer)))
-  (add-hook 'w3m-mode-setup-functions 'w3m-xmas-setup-tab-in-gutter)
-  (add-hook 'w3m-select-buffer-mode-hook 'w3m-xmas-setup-tab-in-gutter)
+  (add-hook 'w3m-mode-setup-functions 'w3m-setup-tab-in-gutter)
+  (add-hook 'w3m-select-buffer-mode-hook 'w3m-setup-tab-in-gutter)
 
-  (defun w3m-xmas-update-tab-in-gutter (&rest args)
+  (defun w3m-update-tab-in-gutter (&rest args)
     "Update the tab control in the gutter area."
     (when (and w3m-use-tab gutter-buffers-tab-enabled)
       (update-tab-in-gutter (selected-frame))))
-  (add-hook 'w3m-display-functions 'w3m-xmas-update-tab-in-gutter))
+  (add-hook 'w3m-display-functions 'w3m-update-tab-in-gutter))
 
 ;;; Graphic icons:
 (defcustom w3m-space-before-modeline-icon ""
@@ -715,32 +835,31 @@ italic font in the modeline."
 (defun w3m-initialize-graphic-icons (&optional force)
   "Make icon images which will be displayed in the modeline."
   (interactive "P")
-  (let ((defs '((w3m-modeline-status-off-icon
-		 "state-00.xpm"
-		 w3m-modeline-status-off)
-		(w3m-modeline-image-status-on-icon
-		 "state-01.xpm"
-		 w3m-modeline-image-status-on)
-		(w3m-modeline-ssl-status-off-icon
-		 "state-10.xpm"
-		 w3m-modeline-ssl-status-off)
-		(w3m-modeline-ssl-image-status-on-icon
-		 "state-11.xpm"
-		 w3m-modeline-ssl-image-status-on)))
-	def icon file status extent keymap)
+  ;; Prefer xpm icons rather than png icons since XEmacs doesn't display
+  ;; background colors of icon images other than xpm images transparently
+  ;; in the mode line.
+  (let* ((w3m-toolbar-icon-preferred-image-types '(xpm))
+	 (defs `((w3m-modeline-status-off-icon
+		  ,(w3m-find-image "state-00")
+		  w3m-modeline-status-off)
+		 (w3m-modeline-image-status-on-icon
+		  ,(w3m-find-image "state-01")
+		  w3m-modeline-image-status-on)
+		 (w3m-modeline-ssl-status-off-icon
+		  ,(w3m-find-image "state-10")
+		  w3m-modeline-ssl-status-off)
+		 (w3m-modeline-ssl-image-status-on-icon
+		  ,(w3m-find-image "state-11")
+		  w3m-modeline-ssl-image-status-on)))
+	 def icon file type status extent keymap)
     (while defs
       (setq def (car defs)
 	    defs (cdr defs)
 	    icon (car def)
-	    file (nth 1 def)
+	    file (car (nth 1 def))
+	    type (cdr (nth 1 def))
 	    status (nth 2 def))
-      (if (and w3m-show-graphic-icons-in-mode-line
-	       (device-on-window-system-p)
-	       (featurep 'xpm)
-	       w3m-icon-directory
-	       (file-directory-p w3m-icon-directory)
-	       (file-exists-p
-		(setq file (expand-file-name file w3m-icon-directory))))
+      (if (and w3m-show-graphic-icons-in-mode-line file)
 	  (progn
 	    (when (or force (not (symbol-value icon)))
 	      (unless extent
@@ -754,7 +873,7 @@ italic font in the modeline."
 	      (set icon
 		   (cons extent
 			 (make-glyph
-			  (make-image-instance (vector 'xpm :file file))))))
+			  (make-image-instance (vector type :file file))))))
 	    (when (stringp (symbol-value status))
 	      ;; Save the original status strings as properties.
 	      (put status 'string (symbol-value status)))
@@ -875,6 +994,17 @@ necessarily solve the problem completely."
 					(- columns (current-column))))
 	(set-window-hscroll window (- (point) (point-at-bol))))))
   )
+
+(defun w3m-form-coding-system-accept-region-p (&optional from to coding-system)
+  "Check whether `coding-system' can encode specified region."
+  (let ((string (buffer-substring (or from (point-min)) 
+				  (or to   (point-max)))))
+    (unless (string= (decode-coding-string
+		      (encode-coding-string string coding-system)
+		      coding-system)
+		     string)
+      (message "Warning: this text may cause coding-system problem."))
+    t))
 
 (provide 'w3m-xmas)
 

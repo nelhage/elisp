@@ -19,9 +19,9 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's maintainer or write to: The Free Software Foundation,
-;; Inc.; 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 
@@ -637,7 +637,9 @@ it works although it may not be perfect."
 	       (setq window (get-buffer-window (current-buffer) 'all-frames))
 	       (when window
 		 (set-window-start window start))
-	       (goto-char (min position (point-max)))))
+	       (goto-char (min position (point-max)))
+	       (let ((deactivate-mark nil))
+		 (run-hooks 'w3m-after-cursor-move-hook))))
 	    ((interactive-p)
 	     (message "No cursor position saved"))))))
 

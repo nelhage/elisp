@@ -1,6 +1,6 @@
 ;;; sb-engadget-ja.el --- shimbun backend for japanese.engadget.com -*- coding: iso-2022-7bit; -*-
 
-;; Copyright (C) 2005 Tsuyoshi CHO <tsuyoshi_cho@ybb.ne.jp>
+;; Copyright (C) 2005, 2006, 2007 Tsuyoshi CHO <tsuyoshi_cho@ybb.ne.jp>
 
 ;; Author: Tsuyoshi CHO <tsuyoshi_cho@ybb.ne.jp>
 ;; Keywords: news
@@ -19,9 +19,9 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's maintainer or write to: The Free Software Foundation,
-;; Inc.; 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 
@@ -30,17 +30,21 @@
 (require 'shimbun)
 (require 'sb-rss)
 
-
 (defvar shimbun-engadget-ja-group-alist
   '(("top" ."http://japanese.engadget.com/rss.xml")))
 
 (luna-define-class shimbun-engadget-ja (shimbun-rss) ())
 
 (defvar shimbun-engadget-ja-content-start
-  "<div id=\"incontent\">")
+  (eval-when-compile
+    (regexp-opt '("<div id=\"incontent\">"
+		"<div id=\"content\">"))))
 (defvar shimbun-engadget-ja-content-end
-  (regexp-opt '("<h3>Recent Posts</h3>"
-		"<a name=\"comments\"></a>")))
+  (eval-when-compile
+    (regexp-opt '("<h3>Recent Posts</h3>"
+		"<h3 id=\"recentheadlines\">Recent Posts</h3>"
+		"<h3 id=\"recentheadlines\">最近の記事</h3>"
+		"<a name=\"comments\"></a>"))))
 
 (luna-define-method shimbun-groups ((shimbun shimbun-engadget-ja))
   (mapcar 'car shimbun-engadget-ja-group-alist))

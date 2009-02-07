@@ -1,6 +1,6 @@
 ;;; w3m-util.el --- Utility macros and functions for emacs-w3m
 
-;; Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006
+;; Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009
 ;; TSUCHIYA Masatoshi <tsuchiya@namazu.org>
 
 ;; Authors: TSUCHIYA Masatoshi <tsuchiya@namazu.org>,
@@ -26,9 +26,9 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's maintainer or write to: The Free Software Foundation,
-;; Inc.; 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 
@@ -61,6 +61,8 @@
   (defvar w3m-work-buffer-list)
   (defvar w3m-use-japanese-menu)
   (defvar w3m-mode-map)
+  (defvar w3m-use-title-buffer-name)
+  (defvar w3m-buffer-unseen)
   (unless (fboundp 'select-frame-set-input-focus)
     (defalias 'select-frame-set-input-focus 'ignore)))
 
@@ -78,21 +80,21 @@
 
 (defmacro w3m-static-if (cond then &rest else)
   "Like `if', except that it evaluates COND at compile-time."
-  (if (eval cond) then (` (progn  (,@ else)))))
+  (if (eval cond) then `(progn  ,@else)))
 (put 'w3m-static-if 'lisp-indent-function 2)
 
 (put 'w3m-static-when 'lisp-indent-function 1)
 (defmacro w3m-static-when (cond &rest body)
   "Like `when', but evaluate COND at compile time."
   (if (eval cond)
-      (` (progn (,@ body)))))
+      `(progn ,@body)))
 
 (put 'w3m-static-unless 'lisp-indent-function 1)
 (defmacro w3m-static-unless (cond &rest body)
   "Like `unless', but evaluate COND at compile time."
   (if (eval cond)
       nil
-    (` (progn (,@ body)))))
+    `(progn ,@body)))
 
 (defmacro w3m-static-cond (&rest clauses)
   "Like `cond', except that it evaluates CONDITION part of each clause at
@@ -107,11 +109,11 @@ compile-time."
 (defmacro w3m-condition-case (var bodyform &rest handlers)
   "Like `condition-case', except that signal an error if `debug-on-error'
 or `debug-on-quit' is non-nil."
-  (` (if (or debug-on-error debug-on-quit)
-	 (, bodyform)
-       (condition-case (, var)
-	   (, bodyform)
-	 (,@ handlers)))))
+  `(if (or debug-on-error debug-on-quit)
+       ,bodyform
+     (condition-case ,var
+	 ,bodyform
+       ,@handlers)))
 
 
 ;;; Text props:
@@ -124,9 +126,9 @@ or `debug-on-quit' is non-nil."
 	     '(list 'start-open t)
 	   ;; Default to front-nonsticky and rear-sticky in Emacsen.
 	   '(list 'rear-nonsticky t))))
-    (` (add-text-properties (, start) (, end)
-			    (append (, non-stickies) (, props))
-			    (, object)))))
+    `(add-text-properties ,start ,end
+			  (append ,non-stickies ,props)
+			  ,object)))
 
 (defun w3m-add-face-property (start end name &optional object)
   "Add face NAME to the face text property of the text from START to END.
@@ -170,17 +172,17 @@ into it."
 the current position.  Return the value corresponding to PROP or nil.
 If PROP is not found at the current position, point will move to the
 position where PROP exists."
-  (` (let ((position (point))
-	   value)
-       (or (get-text-property position (, prop))
-	   (and (not (bolp))
-		(setq value (get-text-property (1- position) (, prop)))
-		(goto-char (1- position))
-		value)
-	   (and (not (eolp))
-		(setq value (get-text-property (1+ position) (, prop)))
-		(goto-char (1+ position))
-		value)))))
+  `(let ((position (point))
+	 value)
+     (or (get-text-property position ,prop)
+	 (and (not (bolp))
+	      (setq value (get-text-property (1- position) ,prop))
+	      (goto-char (1- position))
+	      value)
+	 (and (not (eolp))
+	      (setq value (get-text-property (1+ position) ,prop))
+	      (goto-char (1+ position))
+	      value))))
 
 (defmacro w3m-action (&optional position)
   "Return the value of the `w3m-action' property at the given POSITION.
@@ -188,8 +190,8 @@ NOTE: If POSITION is omitted, it searches for the property in one
 character before and behind the current position, and point will move
 to the position where the property exists."
   (if position
-      (` (get-text-property (, position) 'w3m-action))
-    (` (w3m-get-text-property-around 'w3m-action))))
+      `(get-text-property ,position 'w3m-action)
+    `(w3m-get-text-property-around 'w3m-action)))
 
 (defmacro w3m-anchor (&optional position)
   "Return the value of the `w3m-href-anchor' property at the given POSITION.
@@ -197,8 +199,8 @@ NOTE: If POSITION is omitted, it searches for the property in one
 character before and behind the current position, and point will move
 to the position where the property exists."
   (if position
-      (` (get-text-property (, position) 'w3m-href-anchor))
-    (` (w3m-get-text-property-around 'w3m-href-anchor))))
+      `(get-text-property ,position 'w3m-href-anchor)
+    `(w3m-get-text-property-around 'w3m-href-anchor)))
 
 (defmacro w3m-image (&optional position)
   "Return the value of the `w3m-image' property at the given POSITION.
@@ -206,8 +208,17 @@ NOTE: If POSITION is omitted, it searches for the property in one
 character before and behind the current position, and point will move
 to the position where the property exists."
   (if position
-      (` (get-text-property (, position) 'w3m-image))
-    (` (w3m-get-text-property-around 'w3m-image))))
+      `(get-text-property ,position 'w3m-image)
+    `(w3m-get-text-property-around 'w3m-image)))
+
+(defmacro w3m-image-alt (&optional position)
+  "Return the value of the `w3m-image-alt' property at the given POSITION.
+NOTE: If POSITION is omitted, it searches for the property in one
+character before and behind the current position, and point will move
+to the position where the property exists."
+  (if position
+      `(get-text-property ,position 'w3m-image-alt)
+    `(w3m-get-text-property-around 'w3m-image-alt)))
 
 (defmacro w3m-submit (&optional position)
   "Return the value of the `w3m-submit' property at the given POSITION.
@@ -215,14 +226,14 @@ NOTE: If POSITION is omitted, it searches for the property in one
 character before and behind the current position, and point will move
 to the position where the property exists."
   (if position
-      (` (get-text-property (, position) 'w3m-submit))
-    (` (w3m-get-text-property-around 'w3m-submit))))
+      `(get-text-property ,position 'w3m-submit)
+    `(w3m-get-text-property-around 'w3m-submit)))
 
 (defmacro w3m-anchor-sequence (&optional position)
   "Return the value of the `w3m-anchor-sequence' property at POSITION.
 If POSITION is omitted, the current position is assumed."
   (if position
-      (` (get-text-property (, position) 'w3m-anchor-sequence))
+      `(get-text-property ,position 'w3m-anchor-sequence)
     '(get-text-property (point) 'w3m-anchor-sequence)))
 
 
@@ -344,20 +355,49 @@ An argument of nil means kill the current buffer."
 
 (defsubst w3m-buffer-number (buffer)
   (when (and (bufferp buffer)
-	     (string-match "\\`\\*w3m\\*\\(<\\([0-9]+\\)>\\)?\\'"
+	     (string-match "\\*w3m\\*\\(<\\([0-9]+\\)>\\)?\\'"
 			   (buffer-name buffer)))
     (if (match-beginning 1)
 	(string-to-number (match-string 2 (buffer-name buffer)))
       1))) ;; `1' should not be represented in the buffer name.
 
 (defsubst w3m-buffer-set-number (buffer number)
-  (unless (eq (w3m-buffer-number buffer) number)
-    (with-current-buffer buffer
-      (let ((newname (if (= number 1)
+  (with-current-buffer buffer
+    (let ((newname (if w3m-use-title-buffer-name
+		       (if (= number 1)
+			   (format "%s *w3m*" (w3m-current-title))
+			 (format "%s *w3m*<%d>" (w3m-current-title) number))
+		     (if (= number 1)
 			 "*w3m*"
-		       (format "*w3m*<%d>" number))))
+		       (format "*w3m*<%d>" number)))))
+      (if (eq (w3m-buffer-number buffer) number)
+	  (when w3m-use-title-buffer-name
+	    (unless (get-buffer newname)
+	      (rename-buffer newname)))
 	(unless (get-buffer newname)
 	  (rename-buffer newname))))))
+
+(defsubst w3m-buffer-name-add-title ()
+  "Add current tile to buffer name."
+  (when w3m-use-title-buffer-name
+    (let ((number (w3m-buffer-number (current-buffer)))
+	  newname)
+      (if (= number 1)
+	  (setq newname (format "%s *w3m*" (w3m-current-title)))
+	(setq newname (format "%s *w3m*<%d>" (w3m-current-title) number)))
+      (rename-buffer newname))))
+
+(defsubst w3m-generate-new-buffer (name)
+  (if w3m-use-title-buffer-name
+      (let* ((maxbuf (let ((w3m-fb-mode nil))
+		       (car (nreverse (w3m-list-buffers)))))
+	     (number (w3m-buffer-number maxbuf)))
+	(when (string-match "\\*w3m\\*\\(<\\([0-9]+\\)>\\)?\\'" name)
+	  (setq name "*w3m*"))
+	(if (and maxbuf number)
+	    (generate-new-buffer (format "%s<%d>" name (1+ number)))
+	  (generate-new-buffer name)))
+    (generate-new-buffer name)))
 
 (defun w3m-buffer-name-lessp (x y)
   "Return t if first arg buffer's name is less than second."
@@ -365,12 +405,12 @@ An argument of nil means kill the current buffer."
     (setq x (buffer-name x)))
   (when (bufferp y)
     (setq y (buffer-name y)))
-  (if (and (string-match "\\`\\*w3m\\*\\(<\\([0-9]+\\)>\\)?\\'" x)
+  (if (and (string-match "\\*w3m\\*\\(<\\([0-9]+\\)>\\)?\\'" x)
 	   (setq x (cons x
 			 (if (match-beginning 1)
 			     (string-to-number (match-string 2 x))
 			   1))))
-      (if (string-match "\\`\\*w3m\\*\\(<\\([0-9]+\\)>\\)?\\'" y)
+      (if (string-match "\\*w3m\\*\\(<\\([0-9]+\\)>\\)?\\'" y)
 	  (< (cdr x)
 	     (if (match-beginning 1)
 		 (string-to-number (match-string 2 y))
@@ -392,7 +432,8 @@ buffer names."
     (setq buffers (if nosort
 		      (nreverse rest)
 		    (sort rest #'w3m-buffer-name-lessp)))
-    (when (and w3m-fb-mode
+    (when (and (boundp 'w3m-fb-mode)
+	       w3m-fb-mode
 	       (if (or w3m-pop-up-frames
 		       (not (memq 'w3m-fb-add w3m-mode-hook)))
 		   ;; `w3m-fb-mode' might have been set by something
@@ -987,10 +1028,9 @@ the region active."
 	 (setq zmacs-region-stays t))))
 
 (defmacro w3m-deactivate-region ()
-  "Deactivate the region.
-This macro does nothing in XEmacs, because the region is always
-deactivated after evaluating the current command."
-  (unless (featurep 'xemacs)
+  "Deactivate the region."
+  (if (featurep 'xemacs)
+      '(zmacs-deactivate-region)
     '(deactivate-mark)))
 
 (defmacro w3m-region-active-p ()
@@ -1032,7 +1072,7 @@ deactivated after evaluating the current command."
 	(1+ i)))))
 
 (eval-and-compile
-  ;; This function will be redefined in w3m-e21.el.
+  ;; This function will be redefined in w3m-ems.el.
   (unless (fboundp 'w3m-force-window-update)
     (defalias 'w3m-force-window-update 'ignore)))
 
@@ -1093,6 +1133,29 @@ If SECONDS is omitted, it defaults to 0.5."
   "Convert the car of `:args' as a widget type in WIDGET."
   (apply 'widget-convert (widget-type widget)
 	 (eval (car (widget-get widget :args)))))
+
+(defsubst w3m-unseen-buffer-p (buffer)
+  "Return t if buffer unseen."
+  (save-excursion
+    (set-buffer buffer)
+    w3m-buffer-unseen))
+
+(defun w3m-visited-file-modtime ()
+  "Replacement of `visited-file-modtime'.
+It returns a list of two integers if the current buffer visits a file,
+otherwise returns the number 0.  In modern Emacsen, this function will
+get to be the alias to `visited-file-modtime'."
+  (let ((modtime (visited-file-modtime)))
+    (cond ((consp (cdr-safe modtime))
+	   (defalias 'w3m-visited-file-modtime 'visited-file-modtime)
+	   modtime)
+	  ((integerp (cdr-safe modtime))
+	   ;; XEmacs version returns `(0 . 0)' if no file is visited.
+	   (if (and (= (car modtime) 0) (= (cdr modtime) 0))
+	       0
+	     (list (car modtime) (cdr modtime))))
+	  (t
+	   modtime))))
 
 (provide 'w3m-util)
 

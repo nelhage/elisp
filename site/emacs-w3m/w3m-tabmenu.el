@@ -1,6 +1,6 @@
 ;;; w3m-tabmenu.el --- Functions for TAB menu browsing
 
-;; Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006
+;; Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007
 ;; TSUCHIYA Masatoshi <tsuchiya@namazu.org>
 
 ;; Authors: Hideyuki SHIRAI    <shirai@meadowy.org>,
@@ -20,9 +20,9 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's maintainer or write to: The Free Software Foundation,
-;; Inc.; 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 
@@ -48,9 +48,6 @@
 	  (easy-menu-define w3m-tab-menu w3m-mode-map
 	    "" '("Tab" ["dummy" w3m-switch-buffer t]))
 	  (easy-menu-add w3m-tab-menu)
-	  (setq current-menubar
-		(cons w3m-tab-menu
-		      (delq (assoc "Tab" current-menubar) current-menubar)))
 	  (add-hook 'activate-menubar-hook 'w3m-tab-menubar-update))
       (unless (lookup-key w3m-mode-map [menu-bar Tab])
 	(easy-menu-define w3m-tab-menu w3m-mode-map "" '("Tab"))
@@ -117,22 +114,27 @@
   (let ((i 0)
 	(current (current-buffer))
 	(width w3m-tab-menubar-items-width)
-	title)
+	title unseen)
     (mapcar
      (lambda (buffer)
        (if nomenu
 	   (list (buffer-name buffer)
-		 (w3m-buffer-title buffer)
+		 (format "%s%s"
+			 (if (w3m-unseen-buffer-p buffer) "(u)" "")
+			 (w3m-buffer-title buffer))
 		 (eq buffer current))
 	 (setq title (w3m-buffer-title buffer))
+	 (setq unseen (w3m-unseen-buffer-p buffer))
 	 (when (>= (string-width title) width)
 	   (setq title
 		 (concat (w3m-truncate-string title
 					      (- width 3))
 			 "...")))
-	 (vector (format "%d: %s%s"
+	 (vector (format "%d:%s%s"
 			 (incf i)
-			 (if (eq buffer current) "* " "  ")
+			 (cond ((eq buffer current) "* ")
+			       (unseen "u ")
+			       (t "  "))
 			 title)
 		 `(w3m-tab-menubar-open-item ,(buffer-name buffer))
 		 buffer)))
@@ -142,6 +144,12 @@
 (defvar w3m-tab-menubar-make-items-prebuflst nil)
 (defvar w3m-tab-menubar-make-items-preurl nil)
 (defvar w3m-tab-menubar-make-items-preitems nil)
+
+(defun w3m-tab-menubar-force-update (&rest args)
+  (setq w3m-tab-menubar-make-items-preitems nil)
+  (w3m-tab-menubar-update))
+
+(add-hook 'w3m-display-functions 'w3m-tab-menubar-force-update)
 
 (defun w3m-tab-menubar-make-items (&optional nomenu)
   "Create w3m tab menu items."
@@ -174,7 +182,7 @@
 		      '("-")
 		      (w3m-make-menu-commands
 		       w3m-tab-button-menu-commands)))))))
-  
+
 (provide 'w3m-tabmenu)
 
 ;;; w3m-tabmenu.el ends here

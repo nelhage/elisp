@@ -1,6 +1,6 @@
 ;;; sb-atmarkit.el --- shimbun backend for atmarkit -*- coding: iso-2022-7bit; -*-
 
-;; Copyright (C) 2003, 2004, 2005 NAKAJIMA Mikio <minakaji@namazu.org>
+;; Copyright (C) 2003, 2004, 2005, 2006 NAKAJIMA Mikio <minakaji@namazu.org>
 
 ;; Author: NAKAJIMA Mikio <minakaji@namazu.org>
 ;; Keywords: news
@@ -19,9 +19,9 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's maintainer or write to: The Free Software Foundation,
-;; Inc.; 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 
@@ -82,6 +82,15 @@
 (luna-define-method shimbun-article-url ((shimbun shimbun-atmarkit)
 					 header)
   "http://www.atmarkit.co.jp/club/print/print.php")
+
+(luna-define-method shimbun-get-headers :around ((shimbun shimbun-atmarkit)
+						 &optional range)
+  (mapcar
+   (lambda (header)
+     (shimbun-header-set-xref header
+			      (shimbun-real-url (shimbun-header-xref header)))
+     header)
+   (luna-call-next-method)))
 
 (luna-define-method shimbun-multi-next-url ((shimbun shimbun-atmarkit)
 					    header url)

@@ -1,10 +1,12 @@
+# Generated automatically from Makefile.in by configure.
 .SUFFIXES: .texi .info .pdf
 
 INSTALL      = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_INFO = install-info
-prefix       = /usr
-infodir      = ${prefix}/share/info
+prefix       = /usr/local
+datarootdir  = @datarootdir@
+infodir      = ${prefix}/info
 srcdir       = .
 subdir       = doc
 top_srcdir   = ..
@@ -13,16 +15,22 @@ ADDITIONAL_LOAD_PATH = NONE
 SHELL        = /bin/sh
 
 
-MAKEINFO     = no
-TEXI2DVI     = false
+MAKEINFO     = makeinfo
+TEXI2DVI     = texi2dvi
 PTEX         = false
 JBIBTEX      = false
-DVIPDFMX     = false
-TEXI2PDF     = false
-EMACS        = /usr/bin/emacs
+DVIPDFMX     = dvipdfmx
+TEXI2PDF     = texi2pdf
+EMACS        = /usr/local/bin/emacs
 VANILLA_FLAG = -q -no-site-file --no-unibyte
 FLAGS        = $(VANILLA_FLAG) -batch -l ./w3mhack.el $(ADDITIONAL_LOAD_PATH)
-EMACSINFO    = cd $(top_srcdir) && $(EMACS) $(FLAGS) -f w3mhack-makeinfo
+
+## This is used to set the environment variable XEMACSDEBUG for
+## XEmacs 21.5 in order to suppress warnings for Lisp shadows
+## when XEmacs 21.5 starts.
+XEMACSDEBUG = 
+
+EMACSINFO    = cd $(top_srcdir) && $(XEMACSDEBUG)$(EMACS) $(FLAGS) -f w3mhack-makeinfo
 
 INFO_DEPS_EN = emacs-w3m.info
 INFO_DEPS_JA = emacs-w3m-ja.info
@@ -36,7 +44,7 @@ ja: $(INFO_DEPS_JA)
 
 version.texi: $(top_srcdir)/w3m.el
 	@version=`cd $(top_srcdir)\
-		&& $(EMACS) $(FLAGS) -f w3mhack-version 2>/dev/null`;\
+		&& $(XEMACSDEBUG)$(EMACS) $(FLAGS) -f w3mhack-version 2>/dev/null`;\
 	echo "@set VERSION $$version"> version.texi
 
 emacs-w3m.info: version.texi emacs-w3m.texi
@@ -55,39 +63,41 @@ emacs-w3m-ja.info: version.texi emacs-w3m-ja.texi
 	      $(EMACSINFO) $$texi ;\
 	    else \
 	      echo "Formatting $$texi using $(MAKEINFO)..." ;\
-	      LC_ALL=C $(MAKEINFO) -o $@ $$texi ;\
+	      LC_ALL=C $(MAKEINFO) --no-split -o $@ $$texi ;\
 	      echo "Formatting $$texi using $(MAKEINFO)...done" ;\
 	    fi ;;\
 	esac
 
 install: $(INFO_DEPS)
-	$(SHELL) $(top_srcdir)/mkinstalldirs $(infodir)
-	@list='$(INFO_DEPS)';\
-	for file in $$list; do\
-	  for ifile in `echo $$file $$file-[0-9] $$file-[0-9][0-9]`; do\
-	    if test -f $$ifile; then\
-	      echo " $(INSTALL_DATA) $$ifile $(infodir)/$$ifile";\
-	      $(INSTALL_DATA) $$ifile $(infodir)/$$ifile;\
-	    else : ; fi;\
-	  done;\
+	$(SHELL) $(top_srcdir)/mkinstalldirs "$(infodir)"
+	@for file in $(INFO_DEPS); do\
+	  if test -f $$file; then\
+	    for old in `cd "$(infodir)" && echo $$file-[0-9]`; do\
+	      if test -f "$(infodir)/$$old"; then\
+	        echo "rm -f \"$(infodir)/$$old\"";\
+	        rm -f "$(infodir)/$$old";\
+	      fi;\
+	    done;\
+	    echo "$(INSTALL_DATA) $$file \"$(infodir)/$$file\"";\
+	    $(INSTALL_DATA) $$file "$(infodir)/$$file";\
+	  else : ; fi;\
 	done
 	@if $(SHELL) -c $(INSTALL_INFO)' --version| sed 1q\
 		| fgrep -s -v -i debian'>/dev/null 2>&1; then\
-	  list='$(INFO_DEPS)';\
-	  for file in $$list; do\
-	    if test -f $(infodir)/$$file; then\
-	      echo " $(INSTALL_INFO) --info-dir=$(infodir) $(infodir)/$$file";\
-	      $(INSTALL_INFO) --info-dir=$(infodir) $(infodir)/$$file || :;\
+	  for file in $(INFO_DEPS); do\
+	    if test -f "$(infodir)/$$file"; then\
+	      echo "$(INSTALL_INFO) --info-dir=\"$(infodir)\" \"$(infodir)/$$file\"";\
+	      $(INSTALL_INFO) --info-dir="$(infodir)" "$(infodir)/$$file" || :;\
 	    else : ; fi\
 	  done;\
 	else : ; fi
 
 install-en: $(INFO_DEPS_EN)
-	$(MAKE) INFO_DEPS='$(INFO_DEPS_EN)' EMACS="$(EMACS)"\
+	$(MAKE) INFO_DEPS='$(INFO_DEPS_EN)' $(XEMACSDEBUG)EMACS="$(EMACS)"\
 		infodir="$(infodir)" install
 
 install-ja: $(INFO_DEPS_JA)
-	$(MAKE) INFO_DEPS='$(INFO_DEPS_JA)' EMACS="$(EMACS)"\
+	$(MAKE) INFO_DEPS='$(INFO_DEPS_JA)' $(XEMACSDEBUG)EMACS="$(EMACS)"\
 		infodir="$(infodir)" install
 
 dvi: dvi-en dvi-ja
@@ -104,7 +114,7 @@ emacs-w3m-ja.dvi: version.texi emacs-w3m-ja.texi
 	@texi=$<;\
 	case "$$texi" in \
 	  *-ja.texi) \
-	    env TEX=$(PTEX) BIBTEX=$(JBIBTEX) $(TEXI2DVI) -l ja -o $@ $$texi ;;\
+	    env TEX=$(PTEX) BIBTEX=$(JBIBTEX) $(TEXI2DVI) -o $@ $$texi ;;\
 	  *) \
 	    $(TEXI2DVI) -o $@ $$texi ;;\
 	esac
@@ -130,8 +140,8 @@ emacs-w3m-ja.pdf: version.texi emacs-w3m-ja.texi
 	esac
 
 clean:
-	-rm -rf *~ *.info *.info-[0-9] *.info-[0-9][0-9] *.dvi missfont.log\
- *.pdf *.aux *.cp *.cps *.fn *.fns *.ky *.kys *.log *.pg *.toc *.tp *.vr *.vrs
+	-rm -rf *~ *.info version.texi *.dvi missfont.log *.pdf *.aux *.cp\
+ *.cps *.fn *.fns *.ky *.kys *.log *.pg *.toc *.tp *.vr *.vrs
 
 distclean: clean
 	-rm -f Makefile

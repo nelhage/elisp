@@ -1,7 +1,9 @@
 ;;; sb-rss.el --- shimbun backend for RSS (Rich Site Summary).
 
-;; Copyright (C) 2003, 2004, 2005 Koichiro Ohba <koichiro@meadowy.org>
-;; Copyright (C) 2003, 2004, 2005 NAKAJIMA Mikio <minakaji@osaka.email.ne.jp>
+;; Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009
+;; Koichiro Ohba <koichiro@meadowy.org>
+;; Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009
+;; NAKAJIMA Mikio <minakaji@osaka.email.ne.jp>
 
 ;; Author: Koichiro Ohba <koichiro@meadowy.org>
 ;;         NAKAJIMA Mikio <minakaji@osaka.email.ne.jp>
@@ -21,9 +23,9 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's maintainer or write to: The Free Software Foundation,
-;; Inc.; 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 
@@ -39,7 +41,20 @@
     (require 'xml)))
 (eval '(require 'xml))
 
-(luna-define-class shimbun-rss (shimbun) ())
+(eval-and-compile
+  (luna-define-class shimbun-rss (shimbun) (ignored-subject))
+  (luna-define-internal-accessors 'shimbun-rss))
+
+(luna-define-method initialize-instance :after ((shimbun shimbun-rss)
+						&rest init-args)
+  (shimbun-rss-initialize-ignored-subject shimbun))
+
+(defun shimbun-rss-initialize-ignored-subject (shimbun)
+  (shimbun-rss-set-ignored-subject-internal
+   shimbun
+   (symbol-value (intern-soft (format "shimbun-%s-ignored-subject"
+				      (shimbun-server shimbun)))))
+  shimbun)
 
 (luna-define-generic shimbun-rss-process-date (shimbun-rss date)
   "Process DATE string and return proper Date string to show it in MUA.")
@@ -170,7 +185,8 @@ But clarify need ignored URL return nil.")
 			 (shimbun-index-url shimbun)
 			 (error-message-string err))
 		nil)))
-	dc-ns rss-ns author headers)
+	(ignored-subject (shimbun-rss-ignored-subject-internal shimbun))
+	dc-ns rss-ns author hankaku headers)
     (when xml
       (setq dc-ns (shimbun-rss-get-namespace-prefix
 		   xml "http://purl.org/dc/elements/1.1/")
@@ -185,35 +201,54 @@ But clarify need ignored URL return nil.")
 		       (or
 			(shimbun-rss-node-text rss-ns 'author channel)
 			(shimbun-rss-node-text dc-ns 'creator channel)
-			(shimbun-rss-node-text dc-ns 'contributor channel))))))
-      (dolist (item (shimbun-rss-find-el (intern (concat rss-ns "item")) xml))
-	(let ((url (and (listp item)
-			(eq (intern (concat rss-ns "item")) (car item))
-			(shimbun-rss-node-text rss-ns 'link (cddr item)))))
-	  (when url
-	    (let* ((date (or (shimbun-rss-get-date shimbun url)
-			     (shimbun-rss-node-text dc-ns 'date item)
-			     (shimbun-rss-node-text rss-ns 'pubDate item)))
-		   (id (shimbun-rss-build-message-id shimbun url date)))
-	      (when (and id (or need-all-items
-				(not (shimbun-search-id shimbun id))))
-		(push (shimbun-create-header
-		       0
-		       (shimbun-rss-node-text rss-ns 'title item)
-		       (or (shimbun-rss-node-text rss-ns 'author item)
-			   (shimbun-rss-node-text dc-ns 'creator item)
-			   (shimbun-rss-node-text dc-ns 'contributor item)
-			   author
-			   (shimbun-from-address shimbun))
-		       (shimbun-rss-process-date shimbun date)
-		       id "" 0 0 url
-		       (when need-descriptions
-			 (let ((description (shimbun-rss-node-text
-					     rss-ns 'description item)))
-			   (when description
-			     (list (cons 'description description))))))
-		      headers))))))
-      headers)))
+			(shimbun-rss-node-text dc-ns 'contributor channel)))))
+	    hankaku (unless (memq (shimbun-japanese-hankaku shimbun)
+				  '(body nil))
+		      (generate-new-buffer " *temp*")))
+      (unwind-protect
+	  (dolist (item (shimbun-rss-find-el (intern (concat rss-ns "item"))
+					     xml)
+			headers)
+	    (let ((url (and (listp item)
+			    (eq (intern (concat rss-ns "item")) (car item))
+			    (shimbun-rss-node-text rss-ns 'link (cddr item)))))
+	      (when url
+		(let* ((date (or (shimbun-rss-get-date shimbun url)
+				 (shimbun-rss-node-text dc-ns 'date item)
+				 (shimbun-rss-node-text rss-ns 'pubDate item)))
+		       (id (shimbun-rss-build-message-id shimbun url date))
+		       (subject (shimbun-rss-node-text rss-ns 'title item)))
+		  (when (and id
+			     (or need-all-items
+				 (not (shimbun-search-id shimbun id)))
+			     (if (and ignored-subject subject)
+				 (not (string-match ignored-subject subject))
+			       t))
+		    (push
+		     (shimbun-create-header
+		      0
+		      (if hankaku
+			  (with-current-buffer hankaku
+			    (insert (or subject ""))
+			    (shimbun-japanese-hankaku-region (point-min)
+							     (point-max))
+			    (prog1 (buffer-string) (erase-buffer)))
+			subject)
+		      (or (shimbun-rss-node-text rss-ns 'author item)
+			  (shimbun-rss-node-text dc-ns 'creator item)
+			  (shimbun-rss-node-text dc-ns 'contributor item)
+			  author
+			  (shimbun-from-address shimbun))
+		      (shimbun-rss-process-date shimbun date)
+		      id "" 0 0 url
+		      (when need-descriptions
+			(let ((description (shimbun-rss-node-text
+					    rss-ns 'description item)))
+			  (when description
+			    (list (cons 'description description))))))
+		     headers))))))
+	(when (buffer-live-p hankaku)
+	  (kill-buffer hankaku))))))
 
 ;;; Internal functions
 

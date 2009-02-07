@@ -1,6 +1,6 @@
 ;;; w3m-cookie.el --- Functions for cookie processing
 
-;; Copyright (C) 2002, 2003, 2005, 2006
+;; Copyright (C) 2002, 2003, 2005, 2006, 2008
 ;; TSUCHIYA Masatoshi <tsuchiya@namazu.org>
 
 ;; Authors: Teranishi Yuuichi  <teranisi@gohome.org>
@@ -19,9 +19,9 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's maintainer or write to: The Free Software Foundation,
-;; Inc.; 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 ;;; Commentary:
 
@@ -75,6 +75,11 @@ If ask, ask user whether accept bad cookies or not."
 	  (const :tag "Don't accept bad cookies" nil)
 	  (const :tag "Ask accepting bad cookies" ask)
 	  (const :tag "Always accept bad cookies" t)))
+
+(defcustom w3m-cookie-save-cookies t
+  "*Non-nil means save cookies when emacs-w3m cookie system shutdown."
+  :group 'w3m
+  :type 'boolean)
 
 (defcustom w3m-cookie-file
   (expand-file-name ".cookie" w3m-profile-directory)
@@ -413,16 +418,28 @@ If ask, ask user whether accept bad cookies or not."
   "Clear cookie list."
   (setq w3m-cookies nil))
 
-(defun w3m-cookie-save ()
-  "Save cookies."
+(defun w3m-cookie-save (&optional domain)
+  "Save cookies.
+When DOMAIN is non-nil, only save cookies whose domains match it."
+  (interactive)
   (let (cookies)
     (dolist (cookie w3m-cookies)
-      (when (and (w3m-cookie-expires cookie)
+      (when (and (or (not domain)
+		     (string= (w3m-cookie-domain cookie) domain))
+		 (w3m-cookie-expires cookie)
 		 (w3m-time-newer-p (w3m-time-parse-string
 				    (w3m-cookie-expires cookie))
 				   (current-time)))
 	(push cookie cookies)))
     (w3m-save-list w3m-cookie-file cookies)))
+
+(defun w3m-cookie-save-current-site-cookies ()
+  "Save cookies for the current site."
+  (interactive)
+  (when (and w3m-current-url
+	     (not (w3m-url-local-p w3m-current-url)))
+    (w3m-string-match-url-components w3m-current-url)
+    (w3m-cookie-save (match-string 4 w3m-current-url))))
 
 (defun w3m-cookie-load ()
   "Load cookies."
@@ -439,9 +456,10 @@ If ask, ask user whether accept bad cookies or not."
 
 ;;;###autoload
 (defun w3m-cookie-shutdown ()
-  "Save cookies."
+  "Save cookies, and reset cookies' data."
   (interactive)
-  (w3m-cookie-save)
+  (when w3m-cookie-save-cookies
+    (w3m-cookie-save))
   (setq w3m-cookie-init nil)
   (w3m-cookie-clear)
   (if (get-buffer " *w3m-cookie-parse-temp*")

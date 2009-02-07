@@ -1,6 +1,6 @@
 ;;; w3m-antenna.el --- Utility to detect changes of WEB
 
-;; Copyright (C) 2001, 2002, 2003, 2004, 2005
+;; Copyright (C) 2001, 2002, 2003, 2004, 2005, 2007
 ;; TSUCHIYA Masatoshi <tsuchiya@namazu.org>
 
 ;; Authors: TSUCHIYA Masatoshi <tsuchiya@namazu.org>
@@ -19,9 +19,9 @@
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, you can either send email to this
-;; program's maintainer or write to: The Free Software Foundation,
-;; Inc.; 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
 
 
 ;;; Commentary:
@@ -108,19 +108,19 @@ that consists of:
 ")
 
 (defmacro w3m-antenna-site-key (site)
-  (` (car (, site))))
+  `(car ,site))
 (defmacro w3m-antenna-site-title (site)
-  (` (nth 1 (, site))))
+  `(nth 1 ,site))
 (defmacro w3m-antenna-site-class (site)
-  (` (nth 2 (, site))))
+  `(nth 2 ,site))
 (defmacro w3m-antenna-site-url (site)
-  (` (nth 3 (, site))))
+  `(nth 3 ,site))
 (defmacro w3m-antenna-site-last-modified (site)
-  (` (nth 4 (, site))))
+  `(nth 4 ,site))
 (defmacro w3m-antenna-site-size (site)
-  (` (nth 5 (, site))))
+  `(nth 5 ,site))
 (defmacro w3m-antenna-site-size-detected (site)
-  (` (nth 6 (, site))))
+  `(nth 6 ,site))
 
 (defcustom w3m-antenna-file
   (expand-file-name ".antenna" w3m-profile-directory)
@@ -229,8 +229,13 @@ not to update the page."
 (defun w3m-antenna-alist ()
   (let ((alist (w3m-load-list w3m-antenna-file)))
     (mapcar (lambda (site)
-	      (or (assoc (w3m-antenna-site-key site) alist)
-		  (append site (list nil nil nil nil))))
+	      (let ((l (assoc (w3m-antenna-site-key site) alist)))
+		(if l
+		    (progn
+		      (setf (w3m-antenna-site-class l)
+			    (w3m-antenna-site-class site))
+		      l)
+		  (append site (list nil nil nil nil)))))
 	    w3m-antenna-sites)))
 
 (defun w3m-antenna-hns-last-modified (url handler)
@@ -280,7 +285,7 @@ In order to use this function, `xml.el' is required."
 		(site site))
     (w3m-process-do-with-temp-buffer
 	(type (w3m-retrieve url nil t nil nil handler))
-      (let (link date dc-dates)
+      (let (link date dates)
 	(when type
 	  (w3m-decode-buffer url)
 	  (let* ((xml (ignore-errors
@@ -291,16 +296,25 @@ In order to use this function, `xml.el' is required."
 			  xml "http://purl.org/rss/1.0/"))
 		 (channel (car (w3m-rss-find-el
 				(intern (concat rss-ns "channel"))
-				xml))))
+				xml)))
+		 (items (w3m-rss-find-el
+			 (intern (concat rss-ns "item"))
+			 xml)))
 	    (setq link (nth 2 (car (w3m-rss-find-el
 				    (intern (concat rss-ns "link"))
 				    channel))))
-	    (setq dc-dates (w3m-rss-find-el
-			    (intern (concat dc-ns "date"))
-			    channel))
-	    (when dc-dates
+	    (setq dates (append
+			    (w3m-rss-find-el
+			     (intern (concat dc-ns "date"))
+			     channel)
+			    (w3m-rss-find-el
+			     (intern (concat dc-ns "date"))
+			     items)
+			    (w3m-rss-find-el 'pubDate channel)
+			    (w3m-rss-find-el 'pubDate items)))
+	    (when dates
 	      (setq date '(0 0))
-	      (dolist (tmp dc-dates)
+	      (dolist (tmp dates)
 		(setq tmp (w3m-rss-parse-date-string (nth 2 tmp)))
 		(when (w3m-time-newer-p tmp date)
 		  (setq date tmp))))))
