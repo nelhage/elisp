@@ -240,11 +240,9 @@ unable to perform symbol completion.")
 (add-hook 'shell-mode-hook 'my-shell-mode-hook)
 
 (defun my-shell-mode-hook ()
-  (setq dirtrack-list '("|Pr0mPT|\\([^|]*\\)|" 1 nil))
+  (setq dirtrack-list '("|Pr0mPT|\\([^%|$]*\\)|" 1 nil))
   (shell-dirtrack-mode 0)
-  ;; (dirtrack-mode 1)
-  (setq dirtrack-mode t)
-  (add-hook 'comint-preoutput-filter-functions 'dirtrack nil t)
+  (dirtrack-mode 1)
   (add-hook 'comint-preoutput-filter-functions
             'dirtrack-filter-out-pwd-prompt t t))
 
@@ -824,7 +822,13 @@ unable to perform symbol completion.")
   (local-set-key (kbd "C-M-b") 'nxml-backward-element)
   (local-set-key (kbd "C-M-u") 'nxml-up-element)
   (local-set-key (kbd "C-M-d") 'nxml-down-element)
-  (local-set-key (kbd "C-M-k") 'nxml-kill-element))
+  (local-set-key (kbd "C-M-k") 'nxml-kill-element)
+  (local-set-key (kbd "C-c ]") 'nxml-finish-element)
+  (setq next-error-function 'nxml-next-error))
+
+(defun nxml-next-error (arg reset)
+  (if reset (rng-first-error))
+  (rng-next-error arg)))
 
 (defadvice nxml-up-element (after nxml-up-element-goto-start)
   "Make nxml-up-element go to the start, not end, of the
@@ -954,7 +958,7 @@ surrounding xml expression"
 (eval-after-load 'org
   '(progn
      (define-key org-mode-map (kbd "C-c t") 'org-todo)
-     (define-key org-mode-map (kbd "RET") 'org-meta-return)
+     ;(define-key org-mode-map (kbd "RET") 'org-meta-return)
      (set-face-foreground 'org-todo "#FF6666")
      (set-face-foreground 'org-done "#00FF00")))
 
@@ -1004,8 +1008,9 @@ surrounding xml expression"
 ; (setq desktop-dirname (expand-file-name "~"))
 ; (add-hook 'find-file-hook 'desktop-save-in-desktop-dir)
 
-(autoload 'w3m "w3m" "w3m" t t)
-(autoload 'w3m-find-file "w3m" "w3m" t t)
+(require 'w3m-load)
+; (autoload 'w3m "w3m" "w3m" t t)
+; (autoload 'w3m-find-file "w3m" "w3m" t t)
 (add-hook 'w3m-mode-hook 'my-w3m-mode-hook)
 
 (defun my-w3m-mode-hook ()
