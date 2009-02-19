@@ -13,7 +13,7 @@
 
 ;; This file is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
+;; the Free Software Foundation; either version 3, or (at your option)
 ;; any later version.
 
 ;; This file is distributed in the hope that it will be useful,
@@ -135,7 +135,6 @@ whitespace.
 Runs `haskell-simple-indent-hook'.
 
 Use `haskell-simple-indent-version' to find out what version this is."
-  (interactive)
   (set (make-local-variable 'haskell-simple-indent-old) indent-line-function)
   (set (make-local-variable 'indent-line-function) 'haskell-simple-indent)
   (run-hooks 'haskell-simple-indent-hook))
@@ -143,7 +142,6 @@ Use `haskell-simple-indent-version' to find out what version this is."
 (defun turn-off-haskell-simple-indent ()
   "Return `indent-line-function' to original value.
 I.e. the value before `turn-on-haskell-simple-indent' was called."
-  (interactive)
   (when (local-variable-p 'haskell-simple-indent-old)
     (setq indent-line-function haskell-simple-indent-old)
     (kill-local-variable 'haskell-simple-indent-old)))

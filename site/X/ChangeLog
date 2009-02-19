@@ -1,0 +1,139 @@
+Tue Mar 10 23:44:48 1998  Eric M. Ludlam  <zappo@ultranet.com>
+
+	* xwin.el: Updated configure type to have a 2 byte bitmask.
+	Added X-color-message
+	Added X-GC-data to add data to a GC.
+	Updated X-generic-attribute-message to handle messages w/ different
+	sized bitmask types.
+
+	* xutil.el: Updated the preview window some.
+
+	* xr.el: Added lots of events contributed by emarsden@mail.dotcom.fr
+
+	* xlib.el: fixed XChangeWindowAttributes and XConfigureWindow.
+	Added XStoreColor, XStoreColors, and XChangeGC.
+
+	* xhello.el: Updated to follow new naming convention.
+
+	* xconst.el: Fixed a misspelling.
+
+	* xc.el: Additional check in X-dpy-p for a valid buffer.
+
+Sat Feb 28 15:19:29 1998  Eric M. Ludlam  <zappo@ultranet.com>
+
+	* xs.el: Added an XEmacs fix where a char is not thought of as a number
+
+	* xmath.el: Upgraded to also work w/ Emacs 20
+
+	* xs.el:
+	Unbinaried this file.  Did something else RCS won't let me see.
+
+	* xconst.el:
+	Changed the name of all notify masks to be XM instead of X.
+	Added Color setting constans like DoRed
+
+	* xmath.el:
+	Fixed to work w/ XEmacs 20.3  Hopefully will also fix it to work with
+	Emacs 20.2.  It may still work w/ Emacs 19.34
+
+	* xr.el: Fixed some XEmacs compiler warnings
+
+Thu Nov 20 22:47:10 1997  Eric M. Ludlam  <zappo@ultranet.com>
+
+	* xwin.el:
+	Added a new attrib for XGetWindowAttributes. May remove later.
+	Added X-window-get-vector which finds or creates a new window
+	vector given an Xid.  Useful when dealing with other windows.
+
+	* xutil.el: Added new function X-tree-list which mimics xlswins.
+
+	* xr.el: Removed messages when reading from the X Socket.
+	Use accept-process-output instead of sit-for 1 .. much faster
+	Enable if statements in type field of parse vectors to choose a type.
+
+	* xmath.el: Fixed but in int->string4 for large XIds.
+	Added 4 byte int to hex number.
+
+	* xlib.el: XOpenDisplay can now parses the : out of the name.
+	Added "done" to connection message
+	Added XDefaultScreen, XServerName, XBlackPixel, XWhitePixel,
+	  XDefaultColormap, XDefaultVisual, XDefaultGC, XDefaultRootWindow,
+	  XServerVendor, and XVEntorRelease functions.
+	XCreateWindow uses new accessor to the root window
+	Added XGetWindowAttributes.  It is currently untested, and probably
+	  prone to error.  The return argument will most likely change as well.
+	Added XQueryTree.  This works, and works well.
+	Added XGetAtomName.  This is also untested.
+	Added XGetWindowProperty.  This works well.
+	Added XFetchName using XGetWindowProperty.
+
+	* xhello.el:
+	Removed old functions X-[White/Black]Pixel and use XWhite/BlackPixel
+
+	* xconst.el:
+	Added the AnyAtom atom, and removed some functions that didn't
+	belong in here.
+
+	* xc.el:
+	The name and screen of the server is now maintained in the log buffer.
+	The name parsing of hostname:screen is not done in this file anymore.
+
+Wed Nov 12 04:00:10 1997  Eric M. Ludlam  <zappo@ultranet.com>
+
+	* xlib.el: Allow use of strings when passed to XChangeProperty
+
+	* xc.el: Modified X-open-connection to take a screen number as well.
+
+	* xlib.el: Modified XOpenDisplay to take a screen number as well
+
+Fri Aug 22 01:54:37 1997  Eric M. Ludlam  <zappo@ultranet.com>
+
+        *Posted V 0.1
+	
+	* xlib.el:
+	Added XBell, XSelectInput, XSetWindow[background,foreground,border]
+	XConfigureWindow, X[Lower,Raise,Move,Resize,MoveResize]Window,
+	XSetWindowborderWidth, XDestroyWindow, XDestroySubwindows,
+	XInternAtom, XChangeProperty, XSetWMProtocols, XFreeColormap,
+	XFreeColors, XFreeGC, X[Draw|Fill]Arc[s], X[Draw|Fill]Rectangle[s],
+	XDrawpoint[s], XDrawSegments.
+
+	Also fixed up many incorrect signals and doc-strings.
+
+	* xwin.el: Added atoms, and configuration structs.
+	Windows now has a generic event handler list.
+
+	* xutil.el:
+	Fixed X-info-buffer to display things in the correct format.
+
+	* xr.el: Rewrote event interpolator to work from a matrix of events.
+	Fixed event parser to correctly reverse sub-lits
+
+	* xhello.el: Fixed close-handler, added calls to new X functions
+
+	* xconst.el: Fixed doc, and added new stuff
+
+	* xc.el: Added an atom cache
+
+Tue Aug 19 15:57:36 1997  Eric M. Ludlam  <zappo@ultranet.com>
+
+	* xc.el: Fixed typo
+
+	* xc.el: Added some status messages
+
+	* xmath.el: Added X-pad to calculate the pad size.
+	Added Xtruncate to truncate too-large floats on newer emacsen
+
+	* xr.el:
+	Added more doc and status messages.  Now support DestroyNotify as another
+	window event callback.
+
+	* xs.el: Added more details to the function doc
+
+Fri Aug 15 01:37:49 1997  Eric M. Ludlam  <zappo@ultranet.com>
+
+	* xlib.el, xwin.el: Fixed some compile errors
+
+	* xc.el, xconst.el, xhello.el, xlib.el, xmath.el, xr.el, xs.el, xutil.el, xwin.el:
+	Initial revision
+
