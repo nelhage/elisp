@@ -95,7 +95,7 @@ unable to perform symbol completion.")
 (when (fboundp 'global-font-lock-mode)
   (setq font-lock-face-attributes
         '((font-lock-comment-face  "OrangeRed")
-          (font-lock-function-name-face "blue")
+          (font-lock-function-name-face "#5555AA")
           (font-lock-keyword-face "Cyan1")
           (font-lock-string-face "orange")))
   (require 'font-lock)
@@ -583,7 +583,7 @@ unable to perform symbol completion.")
                  TeX-command-list))
      (let ((pdfview (assoc-string "^pdf$" TeX-output-view-style)))
        (setcdr (cdr pdfview) (list "evince %o")))
-     (setq TeX-print-command "pdf2ps %s.pdf - | lpr -P%p -h")
+     (setq TeX-print-command "cups-lpr -P%p %s.pdf")
      (TeX-global-PDF-mode)))
 
 (defun TeX-count-words ()
@@ -828,7 +828,7 @@ unable to perform symbol completion.")
 
 (defun nxml-next-error (arg reset)
   (if reset (rng-first-error))
-  (rng-next-error arg)))
+  (rng-next-error arg))
 
 (defadvice nxml-up-element (after nxml-up-element-goto-start)
   "Make nxml-up-element go to the start, not end, of the
@@ -958,6 +958,9 @@ surrounding xml expression"
 (eval-after-load 'org
   '(progn
      (define-key org-mode-map (kbd "C-c t") 'org-todo)
+     (define-key org-mode-map (kbd "TAB") 'org-metaright)
+     (define-key org-mode-map (kbd "S-TAB") 'org-metaleft)
+     (define-key org-mode-map (kbd "M-TAB") 'org-cycle)
      ;(define-key org-mode-map (kbd "RET") 'org-meta-return)
      (set-face-foreground 'org-todo "#FF6666")
      (set-face-foreground 'org-done "#00FF00")))
