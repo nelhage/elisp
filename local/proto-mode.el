@@ -29,19 +29,26 @@
 (defconst proto-font-lock-keywords
   (list
    ;; space-time keywords
-   `(,(regexp-opt '("if" "rep" "letfed" "once" "dt" 
-		    "min-hood" "max-hood" "int-hood"
-		    "any-hood" "all-hood"
-		    "nbr" "nbr-range" "nbr-bearing"
-		   ) t) 
-     . font-lock-builtin-face)
+   (cons (concat "\\b"
+                 (regexp-opt '("if" "rep" "letfed" "once" "dt" 
+                               "min-hood" "max-hood" "int-hood"
+                               "any-hood" "all-hood"
+                               "nbr" "nbr-range" "nbr-bearing"
+                               ) t)
+                 "\\b") 
+         'font-lock-builtin-face)
    ;; deprecated, abstraction-violating, and other dangerous keywords
-   `(,(regexp-opt '("fold-hood" "sum-hood" "probe") t) . font-lock-warning-face)
+   (cons (concat "\\b"
+                 (regexp-opt '("fold-hood" "sum-hood" "probe") t)
+                 "\\b")
+         'font-lock-warning-face)
    ;; other keywords
-   `(,(regexp-opt '("def" "let" "let*" "all" "seq" "mux" "and" "or"
-		    "unless" "when" "cond" "case" "case-by" "fun" "#t" "#f"
-		    "tup" "vec") t) . font-lock-keyword-face)
-   ))
+   (cons (concat "\\b"
+                 (regexp-opt '("def" "let" "let*" "all" "seq" "mux" "and" "or"
+                               "unless" "when" "cond" "case" "case-by" "fun" "#t" "#f"
+                               "tup" "vec") t)
+                 "\\b")
+         'font-lock-keyword-face)))
 
 ;; Line indentation
 (defun proto-indent-line ()
