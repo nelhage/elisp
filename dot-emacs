@@ -1,3 +1,4 @@
+
 ;; -*- mode: emacs-lisp; indent-tabs-mode: nil -*-
 ;;.emacs file for Nelson Elhage (nelhage@mit.edu)
 ;; Requires emacs 22 or higher
@@ -26,8 +27,8 @@
 (global-set-key (kbd "TAB") 'indent-and-complete-symbol-generic)
 (global-set-key (kbd "M-r") 're-search-backward)
 (global-set-key (kbd "M-s") 're-search-forward)
-(global-set-key [up] 'increment-number-at-point)
-(global-set-key [down] 'decrement-number-at-point)
+; (global-set-key [up] 'increment-number-at-point)
+; (global-set-key [down] 'decrement-number-at-point)
 (global-set-key (kbd "C-x C-c") 'server-edit)
 
 (setq window-number-prefix "\C-c")
@@ -778,10 +779,10 @@ unable to perform symbol completion.")
 (autoload 'matlab-mode "matlab" "Enter MATLAB mode." t)
 (setq auto-mode-alist (cons '("\\.m\\'" . matlab-mode) auto-mode-alist))
 (autoload 'matlab-shell "matlab" "Interactive MATLAB mode." t)
+(fset 'run-matlab 'matlab-shell)
 
-;; This feels wrong.
-(setq matlab-shell-command "linux32")
-(setq matlab-shell-command-switches '("matlab" "-nodesktop"))
+(setq matlab-shell-command "octave")
+(setq matlab-shell-command-switches '())
 
 ;; google calendar client
 
@@ -947,8 +948,8 @@ surrounding xml expression"
 (require 'elscreen)
 (elscreen-toggle-display-tab)
 
-;(define-key elscreen-map (kbd "SPC") 'elscreen-next)
-;(define-key elscreen-map (kbd "C-z") 'elscreen-swap)
+(define-key elscreen-map (kbd "SPC") 'elscreen-next)
+(define-key elscreen-map (kbd "C-z") 'elscreen-swap)
 
 (setq ediff-split-window-function 'split-window-horizontally)
 
