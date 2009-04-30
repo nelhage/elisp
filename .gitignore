@@ -1,0 +1,6 @@
+*~
+*.elc
+*.log
+*.dvi
+*.aux
+.svn/
