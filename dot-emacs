@@ -916,6 +916,7 @@ surrounding xml expression"
 
 (add-hook 'mail-mode-hook 'auto-fill-mode)
 (add-hook 'mail-mode-hook 'my-mail-mode-hook)
+(add-hook 'mail-mode-hook 'flyspell-mode)
 
 (defun my-mail-mode-hook ()
   (define-key mail-mode-map (kbd "C-c a") 'mail-attach-file)
