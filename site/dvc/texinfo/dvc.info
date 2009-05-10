@@ -829,7 +829,7 @@ File: dvc.info,  Node: Mailing Lists,  Next: Wiki,  Prev: Internals,  Up: Top
 
 There is one mailing list for DVC.
 
-   `dvc-el-dev@gna.org' intended for the discussion of development
+   `dvc-dev@gna.org' intended for the discussion of development
 versions of DVC.  Users of development versions of DVC should subscribe
 to this list.  Bugs should also be reported to this list.
 
@@ -984,14 +984,14 @@ Node: Trouble Shooting29990
 Node: Customization31105
 Node: Internals31345
 Node: Mailing Lists31558
-Node: Wiki32002
-Node: Changes32212
-Node: The Latest Version32591
-Node: The Future32920
-Node: Known Bugs33212
-Node: TODO List33874
-Node: Thanks34120
-Node: Concept Index34229
-Node: Variable Index34808
+Node: Wiki31999
+Node: Changes32209
+Node: The Latest Version32588
+Node: The Future32917
+Node: Known Bugs33209
+Node: TODO List33871
+Node: Thanks34117
+Node: Concept Index34226
+Node: Variable Index34805
 
 End Tag Table

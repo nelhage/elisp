@@ -105,7 +105,7 @@ annotated file's buffer. This allows you to run `baz-trace-line' and
 ;;;;;;  bzr-resolved bzr-dvc-rename bzr-dvc-remove-files bzr-dvc-revert-files
 ;;;;;;  bzr-dvc-add-files bzr-add bzr-inventory bzr-delta bzr-dvc-diff
 ;;;;;;  bzr-diff-against bzr-update bzr-merge bzr-push bzr-pull bzr-checkout)
-;;;;;;  "bzr" "bzr.el" (18763 56990))
+;;;;;;  "bzr" "bzr.el" (18951 1970))
 ;;; Generated autoloads from bzr.el
 
 (autoload 'bzr-checkout "bzr" "\
@@ -209,6 +209,9 @@ LAST-REVISION looks like
 Run bzr version.
 
 \(fn)" t nil)
+
+(defvar bzr-export-via-email-parameters nil "\
+list of (PATH (EMAIL BRANCH-NICK (EXTRA-ARG ...)))")
 
 ;;;***
 
@@ -382,8 +385,8 @@ Displays a welcome message.
 ;;;***
 
 ;;;### (autoloads (dvc-bookmarks-current-push-locations dvc-bookmarks-dired-add-project
-;;;;;;  dvc-bookmarks) "dvc-bookmarks" "dvc-bookmarks.el" (18763
-;;;;;;  56989))
+;;;;;;  dvc-bookmarks) "dvc-bookmarks" "dvc-bookmarks.el" (18951
+;;;;;;  1970))
 ;;; Generated autoloads from dvc-bookmarks.el
 
 (autoload 'dvc-bookmarks "dvc-bookmarks" "\
@@ -432,8 +435,16 @@ otherwise the result depends on SELECTION-MODE:
 
 ;;;***
 
+;;;### (autoloads nil "dvc-defs" "dvc-defs.el" (18951 1970))
+;;; Generated autoloads from dvc-defs.el
+
+(defvar dvc-registered-backends nil "\
+The list of registered dvc backends.")
+
+;;;***
+
 ;;;### (autoloads (dvc-dvc-file-diff dvc-file-ediff) "dvc-diff" "dvc-diff.el"
-;;;;;;  (18763 56989))
+;;;;;;  (18951 1970))
 ;;; Generated autoloads from dvc-diff.el
 
 (autoload 'dvc-file-ediff "dvc-diff" "\
@@ -450,8 +461,8 @@ workspace version).
 
 ;;;***
 
-;;;### (autoloads (dvc-insinuate-gnus) "dvc-gnus" "dvc-gnus.el" (18763
-;;;;;;  56989))
+;;;### (autoloads (dvc-insinuate-gnus) "dvc-gnus" "dvc-gnus.el" (18951
+;;;;;;  1970))
 ;;; Generated autoloads from dvc-gnus.el
 
 (autoload 'dvc-insinuate-gnus "dvc-gnus" "\
@@ -472,7 +483,7 @@ K t p `dvc-gnus-article-apply-patch-with-selected-destination'
 ;;;***
 
 ;;;### (autoloads (dvc-add-log-entry dvc-dvc-log-edit dvc-log-edit-mode)
-;;;;;;  "dvc-log" "dvc-log.el" (18763 56989))
+;;;;;;  "dvc-log" "dvc-log.el" (18951 1970))
 ;;; Generated autoloads from dvc-log.el
 
 (autoload 'dvc-log-edit-mode "dvc-log" "\
@@ -554,7 +565,7 @@ instead.
 ;;;***
 
 ;;;### (autoloads (dvc-enable-prefix-key dvc-prefix-key) "dvc-ui"
-;;;;;;  "dvc-ui.el" (18763 56989))
+;;;;;;  "dvc-ui.el" (18951 1970))
 ;;; Generated autoloads from dvc-ui.el
 
 (eval-and-compile (require 'easymenu))
@@ -652,7 +663,7 @@ Install the DVC prefix key globally.
 
 (define-key ctl-x-4-map [84] 'dvc-add-log-entry)
 
-(easy-menu-add-item (and (boundp 'menu-bar-tools-menu) (dvc-do-in-gnu-emacs menu-bar-tools-menu)) (dvc-do-in-xemacs '("Tools")) '("DVC" ["Show Bookmarks" dvc-bookmarks t] "---" "Tree Commands:" ["View Diff" dvc-diff t] ["View Status" dvc-status t] ["View Log" dvc-log t] ["View ChangeLog" dvc-changelog t] ["Edit Commit Log" dvc-log-edit t] "---" "File Commands:" ["Add Files" dvc-add-files t] ["Revert Files" dvc-revert-files t] ["Remove Files" dvc-remove-files t] ["Add Log Entry" dvc-add-log-entry t] "---" ["Initialize repository" dvc-init t] "---" ("Tla Goto Buffer" ["View Changes" tla-changes-goto t] ["View Status" baz-status-goto t] ["View Inventory" tla-inventory-goto t] ["View Tree Lint" tla-tree-lint-goto t] ["Show Tree Revisions" tla-tree-revisions-goto t]) ("Tla Quick Configuration" ["Three Way Merge" tla-toggle-three-way-merge :style toggle :selected tla-three-way-merge] ["Show Ancestor in Conflicts" tla-toggle-show-ancestor :style toggle :selected tla-show-ancestor] ["Non Recursive Inventory" tla-toggle-non-recursive-inventory :style toggle :selected tla-non-recursive-inventory] ["Use --skip-present" tla-toggle-use-skip-present-option :style toggle :selected tla-use-skip-present-option])) "PCL-CVS")
+(easy-menu-add-item (and (boundp 'menu-bar-tools-menu) (dvc-do-in-gnu-emacs menu-bar-tools-menu)) (dvc-do-in-xemacs '("Tools")) '("DVC" ["Show Bookmarks" dvc-bookmarks t] "---" "Tree Commands:" ["View Diff" dvc-diff t] ["View Status" dvc-status t] ["View Missing" dvc-missing t] ["View Log" dvc-log t] ["View ChangeLog" dvc-changelog t] ["Edit Commit Log" dvc-log-edit t] "---" "File Commands:" ["Add Files" dvc-add-files t] ["Revert Files" dvc-revert-files t] ["Remove Files" dvc-remove-files t] ["Add Log Entry" dvc-add-log-entry t] "---" ["Initialize repository" dvc-init t] "---" ("Tla Goto Buffer" ["View Changes" tla-changes-goto t] ["View Status" baz-status-goto t] ["View Inventory" tla-inventory-goto t] ["View Tree Lint" tla-tree-lint-goto t] ["Show Tree Revisions" tla-tree-revisions-goto t]) ("Tla Quick Configuration" ["Three Way Merge" tla-toggle-three-way-merge :style toggle :selected tla-three-way-merge] ["Show Ancestor in Conflicts" tla-toggle-show-ancestor :style toggle :selected tla-show-ancestor] ["Non Recursive Inventory" tla-toggle-non-recursive-inventory :style toggle :selected tla-non-recursive-inventory] ["Use --skip-present" tla-toggle-use-skip-present-option :style toggle :selected tla-use-skip-present-option])) "PCL-CVS")
 
 ;;;***
 
@@ -665,12 +676,12 @@ Install the DVC prefix key globally.
 ;;;;;;  dvc-log dvc-status dvc-file-diff dvc-delta dvc-diff-against-url
 ;;;;;;  dvc-diff dvc-clone define-dvc-unified-command dvc-remove-files
 ;;;;;;  dvc-revert-files dvc-add-files dvc-init) "dvc-unified" "dvc-unified.el"
-;;;;;;  (18763 56989))
+;;;;;;  (18951 1970))
 ;;; Generated autoloads from dvc-unified.el
 
 (autoload 'dvc-init "dvc-unified" "\
 Initialize a new repository.
-It currently supports the initialization for bzr, xhg, tla.
+It currently supports the initialization for bzr, xhg, xgit, tla.
 Note: this function is only useful when called interactively.
 
 \(fn)" t nil)
@@ -705,9 +716,13 @@ Ask for the DVC to use and clone SOURCE-PATH.
 
 (autoload 'dvc-diff "dvc-unified" "\
 Display the changes from BASE-REV to the local tree in PATH.
+
 BASE-REV (a revision-id) defaults to base revision of the
 tree. Use `dvc-delta' for differencing two revisions.
-PATH defaults to `default-directory'.
+
+PATH defaults to `default-directory', that is, the whole working tree.
+See also `dvc-file-diff', which defaults to the current buffer file.
+
 The new buffer is always displayed; if DONT-SWITCH is nil, select it.
 
 \(fn &optional BASE-REV PATH DONT-SWITCH)" t nil)
@@ -718,13 +733,15 @@ Show the diff from the current tree against a remote url
 \(fn PATH)" t nil)
 
 (autoload 'dvc-delta "dvc-unified" "\
-Display from revision BASE to MODIFIED.
+Display diff from revision BASE to MODIFIED.
 
-BASE and MODIFIED must be revision ID.
+BASE and MODIFIED must be full revision IDs, or strings. If
+strings, the meaning is back-end specific; it should be some sort
+of revision specifier.
 
 The new buffer is always displayed; if DONT-SWITCH is nil, select it.
 
-\(fn BASE MODIFIED &optional DONT-SWITCH)" nil nil)
+\(fn BASE MODIFIED &optional DONT-SWITCH)" t nil)
 
 (autoload 'dvc-file-diff "dvc-unified" "\
 Display the changes in FILE (default current buffer file)
@@ -1623,7 +1640,7 @@ git managed tree (but return nil).
 ;;;;;;  xgit-fetch xgit-diff2 xgit-diff-head xgit-diff-index xgit-diff-cached
 ;;;;;;  xgit-dvc-diff xgit-reset-hard xgit-addremove xgit-add-all-files
 ;;;;;;  xgit-dvc-remove-files xgit-remove xgit-dvc-add-files xgit-add
-;;;;;;  xgit-clone xgit-init) "xgit" "xgit.el" (18763 56989))
+;;;;;;  xgit-clone xgit-init) "xgit" "xgit.el" (18951 1970))
 ;;; Generated autoloads from xgit.el
 
 (autoload 'xgit-init "xgit" "\
@@ -1751,7 +1768,7 @@ LAST-REVISION looks like
 ;;;***
 
 ;;;### (autoloads (xgit-prepare-environment xgit-tree-root) "xgit-core"
-;;;;;;  "xgit-core.el" (18763 56989))
+;;;;;;  "xgit-core.el" (18951 1970))
 ;;; Generated autoloads from xgit-core.el
 
 (autoload 'xgit-tree-root "xgit-core" "\
@@ -1772,8 +1789,8 @@ Prepare the environment to run git.
 
 ;;;***
 
-;;;### (autoloads (xgit-dvc-log) "xgit-dvc" "xgit-dvc.el" (18763
-;;;;;;  56989))
+;;;### (autoloads (xgit-dvc-log) "xgit-dvc" "xgit-dvc.el" (18951
+;;;;;;  1970))
 ;;; Generated autoloads from xgit-dvc.el
 
 (dvc-register-dvc 'xgit "git")
@@ -1803,31 +1820,33 @@ Integrate Xgit into Gnus.
 
 ;;;***
 
-;;;### (autoloads (xgit-log) "xgit-log" "xgit-log.el" (18763 56989))
+;;;### (autoloads (xgit-log) "xgit-log" "xgit-log.el" (18951 1970))
 ;;; Generated autoloads from xgit-log.el
 
 (autoload 'xgit-log "xgit-log" "\
 Run git log for DIR.
-DIR is a directory controlled by Git/Cogito.
+DIR is a directory controlled by Git.
 CNT is max number of log to print.  If not specified, uses xgit-log-max-count.
 LOG-REGEXP is regexp to filter logs by matching commit logs.
 DIFF-MATCH is string to filter logs by matching commit diffs.
 REV is revision to show.
 FILE is filename in repostory to filter logs by matching filename.
 
-\(fn DIR CNT &key LOG-REGEXP DIFF-MATCH REV FILE SINCE)" t nil)
+\(fn DIR &optional CNT &key LOG-REGEXP DIFF-MATCH REV FILE SINCE)" t nil)
 
 ;;;***
 
-;;;### (autoloads (xhg-missing-1 xhg-revision-get-last-or-num-revision
+;;;### (autoloads (xhg-missing-1 xhg-ediff-file-at-rev xhg-revision-get-last-or-num-revision
 ;;;;;;  xhg-revision-get-last-revision xhg-serve-register-serve-parameter-list
-;;;;;;  xhg-update xhg-undo xhg-import xhg-export xhg-view xhg-annotate
-;;;;;;  xhg-tags xhg-paths xhg-showconfig xhg-verify xhg-identify
-;;;;;;  xhg-parents xhg-heads xhg-tip xhg-branch xhg-merge xhg-outgoing
-;;;;;;  xhg-incoming xhg-clone xhg-push xhg-pull xhg-dvc-diff xhg-log
-;;;;;;  xhg-add-all-files xhg-forget xhg-dvc-rename xhg-addremove
-;;;;;;  xhg-dvc-remove-files xhg-rollback xhg-dvc-revert-files xhg-dvc-add-files
-;;;;;;  xhg-init) "xhg" "xhg.el" (18763 56989))
+;;;;;;  xhg-update xhg-undo xhg-import xhg-export xhg-view xhg-tags
+;;;;;;  xhg-tag xhg-paths xhg-showconfig xhg-verify xhg-identify
+;;;;;;  xhg-parents xhg-heads xhg-tip xhg-merge-branch xhg-branches
+;;;;;;  xhg-branch xhg-resolve-list xhg-resolve xhg-merge xhg-strip
+;;;;;;  xhg-outgoing xhg-incoming xhg-dired-clone xhg-clone xhg-push
+;;;;;;  xhg-pull xhg-dvc-diff xhg-log xhg-log-toggle-verbose xhg-add-all-files
+;;;;;;  xhg-forget xhg-dvc-rename xhg-addremove xhg-dvc-remove-files
+;;;;;;  xhg-rollback xhg-dvc-revert-files xhg-dvc-add-files xhg-init)
+;;;;;;  "xhg" "xhg.el" (18951 1970))
 ;;; Generated autoloads from xhg.el
 
 (autoload 'xhg-init "xhg" "\
@@ -1878,6 +1897,11 @@ Only when called with a prefix argument, add the files.
 
 \(fn ARG)" t nil)
 
+(autoload 'xhg-log-toggle-verbose "xhg" "\
+Not documented
+
+\(fn)" t nil)
+
 (autoload 'xhg-log "xhg" "\
 Run hg log.
 When run interactively, the prefix argument decides, which parameters are queried from the user.
@@ -1909,6 +1933,11 @@ Run hg clone.
 
 \(fn SRC &optional DEST REV NOUPDATE PULL)" t nil)
 
+(autoload 'xhg-dired-clone "xhg" "\
+Not documented
+
+\(fn)" t nil)
+
 (autoload 'xhg-incoming "xhg" "\
 Run hg incoming.
 
@@ -1919,18 +1948,39 @@ Run hg outgoing.
 
 \(fn &optional SRC SHOW-PATCH NO-MERGES)" t nil)
 
-(autoload 'xhg-merge "xhg" "\
-Run hg merge. called with prefix argument (C-u)
-use extension hg imerge.
-Be sure to enable it in .hgrc:
-,----
-| [extensions]
-| imerge =
-`----
-To merge from specific revision, choose it in completion.
-If `auto' is choose use default revision (last)
+(autoload 'xhg-strip "xhg" "\
+Run hg strip.
 
-\(fn &optional XHG-USE-IMERGE)" t nil)
+\(fn REV)" t nil)
+
+(autoload 'xhg-merge "xhg" "\
+Run hg merge.
+To merge from specific revision, choose it in completion with tab.
+If `auto' is choose use default revision (last) unless there is ONLY
+one more head.
+See (hg help merge.)
+
+\(fn)" t nil)
+
+(autoload 'xhg-resolve "xhg" "\
+Run hg resolve --all or <spec file>.
+With current prefix arg, take a file as argument.
+You should run xhg-merge before this.
+This command will cleanly retry unresolved file merges
+using file revisions preserved from the last update or merge.
+If file is given resolve this file else resolve all files.
+
+\(fn &optional FILE)" t nil)
+
+(autoload 'xhg-resolve-list "xhg" "\
+Run hg resolve --list.
+Call interactively, show buffer with info.
+Non interactively, return an alist with
+string keys as:
+U = unresolved
+R = resolved
+
+\(fn &optional QUIET)" t nil)
 
 (autoload 'xhg-branch "xhg" "\
 Run hg branch.
@@ -1938,6 +1988,17 @@ When called with a prefix argument, ask for the new branch-name, otherwise
 display the current one.
 
 \(fn &optional NEW-NAME)" t nil)
+
+(autoload 'xhg-branches "xhg" "\
+run xhg-branches
+
+\(fn &optional ONLY-LIST)" t nil)
+
+(autoload 'xhg-merge-branch "xhg" "\
+Run hg merge <branch-name>.
+Usually merge the change made in dev branch in default branch.
+
+\(fn)" t nil)
 
 (autoload 'xhg-tip "xhg" "\
 Run hg tip.
@@ -1980,13 +2041,13 @@ otherwise: Return a list of two element sublists containing alias, path
 
 \(fn &optional TYPE)" t nil)
 
+(autoload 'xhg-tag "xhg" "\
+Run hg tag -r <REV> NAME.
+
+\(fn REV NAME)" t nil)
+
 (autoload 'xhg-tags "xhg" "\
 Run hg tags.
-
-\(fn)" t nil)
-
-(autoload 'xhg-annotate "xhg" "\
-Run hg annotate.
 
 \(fn)" t nil)
 
@@ -2013,9 +2074,10 @@ Run hg undo.
 
 (autoload 'xhg-update "xhg" "\
 Run hg update.
-When called with prefix-arg run hg update -C (clean)
+When called with one prefix-arg run hg update -C (clean).
+Called with two prefix-args run hg update -C <branch-name> (switch to branch).
 
-\(fn &optional CLEAN)" t nil)
+\(fn &optional CLEAN SWITCH)" t nil)
 
 (autoload 'xhg-serve-register-serve-parameter-list "xhg" "\
 Register a mapping from a work directory root to a parameter list for hg serve.
@@ -2039,8 +2101,54 @@ hg cat --rev <num revision> -o outputfile inputfile
 
 \(fn INFILE OUTFILE &optional REVISION)" t nil)
 
+(autoload 'xhg-ediff-file-at-rev "xhg" "\
+Ediff file at rev1 against rev2.
+With prefix arg do not delete the files.
+If rev1 or rev2 are empty, ediff current file against last revision.
+Tip: to quit ediff, use C-u q to kill the ediffied buffers.
+
+\(fn FILE REV1 REV2 &optional KEEP-VARIANTS)" t nil)
+
 (autoload 'xhg-missing-1 "xhg" "\
 Shows the logs of the new arrived changesets after a pull and before an update.
+
+\(fn)" t nil)
+
+;;;***
+
+;;;### (autoloads (xhg-annotate-quit xhg-annotate xhg-annotate-show-next-rev-number-log
+;;;;;;  xhg-annotate-show-prec-rev-number-log xhg-annotate-show-rev-number-log)
+;;;;;;  "xhg-annotate" "xhg-annotate.el" (18951 1970))
+;;; Generated autoloads from xhg-annotate.el
+
+(defvar xhg-annotate-mode-map (let ((map (make-sparse-keymap))) (define-key map [(shift down)] 'xhg-annotate-show-next-rev-number-log) (define-key map [(shift up)] 'xhg-annotate-show-prec-rev-number-log) (define-key map (kbd "<return>") 'xhg-annotate-show-rev-number-log) (define-key map [113] 'xhg-annotate-quit) map) "\
+Keymap used for xhg-annotate-mode commands.")
+
+(autoload 'xhg-annotate-show-rev-number-log "xhg-annotate" "\
+Show xhg-log output corresponding to line at point in
+xhg-annotate buffer.
+
+\(fn)" t nil)
+
+(autoload 'xhg-annotate-show-prec-rev-number-log "xhg-annotate" "\
+Go to precedent line in xhg-annotate buffer and display
+corresponding xhg-log output.
+
+\(fn)" t nil)
+
+(autoload 'xhg-annotate-show-next-rev-number-log "xhg-annotate" "\
+Go to next line in xhg-annotate buffer and display
+corresponding xhg-log output.
+
+\(fn)" t nil)
+
+(autoload 'xhg-annotate "xhg-annotate" "\
+Run hg annotate and display xhg-log in other-window.
+
+\(fn)" t nil)
+
+(autoload 'xhg-annotate-quit "xhg-annotate" "\
+Quit and restore precedent window config.
 
 \(fn)" t nil)
 
@@ -2064,7 +2172,7 @@ mercurial managed tree (but return nil).
 ;;;***
 
 ;;;### (autoloads (xhg-dvc-export-via-email) "xhg-dvc" "xhg-dvc.el"
-;;;;;;  (18763 56989))
+;;;;;;  (18951 1970))
 ;;; Generated autoloads from xhg-dvc.el
 
 (dvc-register-dvc 'xhg "Mercurial")
@@ -2101,8 +2209,8 @@ K t s `xhg-gnus-article-view-status-for-import-patch'
 ;;;;;;  xhg-qsingle xhg-qheader xhg-qprev xhg-qnext xhg-qtop xhg-qrename
 ;;;;;;  xhg-qconvert-to-permanent xhg-qdelete xhg-qdiff xhg-qseries
 ;;;;;;  xhg-qunapplied xhg-qapplied xhg-qpush xhg-qpop xhg-qrefresh-header
-;;;;;;  xhg-qrefresh xhg-qnew xhg-qinit) "xhg-mq" "xhg-mq.el" (18763
-;;;;;;  56989))
+;;;;;;  xhg-qrefresh xhg-qnew xhg-qinit) "xhg-mq" "xhg-mq.el" (18951
+;;;;;;  1970))
 ;;; Generated autoloads from xhg-mq.el
 
 (autoload 'xhg-qinit "xhg-mq" "\
@@ -2199,9 +2307,10 @@ Run hg qheader.
 \(fn &optional PATCH)" t nil)
 
 (autoload 'xhg-qsingle "xhg-mq" "\
-Merge all applied patches in a single patch
+Merge applied patches in a single patch starting from \"qbase\".
+If prefix arg, merge applied patches starting from revision number or patch-name.
 
-\(fn FILE)" t nil)
+\(fn FILE &optional (START-FROM \"qbase\"))" t nil)
 
 (autoload 'xhg-qimport "xhg-mq" "\
 Run hg qimport
@@ -2213,7 +2322,7 @@ Prepare an email that contains a mq patch.
 `xhg-submit-patch-mapping' is honored for the destination email address and the project name
 that is used in the generated email.
 
-\(fn PATCH)" t nil)
+\(fn PATCH &optional SINGLE)" t nil)
 
 (autoload 'xhg-mq-show-stack "xhg-mq" "\
 Show the mq stack.
@@ -2235,11 +2344,11 @@ Show a dvc formatted log for xhg.
 
 ;;;### (autoloads (xmtn-conflicts-clean xmtn-conflicts-review xmtn-conflicts-merge
 ;;;;;;  xmtn-conflicts-propagate) "xmtn-conflicts" "xmtn-conflicts.el"
-;;;;;;  (18763 56989))
+;;;;;;  (18951 1970))
 ;;; Generated autoloads from xmtn-conflicts.el
 
 (autoload 'xmtn-conflicts-propagate "xmtn-conflicts" "\
-List conflicts for a propagate from LEFT-WORK to RIGHT-WORK workspace base revisions.
+List conflicts for a propagate from LEFT-WORK to RIGHT-WORK workspace branch head revisions.
 Allow specifying resolutions.  LEFT-WORK and RIGHT-WORK are strings giving
 workspace directories; prompted if nil. Review is done in RIGHT-WORK
 workspace.
@@ -2247,10 +2356,9 @@ workspace.
 \(fn LEFT-WORK RIGHT-WORK)" t nil)
 
 (autoload 'xmtn-conflicts-merge "xmtn-conflicts" "\
-List conflicts between LEFT and RIGHT revisions, allow specifying resolutions.
-LEFT and RIGHT default to current merge heads.
+List conflicts between current head revisions.
 
-\(fn LEFT RIGHT)" t nil)
+\(fn)" t nil)
 
 (autoload 'xmtn-conflicts-review "xmtn-conflicts" "\
 Review conflicts for WORKSPACE (a directory; default prompt).
@@ -2274,7 +2382,7 @@ Remove conflicts resolution files from WORKSPACE (a directory; default prompt).
 ;;;;;;  xmtn-dvc-status xmtn-dvc-command-version xmtn-dvc-delta xmtn-dvc-diff
 ;;;;;;  xmtn-dvc-search-file-in-diff xmtn-show-base-revision xmtn-dvc-log-edit-done
 ;;;;;;  xmtn-dvc-log-edit xmtn-dvc-log-edit-file-name-func) "xmtn-dvc"
-;;;;;;  "xmtn-dvc.el" (18763 56989))
+;;;;;;  "xmtn-dvc.el" (18951 1970))
 ;;; Generated autoloads from xmtn-dvc.el
 
 (dvc-register-dvc 'xmtn "monotone")
@@ -2451,7 +2559,7 @@ Not documented
 ;;;;;;  xmtn-list-revisions-modifying-file xmtn-view-heads-revlist
 ;;;;;;  xmtn-dvc-missing xmtn-dvc-changelog xmtn-log xmtn-dvc-log
 ;;;;;;  xmtn-revision-list-entry-patch-printer xmtn-revision-refresh-maybe)
-;;;;;;  "xmtn-revlist" "xmtn-revlist.el" (18763 56989))
+;;;;;;  "xmtn-revlist" "xmtn-revlist.el" (18951 1970))
 ;;; Generated autoloads from xmtn-revlist.el
 
 (autoload 'xmtn-revision-refresh-maybe "xmtn-revlist" "\
@@ -2479,7 +2587,7 @@ Not documented
 
 \(fn &optional PATH)" nil nil)
 
-(defvar xmtn-revlist-mode-map (let ((map (make-sparse-keymap))) (define-key map "MH" 'xmtn-view-heads-revlist) (define-key map "MC" 'xmtn-conflicts-propagate) (define-key map "MR" 'xmtn-conflicts-review) (define-key map "MP" 'xmtn-propagate-from) (define-key map "Mx" 'xmtn-conflicts-clean) map))
+(defvar xmtn-revlist-mode-map (let ((map (make-sparse-keymap))) (define-key map "CM" 'xmtn-conflicts-merge) (define-key map "CP" 'xmtn-conflicts-propagate) (define-key map "CR" 'xmtn-conflicts-review) (define-key map "CC" 'xmtn-conflicts-clean) (define-key map "MH" 'xmtn-view-heads-revlist) (define-key map "MP" 'xmtn-propagate-from) map))
 
 (autoload 'xmtn-dvc-missing "xmtn-revlist" "\
 Not documented
@@ -2513,7 +2621,7 @@ Not documented
 ;;;***
 
 ;;;### (autoloads (xmtn-check-command-version) "xmtn-run" "xmtn-run.el"
-;;;;;;  (18763 56990))
+;;;;;;  (18951 1970))
 ;;; Generated autoloads from xmtn-run.el
 
 (autoload 'xmtn-check-command-version "xmtn-run" "\
@@ -2527,12 +2635,12 @@ This command resets xmtn's command version cache.
 
 ;;;### (autoloads nil nil ("bzr-revlog.el" "cus-load.el" "dvc-annotate.el"
 ;;;;;;  "dvc-be.el" "dvc-buffers.el" "dvc-build.el" "dvc-cmenu.el"
-;;;;;;  "dvc-config.el" "dvc-defs.el" "dvc-emacs.el" "dvc-fileinfo.el"
-;;;;;;  "dvc-lisp.el" "dvc-revlist.el" "dvc-revlog.el" "dvc-site.el"
-;;;;;;  "dvc-version.el" "dvc-xemacs.el" "tla-autoconf.el" "xgit-annotate.el"
-;;;;;;  "xgit-revision.el" "xhg-be.el" "xhg-log.el" "xmtn-automate.el"
-;;;;;;  "xmtn-base.el" "xmtn-basic-io.el" "xmtn-compat.el" "xmtn-ids.el")
-;;;;;;  (18763 57129 953620))
+;;;;;;  "dvc-config.el" "dvc-emacs.el" "dvc-fileinfo.el" "dvc-lisp.el"
+;;;;;;  "dvc-revlist.el" "dvc-revlog.el" "dvc-site.el" "dvc-version.el"
+;;;;;;  "dvc-xemacs.el" "tla-autoconf.el" "xgit-annotate.el" "xgit-revision.el"
+;;;;;;  "xhg-be.el" "xhg-log.el" "xmtn-automate.el" "xmtn-base.el"
+;;;;;;  "xmtn-basic-io.el" "xmtn-compat.el" "xmtn-ids.el") (18951
+;;;;;;  20828 935133))
 
 ;;;***
 
