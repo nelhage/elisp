@@ -1,6 +1,6 @@
 ;;; dvc-gnus.el --- dvc integration to gnus
 
-;; Copyright (C) 2003-2008 by all contributors
+;; Copyright (C) 2003-2009 by all contributors
 
 ;; Author: Matthieu Moy <Matthieu.Moy@imag.fr>
 ;; Contributions from:
@@ -149,8 +149,10 @@ Otherwise `dvc-gnus-apply-patch' is called."
                                   nil t)
                (setq patch-type 'tla))
               ((progn (goto-char (point-min))
-                      (re-search-forward "^changeset: +[0-9]+:[0-9a-f]+$" nil t))
-               (setq patch-type 'xhg))
+                      (or
+                       (re-search-forward "^changeset: +[0-9]+:[0-9a-f]+$" nil t)
+                       (re-search-forward "^Merge of all patches applied from revision" nil t))
+                      (setq patch-type 'xhg)))
               ((progn (goto-char (point-min))
                       (or (re-search-forward "^New revision in \\(.+\\)$" nil t)
                           (re-search-forward

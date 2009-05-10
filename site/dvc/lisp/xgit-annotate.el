@@ -1,6 +1,6 @@
-;;; xgit-annotate.el --- Git/Cogito interface for dvc: mode for git-annotate style output
+;;; xgit-annotate.el --- Git interface for dvc: mode for git-annotate style output
 
-;; Copyright (C) 2007 by all contributors
+;; Copyright (C) 2007-2009 by all contributors
 
 ;; Author: Takuzo O'hara, <takuzo.ohara@gmail.com>
 
@@ -21,7 +21,7 @@
 
 ;;; Commentary:
 
-;; The git/cogito interface for dvc: a mode to handle git-annotate style output
+;; The git interface for dvc: a mode to handle git-annotate style output
 
 ;;; Code:
 (require 'dvc-annotate)
@@ -87,8 +87,8 @@ Commands:
     (if (string-match xgit-annotate-revision-regexp rev)
         ;; initial version might result too large for git-show, so use
         ;; git-log.
-        (xgit-log default-directory :rev (match-string-no-properties 1 rev))
-      (xgit-show default-directory rev))
+        (xgit-log default-directory nil :rev (match-string-no-properties 1 rev))
+        (xgit-show default-directory rev))
     (xgit-describe default-directory rev)))
 
 (defun _xgit-annotate-hide-revinfo ()

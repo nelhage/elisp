@@ -23,6 +23,22 @@
 
 ;; This file provides the common dvc layer for xhg
 
+;;; Commands:
+;;
+;; Below is a complete command list:
+;;
+;;  `xhg-select-committer-for-next-commit'
+;;    Select the committer for the next hg commit.
+;;  `xhg-dvc-missing'
+;;    Run hg incoming to show the missing patches for this tree.
+;;  `xhg-dvc-pull'
+;;    Run hg pull, when `xhg-dvc-pull-runs-update' is t, use the --update flag.
+;;  `xhg-dvc-create-branch'
+;;    Run xhg-branch.
+;;  `xhg-dvc-select-branch'
+;;    Switch to a named branch.
+;;
+
 
 ;;; History:
 
@@ -170,6 +186,21 @@ When `last-command' was `dvc-pull', run `xhg-missing'."
                   "Pull from hg repository: "
                   completions nil nil initial-input))))))
     (xhg-pull source-path xhg-dvc-pull-runs-update)))
+
+(defun xhg-dvc-create-branch (new-name)
+  "Run xhg-branch."
+  (interactive "sNewBranchName: ")
+  (xhg-branch new-name))
+
+(defun xhg-dvc-select-branch ()
+  "Switch to a named branch."
+  (interactive)
+  (xhg-update nil t))
+
+(defun xhg-dvc-ediff-file-revisions ()
+  "Layer function for `xhg-ediff-file-at-rev'."
+  (interactive)
+  (call-interactively #'xhg-ediff-file-at-rev))
 
 (defalias 'xhg-dvc-revlog-get-revision 'xhg-revlog-get-revision)
 

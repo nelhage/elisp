@@ -23,6 +23,26 @@
 
 ;; The mercurial interface for dvc: a mode to handle xhg log style output
 
+;;; Commands:
+;;
+;; Below is a complete command list:
+;;
+;;  `xhg-log-mode'
+;;    Major mode to display hg log output with embedded diffs. Derives from `diff-mode'.
+;;  `xhg-log-next'
+;;    Move to the next changeset header of the next diff hunk
+;;  `xhg-log-previous'
+;;    Move to the previous changeset header of the previous diff hunk
+;;  `xhg-log-dwim-next'
+;;    Either move to the next changeset via `xhg-log-next' or call `scroll-up'.
+;;  `xhg-log-toggle-diff-for-changeset'
+;;    Toggle displaying the diff for the current changeset.
+;;  `xhg-log-review-next-diff'
+;;    Close the previous viewed inline diff and open the next one for reviewing.
+;;  `xhg-log-review-previous-diff'
+;;    Close the previous viewed inline diff and open the previous one for reviewing.
+;;
+
 ;;; History:
 
 ;;
@@ -36,6 +56,7 @@
     (define-key map dvc-keyvec-help 'describe-mode)
     (define-key map [?g] 'xhg-log)
     (define-key map [?R] 'xhg-rollback)
+    (define-key map [?T] 'xhg-log-toggle-verbose)
     (define-key map [?h] 'dvc-buffer-pop-to-partner-buffer)
     (define-key map [?e] 'xhg-export)
     (define-key map [?E] 'xhg-export-via-mail)

@@ -259,6 +259,7 @@
 
 (defmacro* xmtn-automate-with-session ((session-var-or-null root-form &key)
                                        &body body)
+  "Call BODY, after ensuring an automate session for ROOT-FORM is active."
   (declare (indent 1) (debug (sexp body)))
   ;; I would prefer to factor out a function
   ;; `xmtn-automate--call-with-session' here, but that would make
@@ -295,7 +296,8 @@
                                        &body body)
   "Send COMMAND_FORM (a list of strings, or cons of lists of
 strings) to session SESSION_FORM (current if nil). If car
-COMMAND_FORM is a list, car COMMAND_FORM is options, cdr is command."
+COMMAND_FORM is a list, car COMMAND_FORM is options, cdr is command.
+Then execute BODY."
   (declare (indent 1) (debug (sexp body)))
   (let ((session (gensym))
         (command (gensym))
@@ -366,6 +368,7 @@ options, cdr is command. Insert result into BUFFER."
 
 ;; This one is useful.
 (defun xmtn-automate-simple-command-output-lines (root command)
+  "Return string containing output of COMMAND."
   (xmtn-automate-with-session (session root)
     (xmtn-automate-with-command (handle session command)
       (xmtn-automate-command-output-lines handle))))
@@ -974,6 +977,9 @@ Each element of the list is a list; key, signature, name, value, trust."
 
 (defun xmtn--heads (root branch)
   (xmtn-automate-simple-command-output-lines root `("heads" ,branch)))
+
+(defun xmtn--tree-default-branch (root)
+  (xmtn-automate-simple-command-output-line root `("get_option" "branch")))
 
 
 (provide 'xmtn-automate)

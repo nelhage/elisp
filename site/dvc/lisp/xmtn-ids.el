@@ -192,6 +192,26 @@ See file commentary for details."
       (setq certs (cdr certs)))
     result))
 
+(defun xmtn--branches-of (hash-id)
+  "Return list of branch names for HASH-ID. `default-directory'
+must be a workspace."
+  (let (result)
+    (xmtn-automate-with-session (session default-directory)
+      (xmtn-automate-with-command (handle session `("certs" ,hash-id))
+        (xmtn-automate-command-wait-until-finished handle)
+        (with-current-buffer (xmtn-automate-command-buffer handle)
+          ;; now in buffer containing basic_io certs; find the branch certs
+          (goto-char (point-min))
+          (while (not (xmtn-basic-io-eof))
+            (xmtn-basic-io-optional-line "name"
+              (if (and (eq 'string (caar value))
+                       (string= "branch" (cadar value)))
+                  (xmtn-basic-io-parse-line
+                      (if (string= symbol "value")
+                          (add-to-list 'result (cadar value)))))
+              nil)))))
+    result))
+
 (defun xmtn--get-parent-revision-hash-id (root hash-id &optional multi-parent-use-local-branch)
   (check-type hash-id xmtn--hash-id)
   (let ((parents (xmtn-automate-simple-command-output-lines root `("parents"

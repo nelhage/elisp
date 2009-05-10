@@ -1,6 +1,6 @@
 ;;; xgit.el --- git interface for dvc
 
-;; Copyright (C) 2006-2008 by all contributors
+;; Copyright (C) 2006-2009 by all contributors
 
 ;; Author: Stefan Reichoer <stefan@xsteve.at>
 ;; Contributions from:
@@ -486,6 +486,21 @@ When called with a prefix argument, ask for the fetch source."
       (setq repository (read-string "Git fetch from: "))))
   (dvc-run-dvc-async 'xgit (list "fetch" repository)))
 
+(defun* xgit-push (url &optional (branch "master"))
+    "Run 'git push url'.
+with prefix arg ask for branch, default to master."
+  (interactive "sGit push to: ")
+  (lexical-let ((branch-name (if current-prefix-arg
+                             (read-string "Which Branch?: ")
+                             branch))
+                (to url))
+    (dvc-run-dvc-async 'xgit (list "push" url branch-name)
+                       :finished
+                       (dvc-capturing-lambda (output error status arguments)
+                         (if (eq status 0)
+                             (message "xgit-push <%s> to <%s> finished" branch-name to)
+                             (dvc-switch-to-buffer error))))))
+
 ;;;###autoload
 (defun xgit-pull (&optional repository)
   "Call git pull.
@@ -696,6 +711,77 @@ FILE is filename in the repository at DIR."
          (default-directory (xgit-tree-root filename)))
     (xgit-do-annotate default-directory filename)
     (goto-line line)))
+
+(defun xgit-stash-save (message)
+  "Run git-stash."
+  (interactive "sComment: ")
+  (if (equal message "")
+      (dvc-run-dvc-sync 'xgit (list "stash"))
+      (dvc-run-dvc-sync 'xgit (list "stash" "save" message))))
+
+(defun xgit-stash-list (&optional only-list)
+  "Run git-stash list."
+  (interactive)
+  (dvc-run-dvc-display-as-info 'xgit (list "stash" "list"))
+  (when only-list
+    (with-current-buffer "*xgit-info*"
+      (let ((stash-list (split-string (buffer-string) "\n")))
+        (loop for i in stash-list
+           with s = nil
+           collect (car (split-string i ":")) into s
+           finally (return s))))))
+
+(defun xgit-stash-apply (&optional stash)
+  "Run git-stash apply."
+  (interactive)
+  (if current-prefix-arg
+      (save-window-excursion
+        (let ((sl (xgit-stash-list t))
+              stash-num)
+          (setq stash-num (dvc-completing-read "Stash: " sl))
+          (dvc-run-dvc-sync 'xgit (list "stash" "apply" stash-num))))
+      (dvc-run-dvc-sync 'xgit (list "stash" "apply"))))
+
+(defun xgit-stash-clear ()
+  "Run git-stash clear."
+  (interactive)
+  (dvc-run-dvc-sync 'xgit (list "stash" "clear"))
+  (message "All stash deleted")) ;; TODO run message in :finished
+
+(defun xgit-stash-drop (&optional stash)
+  "Run git-stash drop."
+  (interactive)
+  (if current-prefix-arg
+      (let ((sl (xgit-stash-list t))
+            stash-num)
+        (save-window-excursion
+          (setq stash-num (dvc-completing-read "Stash: " sl)))
+        (dvc-run-dvc-sync 'xgit (list "stash" "drop" stash-num)))
+      (dvc-run-dvc-sync 'xgit (list "stash" "drop"))))
+
+(defun xgit-stash-pop (&optional stash)
+  "Run git-stash pop."
+  (interactive)
+  (if current-prefix-arg
+      (let ((sl (xgit-stash-list t))
+            stash-num)
+        (save-window-excursion
+          (setq stash-num (dvc-completing-read "Stash: " sl)))
+        (dvc-run-dvc-sync 'xgit (list "stash" "pop" stash-num)))
+      (dvc-run-dvc-sync 'xgit (list "stash" "pop"))))
+
+(defun xgit-stash-show (&optional stash)
+  "Run git-stash show."
+  (interactive)
+  (if current-prefix-arg
+      (let ((sl (xgit-stash-list t))
+            stash-num)
+        (save-window-excursion
+          (setq stash-num (dvc-completing-read "Stash: " sl)))
+        (dvc-run-dvc-display-as-info 'xgit (list "stash" "show" "-p" stash-num)))
+      (dvc-run-dvc-display-as-info 'xgit (list "stash" "show" "-p")))
+  (with-current-buffer "*xgit-info*"
+    (diff-mode)))
 
 (defun xgit-tag-list ()
   "Run \"git tag\" and list all defined tags"

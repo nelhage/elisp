@@ -24,6 +24,68 @@
 
 ;; This file provides a hierachical bookmark system for DVC
 
+;;; Commands:
+;;
+;; Below is a complete command list:
+;;
+;;  `dvc-cur-date-string'
+;;    Return current date under string form ==>2008.03.16
+;;  `dvc-bookmarks-set-tree-properties'
+;;    color value is one of the dvc-faces ==> dvc-buffer, dvc-nested-tree, etc...
+;;  `dvc-bookmarks-toggle-time-stamp'
+;;    Toggle show/don't show time-stamp
+;;  `dvc-bookmarks-toggle-partner-url'
+;;    Toggle show/don't show partners urls
+;;  `dvc-bookmarks'
+;;    Display the *dvc-bookmarks* buffer.
+;;  `dvc-bookmarks-mode'
+;;    Mode to display DVC bookmarks.
+;;  `dvc-bookmarks-quit'
+;;    Clean dvc-bookmarks-hidden-subtree
+;;  `dvc-bookmarks-add'
+;;    Add a DVC bookmark named BOOKMARK-NAME, directory BOOKMARK-LOCAL-DIR.
+;;  `dvc-bookmarks-dired-add-project'
+;;    Add a DVC bookmark from dired
+;;  `dvc-bookmarks-edit'
+;;    Change the current DVC bookmark's BOOKMARK-NAME and/or LOCAL-DIR.
+;;  `dvc-bookmarks-status'
+;;    Run `dvc-status' for bookmark at point.
+;;  `dvc-bookmarks-diff'
+;;    Run `dvc-diff' for bookmark at point.
+;;  `dvc-bookmarks-pull'
+;;    Pull from partner at point or default into current bookmark.
+;;  `dvc-bookmarks-merge'
+;;    Merge from partner at point into current bookmark.
+;;  `dvc-bookmarks-yank'
+;;    Choose to yank marked or at point
+;;  `dvc-bookmarks-yank-from-list-to-sub'
+;;    Yank from list ==> sublist
+;;  `dvc-bookmarks-yank-from-sub-to-list'
+;;    Yank from sublist ==> list
+;;  `dvc-bookmarks-yank-from-sub-to-sub'
+;;    Yank from one sublist to another sublist,
+;;  `dvc-bookmarks-yank-from-list-to-list'
+;;    Yank inside dvc-bookmark-alist: list ==> list
+;;  `dvc-bookmarks-show-or-hide-subtree'
+;;    Hide subtree when called with no argument
+;;  `dvc-bookmarks-delete-at-point'
+;;    Destructive kill and delete function
+;;  `dvc-bookmarks-kill'
+;;    Choose to kill marked entry or entry at point
+;;  `dvc-bookmarks-delete'
+;;    Choose to delete marked entry or entry at point
+;;  `dvc-bookmarks-add-empty-tree'
+;;    Add a new family to your bookmarks
+;;  `dvc-bookmarks-toggle-mark-entry'
+;;    Mark or unmark the current bookmark entry.
+;;  `dvc-bookmarks-unmark-all'
+;;    Unmark all bookmarks.
+;;  `dvc-bookmarks-hg-convert-from-marked'
+;;    Call `xhg-convert' with current dvc-bookmark as target and
+;;  `dvc-bookmarks-save'
+;;    Save `dvc-bookmark-alist' to the file `dvc-bookmarks-file-name'.
+;;
+
 ;;; History:
 
 ;;
@@ -110,6 +172,7 @@ Must be non-nil for some featurs of dvc-bookmarks to work.")
     (define-key map "s"      'dvc-bookmarks-status)
     (define-key map "d"      'dvc-bookmarks-diff)
     (define-key map "c"      'dvc-bookmarks-log-edit)
+    (define-key map "C"      'dvc-bookmarks-hg-convert-from-marked)
     (define-key map "l"      'dvc-bookmarks-changelog)
     (define-key map "L"      'dvc-bookmarks-log)
     (define-key map "Mm"     'dvc-bookmarks-missing)
@@ -1300,25 +1363,43 @@ and reinit `dvc-bookmarks-kill-ring'"
       (message "Did you forget to kill? (C-k)")))
 
 (defun dvc-bookmarks-get-marked-with-name (name)
-  (when dvc-bookmarks-marked-entry-list
+  (when (and dvc-bookmarks-marked-entry-list
+             (member name dvc-bookmarks-marked-entry-list))
     (save-excursion
       (dvc-bookmark-goto-name name)
       (dvc-bookmarks-current-bookmark))))
 
-;; TODO adapt to new code
-;;;;;;;;Obsoletes;;;;;;;;;;;;;;;;;;;;;;;
-;; (defun dvc-bookmarks-marked-bookmark ()
-;;   (when dvc-bookmarks-marked-entry
-;;     (save-excursion
-;;       (dvc-bookmark-goto-name dvc-bookmarks-marked-entry)
-;;       (dvc-bookmarks-current-bookmark))))
+(defun dvc-bookmarks-marked-value (key name)
+  "Get the value of a marked bookmark for key."
+  (let ((marked-bookmark (dvc-bookmarks-get-marked-with-name name)))
+    (when marked-bookmark
+      (dvc-bookmark-value marked-bookmark key))))
 
-;; (defun dvc-bookmarks-marked-value (key)
-;;   (let ((marked-bookmark (dvc-bookmarks-marked-bookmark)))
-;;     (when marked-bookmark
-;;       (dvc-bookmark-value marked-bookmark key))))
+(defun dvc-bookmarks-hg-convert-from-marked ()
+  "Call `xhg-convert' with current dvc-bookmark as target and
+marked dvc-bookmark as source."
+  (interactive)
+  (let* ((target (dvc-bookmarks-current-value 'local-tree))
+         (cur-dvc (dvc-bookmarks-active-dvc-at-point))
+         (marked (car dvc-bookmarks-marked-entry-list))
+         (source (dvc-bookmarks-marked-value 'local-tree marked)))
+    (when (eq cur-dvc 'xhg)
+      (if (= (length dvc-bookmarks-marked-entry-list) 1)
+          (if (y-or-n-p (format "Convert <%s> to <%s>?"
+                                source
+                                (propertize target
+                                            'face 'dvc-id)))
+              (xhg-convert source target))
+          (message "Please mark ONE source to convert from!")))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun dvc-bookmarks-active-dvc-at-point ()
+  (let ((path (dvc-bookmarks-current-value 'local-tree))
+        (current-dvc))
+    (save-excursion
+      (find-file path)
+      (setq current-dvc (dvc-current-active-dvc))
+      (kill-buffer (current-buffer)))
+    current-dvc))
 
 (defun dvc-bookmarks-save ()
   "Save `dvc-bookmark-alist' to the file `dvc-bookmarks-file-name'."

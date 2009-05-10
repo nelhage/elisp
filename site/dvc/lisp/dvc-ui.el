@@ -432,6 +432,7 @@ If you wish to disable the prefix key, set this variable to nil."
    "Tree Commands:"
    ["View Diff" dvc-diff t]
    ["View Status" dvc-status t]
+   ["View Missing" dvc-missing t]
    ["View Log" dvc-log t]
    ["View ChangeLog" dvc-changelog t]
    ;; ["View Inventory" tla-inventory t]

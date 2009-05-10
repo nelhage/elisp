@@ -54,7 +54,7 @@ git metadata directory."
   :group 'dvc-xgit)
 
 (defvar xgit-log-edit-file-name
-  "COMMIT_EDITMSG"
+  "DVC_EDITMSG"
   "The filename used to store the log message before commiting.
 Usually that file is placed in the .git directory of the working tree.")
 

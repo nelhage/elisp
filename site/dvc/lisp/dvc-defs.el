@@ -25,6 +25,103 @@
 ;; This file provides the low-level functions used by the DVC interfaces
 ;; to distributed revison control systems.
 
+;;; Commands:
+;;
+;; Below is a complete command list:
+;;
+;;
+;;; Customizable Options:
+;;
+;; Below is a customizable option list:
+;;
+;;  `dvc-select-priority'
+;;    A list that defines the priority of the available dvc's.
+;;    default = (quote nil)
+;;  `dvc-prompt-active-dvc'
+;;    If non-nil, prompt for the active dvc when more than one is
+;;    default = nil
+;;  `dvc-highlight'
+;;    *Use highlighting for DVC buffers.
+;;    default = t
+;;  `dvc-confirm-add'
+;;    *If non-nil, prompt for confirmation in dvc-add-files.
+;;    default = t
+;;  `dvc-confirm-ignore'
+;;    *If non-nil, prompt for confirmation in dvc-ignore-files.
+;;    default = t
+;;  `dvc-confirm-update'
+;;    *If non-nil, prompt for confirmation in dvc-update.
+;;    default = t
+;;  `dvc-log-last-n'
+;;    *If non-nil, limit log listings to last n entries.
+;;    default = nil
+;;  `dvc-status-display-known'
+;;    If non-nil, display files with 'known' status in dvc-status buffer.
+;;    default = nil
+;;  `dvc-status-display-ignored'
+;;    If non-nil, display files with 'ignored' status in dvc-status buffer.
+;;    default = nil
+;;  `dvc-fileinfo-printer-interface'
+;;    How to display info about the working tree in DVC diff and status buffers.
+;;    default = (quote full)
+;;  `dvc-completing-read-function'
+;;    Function to call when prompting user to choose between a list of options.
+;;    default = (quote auto)
+;;  `dvc-bookmarks-face-tree'
+;;    DVC face used in bookmarks to highlight main tree entry's
+;;    default = (quote dvc-keyword)
+;;  `dvc-bookmarks-face-subtree'
+;;    DVC face used in bookmarks to highlight subtree entry's
+;;    default = (quote dvc-comment)
+;;  `dvc-bookmarks-face-partner'
+;;    DVC face used in bookmarks to highlight partner entry's
+;;    default = (quote dvc-revision-name)
+;;  `dvc-button-face'
+;;    DVC face used to highlight buttons.
+;;    default = (quote bold)
+;;  `dvc-mouse-face'
+;;    DVC face used to highlight buttons.
+;;    default = (quote highlight)
+;;  `dvc-switch-to-buffer-mode'
+;;    *Mode for switching to DVC buffers.
+;;    default = (quote pop-to-buffer)
+;;  `dvc-do-not-prompt-for-save'
+;;    *Whether or not DVC will prompt before saving.
+;;    default = nil
+;;  `dvc-automatically-revert-buffers'
+;;    *Whether or not DVC will automatically revert buffers.
+;;    default = t
+;;  `dvc-log-commands'
+;;    *Non nil means log all DVC commands in the buffer *dvc-log*.
+;;    default = t
+;;  `dvc-log-buffer'
+;;    *Name of the buffer in which DVC logs main events.
+;;    default = " *dvc-log*"
+;;  `dvc-read-project-tree-mode'
+;;    *Mode for prompting for project tree directories. Possible values are:
+;;    default = (quote sometimes)
+;;  `dvc-read-directory-mode'
+;;    *How prompting project directories should be done.
+;;    default = (quote sometimes)
+;;  `dvc-switch-to-buffer-first'
+;;    *Switch to newly created buffer on creation of buffers?
+;;    default = t
+;;  `dvc-buffer-quit-mode'
+;;    *How *dvc-...* buffer should be killed.
+;;    default = (quote kill)
+;;  `dvc-log-insert-last'
+;;    *If non-nil, insert changelog entries at the end of the log file.
+;;    default = t
+;;  `dvc-diff-executable'
+;;    *The name of the diff executable.
+;;    default = (dvc-first-set dvc-site-diff-executable "diff")
+;;  `dvc-patch-executable'
+;;    *The name of the patch executable.
+;;    default = (dvc-first-set dvc-site-patch-executable "patch")
+;;  `dvc-tips-enabled'
+;;    *Set this to nil to disable tips.
+;;    default = t
+
 
 ;;; History:
 
@@ -48,6 +145,7 @@ Otherwise, return ARG2. ARG1 must be a variable."
 (unless (fboundp 'executable-find)
   (autoload 'executable-find "executable"))
 
+;;;###autoload
 (defvar dvc-registered-backends nil "The list of registered dvc backends.")
 
 (defgroup dvc nil

@@ -1,6 +1,6 @@
 ;;; xmtn-run.el --- Functions for runnning monotone commands
 
-;; Copyright (C) 2008 Stephen Leake
+;; Copyright (C) 2008 - 2009 Stephen Leake
 ;; Copyright (C) 2006, 2007 Christian M. Ohler
 
 ;; Author: Christian M. Ohler
@@ -270,7 +270,7 @@ id."
         (xmtn-executable executable))
     (let ((string (xmtn--command-output-line nil '("--version"))))
       (unless (string-match
-               (concat "\\`monotone \\([0-9]+\\)\\.\\([0-9]+\\)"
+               (concat "\\`monotone \\([0-9]+\\)\\.\\([0-9]+\\)\\(dev\\)?"
                        " (base revision: \\(unknown\\|\\([0-9a-f]\\{40\\}\\)\\))\\'")
                string)
         (error (concat "Version output from monotone --version"
@@ -278,7 +278,7 @@ id."
                string))
       (let ((major (parse-integer string (match-beginning 1) (match-end 1)))
             (minor (parse-integer string (match-beginning 2) (match-end 2)))
-            (revision (match-string 3 string)))
+            (revision (match-string 4 string)))
         (list major minor revision string)))))
 
 (defun xmtn--check-cached-command-version ()

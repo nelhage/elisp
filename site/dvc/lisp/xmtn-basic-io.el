@@ -194,6 +194,10 @@ Possible classes are `string', `null-id', `id', `symbol'."
                                 (,parser-fn)))))
            ,@body)))))
 
+(defun xmtn-basic-io-eof ()
+  "Return non-nil if at end of input, nil otherwise."
+  (eq 'eof (xmtn-basic-io--peek)))
+
 (defmacro xmtn-basic-io-parse-line (body)
   "Read next basic-io line at point. Error if it is `empty' or
 `eof'. Otherwise execute BODY with `symbol' bound to key (a

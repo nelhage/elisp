@@ -1,6 +1,6 @@
 ;;; dvc-unified.el --- The unification layer for dvc
 
-;; Copyright (C) 2005-2008 by all contributors
+;; Copyright (C) 2005-2009 by all contributors
 
 ;; Author: Stefan Reichoer, <stefan@xsteve.at>
 
@@ -23,6 +23,54 @@
 
 ;; This file provides the functionality that unifies the various dvc layers
 
+;;; Commands:
+;;
+;; Below is a complete command list:
+;;
+;;  `dvc-init'
+;;    Initialize a new repository.
+;;  `dvc-add-files'
+;;    Add FILES to the currently active dvc. FILES is a list of
+;;  `dvc-revert-files'
+;;    Revert FILES for the currently active dvc.
+;;  `dvc-remove-files'
+;;    Remove FILES for the currently active dvc.
+;;  `dvc-clone'
+;;    Ask for the DVC to use and clone SOURCE-PATH.
+;;  `dvc-diff'
+;;    Display the changes from BASE-REV to the local tree in PATH.
+;;  `dvc-diff-against-url'
+;;    Show the diff from the current tree against a remote url
+;;  `dvc-status'
+;;    Display the status in optional PATH tree.
+;;  `dvc-log'
+;;    Display the brief log for PATH (a file-name; default current
+;;  `dvc-apply-patch'
+;;    Apply patch `patch-name' on current-tree.
+;;  `dvc-rename'
+;;    Rename file FROM-NAME to TO-NAME; TO-NAME may be a directory.
+;;  `dvc-command-version'
+;;    Returns and/or shows the version identity string of backend command.
+;;  `dvc-tree-root'
+;;    Get the tree root for PATH or the current `default-directory'.
+;;  `dvc-log-edit'
+;;    Edit the log before commiting. Optional OTHER_FRAME (default
+;;  `dvc-ignore-file-extensions'
+;;    Ignore the file extensions of the marked files, in all
+;;  `dvc-ignore-file-extensions-in-dir'
+;;    Ignore the file extensions of the marked files, only in the
+;;  `dvc-missing'
+;;    Show revisions missing from PATH (default prompt),
+;;  `dvc-push'
+;;    Push changes to a remote location.
+;;  `dvc-create-branch'
+;;    Create a new branch.
+;;  `dvc-select-branch'
+;;    Select a branch.
+;;  `dvc-list-branches'
+;;    List available branches.
+;;
+
 
 ;;; History:
 
@@ -43,7 +91,7 @@
 ;;;###autoload
 (defun dvc-init ()
   "Initialize a new repository.
-It currently supports the initialization for bzr, xhg, tla.
+It currently supports the initialization for bzr, xhg, xgit, tla.
 Note: this function is only useful when called interactively."
   (interactive)
   (when (interactive-p)
@@ -51,7 +99,9 @@ Note: this function is only useful when called interactively."
           (working-dir (dvc-uniquify-file-name default-directory))
           (dvc))
       ;; hide backends that don't provide an init function
-      (mapcar '(lambda (elem) (setq supported-variants (delete elem supported-variants))) '("xdarcs" "xmtn" "xgit" "baz"))
+      (mapcar '(lambda (elem)
+                (setq supported-variants (delete elem supported-variants)))
+              '("xdarcs" "xmtn" "baz"))
       (add-to-list 'supported-variants "bzr-repo")
       (setq dvc (intern (dvc-completing-read
                          (format "Init a repository for '%s', using dvc: " working-dir)
@@ -110,7 +160,9 @@ in SPEC if they are nil, returning the result."
 (defmacro define-dvc-unified-command (name args comment &optional interactive)
   "Define a DVC unified command.  &optional arguments are permitted, but
 not &rest."
-  (declare (indent 2) (debug (&define name sexp stringp sexp)))
+  (declare (indent 2)
+	   (debug (&define name lambda-list stringp
+			   [&optional interactive])))
   `(defun ,name ,args
      ,comment
      ,@(when interactive (list interactive))
@@ -160,9 +212,13 @@ not &rest."
 ;;;###autoload
 (defun dvc-diff (&optional base-rev path dont-switch)
   "Display the changes from BASE-REV to the local tree in PATH.
+
 BASE-REV (a revision-id) defaults to base revision of the
 tree. Use `dvc-delta' for differencing two revisions.
-PATH defaults to `default-directory'.
+
+PATH defaults to `default-directory', that is, the whole working tree.
+See also `dvc-file-diff', which defaults to the current buffer file.
+
 The new buffer is always displayed; if DONT-SWITCH is nil, select it."
   (interactive)
   (let ((default-directory
@@ -189,11 +245,14 @@ The new buffer is always displayed; if DONT-SWITCH is nil, select it."
 
 ;;;###autoload
 (define-dvc-unified-command dvc-delta (base modified &optional dont-switch)
-  "Display from revision BASE to MODIFIED.
+  "Display diff from revision BASE to MODIFIED.
 
-BASE and MODIFIED must be revision ID.
+BASE and MODIFIED must be full revision IDs, or strings. If
+strings, the meaning is back-end specific; it should be some sort
+of revision specifier.
 
-The new buffer is always displayed; if DONT-SWITCH is nil, select it.")
+The new buffer is always displayed; if DONT-SWITCH is nil, select it."
+  (interactive "Mbase revision: \nMmodified revision: "))
 
 ;;;###autoload
 (define-dvc-unified-command dvc-file-diff (file &optional base modified dont-switch)
@@ -237,6 +296,20 @@ interactively. Use `dvc-changelog' for the full log."
     (dvc-call "dvc-log" path last-n))
   nil)
 
+(defun dvc-apply-patch (patch-name)
+  "Apply patch `patch-name' on current-tree."
+  (interactive "fPatch: ")
+  (let ((current-dvc (dvc-current-active-dvc)))
+    (case current-dvc
+      ('xgit (xgit-apply-patch patch-name))
+      ('xhg (xhg-import patch-name))
+      ;; TODO ==>Please add here appropriate commands for your backend
+      (t
+       (if (y-or-n-p (format "[%s] don't know how to apply patch, do you want to run a generic command instead?"
+                             current-dvc))
+           (shell-command (format "cat %s | patch -p1" patch-name))
+           (message "I don't known yet how to patch on %s" current-dvc))))))
+
 ;;;###autoload
 (define-dvc-unified-command dvc-changelog (&optional arg)
   "Display the full changelog in this tree for the actual dvc.
@@ -257,6 +330,12 @@ Use `dvc-log' for the brief log."
 (define-dvc-unified-command dvc-resolved (file)
   "Mark FILE as resolved"
   (interactive (list (buffer-file-name))))
+
+;; Look at `xhg-ediff-file-at-rev' and `xhg-dvc-ediff-file-revisions'
+;; to build backend functions.
+(define-dvc-unified-command dvc-ediff-file-revisions ()
+  "Ediff rev1 of file against rev2."
+  (interactive))
 
 (defun dvc-rename (from-name to-name)
   "Rename file FROM-NAME to TO-NAME; TO-NAME may be a directory.
@@ -363,7 +442,8 @@ reused. `default-directory' must be the tree root."
        ;; to find dired-mode buffers, so we ignore those.
        (let ((diff-status-buffers
               (append (dvc-get-matching-buffers dvc-buffer-current-active-dvc 'diff default-directory)
-                      (dvc-get-matching-buffers dvc-buffer-current-active-dvc 'status default-directory)))
+                      (dvc-get-matching-buffers dvc-buffer-current-active-dvc 'status default-directory)
+                      (dvc-get-matching-buffers dvc-buffer-current-active-dvc 'conflicts default-directory)))
              (activated-from-bookmark-buffer (eq major-mode 'dvc-bookmarks-mode)))
          (case (length diff-status-buffers)
            (0 (if (not activated-from-bookmark-buffer)
@@ -405,7 +485,7 @@ reused. `default-directory' must be the tree root."
                 default-directory))))))
 
 (defvar dvc-back-end-wrappers
-  '(("add-log-entry" ())
+  '(("add-log-entry" (&optional other-frame))
     ("add-files" (&rest files))
     ("diff" (&optional base-rev path dont-switch))
     ("ignore-file-extensions" (file-list))

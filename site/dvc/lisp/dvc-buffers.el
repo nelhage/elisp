@@ -682,11 +682,11 @@ To be run after an update or a merge."
                     (tree-exp (dvc-uniquify-file-name
                                (expand-file-name tree))))
                 (when (and (string= root tree-exp)
-                           ;; buffer is modified and in the tree TREE.
+                           ;; buffer is not modified and in the tree TREE.
                            dvc-automatically-revert-buffers)
                   ;; Keep the buffer if the file doesn't exist
                   (if (file-exists-p file)
-                      (revert-buffer t t)))))))))))
+                      (revert-buffer t t t)))))))))))
 
 (defun dvc-buffer-visible-p (buffer)
   "Return non-nil if BUFFER is visible in frame."

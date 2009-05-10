@@ -1,6 +1,6 @@
 ;;; xhg-mq.el --- dvc integration for hg's mq
 
-;; Copyright (C) 2006-2008 by all contributors
+;; Copyright (C) 2006-2009 by all contributors
 
 ;; Author: Stefan Reichoer, <stefan@xsteve.at>
 
@@ -24,6 +24,64 @@
 ;; For more information on mq see:
 ;;   http://www.selenic.com/mercurial/wiki/index.cgi/MqTutorial
 
+;;; Commands:
+;;
+;; Below is a complete command list:
+;;
+;;  `xhg-qinit'
+;;    Run hg qinit.
+;;  `xhg-qnew'
+;;    Run hg qnew.
+;;  `xhg-qrefresh'
+;;    Run hg qrefresh.
+;;  `xhg-qrefresh-header'
+;;    Run hg qrefresh --message.
+;;  `xhg-qrefresh-edit-message-done'
+;;    Use the current buffer content as parameter for hg qrefresh --message.
+;;  `xhg-qrefresh-edit-message-mode'
+;;    Major mode to edit the mq header message for the current patch.
+;;  `xhg-qpop'
+;;    Run hg qpop.
+;;  `xhg-qpush'
+;;    Run hg qpush.
+;;  `xhg-qapplied'
+;;    Run hg qapplied.
+;;  `xhg-qunapplied'
+;;    Run hg qunapplied.
+;;  `xhg-qseries'
+;;    Run hg qseries.
+;;  `xhg-qdiff'
+;;    Run hg qdiff.
+;;  `xhg-qdelete'
+;;    Run hg qdelete
+;;  `xhg-qconvert-to-permanent'
+;;    Convert all applied patchs in permanent changeset.
+;;  `xhg-qrename'
+;;    Run hg qrename
+;;  `xhg-qtop'
+;;    Run hg qtop.
+;;  `xhg-qnext'
+;;    Run hg qnext.
+;;  `xhg-qprev'
+;;    Run hg qprev.
+;;  `xhg-qheader'
+;;    Run hg qheader.
+;;  `xhg-qsingle'
+;;    Merge applied patches in a single patch satrting from "qbase".
+;;  `xhg-qimport'
+;;    Run hg qimport
+;;  `xhg-mq-export-via-mail'
+;;    Prepare an email that contains a mq patch.
+;;  `xhg-mq-show-stack'
+;;    Show the mq stack.
+;;  `xhg-qdiff-at-point'
+;;    Show the diff for a given patch.
+;;  `xhg-mq-mode'
+;;    Major mode for xhg mq interaction.
+;;  `xhg-mq-edit-series-file'
+;;    Edit the mq patch series file
+;;
+
 ;; The following commands are available for hg's mq:
 ;; X qapplied      print the patches already applied
 ;;   qclone        clone main and patch repository at same time
@@ -34,7 +92,7 @@
 ;;   qgoto         push or pop patches until named patch is at top of stack
 ;;   qguard        set or print guards for a patch
 ;; X qheader       Print the header of the topmost or specified patch
-;;   qimport       import a patch
+;; X qimport       import a patch
 ;; X qinit         init a new queue repository
 ;; X qnew          create a new patch
 ;; X qnext         print the name of the next patch
@@ -49,6 +107,8 @@
 ;; X qseries       print the entire series file
 ;; X qtop          print the name of the current patch
 ;; X qunapplied    print the patches not yet applied
+
+;;; Code:
 
 (defvar xhg-mq-submenu
   '("mq"
@@ -395,14 +455,20 @@ Called with prefix-arg, do not prompt for confirmation"
   (concat (xhg-tree-root) "/.hg/patches/" patch))
 
 ;;;###autoload
-(defun xhg-qsingle (file)
-  "Merge all applied patches in a single patch"
+(defun* xhg-qsingle (file &optional (start-from "qbase"))
+  "Merge applied patches in a single patch starting from \"qbase\".
+If prefix arg, merge applied patches starting from revision number or patch-name."
   (interactive "FPatchName: ")
+  (when (and current-prefix-arg (interactive-p))
+    (let ((series (xhg-qseries)))
+      (setq start-from (completing-read "PatchName: "
+                                        series nil t
+                                        (car (member (xhg-mq-patch-name-at-point) series))))))
   (let* ((base (with-temp-buffer
                  (apply #'call-process "hg" nil t nil
-                        '("parents"
+                        `("parents"
                           "-r"
-                          "qbase"
+                          ,start-from
                           "--template"
                           "#rev#"))
                  (buffer-string)))
@@ -418,12 +484,21 @@ Called with prefix-arg, do not prompt for confirmation"
          (applied (split-string
                    (with-temp-buffer
                      (apply #'call-process "hg" nil t nil
-                            (list "qapplied"))
+                            (list "qapplied" "-s"))
                      (buffer-string)) "\n")))
+    (when (not (equal start-from "qbase"))
+      (let (pos elm)
+        (catch 'break
+          (dolist (i applied)
+            (when (string-match start-from i)
+              (throw 'break
+                (setq elm i)))))
+        (setq pos (position elm applied))
+        (setq applied (subseq applied pos))))
     (find-file file)
     (goto-char (point-min))
     (erase-buffer)
-    (insert (format "## Merge of all patchs applied from revision %s\n" base))
+    (insert (format "##Merge of all patches applied from revision %s\n" base))
     (mapc #'(lambda (x)
               (insert (concat "## " x "\n")))
           applied)
@@ -455,26 +530,45 @@ Called with prefix-arg, do not prompt for confirmation"
 ;; --------------------------------------------------------------------------------
 
 ;;;###autoload
-(defun xhg-mq-export-via-mail (patch)
+(defun xhg-mq-export-via-mail (patch &optional single)
   "Prepare an email that contains a mq patch.
 `xhg-submit-patch-mapping' is honored for the destination email address and the project name
 that is used in the generated email."
   (interactive (list
                 (let ((series (xhg-qseries)))
-                  (dvc-completing-read "Send mq patch via mail: " series nil t
-                                       (car (member (xhg-mq-patch-name-at-point) series))))))
+                  (dvc-completing-read (if current-prefix-arg
+                                           "Send single patch from: "
+                                         "Send mq patch via mail: ") series nil t
+                                         (car (member (xhg-mq-patch-name-at-point) series))))))
   (let ((file-name)
         (destination-email "")
         (base-file-name nil)
-        (subject))
+        (subject)
+        (log))
     (dolist (m xhg-submit-patch-mapping)
       (when (string= (dvc-uniquify-file-name (car m)) (dvc-uniquify-file-name (xhg-tree-root)))
         ;;(message "%S" (cadr m))
         (setq destination-email (car (cadr m)))
         (setq base-file-name (cadr (cadr m)))))
     (message "Preparing an email for the mq patch '%s' for '%s'" patch destination-email)
-    (setq file-name (concat (dvc-uniquify-file-name dvc-temp-directory) (or base-file-name "") "-" patch ".patch"))
-    (copy-file (xhg-mq-patch-file-name patch) file-name t t)
+    (if (or current-prefix-arg single)
+        (let ((pname (format "single-from-%s-to-tip.patch" patch)))
+          (setq file-name (concat (dvc-uniquify-file-name dvc-temp-directory)
+                                  pname))
+          (xhg-qsingle file-name patch)
+          (setq log
+                (with-temp-buffer
+                  (let (beg end)
+                    (insert-file-contents file-name)
+                    (goto-char (point-min))
+                    (setq beg (point))
+                    (when (re-search-forward "^diff" nil t)
+                      (setq end (point-at-bol)))
+                    (replace-regexp-in-string "^#*" "" (buffer-substring beg end)))))
+          (setq subject pname))
+        (setq file-name (concat (dvc-uniquify-file-name dvc-temp-directory)
+                                (or base-file-name "") "-" patch ".patch"))
+        (copy-file (xhg-mq-patch-file-name patch) file-name t t))
 
     (require 'reporter)
     (delete-other-windows)
@@ -484,8 +578,11 @@ that is used in the generated email."
      nil
      nil
      nil
-     dvc-patch-email-message-body-template)
-    (setq subject (if base-file-name (concat base-file-name ": " patch) patch))
+     (if (or current-prefix-arg single)
+         log
+         dvc-patch-email-message-body-template))
+    (unless (or current-prefix-arg single)
+      (setq subject (if base-file-name (concat base-file-name ": " patch) patch)))
 
     ;; delete emacs version - its not needed here
     (delete-region (point) (point-max))
@@ -580,7 +677,9 @@ that is used in the generated email."
   (toggle-read-only 1))
 
 (defun xhg-mq-ewoc-data-at-point ()
-  (if (or (= (dvc-line-number-at-pos) 1) (eq (line-beginning-position) (line-end-position)) (not (eq major-mode 'xhg-mq-mode)))
+  (if (or (= (dvc-line-number-at-pos) 1)
+          (eq (line-beginning-position) (line-end-position))
+          (not (eq major-mode 'xhg-mq-mode)))
       nil
     (ewoc-data (ewoc-locate xhg-mq-cookie))))
 

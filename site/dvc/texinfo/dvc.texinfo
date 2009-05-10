@@ -866,7 +866,7 @@ containing information for developers.
 
 There is one mailing list for @b{DVC}.
 
-@code{dvc-el-dev@@gna.org} intended for the discussion of development
+@code{dvc-dev@@gna.org} intended for the discussion of development
 versions of @b{DVC}.  Users of development versions of @b{DVC} should
 subscribe to this list.  Bugs should also be reported to this list.
 

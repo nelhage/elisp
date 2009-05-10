@@ -1,6 +1,6 @@
 ;;; dvc-diff.el --- A generic diff mode for DVC
 
-;; Copyright (C) 2005-2008 by all contributors
+;; Copyright (C) 2005-2009 by all contributors
 
 ;; Author: Matthieu Moy <Matthieu.Moy@imag.fr>
 ;; Contributions from:
@@ -785,19 +785,28 @@ Useful to clear diff buffers after a commit."
 (defun dvc-file-ediff (file)
   "Run ediff of FILE (default current buffer file) against last revision."
   (interactive (list (buffer-file-name)))
-  (let ((file-buffer (find-file-noselect file))
-        (pristine-buffer
-         (dvc-revision-get-file-in-buffer
-          file `(,(dvc-current-active-dvc)
-                 (last-revision
-                  ,(dvc-tree-root file t)
-                  1)))))
-    (with-current-buffer pristine-buffer
-      (set-buffer-modified-p nil)
-      (toggle-read-only 1)
-      (let ((buffer-file-name file))
-        (set-auto-mode t)))
-    (dvc-ediff-buffers pristine-buffer file-buffer)))
+  ;; Setting `enable-local-variables' nil here is something of a
+  ;; trade-off. In some buffers (Makefiles), the local variables may
+  ;; include expressions that parse project files, which can take a
+  ;; long time and confuse Emacs, so we don't want to process them. On
+  ;; the other hand, they may set fontification style, which we do
+  ;; want in ediff. The only general solution is to define a subset of
+  ;; local variables that are desireable for ediff; we can't do that
+  ;; just in DVC.
+  (let ((enable-local-variables nil))
+    (let ((file-buffer (find-file-noselect file))
+          (pristine-buffer
+           (dvc-revision-get-file-in-buffer
+            file `(,(dvc-current-active-dvc)
+                   (last-revision
+                    ,(dvc-tree-root file t)
+                    1)))))
+      (with-current-buffer pristine-buffer
+        (set-buffer-modified-p nil)
+        (toggle-read-only 1)
+        (let ((buffer-file-name file))
+          (set-auto-mode t)))
+      (dvc-ediff-buffers pristine-buffer file-buffer))))
 
 (defun dvc-file-ediff-revisions (file base modified)
   "View changes in FILE between BASE and MODIFIED using ediff."

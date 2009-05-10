@@ -21,7 +21,7 @@
   </head>
 
   <body>
-    <img src="dvc.png" />
+    <img src="dvc.png" alt="DVC logo"/>
 
     <h1>DVC: Distributed Version Control for Emacs</h1>
 
@@ -98,11 +98,11 @@
 
     <pre>
       +- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
-      :      Optional common UI (which autodetects the back-end)       :<----.
+      :      Optional common UI (which autodetects the back-end)       :&lt;----.
       +---------------+-------------------+------------------+---------+     |
       | tla (Xtla)    |  Mercurial (xhg)  |  Bazaar (bzr)    |         |     v
       |+-------------+|+-----------------+|+----------------+|   ...   |    \O/
-      ||  Xtla core  |||    xhg core     |||    bzr core    ||         |<--> |
+      ||  Xtla core  |||    xhg core     |||    bzr core    ||         |&lt;--> |
       |+-------------+|+-----------------+|+----------------+|         |    / \
       +---------------+-------------------+------------------+---------+
       |                            DVC core                            |
@@ -146,11 +146,10 @@
             *** 5 stands for the number of functions ***
             ***
           -->
-        <td colspan="2" rowspan="2">
-          <th colspan="5" align="center">Functions</td>
-          <th rowspan="2">Maintainers</td>
-          <th rowspan="2">Notes</td>
-        </td>
+        <td colspan="2" rowspan="2" />
+	<th colspan="5" align="center">Functions</th>
+	<th rowspan="2">Maintainers</th>
+        <th rowspan="2">Notes</th>
       </tr>
       <tr>
         <th>status</th>
@@ -239,6 +238,21 @@
         <td>Not usable yet.</td>
       </tr>
     </table>
+
+
+    <h2>Mailing List</h2>
+
+    There is a mailing list for DVC related stuff:
+    <ul>
+      <li>Subscribe via:
+	<a href="https://mail.gna.org/listinfo/dvc-dev/"
+	  >https://mail.gna.org/listinfo/dvc-dev/</a>
+      </li>
+      <li>The Gmane mirror is here:
+	<a href="http://blog.gmane.org/gmane.emacs.dvc.devel"
+	  >http://blog.gmane.org/gmane.emacs.dvc.devel</a>
+      </li>
+    </ul>
 
 
     <h2>Other Emacs modes related to version control</h2>
