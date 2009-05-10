@@ -112,7 +112,8 @@ unable to perform symbol completion.")
 (eval-after-load 'diff-mode
   '(progn
      (set-face-background 'diff-refine-change "gray20")
-     (set-face-background 'diff-file-header "gray40")))
+     (set-face-background 'diff-file-header "gray40")
+     (set-face-foreground 'diff-removed-face "red")))
 
 (eval-after-load 'flymake
   '(progn
@@ -584,7 +585,7 @@ unable to perform symbol completion.")
                  TeX-command-list))
      (let ((pdfview (assoc-string "^pdf$" TeX-output-view-style)))
        (setcdr (cdr pdfview) (list "evince %o")))
-     (setq TeX-print-command "cups-lpr -P%p %s.pdf")
+     (setq TeX-print-command "pdf2ps %s.pdf - | lpr -P%p -h")
      (TeX-global-PDF-mode)))
 
 (defun TeX-count-words ()
@@ -979,7 +980,7 @@ surrounding xml expression"
 (add-hook 'emacs-startup-hook 'my-startup-hook)
 
 (defun my-startup-hook ()
-  (set-default-font default-font)
+  (set-frame-font default-font t)
   (server-start)
   (find-file-noselect "~/.elisp/dot-emacs")
   (save-window-excursion (shell)))
