@@ -900,8 +900,7 @@ surrounding xml expression"
   (define-key mail-mode-map (kbd "C-c a") 'mail-attach-file)
   (define-key mail-mode-map (kbd "C-c TAB") 'bbdb-complete-name)
   (define-key mail-mode-map (kbd "C-c C-]") 'mail-dont-send)
-  (define-key mail-mode-map (kbd "TAB") 'mail-complete-for-tab-command)
-  (cd "~/mail"))
+  (define-key mail-mode-map (kbd "TAB") 'mail-complete-for-tab-command))
 
 (defun mail-complete-for-tab-command ()
   (interactive)
@@ -923,8 +922,7 @@ surrounding xml expression"
 (setq user-mail-address "nelhage@mit.edu"
       mail-envelope-from "nelhage@mit.edu"
       mail-specify-envelope-from t
-      mail-host-address "mit.edu"
-      mail-archive-file-name "~/mail/sent")
+      mail-host-address "mit.edu")
 
 ;;vm
 
@@ -1044,3 +1042,7 @@ surrounding xml expression"
 (put 'c-indentation-style 'safe-local-variable 'symbolp)
 
 (safe-require 'sipb-minutes)
+(eval-after-load 'sipb-minutes
+  '(progn
+     (add-to-list 'auto-mode-alist
+                  (cons "minutes.[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}$" 'sipb-minutes-mode))))
