@@ -777,6 +777,8 @@ unable to perform symbol completion.")
 (defun my-ruby-mode-hook ()
   nil)
 
+;; Matlab
+
 (autoload 'matlab-mode "matlab" "Enter MATLAB mode." t)
 (setq auto-mode-alist (cons '("\\.m\\'" . matlab-mode) auto-mode-alist))
 (autoload 'matlab-shell "matlab" "Interactive MATLAB mode." t)
@@ -784,6 +786,10 @@ unable to perform symbol completion.")
 
 (setq matlab-shell-command "octave")
 (setq matlab-shell-command-switches '())
+
+;; YAML
+(autoload 'yaml-mode "yaml-mode" "Enter YAML Mode" t)
+(add-to-list 'auto-mode-alist (cons "\\.ya?ml$" 'yaml-mode))
 
 ;; google calendar client
 
