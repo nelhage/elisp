@@ -326,6 +326,7 @@ unable to perform symbol completion.")
 (require 'template)
 (template-initialize)
 (setq template-auto-insert t)
+(setq template-auto-update nil)
 
 (add-to-list 'template-expansion-alist
              (list "AUTHOR"
@@ -348,9 +349,6 @@ unable to perform symbol completion.")
 (advise-to-save-windows log-edit-done)
 (advise-to-save-windows vc-revert-buffer)
 ;(advise-to-save-windows vc-diff)
-
-(eval-after-load "smerge-mode"
-  '(set-face-background 'smerge-refined-change "#003333"))
 
 (defun safe-require (feature)
   "Require FEATURE, failing silently if it does not exist"
@@ -415,7 +413,11 @@ unable to perform symbol completion.")
 (autoload 'python-mode "python-mode"
   "Major mode for editing Python code." t)
 
-(add-hook 'python-mode-hook 'flymake-mode)
+(add-hook 'python-mode-hook 'my-python-mode-hook)
+
+(defun my-python-mode-hook ()
+  (if (buffer-file-name)
+      (flymake-mode)))
 
 (when (load "flymake" t)
   (defun flymake-pylint-init ()
@@ -800,6 +802,19 @@ unable to perform symbol completion.")
 ;;Evil DOS file endings, eeeeeeeeevil
 (add-hook 'find-file-hook 'find-file-check-line-endings)
 
+;; smerge-mode
+(eval-after-load "smerge-mode"
+  '(set-face-background 'smerge-refined-change "#003333"))
+
+(setq smerge-base-re "^|||||||.*\n")
+
+(defun sm-try-smerge ()
+  (save-excursion
+    (goto-char (point-min))
+    (when (re-search-forward "^<<<<<<< " nil t)
+      (smerge-mode 1))))
+(add-hook 'find-file-hook 'sm-try-smerge t)
+
 (defun dos-file-endings-p ()
   (string-match "dos" (symbol-name buffer-file-coding-system)))
 
@@ -1047,7 +1062,11 @@ surrounding xml expression"
 (put 'asm-comment-char 'safe-local-variable 'characterp)
 (put 'c-indentation-style 'safe-local-variable 'symbolp)
 
-(safe-require 'sipb-minutes)
+(autoload 'minutes "sipb-minutes"
+  "Loads a minutes template into a buffer if none exists else switches to it" t)
+(autoload 'sipb-minutes-mode "sipb-minutes"
+  "Major mode for editing SIPB minutes files." t)
+
 (eval-after-load 'sipb-minutes
   '(progn
      (add-to-list 'auto-mode-alist
