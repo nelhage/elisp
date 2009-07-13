@@ -160,7 +160,6 @@ unable to perform symbol completion.")
         (vertical-scroll-bars . nil)
         (tool-bar-lines . 0)))
 
-
 (defun set-projector-faces ()
   (interactive)
   (set-face-attribute 'default nil
@@ -191,7 +190,7 @@ unable to perform symbol completion.")
                       :weight 'normal)
   (set-face-attribute 'font-lock-string-face nil
                       :foreground "orange")
-  (set-default-font default-font)
+  (set-frame-font default-font t)
   (set-face-attribute 'pesche-tab nil
                       :background "#113")
   (set-face-attribute 'pesche-space nil
@@ -357,7 +356,7 @@ unable to perform symbol completion.")
     ('file-error . nil)))
 
 (safe-require 'psvn)
-(safe-require 'vc-svk)
+; (safe-require 'vc-svk)
 (safe-require 'vc-git)
 (safe-require 'git)
 (when (featurep 'vc-git) (add-to-list 'vc-handled-backends 'git))
@@ -416,7 +415,7 @@ unable to perform symbol completion.")
 (add-hook 'python-mode-hook 'my-python-mode-hook)
 
 (defun my-python-mode-hook ()
-  (if (buffer-file-name)
+  (if buffer-file-name
       (flymake-mode)))
 
 (when (load "flymake" t)
