@@ -417,8 +417,7 @@ unable to perform symbol completion.")
 (add-hook 'python-mode-hook 'my-python-mode-hook)
 
 (defun my-python-mode-hook ()
-  (if buffer-file-name
-      (flymake-mode)))
+  )
 
 (when (load "flymake" t)
   (defun flymake-pylint-init ()
