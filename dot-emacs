@@ -222,7 +222,8 @@ unable to perform symbol completion.")
       outline-regexp "\\s *\\*+"
       comint-prompt-read-only t
       diff-switches "-u"
-      compile-command "find-makefile")
+      compile-command "find-makefile"
+      pop-up-windows nil)
 
 (setq-default tab-width 8
               truncate-lines t
