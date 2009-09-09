@@ -145,7 +145,7 @@ unable to perform symbol completion.")
 
 (setq my-echo-help-timer (run-with-idle-timer 1 t 'my-echo-help-text))
 
-(defvar default-font "Mono-7" "The default font")
+(defvar default-font "Mono-9" "The default font")
 
 (when window-system
   (when (not (font-info default-font))
