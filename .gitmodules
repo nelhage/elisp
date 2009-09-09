@@ -1,0 +1,3 @@
+[submodule "site/magit"]
+	path = site/magit
+	url = git://gitorious.org/magit/mainline.git
