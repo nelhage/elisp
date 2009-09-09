@@ -363,6 +363,8 @@ unable to perform symbol completion.")
 (safe-require 'git)
 (when (featurep 'vc-git) (add-to-list 'vc-handled-backends 'git))
 
+(autoload 'magit-status "magit" nil t)
+
 (require 'vc-hg)
 (add-to-list 'vc-handled-backends 'hg)
 
