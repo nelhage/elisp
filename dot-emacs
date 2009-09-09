@@ -412,14 +412,6 @@ unable to perform symbol completion.")
 (add-to-list 'auto-mode-alist (cons "\\.xs$" 'c-mode))
 
 ;;Python mode
-(add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
-(autoload 'python-mode "python-mode"
-  "Major mode for editing Python code." t)
-
-(add-hook 'python-mode-hook 'my-python-mode-hook)
-
-(defun my-python-mode-hook ()
-  )
 
 (when (load "flymake" t)
   (defun flymake-pylint-init ()
