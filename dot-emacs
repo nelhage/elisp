@@ -106,7 +106,8 @@ unable to perform symbol completion.")
   (toggle-tabs-font-lock)
   (toggle-trailing-whitespace-font-lock)
   (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
-  (setq font-lock-maximum-decoration t)
+  (setq font-lock-maximum-decoration t
+        font-lock-global-modes '(not magit-mode w3m-mode))
   (global-font-lock-mode 1))
 
 (eval-after-load 'diff-mode
@@ -367,8 +368,16 @@ unable to perform symbol completion.")
 (autoload 'magit-status "magit" nil t)
 (eval-after-load 'magit
   '(progn
-     (add-hook 'magit-mode 'kill-quote-characters)
-     (set-face-background 'magit-item-highlight "grey10")))
+     (set-face-background 'magit-item-highlight "grey8")
+     (set-face-attribute 'magit-diff-add nil
+                         :foreground nil
+                         :inherit diff-added-face)
+     (set-face-attribute 'magit-diff-del nil
+                         :foreground nil
+                         :inherit diff-removed-face)
+     (set-face-attribute 'magit-diff-none nil
+                         :foreground nil
+                         :inherit diff-context-face)))
 
 (require 'vc-hg)
 (add-to-list 'vc-handled-backends 'hg)
