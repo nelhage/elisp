@@ -276,6 +276,8 @@ unable to perform symbol completion.")
   (let ((default-directory directory))
     (ansi-term (getenv "SHELL") name)))
 
+(add-to-list 'auto-mode-alist (cons "bash-fc-[0-9]+$" 'sh-mode))
+
 (defun dedicate-window (&optional window)
   (interactive)
   (if (null window)
