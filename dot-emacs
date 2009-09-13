@@ -241,7 +241,6 @@ unable to perform symbol completion.")
 (require 'shell)
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
 (add-hook 'shell-mode-hook 'my-shell-mode-hook)
-(add-hook 'shell-mode-hook 'kill-quote-characters)
 
 (defun inferior-process-cwd (buffer)
   (let ((proc (get-buffer-process buffer)))
@@ -1082,10 +1081,3 @@ surrounding xml expression"
   '(progn
      (add-to-list 'auto-mode-alist
                   (cons "minutes.[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}$" 'sipb-minutes-mode))))
-
-(defun kill-quote-characters ()
-  (interactive)
-  (modify-syntax-entry ?\" ".")
-  (modify-syntax-entry ?\' ".")
-  (if (called-interactively-p)
-      (font-lock-fontify-buffer)))
