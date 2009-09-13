@@ -107,7 +107,7 @@ unable to perform symbol completion.")
   (toggle-trailing-whitespace-font-lock)
   (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
   (setq font-lock-maximum-decoration t
-        font-lock-global-modes '(not magit-mode w3m-mode))
+        font-lock-global-modes '(not magit-mode w3m-mode term-mode))
   (global-font-lock-mode 1))
 
 (eval-after-load 'diff-mode
@@ -267,8 +267,7 @@ unable to perform symbol completion.")
 
 (defun my-term-mode-hook ()
   (define-key term-mode-map (kbd "C-x M-x") 'execute-extended-command)
-  (define-key term-raw-map (kbd "C-z") elscreen-map)
-  (font-lock-mode -1))
+  (define-key term-raw-map (kbd "C-z") elscreen-map))
 
 (defun named-term (name directory)
   (interactive "MTerminal name: \nDIn directory: ")
