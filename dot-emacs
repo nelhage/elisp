@@ -722,7 +722,7 @@ unable to perform symbol completion.")
 (add-hook 'lisp-interaction-mode-hook 'pretty-lambdas)
 
 ;;Lisp keybindings
-(global-set-key "\C-cs" 'slime-selector)
+(global-set-key (kbd "C-c s") 'slime-selector)
 
 (defun define-lisp-keys ()
 ;;   (local-set-key "[" 'insert-parentheses)
