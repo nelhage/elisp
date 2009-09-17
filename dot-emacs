@@ -366,6 +366,7 @@ unable to perform symbol completion.")
 (when (featurep 'vc-git) (add-to-list 'vc-handled-backends 'git))
 
 (autoload 'magit-status "magit" nil t)
+(global-set-key (kbd "C-c g") 'magit-status)
 (eval-after-load 'magit
   '(progn
      (set-face-background 'magit-item-highlight "grey8")
