@@ -296,31 +296,31 @@ unable to perform symbol completion.")
 (safe-funcall 'dired-omit-mode 1)
 (setq dired-listing-switches "-l")
 
-(define-key ctl-x-map (kbd "C-d") 'find-file)
-
-(require 'iswitchb)
-(iswitchb-mode t)
 (global-set-key "\C-x\C-b" 'ibuffer-list-buffers)
 
-(defadvice iswitchb-visit-buffer (before iswitchb-undedicate-window)
-  (undedicate-window))
-(ad-activate 'iswitchb-visit-buffer)
+(require 'ido)
+(ido-mode 1)
+(setq ido-auto-merge-work-directories-length -1)
 
-;(require 'ido)
-;(ido-mode nil)
-
-(defun iswitchb-local-keys ()
-  (mapc (lambda (K) 
-          (let* ((key (car K)) (fun (cdr K)))
-            (define-key iswitchb-mode-map (edmacro-parse-keys key) fun)))
-        '(("<right>" . iswitchb-next-match)
-          ("<left>"  . iswitchb-prev-match)
-          ("<up>"    . ignore             )
-          ("<down>"  . ignore             )
-          ("\C-n"    . iswitchb-next-match)
-          ("\C-p"    . iswitchb-prev-match))))
-
-(add-hook 'iswitchb-minibuffer-setup-hook 'iswitchb-local-keys)
+; (require 'iswitchb)
+; (iswitchb-mode nil)
+; 
+; (defadvice iswitchb-visit-buffer (before iswitchb-undedicate-window)
+;   (undedicate-window))
+; (ad-activate 'iswitchb-visit-buffer)
+; 
+; (defun iswitchb-local-keys ()
+;   (mapc (lambda (K) 
+;           (let* ((key (car K)) (fun (cdr K)))
+;             (define-key iswitchb-mode-map (edmacro-parse-keys key) fun)))
+;         '(("<right>" . iswitchb-next-match)
+;           ("<left>"  . iswitchb-prev-match)
+;           ("<up>"    . ignore             )
+;           ("<down>"  . ignore             )
+;           ("\C-n"    . iswitchb-next-match)
+;           ("\C-p"    . iswitchb-prev-match))))
+; 
+; (add-hook 'iswitchb-minibuffer-setup-hook 'iswitchb-local-keys)
 
 (require 'windmove)
 (windmove-default-keybindings)
