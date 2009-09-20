@@ -302,6 +302,19 @@ unable to perform symbol completion.")
 (ido-mode 1)
 (setq ido-auto-merge-work-directories-length -1)
 
+(defun my-ido-keys ()
+  (mapc (lambda (K) 
+          (let* ((key (car K)) (fun (cdr K)))
+            (define-key ido-completion-map (edmacro-parse-keys key) fun)))
+        '(("<right>" . ido-next-match)
+          ("<left>"  . ido-prev-match)
+          ("<up>"    . ignore             )
+          ("<down>"  . ignore             )
+          ("\C-n"    . ido-next-match)
+          ("\C-p"    . ido-prev-match))))
+
+(add-hook 'ido-minibuffer-setup-hook 'my-ido-keys)
+
 ; (require 'iswitchb)
 ; (iswitchb-mode nil)
 ; 
