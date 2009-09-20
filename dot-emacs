@@ -155,7 +155,7 @@ unable to perform symbol completion.")
 (setq default-frame-alist
       `((menu-bar-lines . 0)
         (font . ,default-font)
-        (foreground-color . "#EEE")
+        (foreground-color . "#AAA")
         (background-color . "black")
         (background-mode . 'dark)
         (vertical-scroll-bars . nil)
@@ -182,7 +182,7 @@ unable to perform symbol completion.")
 (defun set-normal-faces ()
   (interactive)
   (set-face-attribute 'default nil
-                      :foreground "#EEE"
+                      :foreground "#AAA"
                       :background "black")
   (set-face-attribute 'font-lock-comment-face nil
                       :foreground "OrangeRed")
