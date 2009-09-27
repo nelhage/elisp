@@ -301,7 +301,8 @@ unable to perform symbol completion.")
 
 (require 'ido)
 (ido-mode 1)
-(setq ido-auto-merge-work-directories-length -1)
+(setq ido-auto-merge-work-directories-length -1
+      ido-max-directory-size (* 256 1024))
 
 (defun my-ido-keys ()
   (mapc (lambda (K) 
