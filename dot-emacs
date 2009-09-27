@@ -114,7 +114,8 @@ unable to perform symbol completion.")
   '(progn
      (set-face-background 'diff-refine-change "gray20")
      (set-face-background 'diff-file-header "gray40")
-     (set-face-foreground 'diff-removed-face "red")))
+     (set-face-foreground 'diff-removed-face "red")
+     (set-face-foreground 'diff-added-face "green")))
 
 (eval-after-load 'flymake
   '(progn
