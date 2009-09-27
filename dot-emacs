@@ -1004,9 +1004,9 @@ surrounding xml expression"
 (eval-after-load 'org
   '(progn
      (define-key org-mode-map (kbd "C-c t") 'org-todo)
-     (define-key org-mode-map (kbd "TAB") 'org-metaright)
-     (define-key org-mode-map (kbd "S-TAB") 'org-metaleft)
      (define-key org-mode-map (kbd "M-TAB") 'org-cycle)
+     (define-key org-mode-map (kbd "M-p") 'outline-backward-same-level)
+     (define-key org-mode-map (kbd "M-n") 'outline-forward-same-level)
      ;(define-key org-mode-map (kbd "RET") 'org-meta-return)
      (set-face-foreground 'org-todo "#FF6666")
      (set-face-foreground 'org-done "#00FF00")))
