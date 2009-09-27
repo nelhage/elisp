@@ -97,14 +97,15 @@ if active"
           (select-window window)
         (error "No such window."))))))
 
-(defun window-number-find-file (window file)
-  (interactive "P\nFFind file in numbered window: ")
+(defun window-number-find-file (window)
+  (interactive "P")
   (if (or (null window)
           (consp window))
-      (find-file-other-window file)
+      (let ((fun (if ido-mode 'ido-find-file-other-window 'find-file-other-window)))
+        (call-interactively fun))
     (progn
       (window-number-select-nth window)
-      (find-file file))))
+      (call-interactively 'find-file))))
 
 (defun window-number ()
   "Returns the the number of the current window."
