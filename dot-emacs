@@ -227,6 +227,11 @@ unable to perform symbol completion.")
       compile-command "find-makefile"
       pop-up-windows nil)
 
+(defadvice calc (around calc-pop-up-windows)
+  (let ((pop-up-windows t))
+    ad-do-it))
+(ad-activate 'calc)
+
 (setq-default tab-width 8
               truncate-lines t
               truncate-partial-width-windows nil
