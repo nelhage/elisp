@@ -1024,7 +1024,32 @@ surrounding xml expression"
 
 ;; Org mode
 
-(setq org-hide-leading-stars t)
+(setq org-directory "~/nelhage/org")
+(setq org-hide-leading-stars t
+      org-log-done 'time
+      org-agenda-files (list (concat org-directory "/todo.org")
+                             (concat org-directory "/ksplice.org"))
+      org-agenda-window-setup 'current-window
+      org-agenda-restore-windows-after-quit t
+      org-default-notes-file (concat org-directory "/notes.org")
+      org-remember-templates
+      '(("Todo" ?t "* TODO %?%^G\n" "todo.org" "Tasks")
+        ("Barnowl" ?b "* TODO %?\n" "todo.org" "BarnOwl")
+        ("Ksplice" ?k "* TODO %?\n" "ksplice.org" "Ksplice"))
+      org-agenda-custom-commands
+      '(("u" tags-todo "SCHEDULED<>{.}&DEADLINE<>{.}"))
+      org-agenda-skip-deadline-if-done t
+      org-agenda-skip-scheduled-if-done t
+      org-agenda-todo-keyword-format "%-6s"
+      org-agenda-todo-ignore-deadlines t
+      org-todo-keywords
+      '((sequence "TODO" "INPROGRESS" "|" "DONE")
+        (sequence "|" "CANCELLED"  "DELEGATED")))
+
+(org-remember-insinuate)
+(global-set-key (kbd "C-c r") 'org-remember)
+(global-set-key (kbd "C-c a") 'org-agenda)
+
 (eval-after-load 'org
   '(progn
      (define-key org-mode-map (kbd "C-c t") 'org-todo)
