@@ -269,11 +269,23 @@ unable to perform symbol completion.")
   (cd directory)
   (shell (current-buffer)))
 
+(defun filter-trailing-whitespace (string)
+  (replace-regexp-in-string "\[ \t\]+$" "" string))
 (add-hook 'term-mode-hook 'my-term-mode-hook)
-
 (defun my-term-mode-hook ()
-  (define-key term-mode-map (kbd "C-x M-x") 'execute-extended-command)
-  (define-key term-raw-map (kbd "C-z") elscreen-map))
+  (add-hook 'buffer-substring-filters 'filter-trailing-whitespace))
+
+(eval-after-load 'term
+  '(progn
+     ;(define-key term-raw-map (kbd "C-x M-x") 'execute-extended-command)
+     (define-key term-raw-map (kbd "<mouse-4>") 'term-send-up)
+     (define-key term-raw-map (kbd "<mouse-5>") 'term-send-down)
+     (define-key term-raw-map (kbd "C-SPC") 'self-insert-command)
+     (define-key term-raw-map (kbd "C-/") 'term-send-undo)))
+
+(defun term-send-undo ()
+  (interactive)
+  (term-send-raw-string (kbd "^_")))
 
 (defun named-term (name directory)
   (interactive "MTerminal name: \nDIn directory: ")
