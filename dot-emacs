@@ -991,7 +991,8 @@ surrounding xml expression"
 (setq user-mail-address "nelhage@mit.edu"
       mail-envelope-from "nelhage@mit.edu"
       mail-specify-envelope-from t
-      mail-host-address "mit.edu")
+      mail-host-address "mit.edu"
+      sendmail-program "/usr/bin/msmtp")
 
 ;;vm
 
