@@ -938,6 +938,10 @@ surrounding xml expression"
      (define-key graphviz-dot-mode-map (kbd ";") 'self-insert-command)
      (define-key graphviz-dot-mode-map (kbd "C-c C-c") 'graphviz-dot-preview)))
 
+;;; ESS
+
+; (require 'ess-site)
+; (ess-restore-asm-extns)
 
 ;;Don't generate backup files on esp's server
 (defvar no-backup-patterns '("^/mnt/esp"))
