@@ -1145,3 +1145,15 @@ surrounding xml expression"
   '(progn
      (add-to-list 'auto-mode-alist
                   (cons "minutes.[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}$" 'sipb-minutes-mode))))
+
+(defun setup-terminals ()
+  (interactive)
+  (named-term "nelhage.com" "~/")
+  (named-term "ksplice-machine" "~/")
+  (named-shell "ksplice-ksplice" "~/ksplice/ksplice")
+  (named-shell "ksplice-client" "~/ksplice/client")
+  (named-shell "linux-2.6" "~/ksplice/linux-2.6")
+  (named-shell "barnowl-dev" "~/code/barnowl")
+  (named-term "mutt" "~/"))
+
+(put 'narrow-to-region 'disabled nil)
