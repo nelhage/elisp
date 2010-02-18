@@ -1047,6 +1047,16 @@ surrounding xml expression"
       '((sequence "TODO" "INPROGRESS" "|" "DONE")
         (sequence "|" "CANCELLED"  "DELEGATED")))
 
+(defun org-agenda-skip-future-scheduled ()
+  (let ((end (save-excursion (progn (outline-next-heading) (1- (point))))))
+    (when (re-search-forward org-scheduled-time-regexp end t)
+      (let ((ss (match-string 1))
+            (sd (org-time-string-to-absolute (match-string 1))))
+        (if (> sd (calendar-absolute-from-gregorian date))
+            end)))))
+
+(setq org-agenda-skip-function 'org-agenda-skip-future-scheduled)
+
 (org-remember-insinuate)
 (global-set-key (kbd "C-c r") 'org-remember)
 (global-set-key (kbd "C-c a") 'org-agenda)
