@@ -277,13 +277,21 @@ unable to perform symbol completion.")
 (defun my-term-mode-hook ()
   (add-hook 'buffer-substring-filters 'filter-trailing-whitespace))
 
+(defun maybe-browse-url-at-point ()
+  (interactive)
+  (let ((url (thing-at-point 'url)))
+    (if (and url
+             (string-match "^https?://.*\\..*" url))
+        (browse-url-at-point))))
+
 (eval-after-load 'term
   '(progn
      ;(define-key term-raw-map (kbd "C-x M-x") 'execute-extended-command)
      (define-key term-raw-map (kbd "<mouse-4>") 'term-send-up)
      (define-key term-raw-map (kbd "<mouse-5>") 'term-send-down)
      (define-key term-raw-map (kbd "C-SPC") 'self-insert-command)
-     (define-key term-raw-map (kbd "C-/") 'term-send-undo)))
+     (define-key term-raw-map (kbd "C-/") 'term-send-undo)
+     (define-key term-raw-map (kbd "<mouse-1>") 'maybe-browse-url-at-point)))
 
 (defun term-send-undo ()
   (interactive)
