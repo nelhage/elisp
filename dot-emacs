@@ -1149,9 +1149,10 @@ surrounding xml expression"
   (other-window 1)
   (w3m url t))
 
-(setq browse-url-browser-function 'w3m-other-window-new-session)
-; (set browse-url-browser-function 'browse-url-firefox)
-(setq w3m-home-page "http://google.com")
+;(setq browse-url-browser-function 'w3m-other-window-new-session)
+(setq browse-url-browser-function 'browse-url-generic
+      browse-url-generic-program "google-chrome"
+      w3m-home-page  "http://google.com")
 
 (put 'asm-comment-char 'safe-local-variable 'characterp)
 (put 'c-indentation-style 'safe-local-variable 'symbolp)
