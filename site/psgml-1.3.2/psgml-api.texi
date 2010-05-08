@@ -1,0 +1,933 @@
+\input texinfo   @c -*-texinfo-*-
+@c %**start of header
+@setfilename psgml-api.info
+@settitle psgml-api
+@c @setchapternewpage odd
+@c %**end of header
+@c $Id: psgml-api.texi,v 1.2 1999/12/03 17:29:39 lenst Exp $
+
+@ifinfo
+@format
+START-INFO-DIR-ENTRY
+* PSGML-API: (psgml-api).  PSGML, the API documentation.
+END-INFO-DIR-ENTRY
+@end format
+@end ifinfo
+
+@ifinfo
+Documentation for PSGML, a major mode for SGML.
+
+Copyright 1994 Lennart Staflin
+     
+Permission is granted to make and distribute verbatim
+copies of this manual provided the copyright notice and
+this permission notice are preserved on all copies.
+
+@ignore
+Permission is granted to process this file through TeX
+and print the results, provided the printed document
+carries a copying permission notice identical to this
+one except for the removal of this paragraph (this
+paragraph not being relevant to the printed manual).
+
+@end ignore
+Permission is granted to copy and distribute modified
+versions of this manual under the conditions for
+verbatim copying, and provided that the entire
+resulting derived work is distributed under the terms
+of a permission notice identical to this one.
+
+Permission is granted to copy and distribute
+translations of this manual into another language,
+under the above conditions for modified versions,
+except that this permission notice may be stated in a
+translation approved by the Free Software Foundation.
+
+@end ifinfo
+
+@titlepage
+
+@title Internals of PSGML
+@author Lennart Staflin
+     
+@c  The following two commands
+@c  start the copyright page.
+@page
+@vskip 0pt plus 1filll
+Copyright @copyright{} 1994 Lennart Staflin
+
+@c Published by ...
+
+Permission is granted to make and distribute verbatim
+copies of this manual provided the copyright notice and
+this permission notice are preserved on all copies.
+
+@ignore
+Permission is granted to process this file through TeX
+and print the results, provided the printed document
+carries a copying permission notice identical to this
+one except for the removal of this paragraph (this
+paragraph not being relevant to the printed manual).
+
+@end ignore
+Permission is granted to copy and distribute modified
+versions of this manual under the conditions for
+verbatim copying, and provided that the entire
+resulting derived work is distributed under the terms
+of a permission notice identical to this one.
+
+Permission is granted to copy and distribute
+translations of this manual into another language,
+under the above conditions for modified versions,
+except that this permission notice may be stated in a
+translation approved by the Free Software Foundation.
+@end titlepage
+
+@node Top, Types, (dir), (dir)
+@comment  node-name,  next,  previous,  up
+@ifinfo
+@top PSGML Internals
+@end ifinfo
+
+@menu
+* Types::                       Types and operations
+* Hooks::                       Hooks
+* Implementation::              Implementation notes
+* Index::                       Index
+
+ --- The Detailed Node Listing ---
+
+Types and operations
+
+* element::                     The element structure
+* attribute::                   Attribute Types
+* parser state::                Parser state
+* DTD::                         DTD
+* entities::                    Entities
+@end menu
+
+@node Types, Hooks, Top, Top
+@comment  node-name,  next,  previous,  up
+@chapter Types and operations
+
+NOTE:
+Names of element types, attributes and entities should be treated as far
+as possible as a real type.  In versions prior to 1.0 names are
+represented by lisp symbols but in 1.0 they are strings.
+
+Perhaps I should make a @file{psgml-api.el} that defines some functions
+to deal with names.  Then it would be possible to write code that works
+in both 0.4 and 1.0.
+
+
+@menu
+* element::                     The element structure
+* attribute::                   Attribute Types
+* parser state::                Parser state
+* DTD::                         DTD
+* entities::                    Entities
+@end menu
+
+@node element, attribute, Types, Types
+@comment  node-name,  next,  previous,  up
+@section The element structure
+
+@deftp {Data type} element
+The basic data type representing the element structure is the Element (this
+happens to be a node in the parse tree).
+@end deftp
+
+
+@subsection Mapping buffer positions to elements
+
+@defun sgml-find-context-of pos
+Return the element current at buffer position @var{pos}.  If @var{pos}
+is in markup, @code{sgml-markup-type} will be a symbol identifying the
+markup type.  It will be @code{nil} if @var{pos} is outside markup.
+@end defun
+
+@defun sgml-find-element-of pos
+Return the element containing the character at buffer position @var{pos}.
+@end defun
+
+
+@subsection Functions operating on elements
+
+@defun sgml-element-name element
+Returns the name of the element.  (obsolete) 
+@end defun
+
+@defun sgml-element-gi element
+Return the general identifier (string) of @var{element}.
+@end defun
+
+@defun sgml-element-level element
+Returns the level of @var{element} in the element structure.  The
+document element is level 1.
+@end defun
+
+@subsubsection Structure
+
+@defun sgml-top-element
+Return the document element.
+@end defun
+
+@defun sgml-off-top-p element
+True if @var{element} is the pseudo element above the document element.
+@end defun
+
+These functions return other related elements, or possibly @code{nil}.
+
+@defun sgml-element-content element
+First element in content of @var{element}, or nil.
+@end defun
+
+@defun sgml-element-next element
+Next sibling of @var{element}.  To loop thru all sub elements of an
+element, @code{el}, You could do like this:
+
+@lisp
+(let ((c (sgml-element-content el)))
+   (while c
+        <<Do something with c>>
+        (setq c (sgml-element-next c))))
+@end lisp
+@end defun
+
+@defun sgml-element-parent element
+Parent of @var{element}.
+@end defun
+
+
+@subsubsection Tags
+
+@defun sgml-element-stag-optional element
+Return true if the start-tag of @var{element} is omissible.
+@end defun
+
+@defun sgml-element-etag-optional element
+Return true if the end-tag of @var{element} is omissible.
+@end defun
+
+@defun sgml-element-stag-len element
+Return the length of the start-tag of @var{element}.  If the start-tag
+has been omitted the length is 0.
+@end defun
+
+@defun sgml-element-etag-len element
+Return the length of the end-tag of @var{element}.  If the end-tag
+has been omitted the length is 0.
+@end defun
+
+@defun sgml-element-net-enabled element
+Return true, if @var{element} or some parent of the element has null end
+tag (NET) enabled.  Return @code{t}, if it is @var{element} that has NET
+enabled.
+@end defun
+
+
+@subsubsection Positions
+
+These functions relates an element to positions in the buffer.
+
+@defun sgml-element-start element
+Position of start of @var{element}.
+@end defun
+
+@defun sgml-element-end element
+Position after @var{element}.
+@end defun
+
+@defun sgml-element-stag-end element
+Position after start-tag of @var{element}.
+@end defun
+
+@defun sgml-element-etag-start element
+Position before end-tag of @var{element}.
+@end defun
+
+
+@subsubsection Attributes
+
+@defun sgml-element-attlist element
+Return the attribute declaration list for @var{element}.
+@end defun
+
+@defun sgml-element-attribute-specification-list element
+Return the attribute specification list for @var{element}.
+@end defun
+
+@defun sgml-element-attval element attribute
+Return the value of the @var{attribute} in @var{element}, string or nil.
+@end defun
+
+
+@subsubsection Misc technical
+
+
+@defun sgml-element-data-p element
+True if @var{element} can contain data characters.
+@end defun
+
+@defun sgml-element-mixed element
+True if @var{element} has mixed content.
+@end defun
+
+@defun sgml-element-eltype element
+@end defun
+
+@defun sgml-element-empty element
+True if @var{element} is empty.
+@end defun
+
+@defun sgml-element-excludes element
+@end defun
+
+@defun sgml-element-includes element
+@end defun
+
+@defun sgml-element-model element
+Declared content or content model of @var{element}.
+@end defun
+
+@defun sgml-element-context-string element
+Return string describing context of @var{element}.
+@end defun
+
+@c ----------------------------------------------------------------------
+@node attribute, parser state, element, Types
+@comment  node-name,  next,  previous,  up
+@section Attribute Types
+
+Basic types for attributes are names and values.  (See note about names
+in @ref{Types}.) And attribute values (attval) by lisp strings.
+
+
+@subsection Attribute Declaration List Type
+
+@deftp {Data type} attlist attdecl*
+This is the result of the ATTLIST declarations in the DTD.
+All attribute declarations for an element is the elements
+attlist.
+@end deftp
+
+@defun sgml-lookup-attdecl name attlist 
+Return attribute declaration (attdecl) for attribute @var{name} in
+attribute declaration list @var{attlist}.
+@end defun
+
+@defun sgml-attribute-with-declared-value attlist declared-value
+Find the first attribute in @var{attlist} that has @var{declared-value}.
+@end defun
+
+
+@subsection Attribute Declaration Type 
+
+@deftp {Data type} attdecl name declared-value default-value
+This is the representation of an individual attribute declaration
+contained in an ATTLIST declaration.
+@end deftp
+
+@defun sgml-make-attdecl name declared-value default-value
+Produces an attdecl.
+@end defun
+
+@defun sgml-attdecl-name attdecl
+Returns the name of an attribute declaration.
+@end defun
+
+@defun sgml-attdecl-declared-value attdecl
+Returns the declared-value of attribute declaration @var{attdecl}.
+@end defun
+
+@defun sgml-attdecl-default-value: attdecl
+Returns the default-value of attribute declaration @var{attdecl}.
+@end defun
+
+
+@subsection Declared Value Type
+
+@deftp {Data type} declared-value (token-group | notation | simple)
+A declared value of an SGML attribute can be of different kinds.  If the
+declared value is a token group there is an associated list of name
+tokens.  For notation there is also a list of associated names, the
+allowed notation names.  The other declared values are represented by the
+type name as a lisp symbol.
+@c token-group = nametoken+
+@c notation = nametoken+
+@c simple = symbol
+@end deftp
+
+@defun sgml-declared-value-token-group declared-value
+Return the name token group for the @var{declared-value}.
+This applies to name token groups.  For other declared values nil is
+returned.
+@end defun
+
+@defun sgml-declared-value-notation declared-value
+Return the list of notation names for the @var{declared-value}.
+This applies to notation declared value.  For other declared values
+nil is returned.
+@end defun
+
+
+@subsection Default Value Type
+
+@deftp {Data type} default-value (required | implied | conref | specified )
+@c implied, conref = constant symbol
+@c specified = (fixed | normal)
+@c fixed, normal = attval
+There are several kinds of default values.  The @var{required},
+@var{implied}, and @var{conref} has no associated information.  The
+@var{specified} have an associated attribute value and can be either
+@code{fixed} or @code{normal}.
+@end deftp
+
+@defun sgml-make-default-value type &optional attval
+@end defun
+
+@defun sgml-default-value-attval default-value 
+Return the actual default value of the declared @var{default-value}.
+The actual value is a string. Return @code{nil} if no actual value.
+@end defun
+
+@defun sgml-default-value-type-p type default-value
+Return true if @var{default-value} is of @var{type}.  Where @var{type}
+is a symbol, one of @code{required}, @code{implied}, @code{conref}, or
+@code{fixed}.
+@end defun
+
+
+@subsection Attribute Specification Type
+
+@deftp {Data type} attspec name attval
+This is the result of parsing an attribute specification.
+@end deftp
+
+@defun sgml-make-attspec name attval
+Create an attspec from @var{name} and @var{attval}.
+Special case, if @var{attval} is @code{nil} this is an implied attribute.
+@end defun
+
+@defun sgml-attspec-name attspec
+Return the name of the attribute specified by @var{attspec}.
+@end defun
+
+@defun sgml-attspec-attval attspec
+Return the value (attval) of attribute specification @var{attspec}.
+If @var{attspec} is @code{nil}, @code{nil} is returned.
+@end defun
+
+
+@subsection Attribute Specification List Type
+
+@deftp {Data type} asl attspec*
+This is the result of parsing an attribute specification list.
+@end deftp
+
+@defun sgml-lookup-attspec name asl
+Return the attribute specification for attribute with @var{name} in the
+attribute specification list @var{asl}.  If the attribute is unspecified
+@code{nil} is returned.
+@end defun
+
+
+
+@c ------------------------------------------------------------------
+@node  parser state, DTD, attribute, Types
+@comment  node-name,  next,  previous,  up
+@section Parser state
+
+The state of the parser that needs to be kept between commands are
+stored in a buffer local variable.  Some global variables are
+initialised from this variable when parsing starts.
+
+@defvar sgml-buffer-parse-state
+The state of the parser that is kept between commands.  The value of
+this variable is of type pstate.
+@end defvar
+
+@deftp {Data type} pstate
+The parser state.
+@end deftp
+
+@defun sgml-pstate-dtd pstate
+The document type information (dtd) for the parser.
+@end defun
+
+
+@c ------------------------------------------------------------------
+@node  DTD, entities, parser state, Types
+@comment  node-name,  next,  previous,  up
+@section DTD
+
+@deftp {Data type} dtd
+Represents what PSGML knows about the DTD.
+@end deftp
+
+@defun sgml-dtd-doctype dtd
+The document type name.
+@end defun
+
+@defun sgml-dtd-eltypes dtd
+The table of element types.
+@end defun
+
+@defun sgml-dtd-entities dtd
+The table of declared general entities (entity-table).
+@end defun
+
+@defun sgml-dtd-parameters dtd
+The table of declared parameter entities (entity-table).
+@end defun
+
+@defun sgml-dtd-shortmaps dtd
+The list of short reference maps.
+@end defun
+
+@defun sgml-dtd-notations dtd
+Not yet implemented.
+@end defun
+
+
+
+@c ------------------------------------------------------------------
+@node  entities,  , DTD, Types
+@comment  node-name,  next,  previous,  up
+@section Entities
+
+@deftp {Data type} entity
+An entity has the following properties: 
+
+@table @var
+@item name
+The name of the entity (a string).  This is either the name of a
+declared entity (general or parameter) or the doctype name if it is the
+implicit entity referred to by the doctype declaration.
+
+@item type
+This is a symbol.  It is @code{text} if it is a text entity, other
+values are @code{cdata}, @code{ndata}, @code{sdata}, @code{sgml} or
+@code{dtd}.
+
+@item text
+This is the text of the entity, either a string or an external
+identifier.
+@end table
+@end deftp
+
+Operations on entities
+
+@defun sgml-make-entity name type text
+Create an entity.
+@end defun
+
+@defun sgml-entity-name entity
+The name of the entity.
+@end defun
+
+@defun sgml-entity-type entity
+The type of the entity.
+@end defun
+
+@defun sgml-entity-text entity
+The text of the entity.
+@end defun
+
+@defun sgml-entity-insert-text entity
+Insert the text of the entity into the current buffer at point.
+@end defun
+
+@defun sgml-entity-data-p entity
+True if @var{entity} is a data entity, that is not of type @code{text}.
+@end defun
+
+
+@deftp {Data type} entity-table
+A table of entities that can be referenced by entity name.
+@end deftp
+
+@defun sgml-lookup-entity name entity-table
+The entity with named @var{name} in the table @var{entity-table}.  If no
+such entity exists, @code{nil} is returned.
+@end defun
+
+@defun sgml-entity-declare name entity-table type text
+Create an entity from @var{name}, @var{type} and @var{text}; and enter
+the entity into the table @var{entity-table}.
+@end defun
+
+@defun sgml-entity-completion-table entity-table
+Make a completion table from the @var{entity-table}.
+@end defun
+
+@defun sgml-map-entities fn entity-table &optional collect
+Apply the function @var{fn} to all entities in @var{entity-table}.  If
+@var{collect} is @code{t}, the results of the applications are collected
+in a list and returned.
+@end defun
+
+
+
+@c ------------------------------------------------------------------
+@node Hooks, Implementation, Types, Top
+@comment  node-name,  next,  previous,  up
+@chapter Hooks
+
+@defvar sgml-open-element-hook
+The hook run by @code{sgml-open-element}.
+Theses functions are called with two arguments, the first argument is
+the opened element and the second argument is the attribute specification
+list.  It is probably best not to refer to the content or the end-tag of 
+the element.
+@end defvar
+
+@defvar sgml-close-element-hook
+The hook run by @code{sgml-close-element}.  These functions are invoked
+with @code{sgml-current-tree} bound to the element just parsed.
+@end defvar
+
+@defvar sgml-doctype-parsed-hook
+This hook is called after the doctype has been parsed.
+It can be used to load any additional information into the DTD structure.
+@end defvar
+
+@defvar sgml-sysid-resolve-functions
+This variable should contain a list of functions.
+Each function should take one argument, the system identifier of an entity.
+If the function can handle that identifier, it should insert the text
+of the entity into the current buffer at point and return t.  If the
+system identifier is not handled the function should return nil.
+@end defvar
+
+@defvar sgml-doctype-parsed-hook
+This hook is caled after the doctype has been parsed.
+It can be used to load any additional information into the DTD structure.
+@end defvar
+
+@defvar sgml-close-element-hook
+@c ***
+The hook run by `sgml-close-element'.
+These functions are invoked with `sgml-current-tree' bound to the
+element just parsed.
+@end defvar
+
+*** sgml-new-attribute-list-function
+This hook is run when a new element is inserted to construct the
+attribute specification list. The default function prompts for the
+required attributes.
+
+
+@c ------------------------------------------------------------------
+@node Implementation, Index, Hooks, Top
+@comment  node-name,  next,  previous,  up
+@chapter Implementation notes
+
+@section Data Types and Operations
+
+@subsection Element Type
+
+@deftp {Data type} eltype
+Data type representing the information about an element type.  An
+@code{eltype} has information from @samp{ELEMENT} and @samp{ATTLIST}
+declarations.  It can also store data for the application.
+@end deftp
+
+The element types are symbols in a special oblist.  The oblist is the
+table of element types.  The symbols name is the GI, its value is used
+to store three flags and the function definition holds the content
+model.  Other information about the element type is stored on the
+property list.
+
+@defun sgml-eltype-name et
+The name (a string) of the element type @var{et}.
+@end defun
+
+@defun sgml-eltype-appdata et prop
+Get application data from element type @var{et} with name @var{prop}.
+@var{prop} should be a symbol, reserved names are: flags, model, attlist,
+includes, excludes, conref-regexp, mixed, stag-optional, etag-optional.
+
+This function can be used as a place in @code{setf}, @code{push} and
+other functions from the CL library.
+@end defun
+
+@defun sgml-eltype-all-miscdata eltype
+A list of all data properties for eltype except for flags, model,
+includes and excludes.  This function filters the property list of
+@var{eltype}.  Used when saving the parsed DTD.
+@end defun
+
+@defun sgml-eltype-set-all-miscdata eltype miscdata
+Append the @var{miscdata} data properties to the properties of
+@var{eltype}.
+@end defun
+
+@defun sgml-eltype-attlist et
+The attribute specification list for the element type @var{et}.
+@end defun
+
+@defun sgml-eltype-completion-table eltypes
+Make a completion table from a list, @var{eltypes}, of element types.
+@end defun
+
+@defun sgml-eltype-stag-optional et
+True if the element type @var{et} has optional start-tag.
+@end defun
+
+@defun sgml-eltype-etag-optional et
+True if the element type @var{et} has optional end-tag.
+@end defun
+
+@defun sgml-eltype-excludes et
+The list of excluded element types for element type @var{et}.
+@end defun
+
+@defun sgml-eltype-includes et
+The list of included element types for element type @var{et}.
+@end defun
+
+@defun sgml-eltype-flags et
+Contains three flags as a number.  The flags are stag-optional,
+etag-optional and mixed.
+@end defun
+
+@defun sgml-eltype-mixed et
+True if element type @var{et} has mixed content.
+@end defun
+
+@defun sgml-eltype-model et
+The content model of element type @var{et}.  The content model is either
+the start state in the DFA for the content model or a symbol identifying
+a declared content.
+@end defun
+
+@defun sgml-eltype-shortmap et
+The name of the shortmap associated with element type @var{et}.  This
+can also be the symbol @code{empty} (if declared with a @samp{<!USEMAP
+gi #EMPTY>} or @code{nil} (if no associated map).
+@end defun
+
+
+@defun sgml-eltype-token et
+Return a token for the element type @var{et}.
+@end defun
+
+@defun sgml-eltypes-in-state state tree
+List of element types valid in @var{state} and @var{tree}.
+@end defun
+
+
+@subsection DTD
+
+The DTD data type is realised as a lisp vector using @code{defstruct}.
+
+There are two additional fields for internal use: dependencies and
+merged.
+
+@defun sgml-dtd-dependencies dtd
+The list of files used to create this DTD.
+@end defun
+
+@defun sgml-dtd-merged dtd
+The pair (@var{file} . @var{merged-dtd}), if the DTD has had a
+precompiled dtd merged into it.  @var{File} is the file containing the
+compiled DTD and @var{merged-dtd} is the DTD loaded from that file.
+@end defun
+
+
+@subsection Element and Tree
+
+@deftp {Data Type} tree
+This is the data type for the nodes in the tree build by the parser. 
+@end deftp
+
+The tree nodes are represented as lisp vectors, using @code{defstruct}
+to define basic operations. 
+
+The Element data type is a view of the tree built by the parser.
+
+
+@section Parsing model
+
+PSGML uses finite state machines and a stack to parse SGML.  Every
+element type has an associated DFA (deterministic finite automaton).
+This DFA is constructed from the content model.
+
+SGML restricts the allowed content models in such a way that it is
+easy to directly construct a DFA.
+
+To be able to determine when a start-tag can be omitted the DFA need to
+contain some more information than the traditional DFA.  In PSGML a DFA
+has a set of states and two sets of edges.  The edges are associated
+with tokens (corresponding to SGML's primitive content tokens).  I call
+these moves.  One set of moves, the @dfn{optional moves}, represents
+optional tokens.  I call the other set @dfn{required moves}.  The
+correspondence to SGML definitions are: if there is precisely one
+required move from one state, then the associated token is required.
+A state is final if there is not required move from that state.
+
+The SGML construct @samp{(...&...&...)} (@dfn{AND-group}) is another
+problem.  There is a simple translation to sequence- and or-connectors.
+For example @samp{(a & b & c)} is can be translated to:
+
+@example
+((a, ((c, b) | (b, c))) | 
+ (b, ((a, c) | (c, a))) | 
+ (c, ((a, b) | (b, a))) )
+@end example
+
+But this grows too fast to be of direct practical use.  PSGML represents
+an AND-group with one DFA for every (SGML) token in the group.  During
+parsing of an AND-group there is a pointer to a state in one of the
+group's DFAs, and a list of the DFAs for the tokens not yet satisfied.
+Most of this is hidden by the primitives for the state type.  The parser
+only sees states in a DFA and moves.
+
+
+@section Entity manager
+
+@defun sgml-push-to-entity entity &optional ref-start type
+Set current buffer to a buffer containing the entity @var{entity}.
+@var{entity} can also be a file name. Optional argument @var{ref-start}
+should be the start point of the entity reference. Optional argument
+@var{type}, overrides the entity type in entity look up.
+@end defun
+
+
+@defun sgml-pop-entity
+Should be called after a @code{sgml-push-to-entity} (or similar).
+Restore the current buffer to the buffer that was current when the push
+to this buffer was made.
+@end defun
+
+@defun sgml-push-to-string string
+Create an entity from @var{string} and push it on the top of the entity
+stack. After this the current buffer will be a scratch buffer containing
+the text of the new entity with point at the first character.
+
+Use @code{sgml-pop-entity} to exit from this buffer.
+@end defun
+
+
+@c @section Lexical
+
+@section Parser functions
+
+@defun sgml-need-dtd
+This makes sure that the buffer has a DTD and set global variables
+needed by parsing routines. One global variable is @code{sgml-dtd-info}
+which contain the DTD (type dtd).
+@end defun
+
+
+@defun sgml-parse-to goal &optional extra-cond quiet
+This is the low level interface to the parser.
+
+Parse until (at least) @var{goal}, a buffer position. Optional argument
+@var{extra-cond} should be a function. This function is called in the
+parser loop, and the loop is exited if the function returns t. If third
+argument @var{quit} is non-@code{nil}, no "@samp{Parsing...}" message
+will be displayed.
+@end defun
+
+
+@defun sgml-reparse-buffer shortref-fun
+Reparse the buffer and let @var{shortref-fun} take care of short 
+references.  @var{shortref-fun} is called with the entity as 
+argument and @code{sgml-markup-start} pointing to start of short 
+reference and point pointing to the end.
+@end defun
+
+
+@section Saved DTD Format
+@format
+File =         Comment,
+               File version,
+               S-expression --dependencies--,
+               Parameter entites,
+               Document type name,
+               Elements,
+               General entities,
+               S-expression --shortref maps--,
+               S-expression --notations--
+
+Elements =     Counted Sequence of S-expression --element type name--,
+               Counted Sequence of Element type description
+
+File version = "(sgml-saved-dtd-version 5)
+"
+
+Comment =      (";",
+                (CASE
+                  OF [0-9]
+                  OF [11-255])*,
+                [10] --end of line marker--)*
+
+Element type description = S-expression --Misc info--,
+               CASE
+                OF [0-7] --Flags 1:stag-opt, 2:etag-opt, 4:mixed--,
+                    Content specification,
+                    Token list --includes--,
+                    Token list --excludes--
+                OF [128] --Flag undefined element--
+
+Content specification = CASE
+                OF [0] --cdata--
+                OF [1] --rcdata--
+                OF [2] --empty--
+                OF [3] --any--
+                OF [4] --undefined--
+                OF [128] --model follows--,
+                    Model --nodes in the finite state automaton--
+
+Model =        Counted Sequence of Node
+
+Node =         CASE
+                OF Normal State
+                OF And Node
+
+Normal State = Moves --moves for optional tokens--,
+               Moves --moves for required tokens--
+
+Moves =        Counted Sequence of (Token,
+                    OCTET --state #--)
+
+And Node =     [255] --signals an AND node--,
+               Number --next state (node number)--,
+               Counted Sequence of Model --set of models--
+
+Token =        Number --index in list of elements--
+
+Number =       CASE
+                OF [0-250] --Small number 0--250--
+                OF [251-255] --Big number, first octet--,
+                    OCTET --Big number, second octet--
+
+Token list =   Counted Sequence of Token
+
+Parameter entites = S-expression --internal representation of parameter entities--
+
+General entities = S-expression --internal representation of general entities--
+
+Document type name = S-expression --name of document type as a string--
+
+S-expression = OTHER
+
+Counted Sequence = Number_a --length of sequence--,
+               (ARG_1)^a
+
+
+@end format
+
+
+
+@c ------------------------------------------------------------------
+@node Index,  , Implementation, Top
+@comment  node-name,  next,  previous,  up
+@chapter Index
+
+Types
+@printindex tp
+
+@bye
