@@ -966,17 +966,7 @@ surrounding xml expression"
 ; (require 'ess-site)
 ; (ess-restore-asm-extns)
 
-;;Don't generate backup files on esp's server
-(defvar no-backup-patterns '("^/mnt/esp"))
-
-(defun find-file-conditional-disable-backups ()
-  (dolist (pat no-backup-patterns)
-    (if (string-match pat (buffer-file-name))
-        (progn
-          (make-local-variable 'backup-inhibited)
-          (setq backup-inhibited t)))))
-
-(add-hook 'find-file-hook 'find-file-conditional-disable-backups)
+(setq-default backup-inhibited t)
 
 ;;;Mail
 
