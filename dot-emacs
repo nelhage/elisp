@@ -883,7 +883,8 @@ unable to perform symbol completion.")
              (cons (concat "\\."
                            (regexp-opt '("xml" "xsd" "sch"
                                          "rng" "xslt" "svg"
-                                         "rss" "plist") t) "\\'")
+                                         "rss" "plist" "html"
+                                         "xhtml") t) "\\'")
                    'nxml-mode))
 
 (add-to-list 'magic-mode-alist
@@ -897,7 +898,7 @@ unable to perform symbol completion.")
   (local-set-key (kbd "C-M-b") 'nxml-backward-element)
   (local-set-key (kbd "C-M-u") 'nxml-up-element)
   (local-set-key (kbd "C-M-d") 'nxml-down-element)
-  (local-set-key (kbd "C-M-k") 'nxml-kill-element)
+  (local-set-key (kbd "M-k") 'nxml-kill-element)
   (local-set-key (kbd "C-c ]") 'nxml-finish-element)
   (setq next-error-function 'nxml-next-error))
 
