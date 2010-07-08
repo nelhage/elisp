@@ -929,8 +929,8 @@ surrounding xml expression"
     (kill-region start (point))))
 
 ;;;psgml-mode
-(autoload 'sgml-mode "psgml" "Major mode to edit SGML files." t)
-(autoload 'xml-mode "psgml" "Major mode to edit XML files." t)
+; (autoload 'sgml-mode "psgml" "Major mode to edit SGML files." t)
+; (autoload 'xml-mode "psgml" "Major mode to edit XML files." t)
 
 (setq sgml-set-face t
       sgml-indent-data t
