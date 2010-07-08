@@ -1079,6 +1079,15 @@ surrounding xml expression"
 (autoload 'vm-mail "vm" "Send a mail message using VM." t)
 (autoload 'vm-submit-bug-report "vm" "Send a bug report about VM." t)
 
+(setq notmuch-saved-searches '(("inbox" . "tag:inbox")
+                               ("todo"  . "tag:todo")
+                               ("llvmdev"  . "to:llvmdev@cs.uiuc.edu")
+                               ("llvm-commits"  . "to:llvm-commits")
+                               ("lldb"  . "to:lldb-dev@cs.uiuc.edu")
+                               ("clang"  . "to:cfe-dev@cs.uiuc.edu")
+                               ("clang-commits"  . "to:cfe-commits@cs.uiuc.edu")
+                               ("git" . "vger.kernel.org")))
+
 ;;Mailcrypt
 (require 'mailcrypt)
 (mc-setversion "gpg")
