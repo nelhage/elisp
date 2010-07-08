@@ -445,7 +445,7 @@ unable to perform symbol completion.")
 
 (autoload 'perldoc "perl-utils" "Look up documentation on a perl module" t)
 (autoload 'run-perl "inf-perl" "Run perl interactively" t)
-(setq inf-perl-shell-program "/usr/local/bin/re.pl")
+(setq inf-perl-shell-program "/usr/bin/re.pl")
 
 (defun my-perl-mode-hook ()
   (require 'perl-utils)
