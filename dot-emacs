@@ -845,6 +845,15 @@ unable to perform symbol completion.")
 (autoload 'yaml-mode "yaml-mode" "Enter YAML Mode" t)
 (add-to-list 'auto-mode-alist (cons "\\.ya?ml$" 'yaml-mode))
 
+;; LLVM development
+
+(let ((llvm-el (expand-file-name "~/code/llvm/utils/emacs")))
+  (when (file-exists-p llvm-el)
+    (load-file (concat llvm-el "/emacs.el"))
+    (add-to-list 'load-path llvm-el)
+    (require 'llvm-mode)
+    (require 'tablegen-mode)))
+
 ;; google calendar client
 
 (load-library "g")
