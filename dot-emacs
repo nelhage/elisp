@@ -1063,7 +1063,7 @@ surrounding xml expression"
 
 (add-hook 'bbdb-after-change-hook (lambda (arg) (bbdb-save-db nil nil)))
 
-(setq user-mail-address "nelhage@mit.edu"
+(setq user-mail-address "nelhage@nelhage.com"
       mail-envelope-from 'header
       mail-specify-envelope-from t
       message-sendmail-envelope-from 'header
