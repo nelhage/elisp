@@ -1129,9 +1129,11 @@ surrounding xml expression"
       org-agenda-todo-keyword-format "%-6s"
       org-agenda-todo-ignore-deadlines t
       org-todo-keywords
-      '((sequence "TODO" "INPROGRESS" "|" "DONE")
+      '((sequence "TODO" "INPROGRESS" "PENDING-REVIEW" "NEEDS-TESTING" "|" "DONE")
         (sequence "|" "CANCELLED"  "DELEGATED"))
-      org-deadline-warning-days 0)
+      org-deadline-warning-days 0
+      org-return-follows-link t
+      line-move-visual nil)
 
 (eval-after-load 'org-agenda
   '(progn
