@@ -52,6 +52,8 @@
 ; Apparently I'm not supposed to set this globally, but if you're not
 ; going to tell me why, too bad.
 (setq epa-armor t)
+(require 'epa-file)
+(epa-file-enable)
 
 (autoload 'nethack "nethack" "Play Nethack." t)
 (setq nethack-program "/usr/games/nethack-lisp")
