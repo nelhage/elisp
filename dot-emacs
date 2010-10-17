@@ -1164,6 +1164,11 @@ surrounding xml expression"
      (set-face-foreground 'org-todo "#FF6666")
      (set-face-foreground 'org-done "#00FF00")))
 
+;; SES mode
+(add-hook 'ses-mode-hook 'my-ses-mode-hook)
+(defun my-ses-mode-hook ()
+  (whitespace-mode -1))
+
 ;;Livejournal
 (autoload 'lj-login "ljupdate" "Log in to Livejournal" t)
 
