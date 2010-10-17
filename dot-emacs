@@ -1259,8 +1259,8 @@ surrounding xml expression"
 
 (defvar initial-terminals
   '((term "nelhage.com" "~/")
-    (term "ksplice-machine" "~/")
-    (term "ksplice-zephyr" "~/")
+    (term "ksplice-machine" "~/ksplice")
+    (term "ksplice-zephyr" "~/ksplice")
     (shell "ksplice-ksplice" "~/ksplice/ksplice")
     (shell "ksplice-client" "~/ksplice/client")
     (shell "ksplice-dev" "~/ksplice/dev")
@@ -1280,7 +1280,8 @@ surrounding xml expression"
   (interactive)
   (dolist (spec initial-terminals)
     (destructuring-bind (type name dir) spec
-      (when (not (get-buffer (concat "*" name "*")))
+      (when (and (not (get-buffer (concat "*" name "*")))
+                 (file-exists-p dir))
         (case type
           (term
            (named-term name dir))
