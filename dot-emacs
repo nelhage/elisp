@@ -483,6 +483,9 @@ unable to perform symbol completion.")
   (add-to-list 'flymake-allowed-file-name-masks
                '("\\.py\\'" flymake-pylint-init)))
 
+(add-to-list 'interpreter-mode-alist (cons "python2.4" 'python-mode))
+(add-to-list 'interpreter-mode-alist (cons "python2.5" 'python-mode))
+
 
 (defun pydoc (word)
   "Run `pydoc' on WORD and display it in a buffer"
