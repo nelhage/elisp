@@ -1214,10 +1214,6 @@ surrounding xml expression"
 
 (add-to-list 'auto-mode-alist (cons "/Makefrag$" 'makefile-mode))
 
-; (desktop-save-mode 1)
-; (setq desktop-dirname (expand-file-name "~"))
-; (add-hook 'find-file-hook 'desktop-save-in-desktop-dir)
-
 (require 'w3m-load)
 ; (autoload 'w3m "w3m" "w3m" t t)
 ; (autoload 'w3m-find-file "w3m" "w3m" t t)
@@ -1284,9 +1280,3 @@ surrounding xml expression"
            (named-shell name dir)))))))
 
 (put 'narrow-to-region 'disabled nil)
-
-(require 'desktop)
-(setq desktop-path '("~/.emacs.d/")
-      desktop-dirname "~/.emacs.d/")
-(desktop-save-mode 1)
-(add-hook 'auto-save-hook (lambda () (desktop-save-in-desktop-dir)))
