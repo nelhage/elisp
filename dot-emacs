@@ -1275,7 +1275,7 @@ surrounding xml expression"
     (shell "linux-2.6" "~/ksplice/linux-2.6")
     (shell "barnowl-dev" "~/code/barnowl")
     (shell "llvm-dev" "~/code/llvm")
-    (shell "mysql" "~/")
+    ; (shell "mysql" "~/")
     (term "mutt" "~/")
     (term "mutt-archive" "~/"))
   "Terminals to create initially")
