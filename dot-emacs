@@ -1262,7 +1262,7 @@ surrounding xml expression"
 (defvar initial-terminals
   '((term "nelhage.com" "~/")
     (term "ksplice-machine" "~/ksplice")
-    (term "ksplice-zephyr" "~/ksplice")
+    (term "ksplice-zephyr" "~/")
     (shell "ksplice-ksplice" "~/ksplice/ksplice")
     (shell "ksplice-client" "~/ksplice/client")
     (shell "ksplice-dev" "~/ksplice/dev")
