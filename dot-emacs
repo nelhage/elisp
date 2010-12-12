@@ -487,6 +487,8 @@ unable to perform symbol completion.")
 
 (add-to-list 'interpreter-mode-alist (cons "python2.4" 'python-mode))
 (add-to-list 'interpreter-mode-alist (cons "python2.5" 'python-mode))
+(add-to-list 'auto-mode-alist (cons "SConscript$" 'python-mode))
+(add-to-list 'auto-mode-alist (cons "SConstruct$" 'python-mode))
 
 
 (defun pydoc (word)
