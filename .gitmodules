@@ -7,3 +7,9 @@
 [submodule "site/google-maps"]
 	path = site/google-maps
 	url = git://git.naquadah.org/~jd/jd-el.git
+[submodule "site/slime"]
+	path = site/slime
+	url = git://sbcl.boinkor.net/slime.git
+[submodule "site/swank-js"]
+	path = site/swank-js
+	url = git://github.com/ivan4th/swank-js.git

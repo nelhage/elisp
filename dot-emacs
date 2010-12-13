@@ -718,6 +718,13 @@ unable to perform symbol completion.")
 (autoload 'slime "slime" t t)
 (autoload 'slime-connect "slime" t t)
 
+(eval-after-load 'slime
+  '(progn
+     (slime-setup '(slime-repl slime-js))
+     (add-hook 'js2-mode-hook
+               (lambda ()
+                 (slime-js-minor-mode 1)))))
+
 (defadvice slime (around slime-switch-to-repl-if-connected)
   (if (safe-funcall 'slime-connected-p)
       (slime-switch-to-output-buffer)
@@ -758,7 +765,6 @@ unable to perform symbol completion.")
     (save-excursion (slime))) 
   (slime-mode t)
   (setq complete-symbol-function slime-complete-symbol-function))
-
 
 (setq common-lisp-hyperspec-root "file:///usr/share/doc/hyperspec/")
 
@@ -802,8 +808,8 @@ unable to perform symbol completion.")
   (local-set-key (kbd "TAB") 'indent-and-complete-symbol-generic))
 
 (defun define-slime-keys ()
-  (define-lisp-keys)
-  (setq lisp-indent-function 'common-lisp-indent-function)
+  ; (define-lisp-keys)
+  ; (setq lisp-indent-function 'common-lisp-indent-function)
   (local-set-key (kbd "TAB") 'slime-indent-and-complete-symbol))
 
 (defun define-elisp-keys ()
