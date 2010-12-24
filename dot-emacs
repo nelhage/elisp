@@ -655,8 +655,12 @@ unable to perform symbol completion.")
   (save-excursion
     (shell-command-on-region (point-min) (point-max) "detex | wc -w")))
 
-(eval-after-load 'info '(setq Info-directory-list
-                         (cons "~/.elisp/auctex/doc" Info-default-directory-list)))
+(eval-after-load 'info
+  '(progn
+     (setq Info-directory-list
+           (cons "~/.elisp/auctex/doc" Info-default-directory-list))
+     (define-key Info-mode-map "B" 'Info-history-back)
+     (define-key Info-mode-map "F" 'Info-history-forward)))
 
 ;;;Lisps
 ;;;Scheme
