@@ -174,3 +174,5 @@
        (unwind-protect
            (progn ,@body)
          (set-match-data ,v)))))
+
+(provide 'ddx)
