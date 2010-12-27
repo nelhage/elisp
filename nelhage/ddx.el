@@ -67,13 +67,15 @@
          font-lock-builtin-face)
    (cons (concat "\\<" (regexp-opt '("private" "public" "static" "final")) "\\>")
          font-lock-keyword-face)
-   (cons ";.*" font-lock-comment-face)
+   (cons "[#;].*" font-lock-comment-face)
    (cons (concat "\\.\\<" (regexp-opt '("field" "method" "limit"
                                         "throws" "catch" "class"
-                                        "super" "var" "line")) "\\>")
+                                        "super" "var" "line"
+                                        "registers" "annotation"
+                                        "end")) "\\>")
          font-lock-preprocessor-face)
    (cons "^\\sw+:" font-lock-constant-face)
-   (cons "\\<v[[:digit:]]+\\>" font-lock-variable-name-face)))
+   (cons "\\<[vp][[:digit:]]+\\>" font-lock-variable-name-face)))
 
 (defvar ddx-mode-map
   (let ((map (make-sparse-keymap)))
