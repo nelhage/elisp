@@ -459,13 +459,13 @@ unable to perform symbol completion.")
   '(progn
      (set-face-background 'magit-item-highlight "grey8")
      (set-face-attribute 'magit-diff-add nil
-                         :foreground nil
+                         :foreground 'unspecified
                          :inherit diff-added-face)
      (set-face-attribute 'magit-diff-del nil
-                         :foreground nil
+                         :foreground 'unspecified
                          :inherit diff-removed-face)
      (set-face-attribute 'magit-diff-none nil
-                         :foreground nil
+                         :foreground 'unspecified
                          :inherit diff-context-face)))
 
 (require 'vc-hg)
