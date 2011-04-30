@@ -285,16 +285,57 @@ unable to perform symbol completion.")
              (string-match "^https?://.*\\..*" url))
         (browse-url-at-point))))
 
+(defun term-send-c-space ()
+  (interactive)
+  (term-send-raw-string "\0"))
+
 (eval-after-load 'term
   '(progn
-     ;(define-key term-raw-map (kbd "C-x M-x") 'execute-extended-command)
+     (setq term-default-bg-color 'unspecified)
+     (setq term-default-fg-color 'unspecified)
+
+     ;;(define-key term-raw-map (kbd "C-x M-x") 'execute-extended-command)
      (define-key term-raw-map (kbd "<mouse-4>") 'term-send-up)
      (define-key term-raw-map (kbd "<mouse-5>") 'term-send-down)
-     (define-key term-raw-map (kbd "C-SPC") 'self-insert-command)
+     (define-key term-raw-map (kbd "C-SPC") 'term-send-c-space)
+     ;; (define-key term-raw-map (kbd "ESC") 'term-send-raw-meta)
      (define-key term-raw-map (kbd "C-/") 'term-send-undo)
      (define-key term-raw-map (kbd "<mouse-1>") 'maybe-browse-url-at-point)
-     (define-key term-raw-map (kbd "C-c n") 'notmuch-hello)
-     (define-key term-raw-map (kbd "C-c a") 'org-agenda)))
+
+     (let ((i 1))
+       (while (<= i 12)
+         (define-key term-raw-map (vector (make-symbol (concat "f" (int-to-string i))))
+           'my-term-send-fN)
+         (setq i (+ i 1))))
+
+     (defun my-term-send-fN ()
+       (interactive)
+       (let ((evt last-input-event))
+         (when (and (symbolp evt)
+                    (string-match "^f\\([0-9]+\\)" (symbol-name evt)))
+           (let ((n (string-to-int (match-string 1 (symbol-name evt)))))
+             (message "%s" n)
+             (term-send-raw-string
+              (format "\eO%c" (+ ?O n)))))))
+
+     (defun term-send-raw-meta ()
+       (interactive)
+       (let ((char last-input-event))
+         (when (symbolp last-input-event)
+           ;; Convert `return' to C-m, etc.
+           (let ((tmp (get char 'event-symbol-elements)))
+             (when tmp
+               (setq char (car tmp)))
+             (when (symbolp char)
+               (setq tmp (get char 'ascii-character))
+               (when tmp
+                 (setq char tmp)))))
+         (setq char (logand char (lognot ?\M-\^@)))
+         (term-send-raw-string (if (and (numberp char)
+                                        (> char 127)
+                                        (< char 256))
+                                   (make-string 1 char)
+                                 (format "\e%c" char)))))))
 
 (defun term-send-undo ()
   (interactive)
