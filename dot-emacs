@@ -531,6 +531,9 @@ unable to perform symbol completion.")
 (add-to-list 'interpreter-mode-alist (cons "python2.5" 'python-mode))
 (add-to-list 'auto-mode-alist (cons "SConscript$" 'python-mode))
 (add-to-list 'auto-mode-alist (cons "SConstruct$" 'python-mode))
+(eval-after-load 'python
+  '(progn
+    (define-key python-mode-map (kbd "M-TAB") 'dabbrev-expand)))
 
 
 (defun pydoc (word)
@@ -1177,7 +1180,7 @@ surrounding xml expression"
       org-agenda-restore-windows-after-quit t
       org-default-notes-file (concat org-directory "/notes.org")
       org-remember-templates
-      '(("Todo" ?t "* TODO %?%^G\n" "todo.org" "Tasks")
+      '(("Todo" ?t "* TODO %?\n" "todo.org" "Tasks")
         ("Barnowl" ?b "* TODO %?\n" "todo.org" "BarnOwl")
         ("Ksplice" ?k "* TODO %?\n" "ksplice.org" "Ksplice"))
       org-agenda-custom-commands
@@ -1328,9 +1331,11 @@ surrounding xml expression"
     (shell "linux-2.6" "~/ksplice/linux-2.6")
     (shell "barnowl-dev" "~/code/barnowl")
     (shell "llvm-dev" "~/code/llvm")
-    ; (shell "mysql" "~/")
+    ;; (shell "mysql" "~/")
     (term "mutt" "~/")
-    (term "mutt-archive" "~/"))
+    (term "mutt-nelhage" "~/")
+    (term "mutt-archive" "~/")
+    (term "brownpants" "~/"))
   "Terminals to create initially")
 
 (defun setup-terminals ()
@@ -1345,4 +1350,7 @@ surrounding xml expression"
           (shell
            (named-shell name dir)))))))
 
-(put 'narrow-to-region 'disabled nil)
+(defun sql-updates ()
+  (interactive)
+  (let ((sql-mysql-program "mysql.updates"))
+    (sql-mysql)))
