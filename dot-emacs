@@ -372,6 +372,7 @@ unable to perform symbol completion.")
 
 (require 'ido)
 (ido-mode 1)
+(ido-everywhere 1)
 (setq ido-auto-merge-work-directories-length -1
       ido-max-directory-size (* 256 1024)
       ido-enable-flex-matching t
