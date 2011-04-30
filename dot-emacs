@@ -103,7 +103,7 @@ unable to perform symbol completion.")
   (require 'font-lock)
   (require 'whitespace)
   (set-face-background 'whitespace-tab "#111133")
-  (setq whitespace-style '(trailing tabs))
+  (setq whitespace-style '(face trailing tabs))
   (global-whitespace-mode 1)
   (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
   (setq font-lock-maximum-decoration t
