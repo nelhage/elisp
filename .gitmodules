@@ -13,3 +13,6 @@
 [submodule "site/swank-js"]
 	path = site/swank-js
 	url = git://github.com/ivan4th/swank-js.git
+[submodule "site/emacs_chrome"]
+	path = site/emacs_chrome
+	url = git://github.com/stsquad/emacs_chrome.git
