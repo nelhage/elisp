@@ -737,6 +737,7 @@ unable to perform symbol completion.")
 (define-scheme-implementation "kawa")
 (define-scheme-implementation "csi")
 (define-scheme-implementation "scheme48")
+(define-scheme-implementation "racket")
 
 (add-to-list 'auto-mode-alist
              (cons (concat "/\\."
