@@ -1192,6 +1192,7 @@ surrounding xml expression"
 ;; Org mode
 
 (setq org-directory "~/nelhage/org")
+(require 'org-mobile)
 (setq org-hide-leading-stars t
       org-log-done 'time
       org-agenda-files (list (concat org-directory "/todo.org")
@@ -1221,6 +1222,8 @@ surrounding xml expression"
         (sequence "|" "CANCELLED"  "DELEGATED"))
       org-deadline-warning-days 0
       org-return-follows-link t
+      org-mobile-inbox-for-pull (concat org-directory "/mobile.org")
+      org-mobile-directory "~/Dropbox/org/mobile"
       line-move-visual nil)
 
 (defun my-skip-unless-ksplice ()
