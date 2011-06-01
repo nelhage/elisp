@@ -651,6 +651,9 @@ unable to perform symbol completion.")
   (local-set-key (kbd "C-x `") 'next-error)
   (setq forward-sexp-function nil))
 
+(put 'js2-basic-offset 'safe-local-variable 'integerp)
+
+
 (defun my-javascript-mode-hook ()
   (require 'moz))
 
