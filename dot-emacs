@@ -1063,7 +1063,8 @@ surrounding xml expression"
   (define-key mail-mode-map (kbd "C-c a") 'mail-attach-file)
   (define-key mail-mode-map (kbd "C-c TAB") 'bbdb-complete-name)
   (define-key mail-mode-map (kbd "C-c C-]") 'mail-dont-send)
-  (define-key mail-mode-map (kbd "TAB") 'mail-complete-for-tab-command))
+  (define-key mail-mode-map (kbd "TAB") 'mail-complete-for-tab-command)
+  (setq fill-column 69))
 
 (defun mail-complete-for-tab-command ()
   (interactive)
