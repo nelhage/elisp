@@ -4,9 +4,6 @@
 [submodule "site/org-mode"]
 	path = site/org-mode
 	url = git://repo.or.cz/org-mode.git
-[submodule "site/google-maps"]
-	path = site/google-maps
-	url = git://git.naquadah.org/~jd/jd-el.git
 [submodule "site/slime"]
 	path = site/slime
 	url = git://sbcl.boinkor.net/slime.git
