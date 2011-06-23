@@ -1051,6 +1051,14 @@ surrounding xml expression"
 
 (setq-default backup-inhibited t)
 
+;; puppet
+
+(autoload 'puppet-mode "puppet-mode" "Major mode for editing puppet manifests")
+
+(add-to-list 'auto-mode-alist '("\\.pp$" . puppet-mode))
+
+;;; ADD NEW LANGUAGE MODES HERE
+
 ;;;Mail
 
 (defun fetchmail ()
