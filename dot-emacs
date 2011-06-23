@@ -632,7 +632,6 @@ unable to perform symbol completion.")
 (add-hook 'js2-mode-hook 'my-js2-mode-hook)
 (add-hook 'js2-mode-hook 'define-bracket-keys)
 (setq js2-use-font-lock-faces t
-      js2-bounce-indent-flag nil
       js2-allow-keywords-as-property-names t
       js2-mode-show-strict-warnings nil)
 
