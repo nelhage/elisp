@@ -1197,7 +1197,10 @@ surrounding xml expression"
         ("Ksplice" ?k "* TODO %?\n" "ksplice.org" "Ksplice"))
       org-agenda-custom-commands
       '(("u" tags-todo "SCHEDULED<>{.}&DEADLINE<>{.}-ksplice")
-        ("k" "Ksplice agenda" tags-todo "KSPLICE"))
+        ("k" "Ksplice todo" tags-todo "KSPLICE")
+        ("K" "Ksplice agenda" agenda ""
+         ((org-agenda-files
+           (list (concat org-directory "/ksplice.org"))))))
       org-agenda-skip-deadline-if-done t
       org-agenda-skip-scheduled-if-done t
       org-agenda-todo-keyword-format "%-6s"
@@ -1208,6 +1211,10 @@ surrounding xml expression"
       org-deadline-warning-days 0
       org-return-follows-link t
       line-move-visual nil)
+
+(defun my-skip-unless-ksplice ()
+  (if (not (member "KSPLICE" (org-get-tags-at (point))))
+      (point-max)))
 
 (eval-after-load 'org-agenda
   '(progn
