@@ -234,6 +234,7 @@ unable to perform symbol completion.")
       comint-prompt-read-only t
       diff-switches "-u"
       compile-command "find-makefile"
+      grep-command "gr -nH -e "
       pop-up-windows nil)
 
 (eval-after-load 'calc
