@@ -1077,15 +1077,15 @@ surrounding xml expression"
   (interactive)
   (shell-command "fetchmail"))
 
-(add-hook 'mail-mode-hook 'auto-fill-mode)
-(add-hook 'mail-mode-hook 'my-mail-mode-hook)
-(add-hook 'mail-mode-hook 'flyspell-mode)
+(add-hook 'message-mode-hook 'auto-fill-mode)
+(add-hook 'message-mode-hook 'my-mail-mode-hook)
+(add-hook 'message-mode-hook 'flyspell-mode)
 
 (defun my-mail-mode-hook ()
-  (define-key mail-mode-map (kbd "C-c a") 'mail-attach-file)
-  (define-key mail-mode-map (kbd "C-c TAB") 'bbdb-complete-name)
-  (define-key mail-mode-map (kbd "C-c C-]") 'mail-dont-send)
-  (define-key mail-mode-map (kbd "TAB") 'mail-complete-for-tab-command)
+  (local-set-key (kbd "C-c a") 'mail-attach-file)
+  (local-set-key (kbd "C-c TAB") 'bbdb-complete-name)
+  (local-set-key (kbd "C-c C-]") 'mail-dont-send)
+  (local-set-key (kbd "TAB") 'mail-complete-for-tab-command)
   (setq fill-column 69))
 
 (defun mail-complete-for-tab-command ()
