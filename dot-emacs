@@ -1208,7 +1208,10 @@ surrounding xml expression"
         ("k" "Ksplice todo" tags-todo "KSPLICE")
         ("K" "Ksplice agenda" agenda ""
          ((org-agenda-files
-           (list (concat org-directory "/ksplice.org"))))))
+           (list (concat org-directory "/ksplice.org")))))
+        ("O" "Other agenda" agenda ""
+         ((org-agenda-files
+           (list (concat org-directory "/todo.org"))))))
       org-agenda-skip-deadline-if-done t
       org-agenda-skip-scheduled-if-done t
       org-agenda-todo-keyword-format "%-6s"
@@ -1360,9 +1363,7 @@ surrounding xml expression"
     (shell "llvm-dev" "~/code/llvm")
     ;; (shell "mysql" "~/")
     (term "mutt" "~/")
-    (term "mutt-nelhage" "~/")
-    (term "mutt-archive" "~/")
-    (term "brownpants" "~/"))
+    (term "oracle-irc" "~/"))
   "Terminals to create initially")
 
 (defun setup-terminals ()
