@@ -657,6 +657,7 @@ unable to perform symbol completion.")
 (defun my-js2-mode-hook ()
   (local-set-key (kbd "C-a") 'beginning-of-line-dwim)
   (local-set-key (kbd "C-x `") 'next-error)
+  (local-set-key (kbd "M-TAB") 'dabbrev-completion)
   (setq forward-sexp-function nil))
 
 (put 'js2-basic-offset 'safe-local-variable 'integerp)
