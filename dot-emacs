@@ -227,6 +227,10 @@ unable to perform symbol completion.")
       compile-command "find-makefile"
       grep-command "gr -nH -e "
       pop-up-windows nil)
+(eval-after-load 'grep
+  '(progn
+     (grep-apply-setting 'grep-use-null-device nil)))
+
 
 (eval-after-load 'calc
   '(progn
