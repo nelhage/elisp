@@ -617,8 +617,8 @@ unable to perform symbol completion.")
 
 (defun my-java-mode-hook ()
   (setq *javadoc-base-url* "file:///usr/share/doc/sun-java5-doc/html/api/")
-  (require 'javadoc) 
-  (require 'java-utils) 
+  (require 'javadoc)
+  (require 'java-utils)
   (javadoc-load-classes)
   (define-key java-mode-map "\C-c\C-d" (make-sparse-keymap))
   (define-key java-mode-map "\C-c\C-dh" 'javadoc-lookup-class)
@@ -626,7 +626,7 @@ unable to perform symbol completion.")
 
 ;;; ANTLR
 (autoload 'antlr-mode "antlr-mode" nil t)
-(setq auto-mode-alist (cons '("\\.g\\'" . antlr-mode) auto-mode-alist)) 
+(setq auto-mode-alist (cons '("\\.g\\'" . antlr-mode) auto-mode-alist))
 
 ;; Javascript
 (autoload 'moz-minor-mode "moz" "Mozilla Minor and Inferior Mozilla Modes" t)
@@ -1209,8 +1209,8 @@ surrounding xml expression"
       org-default-notes-file (concat org-directory "/notes.org")
       org-remember-templates
       '(("Todo" ?t "* TODO %?\n" "todo.org" "Tasks")
-        ("Barnowl" ?b "* TODO %?\n" "todo.org" "BarnOwl")
-        ("Ksplice" ?k "* TODO %?\n" "ksplice.org" "Ksplice"))
+        ("Ksplice" ?k "* TODO %?\n" "ksplice.org" "Ksplice")
+        ("Buy" ?b "* TODO %?" "todo.org" "To Buy"))
       org-agenda-custom-commands
       '(("u" tags-todo "SCHEDULED<>{.}&DEADLINE<>{.}-ksplice")
         ("k" "Ksplice todo" tags-todo "KSPLICE")
