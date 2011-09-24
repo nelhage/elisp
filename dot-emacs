@@ -1019,8 +1019,8 @@ surrounding xml expression"
 
 ;;; Zen Coding
 (autoload 'zencoding-mode "zencoding-mode" "Minor mode to enable Zen coding")
-(add-hook 'sgml-mode-hook 'zencoding-mode)
-(add-hook 'nxml-mode-hook 'zencoding-mode)
+; (add-hook 'sgml-mode-hook 'zencoding-mode)
+; (add-hook 'nxml-mode-hook 'zencoding-mode)
 
 ;;;Mason-mode
 (defun mason-mode ()
