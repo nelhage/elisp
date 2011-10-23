@@ -618,6 +618,16 @@ unable to perform symbol completion.")
         (string-to-number (buffer-string))
       nil)))
 
+(defun smells-like-c++ ()
+  (when (string-match "\\.h\\'" (buffer-name))
+    (save-excursion
+      (goto-char (point-min))
+      (if (re-search-forward "\\s \\(class\\|template\\)" nil t)
+          t))))
+
+(add-to-list 'magic-mode-alist
+             '(smells-like-c++ . c++-mode))
+
 ;;;Java
 (add-hook 'java-mode-hook 'define-bracket-keys)
 (add-hook 'java-mode-hook 'my-java-mode-hook)
