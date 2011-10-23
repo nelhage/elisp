@@ -67,6 +67,13 @@
      (define-key doc-view-mode-map (kbd "C-a") 'image-bol)
      (define-key doc-view-mode-map (kbd "C-c t") 'doc-view-open-text)))
 
+(eval-after-load 'compilation
+  '(progn
+     (let ((ent (aget compilation-error-regexp-alist-alist 'gcc-include)))
+       (when ent
+         (setcar ent "^\\(?:In file included\\|                \\) from \\(.+?\\):\\([0-9]+\\)\\(:[0-9]+\\)?\\(?:\\(:\\)\\|\\(,\\)\\)?")
+         (setcdr ent (list 1 2 nil '(4 . 5)))))))
+
 (defun strip-lf ()
   (interactive)
   (save-excursion
