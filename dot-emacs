@@ -150,15 +150,18 @@ unable to perform symbol completion.")
 (defun my-echo-help-text ()
   (let ((help-echo (get-char-property (point) 'help-echo)))
     (when (and help-echo flymake-mode)
-      (message help-echo)))) 
+      (message help-echo))))
 
 (setq my-echo-help-timer (run-with-idle-timer 1 t 'my-echo-help-text))
 
-(defvar default-font "Mono-9" "The default font")
+(defvar default-font "Ubuntu Mono-10" "The default font")
 
 (when window-system
-  (when (not (font-info default-font))
-    (setq default-font "-adobe-courier-medium-r-*-*-12-*-*-*-*-70-iso8859-1")))
+  (let ((backups (list "Mono-9"
+                       "-adobe-courier-medium-r-*-*-12-*-*-*-*-70-iso8859-1")))
+    (while (and backups (not (font-info default-font)))
+      (setq default-font (car backups))
+      (setq backups (cdr backups)))))
 
 (setq default-frame-alist
       `((menu-bar-lines . 0)
