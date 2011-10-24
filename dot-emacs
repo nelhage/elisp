@@ -625,7 +625,7 @@ unable to perform symbol completion.")
   (when (string-match "\\.h\\'" (buffer-name))
     (save-excursion
       (goto-char (point-min))
-      (if (re-search-forward "\\s \\(class\\|template\\)" nil t)
+      (if (re-search-forward "\\s \\(class\\|template\\|using\\)" nil t)
           t))))
 
 (add-to-list 'magic-mode-alist
