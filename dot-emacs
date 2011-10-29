@@ -67,7 +67,7 @@
      (define-key doc-view-mode-map (kbd "C-a") 'image-bol)
      (define-key doc-view-mode-map (kbd "C-c t") 'doc-view-open-text)))
 
-(eval-after-load 'compilation
+(eval-after-load 'compile
   '(progn
      (let ((ent (aget compilation-error-regexp-alist-alist 'gcc-include)))
        (when ent
