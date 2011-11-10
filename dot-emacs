@@ -49,11 +49,14 @@
 (fset 'mkdir 'make-directory)
 (fset 'rmdir 'delete-directory)
 
-; Apparently I'm not supposed to set this globally, but if you're not
-; going to tell me why, too bad.
-(setq epa-armor t)
-(require 'epa-file)
-(epa-file-enable)
+(condition-case nil
+    (progn
+      ;; Apparently I'm not supposed to set this globally, but if you're not
+      ;; going to tell me why, too bad.
+      (setq epa-armor t)
+      (require 'epa-file)
+      (epa-file-enable))
+  ('file-error . nil))
 
 (autoload 'nethack "nethack" "Play Nethack." t)
 (setq nethack-program "/usr/games/nethack-lisp")
@@ -69,10 +72,10 @@
 
 (eval-after-load 'compile
   '(progn
-     (let ((ent (aget compilation-error-regexp-alist-alist 'gcc-include)))
+     (let ((ent (assq 'gcc-include compilation-error-regexp-alist-alist)))
        (when ent
-         (setcar ent "^\\(?:In file included\\|                \\) from \\(.+?\\):\\([0-9]+\\)\\(:[0-9]+\\)?\\(?:\\(:\\)\\|\\(,\\)\\)?")
-         (setcdr ent (list 1 2 nil '(4 . 5)))))))
+         (setcar (cdr ent) "^\\(?:In file included\\|                \\) from \\(.+?\\):\\([0-9]+\\)\\(:[0-9]+\\)?\\(?:\\(:\\)\\|\\(,\\)\\)?")
+         (setcdr (cdr ent) (list 1 2 nil '(4 . 5)))))))
 
 (defun strip-lf ()
   (interactive)
@@ -109,7 +112,8 @@ unable to perform symbol completion.")
           (font-lock-string-face "orange")))
   (require 'font-lock)
   (require 'whitespace)
-  (set-face-background 'whitespace-tab "#111133")
+  (when (facep 'whitespace-tab)
+    (set-face-background 'whitespace-tab "#111133"))
   (setq whitespace-style '(face trailing tabs))
   (global-whitespace-mode 1)
   (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
@@ -483,8 +487,11 @@ unable to perform symbol completion.")
                          :foreground 'unspecified
                          :inherit diff-context-face)))
 
-(require 'vc-hg)
-(add-to-list 'vc-handled-backends 'hg)
+(condition-case nil
+    (progn
+      (require 'vc-hg)
+      (add-to-list 'vc-handled-backends 'hg))
+  ('file-error . nil))
 
 (load-library "dvc-load")
 (setq xgit-use-index 'always
