@@ -829,6 +829,7 @@ unable to perform symbol completion.")
   (setq inferior-lisp-program "cmucl"))
 
 (slime-use-sbcl)
+(autoload 'slime-selector "slime" "" t)
 
 (add-to-list 'auto-mode-alist
              (cons (concat "/\\."
