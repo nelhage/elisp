@@ -969,6 +969,11 @@ unable to perform symbol completion.")
 (setq g-user-email "nelhage@gmail.com")
 (setq g-html-handler 'browse-url-of-buffer)
 
+;; Mediawiki
+(require 'mediawiki)
+(setq mediawiki-site-alist
+      '(("Ksplice" "https://saccharine.us.oracle.com/w/" "nelhage" nil "Main Page")))
+
 ;;Evil DOS file endings, eeeeeeeeevil
 (add-hook 'find-file-hook 'find-file-check-line-endings)
 
