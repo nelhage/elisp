@@ -121,12 +121,16 @@ unable to perform symbol completion.")
         font-lock-global-modes '(not magit-mode w3m-mode term-mode))
   (global-font-lock-mode 1))
 
+(defun safe-set-face-attribute (face frame &rest args)
+  (when (facep face)
+    (apply 'set-face-attribute face frame args)))
+
 (eval-after-load 'diff-mode
   '(progn
-     (set-face-background 'diff-refine-change "gray20")
-     (set-face-background 'diff-file-header "gray40")
-     (set-face-foreground 'diff-removed-face "red")
-     (set-face-foreground 'diff-added-face "green")))
+     (safe-set-face-attribute 'diff-refine-change nil :background "gray20")
+     (safe-set-face-attribute 'diff-file-header   nil :background "gray40")
+     (safe-set-face-attribute 'diff-removed-face  nil :foreground "red")
+     (safe-set-face-attribute 'diff-added-face    nil :foreground "green")))
 
 (eval-after-load 'flymake
   '(progn
