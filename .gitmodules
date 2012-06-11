@@ -1,6 +1,6 @@
 [submodule "site/magit"]
 	path = site/magit
-	url = git://github.com/nelhage/magit.git
+	url = git://github.com/magit/magit.git
 [submodule "site/org-mode"]
 	path = site/org-mode
 	url = git://repo.or.cz/org-mode.git
