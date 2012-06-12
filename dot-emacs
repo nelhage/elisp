@@ -1416,6 +1416,7 @@ surrounding xml expression"
     (shell "llvm-dev" "~/code/llvm")
     ;; (shell "mysql" "~/")
     (term "mutt" "~/")
+    (term "mutt-nelhage" "~/")
     (term "oracle-irc" "~/"))
   "Terminals to create initially")
 
