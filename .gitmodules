@@ -13,3 +13,6 @@
 [submodule "site/emacs_chrome"]
 	path = site/emacs_chrome
 	url = git://github.com/stsquad/emacs_chrome.git
+[submodule "site/markdown-mode"]
+	path = site/markdown-mode
+	url = git://jblevins.org/git/markdown-mode.git

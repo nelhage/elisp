@@ -1106,6 +1106,12 @@ surrounding xml expression"
 
 (add-to-list 'auto-mode-alist '("\\.pp$" . puppet-mode))
 
+;; markdown
+(autoload 'markdown-mode "markdown-mode.el"
+   "Major mode for editing Markdown files" t)
+(setq auto-mode-alist
+   (cons '("\\.md$" . markdown-mode) auto-mode-alist))
+
 ;;; ADD NEW LANGUAGE MODES HERE
 
 ;;;Mail
@@ -1357,6 +1363,7 @@ surrounding xml expression"
   (define-key asm-mode-map (kbd "#") 'self-insert-command))
 
 (add-to-list 'auto-mode-alist (cons "/Makefrag$" 'makefile-mode))
+(add-to-list 'auto-mode-alist (cons "^Makefile" 'makefile-mode))
 
 (require 'w3m-load)
 ; (autoload 'w3m "w3m" "w3m" t t)
