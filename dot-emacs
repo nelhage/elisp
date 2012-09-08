@@ -36,8 +36,8 @@
 
 (setq display-time-24hr-format t)
 
-(global-set-key (kbd "C-x 4 C-f") 'window-number-find-file)
-(global-set-key (kbd "C-x 4 f") 'window-number-find-file)
+; (global-set-key (kbd "C-x 4 C-f") 'window-number-find-file)
+; (global-set-key (kbd "C-x 4 f") 'window-number-find-file)
 
 (setq lpr-switches '("-h"))
 (setq ps-left-header '(ps-get-buffer-name user-full-name))
