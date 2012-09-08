@@ -694,9 +694,12 @@ unable to perform symbol completion.")
 
 (put 'js2-basic-offset 'safe-local-variable 'integerp)
 
-
 (defun my-javascript-mode-hook ()
   (require 'moz))
+
+(require 'coffee-mode)
+(add-to-list 'auto-mode-alist '("\\.coffee$" . coffee-mode))
+(add-to-list 'auto-mode-alist '("Cakefile" . coffee-mode))
 
 ;;;LaTeX
 (add-hook 'latex-mode-hook 'my-latex-mode-hook)
