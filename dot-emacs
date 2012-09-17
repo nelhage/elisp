@@ -249,6 +249,19 @@ unable to perform symbol completion.")
   '(progn
      (grep-apply-setting 'grep-use-null-device nil)))
 
+(defun chomp (str)
+  "Chomp leading and tailing whitespace from STR."
+  (while (string-match "\\`\n+\\|^\\s-+\\|\\s-+$\\|\n+\\'"
+                       str)
+    (setq str (replace-match "" t t str)))
+  str)
+
+(defun git-grep ()
+  (interactive)
+  (let ((cdup (chomp (shell-command-to-string "git rev-parse --show-cdup")))
+        (grep-command "git grep -nH -e"))
+    (cd (expand-file-name cdup))
+    (call-interactively 'grep)))
 
 (eval-after-load 'calc
   '(progn
