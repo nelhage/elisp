@@ -256,11 +256,14 @@ unable to perform symbol completion.")
     (setq str (replace-match "" t t str)))
   str)
 
+(defun git-wc-root ()
+  (expand-file-name
+   (chomp (shell-command-to-string "git rev-parse --show-cdup"))))
+
 (defun git-grep ()
   (interactive)
-  (let ((cdup (chomp (shell-command-to-string "git rev-parse --show-cdup")))
-        (grep-command "git grep -nH -e"))
-    (cd (expand-file-name cdup))
+  (let ((grep-command "git grep -nH -e"))
+    (cd (git-wc-root))
     (call-interactively 'grep)))
 
 (eval-after-load 'calc
@@ -446,6 +449,36 @@ unable to perform symbol completion.")
 ;           ("\C-p"    . iswitchb-prev-match))))
 ; 
 ; (add-hook 'iswitchb-minibuffer-setup-hook 'iswitchb-local-keys)
+
+(defun git-find-file ()
+  "Use ido to select a file from the project."
+  (interactive)
+  (let* ((my-project-root (git-wc-root))
+         (git-dir (chomp (shell-command-to-string "git rev-parse --git-dir")))
+         (project-files
+          (split-string
+           (shell-command-to-string
+            (concat "git --git-dir "
+                    (shell-quote-argument git-dir)
+                    " ls-files"))
+           "\n")))
+    ;; populate hash table (display repr => path)
+    (setq tbl (make-hash-table :test 'equal))
+    (let (ido-list)
+      (mapc (lambda (path)
+              ;; format path for display in ido list
+              (setq key path)
+              ;; strip project root
+              (setq key (replace-regexp-in-string my-project-root "" key))
+              ;; remove trailing | or /
+              (setq key (replace-regexp-in-string "\\(|\\|/\\)$" "" key))
+              (puthash key path tbl)
+              (push key ido-list)
+              )
+            project-files)
+      (let ((ido-decorations (quote ("\n-> " "" "\n   " "\n   ..." "[" "]" " [No match]" " [Matched]" " [Not readable]" " [Too big]" " [Confirm]")))
+            (truncate-lines nil))
+        (find-file (gethash (ido-completing-read "project-files: " ido-list) tbl))))))
 
 (require 'windmove)
 (windmove-default-keybindings)
