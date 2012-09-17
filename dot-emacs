@@ -430,6 +430,11 @@ unable to perform symbol completion.")
 
 (add-hook 'ido-minibuffer-setup-hook 'my-ido-keys)
 
+(defun my-find-file (arg)
+  (interactive "P")
+  (call-interactively (if arg 'git-find-file 'ido-find-file)))
+
+(global-set-key (kbd "C-x C-f") 'my-find-file)
 ; (require 'iswitchb)
 ; (iswitchb-mode nil)
 ; 
@@ -451,7 +456,7 @@ unable to perform symbol completion.")
 ; (add-hook 'iswitchb-minibuffer-setup-hook 'iswitchb-local-keys)
 
 (defun git-find-file ()
-  "Use ido to select a file from the project."
+  "Use ido to select a file from the git repo"
   (interactive)
   (let* ((my-project-root (git-wc-root))
          (git-dir (chomp (shell-command-to-string "git rev-parse --git-dir")))
@@ -478,7 +483,7 @@ unable to perform symbol completion.")
             project-files)
       (let ((ido-decorations (quote ("\n-> " "" "\n   " "\n   ..." "[" "]" " [No match]" " [Matched]" " [Not readable]" " [Too big]" " [Confirm]")))
             (truncate-lines nil))
-        (find-file (gethash (ido-completing-read "project-files: " ido-list) tbl))))))
+        (find-file (gethash (ido-completing-read "files: " ido-list) tbl))))))
 
 (require 'windmove)
 (windmove-default-keybindings)
