@@ -256,16 +256,6 @@ unable to perform symbol completion.")
     (setq str (replace-match "" t t str)))
   str)
 
-(defun git-wc-root ()
-  (expand-file-name
-   (chomp (shell-command-to-string "git rev-parse --show-cdup"))))
-
-(defun git-grep ()
-  (interactive)
-  (let ((grep-command "git grep -nH -e"))
-    (cd (git-wc-root))
-    (call-interactively 'grep)))
-
 (eval-after-load 'calc
   '(progn
      (defadvice calc (around calc-pop-up-windows)
@@ -430,11 +420,6 @@ unable to perform symbol completion.")
 
 (add-hook 'ido-minibuffer-setup-hook 'my-ido-keys)
 
-(defun my-find-file (arg)
-  (interactive "P")
-  (call-interactively (if arg 'git-find-file 'ido-find-file)))
-
-(global-set-key (kbd "C-x C-f") 'my-find-file)
 ; (require 'iswitchb)
 ; (iswitchb-mode nil)
 ; 
@@ -455,6 +440,22 @@ unable to perform symbol completion.")
 ; 
 ; (add-hook 'iswitchb-minibuffer-setup-hook 'iswitchb-local-keys)
 
+(defun my-find-file (arg)
+  (interactive "P")
+  (call-interactively (if arg 'git-find-file 'ido-find-file)))
+
+(global-set-key (kbd "C-x C-f") 'my-find-file)
+
+(defun git-wc-root ()
+  (expand-file-name
+   (chomp (shell-command-to-string "git rev-parse --show-cdup"))))
+
+(defun git-grep ()
+  (interactive)
+  (let ((grep-command "git grep -nH -e"))
+    (cd (git-wc-root))
+    (call-interactively 'grep)))
+
 (defun git-find-file ()
   "Use ido to select a file from the git repo"
   (interactive)
@@ -465,7 +466,7 @@ unable to perform symbol completion.")
            (shell-command-to-string
             (concat "git --git-dir "
                     (shell-quote-argument git-dir)
-                    " ls-files"))
+                    " ls-files -c -o"))
            "\n")))
     ;; populate hash table (display repr => path)
     (setq tbl (make-hash-table :test 'equal))
@@ -477,9 +478,8 @@ unable to perform symbol completion.")
               (setq key (replace-regexp-in-string my-project-root "" key))
               ;; remove trailing | or /
               (setq key (replace-regexp-in-string "\\(|\\|/\\)$" "" key))
-              (puthash key path tbl)
-              (push key ido-list)
-              )
+              (puthash key (expand-file-name (concat my-project-root "/" path)) tbl)
+              (push key ido-list))
             project-files)
       (let ((ido-decorations (quote ("\n-> " "" "\n   " "\n   ..." "[" "]" " [No match]" " [Matched]" " [Not readable]" " [Too big]" " [Confirm]")))
             (truncate-lines nil))
