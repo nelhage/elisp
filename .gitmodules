@@ -6,7 +6,7 @@
 	url = git://repo.or.cz/org-mode.git
 [submodule "site/slime"]
 	path = site/slime
-	url = git://sbcl.boinkor.net/slime.git
+	url = https://github.com/nablaone/slime.git 
 [submodule "site/swank-js"]
 	path = site/swank-js
 	url = git://github.com/ivan4th/swank-js.git
