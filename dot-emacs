@@ -1298,7 +1298,8 @@ surrounding xml expression"
 
 ;;elscreen
 (require 'elscreen)
-(elscreen-toggle-display-tab)
+(when elscreen-display-tab
+  (elscreen-toggle-display-tab))
 
 (define-key elscreen-map (kbd "SPC") 'elscreen-next)
 (define-key elscreen-map (kbd "C-z") 'elscreen-swap)
