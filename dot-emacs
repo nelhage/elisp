@@ -1468,7 +1468,9 @@ surrounding xml expression"
     (term "mutt-stripe" "~/")
     (term "stripe-dev" "~/stripe")
     (term "devbox" "~/stripe/pay-server")
-    )
+    (shell "pay-dev" "~/stripe/pay-server")
+    (shell "remote-control" "~/stripe/remote-control")
+    (shell "puppet-config" "~/stripe/puppet-config"))
   "Terminals to create initially")
 
 (defun setup-terminals ()
