@@ -243,11 +243,14 @@ unable to perform symbol completion.")
       comint-prompt-read-only t
       diff-switches "-u"
       compile-command "find-makefile"
-      grep-command "gr -nH -e "
       pop-up-windows nil)
 (eval-after-load 'grep
   '(progn
-     (grep-apply-setting 'grep-use-null-device nil)))
+     (grep-apply-setting 'grep-use-null-device nil)
+     (grep-apply-setting 'grep-command "gr -nH -e ")
+
+     (defun grep-default-command ()
+       grep-command)))
 
 (defun chomp (str)
   "Chomp leading and tailing whitespace from STR."
@@ -442,24 +445,24 @@ unable to perform symbol completion.")
 
 (defun my-find-file (arg)
   (interactive "P")
-  (call-interactively (if arg 'git-find-file 'ido-find-file)))
+  (call-interactively (if arg 'my-git-find-file 'ido-find-file)))
 
 (global-set-key (kbd "C-x C-f") 'my-find-file)
 
-(defun git-wc-root ()
+(defun my-git-wc-root ()
   (expand-file-name
    (chomp (shell-command-to-string "git rev-parse --show-cdup"))))
 
 (defun git-grep ()
   (interactive)
-  (let ((grep-command "git grep -nH -e"))
-    (cd (git-wc-root))
+  (let ((grep-command "git grep -nH -e ")
+        (default-directory (my-git-wc-root)))
     (call-interactively 'grep)))
 
-(defun git-find-file ()
+(defun my-git-find-file ()
   "Use ido to select a file from the git repo"
   (interactive)
-  (let* ((my-project-root (git-wc-root))
+  (let* ((my-project-root (my-git-wc-root))
          (git-dir (chomp (shell-command-to-string "git rev-parse --git-dir")))
          (project-files
           (split-string
