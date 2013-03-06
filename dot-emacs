@@ -453,8 +453,10 @@ unable to perform symbol completion.")
 (global-set-key (kbd "C-x C-f") 'my-find-file)
 
 (defun my-git-wc-root ()
-  (expand-file-name
-   (chomp (shell-command-to-string "git rev-parse --show-cdup"))))
+  (concat
+   (expand-file-name
+    (chomp (shell-command-to-string "git rev-parse --show-cdup")))
+   "/"))
 
 (defun git-grep ()
   (interactive)
