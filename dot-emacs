@@ -1008,7 +1008,8 @@ unable to perform symbol completion.")
   nil)
 (eval-after-load 'ruby-mode
   '(progn
-     (define-key ruby-mode-map (kbd "M-TAB") 'dabbrev-expand)))
+     (define-key ruby-mode-map (kbd "M-TAB") 'dabbrev-expand)
+     (setq ruby-program-name "irb --inf-ruby-mode -rubygems")))
 
 ;; Matlab
 
