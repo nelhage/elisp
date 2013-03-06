@@ -1482,6 +1482,8 @@ surrounding xml expression"
     (term "stripe-dev" "~/stripe")
     (term "devbox" "~/stripe/pay-server")
     (shell "pay-dev" "~/stripe/pay-server")
+    (shell "context-dev" "~/stripe/stripe-context")
+    (shell "henson-dev" "~/stripe/henson")
     (shell "remote-control" "~/stripe/remote-control")
     (shell "puppet-config" "~/stripe/puppet-config"))
   "Terminals to create initially")
