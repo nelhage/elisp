@@ -42,6 +42,7 @@
 (setq lpr-switches '("-h"))
 (setq ps-left-header '(ps-get-buffer-name user-full-name))
 (setq woman-use-own-frame nil)
+(setq split-height-threshold nil)
 
 (fset 'rm 'delete-file)
 (fset 'mv 'rename-file)
