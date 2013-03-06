@@ -996,8 +996,8 @@ unable to perform symbol completion.")
 ;; ruby
 (autoload 'ruby-mode "ruby-mode" "" t)
 (add-to-list 'auto-mode-alist (cons "\\.rb$" 'ruby-mode))
-(add-to-list 'auto-mode-alist (cons "Rakefile$" 'ruby-mode))
-(add-to-list 'auto-mode-alist (cons "Gemfile$" 'ruby-mode))
+(add-to-list 'auto-mode-alist (cons "\\(Rake\\|Gem\\|Guard\\)file$" 'ruby-mode))
+(add-to-list 'auto-mode-alist (cons "\\.gemspec$" 'ruby-mode))
 (add-to-list 'interpreter-mode-alist (cons "ruby" 'ruby-mode))
 
 (autoload 'run-ruby "inf-ruby" "Run an inferior ruby process" t)
