@@ -736,6 +736,7 @@ unable to perform symbol completion.")
       js2-allow-keywords-as-property-names t
       js2-mode-show-strict-warnings nil
       js2-bounce-indent-p t)
+(setq-default js2-basic-offset 2)
 
 (defadvice js2-enter-key (after js2-enter-key-indent)
   (let ((js2-bounce-indent-flag nil))
