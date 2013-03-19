@@ -195,11 +195,7 @@ unable to perform symbol completion.")
                       :foreground "blue"
                       :weight 'bold)
   (set-face-attribute 'font-lock-string-face nil
-                      :foreground "dark red")
-  (set-face-attribute 'pesche-tab nil
-                      :background "white")
-  (set-face-attribute 'pesche-space nil
-                      :background "white"))
+                      :foreground "dark red"))
 
 (defun set-normal-faces ()
   (interactive)
@@ -213,11 +209,7 @@ unable to perform symbol completion.")
                       :weight 'normal)
   (set-face-attribute 'font-lock-string-face nil
                       :foreground "orange")
-  (set-frame-font default-font t)
-  (set-face-attribute 'pesche-tab nil
-                      :background "#113")
-  (set-face-attribute 'pesche-space nil
-                      :background "#311"))
+  (set-frame-font default-font t))
 
 (defun safe-funcall (func &rest args)
   "Call FUNC on ARGS if and only if FUNC is defined as a function."
