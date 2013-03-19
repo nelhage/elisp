@@ -1420,7 +1420,7 @@ surrounding xml expression"
   (define-key asm-mode-map (kbd "#") 'self-insert-command))
 
 (add-to-list 'auto-mode-alist (cons "/Makefrag$" 'makefile-mode))
-(add-to-list 'auto-mode-alist (cons "^Makefile" 'makefile-mode))
+(add-to-list 'auto-mode-alist (cons "/Makefile[^/]+$" 'makefile-mode))
 
 (require 'w3m-load)
 ; (autoload 'w3m "w3m" "w3m" t t)
