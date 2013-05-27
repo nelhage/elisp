@@ -1463,16 +1463,6 @@ surrounding xml expression"
 (put 'asm-comment-char 'safe-local-variable 'characterp)
 (put 'c-indentation-style 'safe-local-variable 'symbolp)
 
-(autoload 'minutes "sipb-minutes"
-  "Loads a minutes template into a buffer if none exists else switches to it" t)
-(autoload 'sipb-minutes-mode "sipb-minutes"
-  "Major mode for editing SIPB minutes files." t)
-
-(eval-after-load 'sipb-minutes
-  '(progn
-     (add-to-list 'auto-mode-alist
-                  (cons "minutes.[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}$" 'sipb-minutes-mode))))
-
 (defvar initial-terminals '() "Terminals to create initially")
 (setq initial-terminals
       '((term "nelhage.com" "~/")
