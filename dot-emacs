@@ -1408,17 +1408,6 @@ surrounding xml expression"
   (setup-terminals))
 
 ;;; Misc stuff
-(defun jifty-dev ()
-  (interactive)
-  (named-shell "jifty-test" "~/code/jifty/trunk")
-  (named-shell "jifty" "~/code/jifty/trunk"))
-
-(defun jifty-app-dev (name path)
-  (interactive "MApplication Name: \nDIn directory: ")
-  (named-shell name path)
-  (named-shell (concat name "-server") path)
-  (named-shell (concat name "-test") path)
-  (switch-to-buffer (concat "*" name "*")))
 
 (require 'kerberos)
 
