@@ -453,7 +453,7 @@ unable to perform symbol completion.")
 
 (defun git-grep ()
   (interactive)
-  (let ((grep-command "git --no-pager grep -nH -e ")
+  (let ((grep-command "gr -nH -e ")
         (default-directory (my-git-wc-root)))
     (call-interactively 'grep)))
 
@@ -710,6 +710,12 @@ unable to perform symbol completion.")
   (define-key java-mode-map "\C-c\C-d" (make-sparse-keymap))
   (define-key java-mode-map "\C-c\C-dh" 'javadoc-lookup-class)
   (make-local-variable 'dabbrev-case-fold-search))
+
+;; Scala
+(require 'scala-mode-auto)
+(eval-after-load 'scala-mode
+  '(progn
+     (put 'scala-mode-indent:step 'safe-local-variable 'integerp)))
 
 ;;; ANTLR
 (autoload 'antlr-mode "antlr-mode" nil t)
@@ -1122,6 +1128,9 @@ surrounding xml expression"
       sgml-indent-data t
       sgml-auto-activate-dtd t)
 
+;;; nXhtml mode
+(load "nxhtml")
+
 ;;; Zen Coding
 (autoload 'zencoding-mode "zencoding-mode" "Minor mode to enable Zen coding")
 ; (add-hook 'sgml-mode-hook 'zencoding-mode)
@@ -1464,23 +1473,25 @@ surrounding xml expression"
      (add-to-list 'auto-mode-alist
                   (cons "minutes.[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}$" 'sipb-minutes-mode))))
 
-(defvar initial-terminals
-  '((term "nelhage.com" "~/")
-    ;; (shell "linux-2.6" "~/code/linux")
-    ;; (shell "barnowl-dev" "~/code/barnowl")
-    ;; (shell "llvm-dev" "~/code/llvm")
-    ;; (shell "mysql" "~/")
-    (shell "livegrep-dev" "~/code/livegrep")
-    (term "mutt-nelhage" "~/")
-    (term "mutt-stripe" "~/")
-    (term "stripe-dev" "~/stripe")
-    (term "devbox" "~/stripe/pay-server")
-    (shell "pay-dev" "~/stripe/pay-server")
-    (shell "context-dev" "~/stripe/stripe-context")
-    (shell "henson-dev" "~/stripe/henson")
-    (shell "remote-control" "~/stripe/remote-control")
-    (shell "puppet-config" "~/stripe/puppet-config"))
-  "Terminals to create initially")
+(defvar initial-terminals '() "Terminals to create initially")
+(setq initial-terminals
+      '((term "nelhage.com" "~/")
+        ;; (shell "linux-2.6" "~/code/linux")
+        ;; (shell "barnowl-dev" "~/code/barnowl")
+        ;; (shell "llvm-dev" "~/code/llvm")
+        ;; (shell "mysql" "~/")
+        (shell "livegrep-dev" "~/code/livegrep")
+        (term "mutt-nelhage" "~/")
+        (term "mutt-stripe" "~/")
+        (term "stripe-dev" "~/stripe")
+        (term "devbox" "~/stripe/pay-server")
+        (shell "pay-dev" "~/stripe/pay-server")
+        (shell "context-dev" "~/stripe/stripe-context")
+        (shell "henson-dev" "~/stripe/henson")
+        (shell "odin-dev" "~/stripe/odin")
+        (term "pay-pry" "~/stripe/pay-server")
+        (shell "remote-control" "~/stripe/remote-control")
+        (shell "puppet-config" "~/stripe/puppet-config")))
 
 (defun setup-terminals ()
   (interactive)
