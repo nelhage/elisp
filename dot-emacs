@@ -1130,9 +1130,6 @@ surrounding xml expression"
       sgml-indent-data t
       sgml-auto-activate-dtd t)
 
-;;; nXhtml mode
-(load "nxhtml")
-
 ;;; Zen Coding
 (autoload 'zencoding-mode "zencoding-mode" "Minor mode to enable Zen coding")
 ; (add-hook 'sgml-mode-hook 'zencoding-mode)
