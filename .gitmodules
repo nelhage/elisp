@@ -22,3 +22,6 @@
 [submodule "site/scala-dist"]
 	path = site/scala-dist
 	url = git://github.com/scala/scala-dist.git
+[submodule "site/popwin-el"]
+	path = site/popwin-el
+	url = git@github.com:m2ym/popwin-el.git
