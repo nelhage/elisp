@@ -1184,6 +1184,12 @@ surrounding xml expression"
 (setq auto-mode-alist
    (cons '("\\.md$" . markdown-mode) auto-mode-alist))
 
+;; go
+(let ((goroot (getenv "GOROOT")))
+  (when goroot
+    (add-to-list 'load-path (expand-file-name (concat goroot "/misc/emacs")))
+    (safe-require 'go-mode-load)))
+
 ;;; ADD NEW LANGUAGE MODES HERE
 
 ;;;Mail
