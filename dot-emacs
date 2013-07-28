@@ -1190,6 +1190,8 @@ surrounding xml expression"
     (add-to-list 'load-path (expand-file-name (concat goroot "/misc/emacs")))
     (safe-require 'go-mode-load)))
 
+(require 'protobuf-mode)
+
 ;;; ADD NEW LANGUAGE MODES HERE
 
 ;;;Mail
