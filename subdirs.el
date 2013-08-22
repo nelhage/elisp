@@ -1,2 +1,3 @@
-(if (fboundp 'normal-top-level-add-subdirs-to-load-path)
-    (normal-top-level-add-subdirs-to-load-path))
+(dolist (dir (directory-files "~/.elisp" t "^[^.]"))
+  (when (file-directory-p dir)
+    (setq load-path (cons dir load-path))))
