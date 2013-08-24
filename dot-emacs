@@ -981,6 +981,8 @@ unable to perform symbol completion.")
 ;; proto
 (require 'proto-mode)
 (add-hook 'proto-mode-hook 'define-lisp-keys)
+(setq auto-mode-alist
+      (delete-if (lambda (k) (and (consp k) (eq (cdr k) 'proto-mode))) auto-mode-alist))
 
 ;;;Haskell
 
@@ -1184,13 +1186,20 @@ surrounding xml expression"
 (setq auto-mode-alist
    (cons '("\\.md$" . markdown-mode) auto-mode-alist))
 
-;; go
+;; golang
 (let ((goroot (getenv "GOROOT")))
   (when goroot
     (add-to-list 'load-path (expand-file-name (concat goroot "/misc/emacs")))
-    (safe-require 'go-mode-load)))
+    (safe-require 'go-mode-load)
 
+    (add-hook 'go-mode-hook 'my-go-mode-hook)))
+
+(defun my-go-mode-hook ()
+  (setq complete-symbol-function 'dabbrev-completion))
+
+;; protobufs
 (require 'protobuf-mode)
+(add-to-list 'auto-mode-alist (cons "\\.proto$" 'protobuf-mode))
 
 ;;; ADD NEW LANGUAGE MODES HERE
 
