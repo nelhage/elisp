@@ -1,11 +1,17 @@
 ;; -*- mode: emacs-lisp; indent-tabs-mode: nil -*-
-;;.emacs file for Nelson Elhage (nelhage@mit.edu)
-;; Requires emacs 22 or higher
+;;.emacs file for Nelson Elhage (nelhage@nelhage.com)
+;; Requires emacs 24 or higher
 
 (add-to-list 'load-path "~/.elisp")
 (cd "~/.elisp")
 (load "~/.elisp/subdirs.el")
 (cd "~")
+
+; (require 'package)
+; (add-to-list 'package-archives 
+;     '("marmalade" .
+;       "http://marmalade-repo.org/packages/"))
+; (package-initialize)
 
 (require 'uniquify)
 (require 'utils)
@@ -1327,16 +1333,6 @@ surrounding xml expression"
 ;;Mailcrypt
 (require 'mailcrypt)
 (mc-setversion "gpg")
-
-(require 'pgg)
-
-;;elscreen
-(require 'elscreen)
-(when elscreen-display-tab
-  (elscreen-toggle-display-tab))
-
-(define-key elscreen-map (kbd "SPC") 'elscreen-next)
-(define-key elscreen-map (kbd "C-z") 'elscreen-swap)
 
 (setq ediff-split-window-function 'split-window-horizontally)
 
