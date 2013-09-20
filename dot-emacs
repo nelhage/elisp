@@ -40,14 +40,15 @@
 (require 'window-number)
 (window-number-mode 1)
 (require 'popwin)
-(popwin-mode 1)
 
-(setq popwin:special-display-config
-      (delete-if (lambda (e) (or (and (consp e) (or (eq (car e) 'grep-mode)
+(let ((tmp nil))
+  (mapc (lambda (e)
+                (if (not (or (and (consp e) (or (eq (car e) 'grep-mode)
                                                (eq (car e) 'occur-mode)))
-                            (equal e "*vc-diff*")))
-                 popwin:special-display-config))
-
+                             (equal e "*vc-diff*")))
+                    (setq tmp (cons e tmp))))
+        popwin:special-display-config)
+  (setq popwin:special-display-config tmp))
 
 (setq display-time-24hr-format t)
 
@@ -793,8 +794,8 @@ unable to perform symbol completion.")
   (reftex-mode 1)
   (flyspell-mode 1))
 
-(load-library "auctex")
-(load-library "preview-latex")
+(load "auctex-pkg")
+(load "preview.el")
 
 (eval-after-load 'tex
   '(progn
