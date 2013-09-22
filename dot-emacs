@@ -795,7 +795,7 @@ unable to perform symbol completion.")
   (flyspell-mode 1))
 
 (load "auctex-pkg")
-(load "preview.el")
+; (load "preview.el")
 
 (eval-after-load 'tex
   '(progn
