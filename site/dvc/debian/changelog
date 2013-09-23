@@ -1,6 +1,0 @@
-dvc (0r20080829-1) unstable; urgency=low
-
-  * New snapshot.
-  * Julien Danjou is the sponsor for DVC (Closes: #496930).
-
- -- Daniel Dehennin <daniel.dehennin@baby-gnu.org>  Fri, 29 Aug 2008 19:27:14 +0200

@@ -569,10 +569,6 @@ unable to perform symbol completion.")
       (add-to-list 'vc-handled-backends 'hg))
   ('file-error . nil))
 
-(load-library "dvc-load")
-(setq xgit-use-index 'always
-      dvc-tips-enabled nil)
-
 ;;Perl configuration
 (defalias 'perl-mode 'cperl-mode)
 (add-hook 'cperl-mode-hook 'my-perl-mode-hook)
@@ -1228,18 +1224,8 @@ surrounding xml expression"
 
 (defun my-mail-mode-hook ()
   (local-set-key (kbd "C-c a") 'mail-attach-file)
-  (local-set-key (kbd "C-c TAB") 'bbdb-complete-name)
   (local-set-key (kbd "C-c C-]") 'mail-dont-send)
-  (local-set-key (kbd "TAB") 'mail-complete-for-tab-command)
   (setq fill-column 69))
-
-(defun mail-complete-for-tab-command ()
-  (interactive)
-  (if (save-excursion
-        (beginning-of-line)
-        (looking-at (concat
-                     "^" (regexp-opt '("To" "Cc" "Bcc" "From") t ) ":")))
-      (bbdb-complete-name)))
 
 (add-to-list 'magic-mode-alist (cons "\\`From:" 'mail-mode) t)
 
@@ -1294,13 +1280,6 @@ surrounding xml expression"
 ;   (interactive)
 ;   (notmuch-show-add-tag "spam")
 ;   (notmuch-show-archive-thread))
-
-;;BBDB
-(require 'bbdb)
-(require 'bbdb-autoloads)
-(bbdb-initialize)
-
-(add-hook 'bbdb-after-change-hook (lambda (arg) (bbdb-save-db nil nil)))
 
 (setq user-mail-address "nelhage@nelhage.com"
       mail-envelope-from 'header
@@ -1440,29 +1419,6 @@ surrounding xml expression"
 
 (add-to-list 'auto-mode-alist (cons "/Makefrag$" 'makefile-mode))
 (add-to-list 'auto-mode-alist (cons "/Makefile[^/]+$" 'makefile-mode))
-
-(require 'w3m-load)
-; (autoload 'w3m "w3m" "w3m" t t)
-; (autoload 'w3m-find-file "w3m" "w3m" t t)
-(add-hook 'w3m-mode-hook 'my-w3m-mode-hook)
-
-(defun my-w3m-mode-hook ()
-  (local-set-key (kbd "C-c t") 'w3m-view-this-url-new-session))
-
-;; (eval-after-load "w3m"
-;;   (progn
-;;     (set-face-font 'w3m-default-face "Sans-8")
-;;     (set-face-foreground 'w3m-default-face "#000000")
-;;     (set-face-background 'w3m-default-face "#FFFFFF")
-;;    (set-face-foreground 'w3m-anchor-face "#3333FF")))
-
-(defun w3m-other-window (url &optional new-window)
-  (other-window 1)
-  (w3m url))
-
-(defun w3m-other-window-new-session (url &optional new-window)
-  (other-window 1)
-  (w3m url t))
 
 ;(setq browse-url-browser-function 'w3m-other-window-new-session)
 (setq browse-url-browser-function 'browse-url-generic
