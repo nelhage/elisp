@@ -50,6 +50,13 @@
         popwin:special-display-config)
   (setq popwin:special-display-config tmp))
 
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
+(require 'auto-complete-config)
+(add-to-list 'ac-modes 'go-mode)
+(ac-config-default)
+
+(add-to-list 'completion-at-point-functions (lambda () 'auto-complete))
+
 (setq display-time-24hr-format t)
 
 ; (global-set-key (kbd "C-x 4 C-f") 'window-number-find-file)
@@ -99,26 +106,18 @@
   (save-excursion
     (replace-string "" "" nil (point-min) (point-max))))
 
-(defvar complete-symbol-function nil "Function to be called to
-complete a symbol in the current buffer. Should perform
-completion at point and return. If nil, the current mode is
-unable to perform symbol completion.")
-
-(make-variable-buffer-local 'complete-symbol-function)
-
 (defun indent-and-complete-symbol-generic ()
   "Indent the current line and perform symbol completion using
-  `complete-symbol-function'. First indent the line, and if
+  `complete-symbol' First indent the line, and if
   indenting doesn't move point, complete the symbol at point."
   (interactive)
   (let ((pt (point)))
     (funcall indent-line-function)
-    (when (and (not (null complete-symbol-function))
-               (= pt (point))
+    (when (and (= pt (point))
                (save-excursion (re-search-backward "[^() \n\t\r]+\\=" nil t))
                (or (looking-at "\\Sw")
                    (= (point) (point-max))))
-      (funcall complete-symbol-function))))
+      (complete-symbol nil))))
 
 ;;Set up fonts and colors
 (when (fboundp 'global-font-lock-mode)
@@ -680,8 +679,7 @@ unable to perform symbol completion.")
   ;; my customizations for all of c-mode, c++-mode, objc-mode, java-mode
   (c-set-offset 'substatement-open 0)
   (setq c-basic-offset 4
-        dabbrev-case-fold-search nil
-        complete-symbol-function 'dabbrev-completion)
+        dabbrev-case-fold-search nil)
   (cscope-minor-mode))
 
 
@@ -874,8 +872,7 @@ unable to perform symbol completion.")
 (setq save-abbrevs nil)
 
 (defun my-scheme-mode-hook ()
-  (pretty-lambdas)
-  (setq complete-symbol-function 'dabbrev-completion))
+  (pretty-lambdas))
 
 (add-hook 'scheme-mode-hook 'define-lisp-keys t)
 (add-hook 'inferior-scheme-mode-hook 'define-lisp-keys t)
@@ -934,8 +931,7 @@ unable to perform symbol completion.")
 (defun my-lisp-mode-hook ()
   (unless (safe-funcall 'slime-connected-p)
     (save-excursion (slime))) 
-  (slime-mode t)
-  (setq complete-symbol-function slime-complete-symbol-function))
+  (slime-mode t))
 
 (setq common-lisp-hyperspec-root "file:///usr/share/doc/hyperspec/")
 
@@ -984,8 +980,7 @@ unable to perform symbol completion.")
   (local-set-key (kbd "TAB") 'slime-indent-and-complete-symbol))
 
 (defun define-elisp-keys ()
-  (define-lisp-keys)
-  (setq complete-symbol-function 'lisp-complete-symbol))
+  (define-lisp-keys))
 
 (defun my-lisp-mode-common-hook ()
   (setq indent-tabs-mode nil))
