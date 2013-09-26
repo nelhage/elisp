@@ -1202,10 +1202,14 @@ surrounding xml expression"
 
     (add-hook 'go-mode-hook 'my-go-mode-hook)))
 (let* ((gopath (getenv "GOPATH"))
-       (gocode-emacs (concat gopath "/src/github.com/nsf/gocode/emacs/")))
+       (gocode-emacs (concat gopath "/src/github.com/nsf/gocode/emacs/"))
+       (goflymake    (concat gopath "/src/github.com/dougm/goflymake")))
   (when (file-directory-p gocode-emacs)
     (add-to-list 'load-path gocode-emacs)
-    (require 'go-autocomplete)))
+    (require 'go-autocomplete))
+  (when (file-directory-p goflymake)
+    (add-to-list 'load-path goflymake)
+    (require 'go-flymake)))
 
 
 (defun my-go-mode-hook ()
