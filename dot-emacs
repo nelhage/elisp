@@ -1199,23 +1199,28 @@ surrounding xml expression"
    (cons '("\\.md$" . markdown-mode) auto-mode-alist))
 
 ;; golang
-(let ((goroot (getenv "GOROOT")))
-  (when goroot
-    (add-to-list 'load-path (expand-file-name (concat goroot "/misc/emacs")))
-    (safe-require 'go-mode-load)
 
-    (add-hook 'go-mode-hook 'my-go-mode-hook)))
-(let* ((gopath (getenv "GOPATH"))
-       (gocode-emacs (concat gopath "/src/github.com/nsf/gocode/emacs/"))
-       (goflymake    (concat gopath "/src/github.com/dougm/goflymake")))
-  (when (file-directory-p gocode-emacs)
-    (add-to-list 'load-path gocode-emacs)
-    (require 'go-autocomplete))
-  (when (file-directory-p goflymake)
-    (add-to-list 'load-path goflymake)
-    (require 'go-flymake)))
+(defun golang-roots ()
+  (let ((goroot (getenv "GOROOT"))
+        (gopath (getenv "GOPATH"))
+        (roots '()))
+    (when goroot
+      (setq roots (cons goroot roots)))
+    (when gopath
+      (setq roots (append (split-string gopath ":") roots)))
+    roots))
 
+(defun golang-require (path feature)
+  (let ((dir (member-if (lambda (dir) (file-directory-p (concat dir "/" path))) (golang-roots))))
+    (when dir
+      (add-to-list 'load-path (expand-file-name (concat (car dir) "/" path)))
+      (require feature))))
 
+(golang-require "misc/emacs" 'go-mode-load)
+(golang-require "src/github.com/nsf/gocode/emacs/" 'go-autocomplete)
+(golang-require "src/github.com/dougm/goflymake"   'go-flymake)
+
+(add-hook 'go-mode-hook 'my-go-mode-hook)
 (defun my-go-mode-hook ()
   (local-set-key (kbd "M-.") 'godef-jump))
 
