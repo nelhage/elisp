@@ -62,6 +62,10 @@
 (add-to-list 'ac-modes 'go-mode)
 (ac-config-default)
 
+(define-key ac-menu-map (kbd "C-n") 'ac-next)
+(define-key ac-menu-map (kbd "C-p") 'ac-previous)
+(setq ac-use-menu-map t)
+
 (add-to-list 'completion-at-point-functions (lambda () 'auto-complete))
 
 (setq display-time-24hr-format t)
