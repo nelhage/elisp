@@ -1201,9 +1201,15 @@ surrounding xml expression"
     (safe-require 'go-mode-load)
 
     (add-hook 'go-mode-hook 'my-go-mode-hook)))
+(let* ((gopath (getenv "GOPATH"))
+       (gocode-emacs (concat gopath "/src/github.com/nsf/gocode/emacs/")))
+  (when (file-directory-p gocode-emacs)
+    (add-to-list 'load-path gocode-emacs)
+    (require 'go-autocomplete)))
+
 
 (defun my-go-mode-hook ()
-  (setq complete-symbol-function 'dabbrev-completion))
+  (local-set-key (kbd "M-.") 'godef-jump))
 
 ;; protobufs
 (require 'protobuf-mode)
