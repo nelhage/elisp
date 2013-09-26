@@ -7,6 +7,12 @@
 (load "~/.elisp/subdirs.el")
 (cd "~")
 
+(when (and (file-exists-p ".emacs.d/elpa")
+           (not (file-symlink-p ".emacs.d/elpa")))
+  (rename-file ".emacs.d/elpa" ".emacs.d/elpa.bak"))
+(unless (file-exists-p ".emacs.d/elpa")
+  (make-symbolic-link "../.elisp/elpa" ".emacs.d/elpa"))
+
 (require 'package)
 (add-to-list 'package-archives
      '("marmalade" .
@@ -51,8 +57,8 @@
         popwin:special-display-config)
   (setq popwin:special-display-config tmp))
 
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
 (require 'auto-complete-config)
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
 (add-to-list 'ac-modes 'go-mode)
 (ac-config-default)
 
@@ -788,9 +794,6 @@
   (local-set-key "}" 'insert-close)
   (reftex-mode 1)
   (flyspell-mode 1))
-
-(load "auctex-pkg")
-; (load "preview.el")
 
 (eval-after-load 'tex
   '(progn
