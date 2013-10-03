@@ -64,7 +64,8 @@
 
 (define-key ac-menu-map (kbd "C-n") 'ac-next)
 (define-key ac-menu-map (kbd "C-p") 'ac-previous)
-(setq ac-use-menu-map t)
+(setq ac-use-menu-map t
+      ac-ignore-case nil)
 
 (add-to-list 'completion-at-point-functions (lambda () 'auto-complete))
 
@@ -1012,6 +1013,8 @@
 ;; ruby
 (autoload 'ruby-mode "ruby-mode" "" t)
 (add-to-list 'auto-mode-alist (cons "\\.rb$" 'ruby-mode))
+; gdash graphs are .graph
+(add-to-list 'auto-mode-alist (cons "\\.graph$" 'ruby-mode))
 (add-to-list 'auto-mode-alist (cons "\\(Rake\\|Gem\\|Guard\\)file$" 'ruby-mode))
 (add-to-list 'auto-mode-alist (cons "\\.gemspec$" 'ruby-mode))
 (add-to-list 'interpreter-mode-alist (cons "ruby" 'ruby-mode))
@@ -1021,7 +1024,9 @@
 (add-hook 'ruby-mode-hook 'inf-ruby-keys)
 (add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
 (defun my-ruby-mode-hook ()
-  nil)
+  (local-set-key (kbd "TAB") 'indent-and-complete-symbol-generic)
+  (make-local-variable 'ac-ignores)
+  (add-to-list 'ac-ignores "end"))
 (eval-after-load 'ruby-mode
   '(progn
      (define-key ruby-mode-map (kbd "M-TAB") 'dabbrev-expand)
