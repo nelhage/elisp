@@ -411,10 +411,6 @@
       (setq window (get-buffer-window (current-buffer))))
   (set-window-dedicated-p window nil))
 
-(require 'mmm-auto)
-(setq mmm-global-mode 'maybe
-      mmm-submode-decoration-level 0)
-
 (require 'dired-x)
 (safe-funcall 'dired-omit-mode 1)
 (setq dired-listing-switches "-l")
