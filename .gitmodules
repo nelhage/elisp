@@ -28,3 +28,6 @@
 [submodule "site/bbdb"]
 	path = site/bbdb
 	url = git://git.savannah.nongnu.org/bbdb.git
+[submodule "site/mmm-mode"]
+	path = site/mmm-mode
+	url = git@github.com:purcell/mmm-mode.git

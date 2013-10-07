@@ -1025,6 +1025,14 @@
      (define-key ruby-mode-map (kbd "M-TAB") 'dabbrev-expand)
      (setq ruby-program-name "irb --inf-ruby-mode -rubygems")))
 
+;; mmm-mode and ERB
+(require 'mmm-auto)
+(require 'mmm-erb)
+(setq mmm-global-mode 'maybe)
+
+(mmm-add-mode-ext-class 'html-erb-mode "\\.erb\\'" 'erb)
+(add-to-list 'auto-mode-alist '("\\.erb\\'" . html-erb-mode))
+
 ;; Matlab
 
 (autoload 'matlab-mode "matlab" "Enter MATLAB mode." t)
