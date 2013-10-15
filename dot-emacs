@@ -60,6 +60,7 @@
 (require 'auto-complete-config)
 (add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
 (add-to-list 'ac-modes 'go-mode)
+(add-to-list 'ac-modes 'js2-mode)
 (ac-config-default)
 
 (setq ac-ignore-case nil)
@@ -553,6 +554,7 @@
 (require 'magit)
 (require 'magit-svn)
 (global-set-key (kbd "C-c g") 'magit-status)
+(setq magit-completing-read 'magit-ido-completing-read)
 ; (eval-after-load 'magit
 ;   '(progn
 ;      (set-face-background 'magit-item-highlight "grey8")
