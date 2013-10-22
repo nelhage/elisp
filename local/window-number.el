@@ -128,7 +128,7 @@ if active"
 
 (defun window-number-select ()
   (interactive)
-  (let ((n (- (logand last-command-char (1- (expt 2 8)))
+  (let ((n (- (logand last-command-event (1- (expt 2 8)))
               ?0)))
     (if (and (> n 0)
              (<= n 10))
