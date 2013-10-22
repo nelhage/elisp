@@ -1472,6 +1472,8 @@ surrounding xml expression"
         (shell "henson-dev" "~/stripe/henson")
         (shell "odm-dev" "~/stripe/chalk-odm")
         (shell "mosql-dev" "~/stripe/mosql")
+        (shell "flatfiles-dev" "~/stripe/stripe-flatfiles")
+        (shell "space-commander" "~/stripe/space-commander")
         (term "pay-pry" "~/stripe/pay-server/")
         (shell "remote-control" "~/stripe/remote-control")
         (shell "puppet-config" "~/stripe/puppet-config")))
