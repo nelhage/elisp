@@ -1019,7 +1019,10 @@
 (defun my-ruby-mode-hook ()
   (local-set-key (kbd "TAB") 'indent-and-complete-symbol-generic)
   (make-local-variable 'ac-ignores)
-  (add-to-list 'ac-ignores "end"))
+  (add-to-list 'ac-ignores "end")
+  (add-to-list 'ac-ignores "en")
+  (add-to-list 'ac-ignores "else")
+  (add-to-list 'ac-ignores "do"))
 (eval-after-load 'ruby-mode
   '(progn
      (define-key ruby-mode-map (kbd "M-TAB") 'dabbrev-expand)
