@@ -1,10 +1,10 @@
 (defun insert-close (&optional char)
   "Insert the closing bracket CHAR, or else the value of
-`last-command-char'. If there is already one after
+`last-command-event'. If there is already one after
 point, (optionally after whitespace), move to just in front of
 it."
   (interactive)
-  (if (null char) (setq char last-command-char))
+  (if (null char) (setq char last-command-event))
   (cond ((and (stringp char) (= (length char) 1))
 		 (setq char (elt char 0)))
 		((not (integerp char))
