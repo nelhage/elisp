@@ -293,10 +293,11 @@
 
 (setq tramp-default-method "ssh")
 
-;; (require 'paren)
-;; (when (fboundp 'show-paren-mode)
-;;   (setq show-paren-delay 0)
-;;   (show-paren-mode 1))
+(when (fboundp 'show-paren-mode)
+  (setq show-paren-delay 0)
+  (show-paren-mode 1))
+(require 'smartparens-ruby)
+(show-smartparens-global-mode +1)
 
 (require 'shell)
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
@@ -1035,6 +1036,7 @@
 
 (mmm-add-mode-ext-class 'html-erb-mode "\\.erb\\'" 'erb)
 (add-to-list 'auto-mode-alist '("\\.erb\\'" . html-erb-mode))
+(set-face-background 'mmm-default-submode-face "#222")
 
 ;; Matlab
 
