@@ -300,8 +300,6 @@
 (when (fboundp 'show-paren-mode)
   (setq show-paren-delay 0)
   (show-paren-mode 1))
-(require 'smartparens-ruby)
-(show-smartparens-global-mode +1)
 
 (require 'shell)
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
