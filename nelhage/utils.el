@@ -25,24 +25,6 @@ is already at the beginning of the text."
   (interactive)
   (indent-region (point-min) (point-max) nil))
 
-;;Improved clipboard interaction -- before a new kill,
-;;check the clipboard, and if there's something new on it,
-;;put it in the kill ring
-(setq last-clipboard nil)
-
-(defadvice kill-new (before kill-new-save-clipboard)
-  (when (and (boundp 'x-select-enable-clipboard)
-             x-select-enable-clipboard
-             interprogram-paste-function
-             (functionp interprogram-paste-function))
-    (let ((clipboard (funcall interprogram-paste-function)))
-      (when (and clipboard
-                 (not (string= clipboard last-clipboard)))
-        (setq last-clipboard clipboard)
-        (kill-new clipboard)))))
-
-(ad-activate 'kill-new)
-
 (defun increment-number-at-point (&optional amount)
   "Increment the number under point by `amount'"
   (interactive "p")
