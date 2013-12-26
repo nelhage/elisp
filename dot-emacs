@@ -1238,6 +1238,7 @@ surrounding xml expression"
 (add-hook 'go-mode-hook 'my-go-mode-hook)
 (defun my-go-mode-hook ()
   (local-set-key (kbd "M-.") 'godef-jump))
+(add-hook 'before-save-hook 'gofmt-before-save)
 
 ;; protobufs
 (require 'protobuf-mode)
