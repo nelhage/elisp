@@ -1026,7 +1026,8 @@
   (add-to-list 'ac-ignores "end")
   (add-to-list 'ac-ignores "en")
   (add-to-list 'ac-ignores "else")
-  (add-to-list 'ac-ignores "do"))
+  (add-to-list 'ac-ignores "do")
+  (setq ruby-deep-indent-paren nil))
 (eval-after-load 'ruby-mode
   '(progn
      (define-key ruby-mode-map (kbd "M-TAB") 'dabbrev-expand)
