@@ -553,7 +553,6 @@
 (when (featurep 'vc-git) (add-to-list 'vc-handled-backends 'git))
 
 (require 'magit)
-(require 'magit-svn)
 (global-set-key (kbd "C-c g") 'magit-status)
 (setq magit-completing-read 'magit-ido-completing-read)
 ; (eval-after-load 'magit
