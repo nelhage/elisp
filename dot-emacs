@@ -942,6 +942,8 @@
 
 (add-to-list 'auto-mode-alist (cons "\\.asd\\'" 'lisp-mode))
 
+(add-hook 'clojure-mode-hook 'define-lisp-keys)
+
 ;;;elisp
 (add-hook 'emacs-lisp-mode-hook 'define-elisp-keys)
 (add-hook 'emacs-lisp-mode-hook 'my-lisp-mode-common-hook)
