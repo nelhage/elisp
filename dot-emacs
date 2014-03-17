@@ -266,7 +266,8 @@
       diff-switches "-u"
       compile-command "find-makefile"
       pop-up-windows nil
-      save-interprogram-paste-before-kill t)
+      save-interprogram-paste-before-kill t
+      Man-width 80)
 (eval-after-load 'grep
   '(progn
      (grep-apply-setting 'grep-use-null-device nil)
