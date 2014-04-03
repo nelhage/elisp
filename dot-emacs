@@ -1242,6 +1242,7 @@ surrounding xml expression"
     (load-file (concat oracle-dir "/oracle.el"))
     (add-hook 'go-mode-hook 'go-oracle-mode)))
 
+(add-hook 'go-mode-hook 'go-eldoc-setup)
 (add-hook 'go-mode-hook 'my-go-mode-hook)
 (defun my-go-mode-hook ()
   (local-set-key (kbd "M-.") 'godef-jump))
