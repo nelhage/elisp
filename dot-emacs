@@ -59,15 +59,29 @@
         popwin:special-display-config)
   (setq popwin:special-display-config tmp))
 
-(require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
-(add-to-list 'ac-modes 'go-mode)
-(add-to-list 'ac-modes 'js2-mode)
-(ac-config-default)
+(global-company-mode 1)
 
-(setq ac-ignore-case nil)
+(custom-set-faces
+ '(company-preview
+   ((t (:foreground "darkgray" :underline t))))
+ '(company-preview-common
+   ((t (:inherit company-preview))))
+ '(company-tooltip
+   ((t (:background "lightgray" :foreground "black"))))
+ '(company-tooltip-selection
+   ((t (:background "steelblue" :foreground "white"))))
+ '(company-tooltip-common
+   ((((type x)) (:inherit company-tooltip :weight bold))
+    (t (:inherit company-tooltip))))
+ '(company-tooltip-common-selection
+   ((((type x)) (:inherit company-tooltip-selection :weight bold))
+    (t (:inherit company-tooltip-selection)))))
 
-(add-to-list 'completion-at-point-functions (lambda () 'auto-complete))
+(setq company-tooltip-limit 20
+      company-minimum-prefix-length 0
+      company-idle-delay .3
+      company-echo-delay 0
+      company-begin-commands '(self-insert-command))
 
 (setq display-time-24hr-format t)
 
@@ -1245,6 +1259,7 @@ surrounding xml expression"
 (add-hook 'go-mode-hook 'go-eldoc-setup)
 (add-hook 'go-mode-hook 'my-go-mode-hook)
 (defun my-go-mode-hook ()
+  (set (make-local-variable 'company-backends) '(company-go))
   (local-set-key (kbd "M-.") 'godef-jump))
 (when (fboundp 'gofmt-before-save)
       (add-hook 'before-save-hook 'gofmt-before-save))
