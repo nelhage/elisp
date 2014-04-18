@@ -78,7 +78,7 @@
     (t (:inherit company-tooltip-selection)))))
 
 (setq company-tooltip-limit 20
-      company-minimum-prefix-length 0
+      company-minimum-prefix-length 3
       company-idle-delay .3
       company-echo-delay 0
       company-begin-commands '(self-insert-command))
@@ -1260,6 +1260,7 @@ surrounding xml expression"
 (add-hook 'go-mode-hook 'my-go-mode-hook)
 (defun my-go-mode-hook ()
   (set (make-local-variable 'company-backends) '(company-go))
+  (set (make-local-variable 'company-minimum-prefix-length) 0)
   (local-set-key (kbd "M-.") 'godef-jump))
 (when (fboundp 'gofmt-before-save)
       (add-hook 'before-save-hook 'gofmt-before-save))
