@@ -125,7 +125,11 @@
      (let ((ent (assq 'gcc-include compilation-error-regexp-alist-alist)))
        (when ent
          (setcar (cdr ent) "^\\(?:In file included\\|                \\) from \\(.+?\\):\\([0-9]+\\)\\(:[0-9]+\\)?\\(?:\\(:\\)\\|\\(,\\)\\)?")
-         (setcdr (cdr ent) (list 1 2 nil '(4 . 5)))))))
+         (setcdr (cdr ent) (list 1 2 nil '(4 . 5)))))
+
+     (defadvice compilation-start (before flymake-cleanup-before-compilation)
+       (flymake-master-cleanup))
+     (ad-activate 'compilation-start)))
 
 (defun strip-lf ()
   (interactive)
