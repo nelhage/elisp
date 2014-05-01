@@ -125,11 +125,9 @@
      (let ((ent (assq 'gcc-include compilation-error-regexp-alist-alist)))
        (when ent
          (setcar (cdr ent) "^\\(?:In file included\\|                \\) from \\(.+?\\):\\([0-9]+\\)\\(:[0-9]+\\)?\\(?:\\(:\\)\\|\\(,\\)\\)?")
-         (setcdr (cdr ent) (list 1 2 nil '(4 . 5)))))
+         (setcdr (cdr ent) (list 1 2 nil '(4 . 5)))))))
 
-     (defadvice compilation-start (before flymake-cleanup-before-compilation)
-       (flymake-master-cleanup))
-     (ad-activate 'compilation-start)))
+(add-hook 'after-init-hook #'global-flycheck-mode)
 
 (defun strip-lf ()
   (interactive)
@@ -179,36 +177,6 @@
      (safe-set-face-attribute 'diff-file-header   nil :background "gray40")
      (safe-set-face-attribute 'diff-removed-face  nil :foreground "red")
      (safe-set-face-attribute 'diff-added-face    nil :foreground "green")))
-
-(eval-after-load 'flymake
-  '(progn
-    (global-set-key (kbd "C-c f") (make-sparse-keymap))
-    (global-set-key (kbd "C-c f n") 'my-flymake-goto-next-error)
-    (global-set-key (kbd "C-c f p") 'my-flymake-goto-prev-error)
-    (global-set-key (kbd "C-c f .") 'flymake-display-err-menu-for-current-line)
-    (set-face-attribute 'flymake-errline nil
-                        :underline "OrangeRed")
-    (set-face-attribute 'flymake-warnline nil
-                        :underline "cyan")
-    (set-face-background 'flymake-errline nil)
-    (set-face-background 'flymake-warnline nil)))
-
-(defun my-flymake-goto-next-error ()
-  (interactive)
-  (flymake-goto-next-error)
-  (message (get-char-property (point) 'help-echo)))
-
-(defun my-flymake-goto-prev-error ()
-  (interactive)
-  (flymake-goto-prev-error)
-  (message (get-char-property (point) 'help-echo)))
-
-(defun my-echo-help-text ()
-  (let ((help-echo (get-char-property (point) 'help-echo)))
-    (when (and help-echo flymake-mode)
-      (message help-echo))))
-
-(setq my-echo-help-timer (run-with-idle-timer 1 t 'my-echo-help-text))
 
 (defvar default-font "Ubuntu Mono-10" "The default font")
 
@@ -635,17 +603,6 @@
 (add-to-list 'auto-mode-alist (cons "\\.xs$" 'c-mode))
 
 ;;Python mode
-
-(when (load "flymake" t)
-  (defun flymake-pylint-init ()
-    (let* ((temp-file (flymake-init-create-temp-buffer-copy
-                       'flymake-create-temp-inplace))
-           (local-file (file-relative-name
-                        temp-file
-                        (file-name-directory buffer-file-name))))
-      (list "epylint" (list local-file))))
-  (add-to-list 'flymake-allowed-file-name-masks
-               '("\\.py\\'" flymake-pylint-init)))
 
 (add-to-list 'interpreter-mode-alist (cons "python2.4" 'python-mode))
 (add-to-list 'interpreter-mode-alist (cons "python2.5" 'python-mode))
@@ -1253,7 +1210,6 @@ surrounding xml expression"
 
 (golang-require "misc/emacs" 'go-mode-load)
 (golang-require "src/github.com/nsf/gocode/emacs/" 'go-autocomplete)
-(golang-require "src/github.com/dougm/goflymake"   'go-flymake)
 (golang-require "src/github.com/golang/lint/misc/emacs" 'golint)
 (let ((oracle-dir (concat (getenv "GOPATH") "/src/code.google.com/p/go.tools/cmd/oracle")))
   (when (file-directory-p oracle-dir)
