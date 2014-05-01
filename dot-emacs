@@ -1268,7 +1268,9 @@ surrounding xml expression"
   (set (make-local-variable 'company-minimum-prefix-length) 0)
   (local-set-key (kbd "M-.") 'godef-jump))
 (when (fboundp 'gofmt-before-save)
-      (add-hook 'before-save-hook 'gofmt-before-save))
+      (add-hook 'before-save-hook 'gofmt-before-save)
+      (when (not (string-equal "" (shell-command-to-string "which goimports")))
+        (setq gofmt-command "goimports")))
 
 ;; protobufs
 (require 'protobuf-mode)
