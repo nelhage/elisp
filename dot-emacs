@@ -128,6 +128,9 @@
          (setcdr (cdr ent) (list 1 2 nil '(4 . 5)))))))
 
 (add-hook 'after-init-hook #'global-flycheck-mode)
+(setq-default flycheck-disabled-checkers
+              '(ruby-rubocop ruby-rubylint ruby ruby-jruby
+                             python-flake8 python-pylint))
 
 (defun strip-lf ()
   (interactive)
