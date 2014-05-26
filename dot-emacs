@@ -1228,6 +1228,8 @@ surrounding xml expression"
   (local-set-key (kbd "M-.") 'godef-jump))
 (when (fboundp 'gofmt-before-save)
       (add-hook 'before-save-hook 'gofmt-before-save)
+      (add-to-list 'safe-local-variable-values '(gofmt-command . "goimports"))
+      (add-to-list 'safe-local-variable-values '(gofmt-command . "gofmt"))
       (when (not (string-equal "" (shell-command-to-string "which goimports")))
         (setq gofmt-command "goimports")))
 
