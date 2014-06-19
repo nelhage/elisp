@@ -29,10 +29,10 @@
        ((:url . "http://elpa.gnu.org/packages/all.html")
 	(:keywords "matching"))])
  (ascii-art-to-unicode .
-		       [(1 5)
+		       [(1 8)
 			nil "a small artist adjunct" single
 			((:url . "http://elpa.gnu.org/packages/ascii-art-to-unicode.html")
-			 (:keywords))])
+			 (:keywords "ascii" "unicode" "box-drawing"))])
  (auctex .
 	 [(11 87 4)
 	  nil "Integrated environment for *TeX*" tar
@@ -140,7 +140,7 @@
 	   ((:url . "http://elpa.gnu.org/packages/flylisp.html")
 	    (:keywords))])
  (ggtags .
-	 [(0 8 3)
+	 [(0 8 4)
 	  ((emacs
 	    (24))
 	   (cl-lib
@@ -151,9 +151,12 @@
  (gnugo .
 	[(2 3 1)
 	 ((ascii-art-to-unicode
-	   (1 5)))
+	   (1 5))
+	  (xpm
+	   (1 0 0)))
 	 "play GNU Go in a buffer" tar
-	 ((:url . "http://elpa.gnu.org/packages/gnugo.html"))])
+	 ((:keywords "games" "processes")
+	  (:url . "http://elpa.gnu.org/packages/gnugo.html"))])
  (heap .
        [(0 3)
 	nil "Heap (a.k.a. priority queue) data structure" single
@@ -245,15 +248,20 @@
 	    ((:url . "http://elpa.gnu.org/packages/omn-mode.html")
 	     (:keywords))])
  (org .
-      [(20140428)
+      [(20140519)
        nil "Outline-based notes management and organizer" tar nil])
+ (poker .
+	[(0 1)
+	 nil "Texas hold'em poker" single
+	 ((:url . "http://elpa.gnu.org/packages/poker.html")
+	  (:keywords "games"))])
  (quarter-plane .
 		[(0 1)
 		 nil "Minor mode for quarter-plane style editing" single
 		 ((:url . "http://elpa.gnu.org/packages/quarter-plane.html")
 		  (:keywords "convenience" "wp"))])
  (queue .
-	[(0 1)
+	[(0 1 1)
 	 nil "Queue data structure" single
 	 ((:url . "http://www.dr-qubit.org/emacs.php")
 	  (:keywords "extensions" "data structures" "queue"))])
@@ -267,6 +275,11 @@
 		 nil "Interactively list/edit registers" single
 		 ((:url . "http://elpa.gnu.org/packages/register-list.html")
 		  (:keywords "register"))])
+ (rudel .
+	[(0 3)
+	 nil "A collaborative editing framework for Emacs" tar
+	 ((:keywords "rudel" "collaboration")
+	  (:url . "http://rudel.sourceforge.net/"))])
  (shen-mode .
 	    [(0 1)
 	     nil "A major mode for editing shen source code" tar
@@ -338,9 +351,9 @@
       ((:keywords "faces" "help" "comm" "news" "mail" "processes" "mouse" "hypermedia")
        (:url . "http://elpa.gnu.org/packages/w3.html"))])
  (web-server .
-	     [(0 1 0)
+	     [(0 1 1)
 	      ((emacs
-		(24 3)))
+		(24 4)))
 	      "Emacs Web Server" tar
 	      ((:keywords "http" "server" "network")
 	       (:url . "https://github.com/eschulte/emacs-web-server"))])
@@ -372,6 +385,11 @@
 	 nil "use xclip to copy&paste" single
 	 ((:url . "http://elpa.gnu.org/packages/xclip.html")
 	  (:keywords "convenience" "tools"))])
+ (xpm .
+      [(1 0 1)
+       nil "edit XPM images" tar
+       ((:keywords "multimedia" "xpm")
+	(:url . "http://elpa.gnu.org/packages/xpm.html"))])
  (yasnippet .
 	    [(0 8 0)
 	     nil "Yet another snippet extension for Emacs." tar
