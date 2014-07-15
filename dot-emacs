@@ -1032,10 +1032,6 @@
 (setq matlab-shell-command "octave")
 (setq matlab-shell-command-switches '())
 
-;; YAML
-(autoload 'yaml-mode "yaml-mode" "Enter YAML Mode" t)
-(add-to-list 'auto-mode-alist (cons "\\.ya?ml$" 'yaml-mode))
-
 ;; LLVM development
 
 (let ((llvm-el (expand-file-name "~/code/llvm/utils/emacs")))
