@@ -4,9 +4,6 @@
 [submodule "site/org-mode"]
 	path = site/org-mode
 	url = git://repo.or.cz/org-mode.git
-[submodule "site/slime"]
-	path = site/slime
-	url = https://github.com/nablaone/slime.git 
 [submodule "site/swank-js"]
 	path = site/swank-js
 	url = git://github.com/swank-js/swank-js.git
