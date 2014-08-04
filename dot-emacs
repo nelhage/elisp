@@ -865,38 +865,6 @@
 
 (setq comint-scroll-to-bottom-on-ouput t)
 
-;;;SLIME
-(autoload 'slime "slime" t t)
-(autoload 'slime-connect "slime" t t)
-
-(eval-after-load 'slime
-  '(progn
-     (slime-setup '(slime-repl slime-js))
-     (add-hook 'js2-mode-hook
-               (lambda ()
-                 (slime-js-minor-mode 1)))))
-
-(defadvice slime (around slime-switch-to-repl-if-connected)
-  (if (safe-funcall 'slime-connected-p)
-      (slime-switch-to-output-buffer)
-      ad-do-it))
-
-(ad-activate 'slime)
-
-(setq slime-startup-animation nil
-      slime-complete-symbol-function 'slime-complete-symbol*)
-
-(defun slime-use-sbcl ()
-  (interactive)
-  (setq inferior-lisp-program "sbcl"))
-
-(defun slime-use-cmucl ()
-  (interactive)
-  (setq inferior-lisp-program "cmucl"))
-
-(slime-use-sbcl)
-(autoload 'slime-selector "slime" "" t)
-
 (add-to-list 'auto-mode-alist
              (cons (concat "/\\."
                            (regexp-opt '("sbclrc"
@@ -905,17 +873,11 @@
                            "$") 'lisp-mode))
 
 (add-hook 'lisp-mode-hook 'my-lisp-mode-hook)
-(add-hook 'lisp-mode-hook 'define-slime-keys)
 (add-hook 'lisp-mode-hook 'my-lisp-mode-common-hook)
 (add-hook 'lisp-mode-hook 'pretty-lambdas)
-(add-hook 'slime-repl-mode-hook 'define-slime-keys)
-(add-hook 'slime-repl-mode-hook 'my-lisp-mode-common-hook)
-(add-hook 'slime-repl-mode-hook 'pretty-lambdas)
 
 (defun my-lisp-mode-hook ()
-  (unless (safe-funcall 'slime-connected-p)
-    (save-excursion (slime))) 
-  (slime-mode t))
+  )
 
 (setq common-lisp-hyperspec-root "file:///usr/share/doc/hyperspec/")
 
@@ -932,7 +894,6 @@
 (add-hook 'lisp-interaction-mode-hook 'pretty-lambdas)
 
 ;;Lisp keybindings
-(global-set-key (kbd "C-c s") 'slime-selector)
 
 (defun define-lisp-keys ()
 ;;   (local-set-key "[" 'insert-parentheses)
@@ -960,11 +921,6 @@
   (local-set-key (kbd "C-M-q") 'fill-paragraph)
   (local-set-key (kbd "TAB") 'indent-and-complete-symbol-generic))
 
-(defun define-slime-keys ()
-  ; (define-lisp-keys)
-  ; (setq lisp-indent-function 'common-lisp-indent-function)
-  (local-set-key (kbd "TAB") 'slime-indent-and-complete-symbol))
-
 (defun define-elisp-keys ()
   (define-lisp-keys))
 
@@ -988,7 +944,7 @@
 (setq haskell-program-name "ghci")
 
 ;; ruby
-(autoload 'ruby-mode "ruby-mode" "" t)
+; (autoload 'ruby-mode "ruby-mode" "" t)
 (add-to-list 'auto-mode-alist (cons "\\.rb$" 'ruby-mode))
 ; gdash graphs are .graph
 (add-to-list 'auto-mode-alist (cons "\\.graph$" 'ruby-mode))
@@ -996,9 +952,9 @@
 (add-to-list 'auto-mode-alist (cons "\\.gemspec$" 'ruby-mode))
 (add-to-list 'interpreter-mode-alist (cons "ruby" 'ruby-mode))
 
-(autoload 'run-ruby "inf-ruby" "Run an inferior ruby process" t)
-(autoload 'inf-ruby-keys "inf-ruby" "Set local key defs for inf-ruby in ruby-mode")
-(add-hook 'ruby-mode-hook 'inf-ruby-keys)
+; (autoload 'run-ruby "inf-ruby" "Run an inferior ruby process" t)
+; (autoload 'inf-ruby-keys "inf-ruby" "Set local key defs for inf-ruby in ruby-mode")
+; (add-hook 'ruby-mode-hook 'inf-ruby-keys)
 (add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
 (defun my-ruby-mode-hook ()
   (local-set-key (kbd "TAB") 'indent-and-complete-symbol-generic)
@@ -1008,10 +964,6 @@
   (add-to-list 'ac-ignores "else")
   (add-to-list 'ac-ignores "do")
   (setq ruby-deep-indent-paren nil))
-(eval-after-load 'ruby-mode
-  '(progn
-     (define-key ruby-mode-map (kbd "M-TAB") 'dabbrev-expand)
-     (setq ruby-program-name "irb --inf-ruby-mode -rubygems")))
 
 ;; mmm-mode and ERB
 (require 'mmm-auto)
