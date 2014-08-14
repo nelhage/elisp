@@ -950,7 +950,7 @@
 (add-to-list 'auto-mode-alist (cons "\\.rb$" 'ruby-mode))
 ; gdash graphs are .graph
 (add-to-list 'auto-mode-alist (cons "\\.graph$" 'ruby-mode))
-(add-to-list 'auto-mode-alist (cons "\\(Rake\\|Gem\\|Guard\\)file$" 'ruby-mode))
+(add-to-list 'auto-mode-alist (cons "\\(Rake\\|Gem\\|Guard\\|Vagrant\\)file$" 'ruby-mode))
 (add-to-list 'auto-mode-alist (cons "\\.gemspec$" 'ruby-mode))
 (add-to-list 'interpreter-mode-alist (cons "ruby" 'ruby-mode))
 
