@@ -509,6 +509,35 @@
             (ido-enable-flex-matching nil))
         (find-file (gethash (ido-completing-read "files: " ido-list) tbl))))))
 
+(defconst my-github-remote-url-re
+  "^git@github.com:\\([^/]+\\)/\\([^/.]+\\)\\(\\.git\\)?$"
+  "Regular expression to parse a github git URL")
+
+(defun my-github-goto-file ()
+  (interactive)
+  (let
+      ((remote (chomp (shell-command-to-string "git config remote.origin.url")))
+       (prefix (chomp (shell-command-to-string "git rev-parse --show-prefix")))
+       (commit (chomp (shell-command-to-string "git rev-parse HEAD"))))
+    (if (not (string-match my-github-remote-url-re remote))
+        (error "Unable to parse github remote"))
+    (let ((org (match-string 1 remote))
+          (repo (match-string 2 remote))
+          (lines
+           (if (region-active-p)
+               (concat
+                (int-to-string (line-number-at-pos (region-beginning)))
+                "-"
+                (int-to-string (line-number-at-pos (region-end))))
+             (int-to-string (line-number-at-pos (point))))))
+
+      (browse-url (concat "https://github.com/"
+                          org "/" repo
+                          "/blob/" commit "/"
+                          prefix (file-name-nondirectory (buffer-file-name))
+                          "#L" lines)))))
+
+
 (require 'windmove)
 (windmove-default-keybindings)
 
@@ -1350,3 +1379,4 @@ surrounding xml expression"
            (named-term name dir))
           (shell
            (named-shell name dir)))))))
+
