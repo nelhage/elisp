@@ -25,6 +25,7 @@
 (require 'utils)
 (require 'structured)
 (require 'dirvars)
+(require 'subr-x)
 
 ;;Global key bindings
 (global-set-key (kbd "<deletechar>") 'backward-delete-char)
@@ -1181,11 +1182,12 @@ surrounding xml expression"
   (set (make-local-variable 'company-minimum-prefix-length) 0)
   (local-set-key (kbd "M-.") 'godef-jump))
 (when (fboundp 'gofmt-before-save)
-      (add-hook 'before-save-hook 'gofmt-before-save)
-      (add-to-list 'safe-local-variable-values '(gofmt-command . "goimports"))
-      (add-to-list 'safe-local-variable-values '(gofmt-command . "gofmt"))
-      (when (not (string-equal "" (shell-command-to-string "which goimports")))
-        (setq gofmt-command "goimports")))
+  (add-hook 'before-save-hook 'gofmt-before-save)
+  (add-to-list 'safe-local-variable-values '(gofmt-command . "goimports"))
+  (add-to-list 'safe-local-variable-values '(gofmt-command . "gofmt"))
+  (let ((goimports (string-trim (shell-command-to-string "which goimports"))))
+    (when (not (string-equal "" goimports))
+      (setq gofmt-command goimports))))
 
 ;; protobufs
 (require 'protobuf-mode)
@@ -1249,7 +1251,7 @@ surrounding xml expression"
 
 ; (setq org-agenda-skip-function 'org-agenda-skip-future-scheduled)
 
-(org-remember-insinuate)
+; (org-remember-insinuate)
 (global-set-key (kbd "C-c r") 'org-remember)
 (global-set-key (kbd "C-c a") 'org-agenda)
 
