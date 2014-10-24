@@ -184,11 +184,10 @@
      (safe-set-face-attribute 'diff-removed-face  nil :foreground "red")
      (safe-set-face-attribute 'diff-added-face    nil :foreground "green")))
 
-(defvar default-font "Ubuntu Mono-10" "The default font")
+(defvar default-font "Mono-11" "The default font")
 
 (when window-system
-  (let ((backups (list "Mono-9"
-                       "-adobe-courier-medium-r-*-*-12-*-*-*-*-70-iso8859-1")))
+  (let ((backups (list "-adobe-courier-medium-r-*-*-12-*-*-*-*-70-iso8859-1")))
     (while (and backups (not (font-info default-font)))
       (setq default-font (car backups))
       (setq backups (cdr backups)))))
