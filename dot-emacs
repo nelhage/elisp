@@ -184,10 +184,13 @@
      (safe-set-face-attribute 'diff-removed-face  nil :foreground "red")
      (safe-set-face-attribute 'diff-added-face    nil :foreground "green")))
 
-(defvar default-font "Mono-11" "The default font")
+(defvar default-font "" "The default font")
 
 (when window-system
-  (let ((backups (list "-adobe-courier-medium-r-*-*-12-*-*-*-*-70-iso8859-1")))
+  (let ((backups (list
+                  "-*-Source Code Pro-light-normal-normal-*-11-*-*-*-m-0-iso10646-1"
+                  "Mono-11"
+                  "-adobe-courier-medium-r-*-*-12-*-*-*-*-70-iso8859-1")))
     (while (and backups (not (font-info default-font)))
       (setq default-font (car backups))
       (setq backups (cdr backups)))))
