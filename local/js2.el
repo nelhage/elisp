@@ -1,1 +1,1 @@
-/home/nelhage/.elisp/local/js2-20090723b.el
+js2-20090723b.el
