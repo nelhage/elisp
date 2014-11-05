@@ -130,7 +130,7 @@
 
 (add-hook 'after-init-hook #'global-flycheck-mode)
 (setq-default flycheck-disabled-checkers
-              '(ruby-rubylint ruby ruby-jruby python-flake8 python-pylint))
+              '(ruby-rubylint ruby ruby-jruby python-flake8 python-pylint puppet-lint))
 (setq-default flycheck-rubocoprc (expand-file-name "~/stripe/pay-server/.rubocop.yml"))
 (setq-default flycheck-rubocop-lint-only t)
 
