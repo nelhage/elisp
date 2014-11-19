@@ -184,25 +184,28 @@
      (safe-set-face-attribute 'diff-removed-face  nil :foreground "red")
      (safe-set-face-attribute 'diff-added-face    nil :foreground "green")))
 
-(defvar default-font "" "The default font")
+(defvar try-fonts
+  (list
+   "-*-Source Code Pro-light-normal-normal-*-11-*-*-*-m-0-iso10646-1"
+   "Mono-11"
+   "-adobe-courier-medium-r-*-*-12-*-*-*-*-70-iso8859-1"))
+(defvar default-font ""
+  "The default font")
 
 (when window-system
-  (let ((backups (list
-                  "-*-Source Code Pro-light-normal-normal-*-11-*-*-*-m-0-iso10646-1"
-                  "Mono-11"
-                  "-adobe-courier-medium-r-*-*-12-*-*-*-*-70-iso8859-1")))
-    (while (and backups (not (font-info default-font)))
-      (setq default-font (car backups))
-      (setq backups (cdr backups)))))
+  (let ((try try-fonts))
+    (while (and try (not (font-info (car try))))
+      (setq try (cdr try)))
+    (setq default-font (car try)))
+  (setq default-frame-alist
+        `((menu-bar-lines . 0)
+          (font . ,default-font)
+          (foreground-color . "#AAA")
+          (background-color . "black")
+          (background-mode . 'dark)
+          (vertical-scroll-bars . nil)
+          (tool-bar-lines . 0))))
 
-(setq default-frame-alist
-      `((menu-bar-lines . 0)
-        (font . ,default-font)
-        (foreground-color . "#AAA")
-        (background-color . "black")
-        (background-mode . 'dark)
-        (vertical-scroll-bars . nil)
-        (tool-bar-lines . 0)))
 
 (defun set-projector-faces ()
   (interactive)
