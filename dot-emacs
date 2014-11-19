@@ -21,6 +21,9 @@
              '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (package-initialize)
 
+(setq exec-path-from-shell-variables '("PATH" "MANPATH" "GOROOT" "GOPATH" "TEXINPUTS"))
+(exec-path-from-shell-initialize)
+
 (require 'uniquify)
 (require 'utils)
 (require 'structured)
