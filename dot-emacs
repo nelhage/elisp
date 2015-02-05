@@ -271,7 +271,7 @@
 (eval-after-load 'grep
   '(progn
      (grep-apply-setting 'grep-use-null-device nil)
-     (grep-apply-setting 'grep-command "gr -nH -e ")
+     (grep-apply-setting 'grep-command "gr -nH -Ee ")
 
      (defun grep-default-command ()
        grep-command)))
@@ -481,7 +481,7 @@
 
 (defun git-grep ()
   (interactive)
-  (let ((grep-command "gr -nH -e ")
+  (let ((grep-command "gr -nH -Ee ")
         (default-directory (my-git-wc-root)))
     (call-interactively 'grep)))
 
