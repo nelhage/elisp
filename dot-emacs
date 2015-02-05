@@ -518,7 +518,7 @@
         (find-file (gethash (ido-completing-read "files: " ido-list) tbl))))))
 
 (defconst my-github-remote-url-re
-  "^git@github.com:\\([^/]+\\)/\\([^/.]+\\)\\(\\.git\\)?$"
+  "^\\(?:git@github.com:\\|https?://github.com/\\)\\([^/]+\\)/\\([^/.]+\\)\\(\\.git\\)?$"
   "Regular expression to parse a github git URL")
 
 (defun my-github-goto-file ()
