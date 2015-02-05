@@ -1205,9 +1205,15 @@ surrounding xml expression"
       (add-to-list 'load-path (expand-file-name (concat (car dir) "/" path)))
       (require feature))))
 
+(defun golang-load (path)
+  (let ((dir (member-if (lambda (dir) (file-exists-p (concat dir "/" path))) (golang-roots))))
+    (when dir
+      (load (concat (car dir) "/" path)))))
+
 (golang-require "misc/emacs" 'go-mode-load)
 (golang-require "src/github.com/nsf/gocode/emacs/" 'go-autocomplete)
 (golang-require "src/github.com/golang/lint/misc/emacs" 'golint)
+(golang-load "src/golang.org/x/tools/refactor/rename/rename.el")
 (let ((oracle-dir (concat (getenv "GOPATH") "/src/code.google.com/p/go.tools/cmd/oracle")))
   (when (file-directory-p oracle-dir)
     (load-file (concat oracle-dir "/oracle.el"))
