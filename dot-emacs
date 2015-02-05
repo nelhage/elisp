@@ -416,7 +416,9 @@
   (set-window-dedicated-p window nil))
 
 (require 'dired-x)
-(safe-funcall 'dired-omit-mode 1)
+(add-hook 'dired-mode-hook 'my-dired-mode-hook)
+(defun my-dired-mode-hook ()
+  (dired-omit-mode 1))
 (setq dired-listing-switches "-l")
 
 (global-set-key "\C-x\C-b" 'ibuffer-list-buffers)
