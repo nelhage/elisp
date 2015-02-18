@@ -134,7 +134,7 @@
 (add-hook 'after-init-hook #'global-flycheck-mode)
 (setq-default flycheck-disabled-checkers
               '(ruby-rubylint ruby ruby-jruby python-flake8 python-pylint puppet-lint))
-(setq-default flycheck-rubocoprc (expand-file-name "~/stripe/pay-server/.rubocop.yml"))
+(setq-default flycheck-rubocoprc (expand-file-name "~/.rubocop.yml"))
 (setq-default flycheck-rubocop-lint-only nil)
 
 
@@ -1382,16 +1382,7 @@ surrounding xml expression"
         (shell "livegrep-dev" "~/code/livegrep")
         (term "mutt-nelhage" "~/")
         (term "mutt-stripe" "~/")
-        (term "stripe-dev" "~/stripe")
-        (term "devbox" "~/stripe/pay-server")
-        (shell "pay-dev" "~/stripe/pay-server")
-        (shell "context-dev" "~/stripe/stripe-context")
-        (shell "henson-dev" "~/stripe/henson")
-        (shell "odm-dev" "~/stripe/chalk-odm")
-        (shell "mosql-dev" "~/stripe/mosql")
-        (shell "flatfiles-dev" "~/stripe/stripe-flatfiles")
-        (shell "space-commander" "~/stripe/space-commander")
-        (shell "puppet-config" "~/stripe/puppet-config")))
+        (term "stripe-dev" "~/stripe")))
 
 (defun setup-terminals ()
   (interactive)
