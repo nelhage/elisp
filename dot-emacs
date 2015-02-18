@@ -35,7 +35,7 @@
 (global-set-key (kbd "ESC <deletechar>") 'backward-kill-word)
 (global-set-key (kbd "C-z") nil)
 (global-set-key "\M-g" 'goto-line)
-(global-set-key "\C-m" 'newline-and-indent)
+(global-set-key "\C-m" 'magic-mode-newline-and-indent)
 (global-set-key "\M-k" 'kill-word)
 (global-set-key "\C-cc" 'compile)
 (global-set-key "\C-a" 'beginning-of-line-dwim)
@@ -1060,6 +1060,17 @@
 
 ;;Evil DOS file endings, eeeeeeeeevil
 (add-hook 'find-file-hook 'find-file-check-line-endings)
+
+;; automatically set mode after I type a shebang
+(defun magic-mode-newline-and-indent ()
+  (interactive "*")
+  (let ((shebang (and (eq major-mode 'fundamental-mode)
+                      (save-excursion
+                        (beginning-of-line)
+                        (looking-at "#!")))))
+    (newline-and-indent)
+    (when shebang
+      (normal-mode))))
 
 ;; smerge-mode
 (eval-after-load "smerge-mode"
