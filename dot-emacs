@@ -521,8 +521,7 @@
   "^\\(?:git@github.com:\\|https?://github.com/\\)\\([^/]+\\)/\\(.+?\\)\\(\\.git\\)?$"
   "Regular expression to parse a github git URL")
 
-(defun my-github-goto-file ()
-  (interactive)
+(defun my-github-url-for-point ()
   (let
       ((remote (chomp (shell-command-to-string "git config remote.origin.url")))
        (prefix (chomp (shell-command-to-string "git rev-parse --show-prefix")))
@@ -536,14 +535,22 @@
                (concat
                 (int-to-string (line-number-at-pos (region-beginning)))
                 "-"
-                (int-to-string (line-number-at-pos (region-end))))
+                (int-to-string (line-number-at-pos (- (region-end) 1))))
              (int-to-string (line-number-at-pos (point))))))
 
-      (browse-url (concat "https://github.com/"
-                          org "/" repo
-                          "/blob/" commit "/"
-                          prefix (file-name-nondirectory (buffer-file-name))
-                          "#L" lines)))))
+      (concat "https://github.com/"
+              org "/" repo
+              "/blob/" commit "/"
+              prefix (file-name-nondirectory (buffer-file-name))
+              "#L" lines))))
+
+(defun my-github-copy-url-for-point ()
+  (interactive)
+  (kill-new (my-github-url-for-point)))
+
+(defun my-github-goto-file ()
+  (interactive)
+  (browse-url (my-github-url-for-point)))
 
 
 (require 'windmove)
