@@ -137,6 +137,7 @@
 (setq-default flycheck-rubocoprc (expand-file-name "~/.rubocop.yml"))
 (setq-default flycheck-rubocop-lint-only nil)
 
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
 (defun strip-lf ()
   (interactive)
@@ -436,7 +437,7 @@
 ;(global-set-key (kbd "C-x b") 'helm-buffers-list)
 
 (defun my-ido-keys ()
-  (mapc (lambda (K) 
+  (mapc (lambda (K)
           (let* ((key (car K)) (fun (cdr K)))
             (define-key ido-completion-map (edmacro-parse-keys key) fun)))
         '(("<right>" . ido-next-match)
@@ -450,13 +451,13 @@
 
 ; (require 'iswitchb)
 ; (iswitchb-mode nil)
-; 
+;
 ; (defadvice iswitchb-visit-buffer (before iswitchb-undedicate-window)
 ;   (undedicate-window))
 ; (ad-activate 'iswitchb-visit-buffer)
-; 
+;
 ; (defun iswitchb-local-keys ()
-;   (mapc (lambda (K) 
+;   (mapc (lambda (K)
 ;           (let* ((key (car K)) (fun (cdr K)))
 ;             (define-key iswitchb-mode-map (edmacro-parse-keys key) fun)))
 ;         '(("<right>" . iswitchb-next-match)
@@ -465,7 +466,7 @@
 ;           ("<down>"  . ignore             )
 ;           ("\C-n"    . iswitchb-next-match)
 ;           ("\C-p"    . iswitchb-prev-match))))
-; 
+;
 ; (add-hook 'iswitchb-minibuffer-setup-hook 'iswitchb-local-keys)
 
 (defun my-find-file (arg)
@@ -1399,4 +1400,3 @@ surrounding xml expression"
            (named-term name dir))
           (shell
            (named-shell name dir)))))))
-
