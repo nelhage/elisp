@@ -1386,8 +1386,6 @@ surrounding xml expression"
         ;; (shell "llvm-dev" "~/code/llvm")
         ;; (shell "mysql" "~/")
         (shell "livegrep-dev" "~/code/livegrep")
-        (term "mutt-nelhage" "~/")
-        (term "mutt-stripe" "~/")
         (term "stripe-dev" "~/stripe")))
 
 (defun setup-terminals ()
