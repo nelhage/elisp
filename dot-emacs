@@ -599,6 +599,8 @@
 (require 'magit)
 (global-set-key (kbd "C-c g") 'magit-status)
 (setq magit-completing-read 'magit-ido-completing-read)
+(setq magit-push-always-verify nil
+      magit-branch-arguments '())
 ; (eval-after-load 'magit
 ;   '(progn
 ;      (set-face-background 'magit-item-highlight "grey8")
