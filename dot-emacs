@@ -666,6 +666,10 @@
 (add-to-list 'interpreter-mode-alist (cons "python2.5" 'python-mode))
 (add-to-list 'auto-mode-alist (cons "SConscript$" 'python-mode))
 (add-to-list 'auto-mode-alist (cons "SConstruct$" 'python-mode))
+; bazel BUILD files are python-esque
+(add-to-list 'auto-mode-alist (cons "/BUILD\\(\\..*\\)?$" 'python-mode))
+(add-to-list 'auto-mode-alist (cons "/WORKSPACE\\(\\..*\\)?$" 'python-mode))
+(add-to-list 'auto-mode-alist (cons "\\.bzl$" 'python-mode))
 (eval-after-load 'python
   '(progn
     (define-key python-mode-map (kbd "M-TAB") 'dabbrev-expand)))
@@ -724,7 +728,6 @@
         dabbrev-case-fold-search nil)
   (cscope-minor-mode))
 
-
 (require 'xcscope)
 
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
@@ -744,11 +747,26 @@
   (when (string-match "\\.h\\'" (buffer-name))
     (save-excursion
       (goto-char (point-min))
-      (if (re-search-forward "\\s \\(class\\|template\\|using\\)" nil t)
+      (if (re-search-forward "\\s \\(class\\|template\\|using\\|namespace\\)" nil t)
           t))))
 
 (add-to-list 'magic-mode-alist
              '(smells-like-c++ . c++-mode))
+
+(defvar clang-format-before-save-p nil
+  "Should we run `clang-format` on buffer before save?")
+(make-variable-buffer-local 'clang-format-before-save-p)
+(put 'clang-format-before-save-p 'safe-local-variable 'booleanp)
+(defun maybe-clang-format-before-save ()
+  (when clang-format-before-save-p
+    (clang-format-buffer)))
+(add-hook 'before-save-hook 'maybe-clang-format-before-save)
+
+(c-add-style "my-cc-style"
+             '("cc-mode"
+               (c-basic-offset . 2)
+               (indent-tabs-mode . nil)
+               (c-offsets-alist . ((innamespace . [0])))))
 
 ;;;Java
 (add-hook 'java-mode-hook 'define-bracket-keys)
