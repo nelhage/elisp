@@ -728,6 +728,13 @@
         dabbrev-case-fold-search nil)
   (cscope-minor-mode))
 
+(defun my-clang-local-variables-hook ()
+  (when flycheck-clang-include-path
+    (setq company-clang-arguments
+          (mapcar '(lambda (s) (concat "-I" s))
+                  flycheck-clang-include-path))))
+(add-hook 'hack-local-variables-hook 'my-clang-local-variables-hook)
+
 (require 'xcscope)
 
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
