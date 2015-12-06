@@ -28,7 +28,6 @@
 (require 'utils)
 (require 'structured)
 (require 'dirvars)
-(require 'subr-x)
 
 ;;Global key bindings
 (global-set-key (kbd "<deletechar>") 'backward-delete-char)
@@ -596,7 +595,7 @@
 (safe-require 'git)
 (when (featurep 'vc-git) (add-to-list 'vc-handled-backends 'git))
 
-(require 'magit)
+; (require 'magit)
 (global-set-key (kbd "C-c g") 'magit-status)
 (setq magit-completing-read 'magit-ido-completing-read)
 (setq magit-push-always-verify nil
@@ -1250,9 +1249,9 @@ surrounding xml expression"
   (add-hook 'before-save-hook 'gofmt-before-save)
   (add-to-list 'safe-local-variable-values '(gofmt-command . "goimports"))
   (add-to-list 'safe-local-variable-values '(gofmt-command . "gofmt"))
-  (let ((goimports (string-trim (shell-command-to-string "which goimports"))))
+  (let ((goimports (shell-command-to-string "which goimports")))
     (when (not (string-equal "" goimports))
-      (setq gofmt-command goimports))))
+      (setq gofmt-command (replace-regexp-in-string "\\n$" "" goimports)))))
 
 ;; protobufs
 (require 'protobuf-mode)
