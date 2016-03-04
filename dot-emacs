@@ -133,7 +133,7 @@
 (add-hook 'after-init-hook #'global-flycheck-mode)
 (setq-default flycheck-disabled-checkers
               '(ruby-rubylint ruby ruby-jruby python-flake8 python-pylint puppet-lint))
-(setq-default flycheck-rubocoprc (expand-file-name "~/.rubocop.yml"))
+(setq-default flycheck-rubocoprc ".rubocop.yml")
 (setq-default flycheck-rubocop-lint-only nil)
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
@@ -497,7 +497,7 @@
            (shell-command-to-string
             (concat "git --git-dir "
                     (shell-quote-argument git-dir)
-                    " ls-files -c -o"))
+                    " ls-files -c -o --exclude-standard"))
            "\n")))
     ;; populate hash table (display repr => path)
     (setq tbl (make-hash-table :test 'equal))
@@ -1028,7 +1028,6 @@
 (add-to-list 'auto-mode-alist (cons "\\.rb$" 'ruby-mode))
 ; gdash graphs are .graph
 (add-to-list 'auto-mode-alist (cons "\\.graph$" 'ruby-mode))
-(add-to-list 'auto-mode-alist (cons "\\(Rake\\|Gem\\|Guard\\|Vagrant\\)file$" 'ruby-mode))
 (add-to-list 'auto-mode-alist (cons "\\.gemspec$" 'ruby-mode))
 (add-to-list 'interpreter-mode-alist (cons "ruby" 'ruby-mode))
 
@@ -1039,11 +1038,28 @@
 (defun my-ruby-mode-hook ()
   (local-set-key (kbd "TAB") 'indent-and-complete-symbol-generic)
   (make-local-variable 'ac-ignores)
+  (make-local-variable 'before-save-hook)
+  (add-hook 'before-save-hook 'maybe-rubocop-autocorrect-current-file)
   (add-to-list 'ac-ignores "end")
   (add-to-list 'ac-ignores "en")
   (add-to-list 'ac-ignores "else")
   (add-to-list 'ac-ignores "do")
   (setq ruby-deep-indent-paren nil))
+
+(define-derived-mode ruby-dsl-mode ruby-mode "ruby-dsl")
+(add-hook 'ruby-dsl-mode-hook 'my-ruby-dsl-mode-hook)
+(defun my-ruby-dsl-mode-hook ()
+  (setq rubocop-autocorrect-on-save-p nil)
+  (remove-hook 'before-save-hook 'maybe-rubocop-autocorrect-current-file))
+(add-to-list 'auto-mode-alist (cons "\\(Rake\\|Gem\\|Guard\\|Vagrant\\)file$" 'ruby-dsl-mode))
+
+(defvar rubocop-autocorrect-on-save-p nil
+  "Should we run rubocop autocorrect on buffer before save?")
+(make-variable-buffer-local 'rubocop-autocorrect-on-save-p)
+(put 'rubocop-autocorrect-on-save-p 'safe-local-variable 'booleanp)
+(defun maybe-rubocop-autocorrect-current-file ()
+  (when rubocop-autocorrect-on-save-p
+    (rubocop-autocorrect-current-file)))
 
 ;; mmm-mode and ERB
 (require 'mmm-auto)
