@@ -534,7 +534,7 @@
            (if (region-active-p)
                (concat
                 (int-to-string (line-number-at-pos (region-beginning)))
-                "-"
+                "-L"
                 (int-to-string (line-number-at-pos (- (region-end) 1))))
              (int-to-string (line-number-at-pos (point))))))
 
@@ -551,7 +551,6 @@
 (defun my-github-goto-file ()
   (interactive)
   (browse-url (my-github-url-for-point)))
-
 
 (require 'windmove)
 (windmove-default-keybindings)
