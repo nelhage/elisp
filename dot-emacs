@@ -599,6 +599,7 @@
 (setq magit-completing-read 'magit-ido-completing-read)
 (setq magit-push-always-verify nil
       magit-branch-arguments '())
+(magit-auto-revert-mode 1)
 ; (eval-after-load 'magit
 ;   '(progn
 ;      (set-face-background 'magit-item-highlight "grey8")
@@ -671,8 +672,8 @@
 (add-to-list 'auto-mode-alist (cons "\\.bzl$" 'python-mode))
 (eval-after-load 'python
   '(progn
-    (define-key python-mode-map (kbd "M-TAB") 'dabbrev-expand)))
-
+     (define-key python-mode-map (kbd "M-TAB") 'dabbrev-expand)))
+(setq python-indent-offset 2)
 
 (defun pydoc (word)
   "Run `pydoc' on WORD and display it in a buffer"
