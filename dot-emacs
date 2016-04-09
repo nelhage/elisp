@@ -1273,7 +1273,7 @@ surrounding xml expression"
 (golang-require "misc/emacs" 'go-mode-load)
 (golang-require "src/github.com/nsf/gocode/emacs/" 'go-autocomplete)
 (golang-require "src/github.com/golang/lint/misc/emacs" 'golint)
-(golang-load "src/golang.org/x/tools/refactor/rename/rename.el")
+(golang-load "src/golang.org/x/tools/refactor/rename/go-rename.el")
 (let ((oracle-dir (concat (getenv "GOPATH") "/src/code.google.com/p/go.tools/cmd/oracle")))
   (when (file-directory-p oracle-dir)
     (load-file (concat oracle-dir "/oracle.el"))
