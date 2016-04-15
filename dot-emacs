@@ -599,7 +599,9 @@
 (setq magit-completing-read 'magit-ido-completing-read)
 (setq magit-push-always-verify nil
       magit-branch-arguments '())
-(magit-auto-revert-mode 1)
+(eval-after-load 'magit
+  '(progn
+     (magit-auto-revert-mode 1)))
 ; (eval-after-load 'magit
 ;   '(progn
 ;      (set-face-background 'magit-item-highlight "grey8")
