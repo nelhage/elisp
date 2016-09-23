@@ -225,8 +225,8 @@
 	    [(1 0)
 	     nil "Emacs WebSocket client and server" single])
  (web-mode .
-	   [(8 0 4)
-	    nil "major mode for editing html templates" single])
+	   [(14 0 0)
+	    nil "major mode for editing web templates" single])
  (web .
       [(0 5 2)
        ((dash
@@ -460,7 +460,7 @@
 	     [(12)
 	      nil "A theme loosely based on Tron: Legacy colors" single])
  (transmission .
-	       [(0 7)
+	       [(0 9)
 		((emacs
 		  (24 4))
 		 (let-alist
@@ -574,6 +574,9 @@
  (systemtap-mode .
 		 [(0 2)
 		  nil "A mode for SystemTap" single])
+ (systemd .
+	  [(1 4 1)
+	   nil "Major mode for editing systemd units" tar])
  (syslog-mode .
 	      [(2 2)
 	       ((hide-lines
@@ -1004,6 +1007,9 @@
  (scala-mode .
 	     [(0 0 2)
 	      nil "Scala major mode" tar])
+ (say-what-im-doing .
+		    [(0 2)
+		     nil "dictate what you're doing with text to speech" single])
  (sawfish .
 	  [(1 32)
 	   nil "Sawfish mode." single])
@@ -1402,7 +1408,7 @@
 	   [(0 0 1)
 	    nil "get stuff from pinboard" single])
  (picpocket .
-	    [(16)
+	    [(22)
 	     nil "Image viewer" single])
  (pickup .
 	 [(0 0 3)
@@ -1593,7 +1599,7 @@
 	     [(0 0 8)
 	      nil "export html and meta data used by static blog like nikola from org file" tar])
  (org2jekyll .
-	     [(0 1 8)
+	     [(0 1 9)
 	      ((dash-functional
 		(2 11 0))
 	       (s
@@ -1609,7 +1615,7 @@
 	      (1 6 8)))
 	    "Blog from Org mode to wordpress" tar])
  (org-trello .
-	     [(0 7 8)
+	     [(0 7 9)
 	      ((request-deferred
 		(0 2 0))
 	       (deferred
@@ -1666,7 +1672,7 @@
 	       (6 1)))
 	     "basic support for magit links" single])
  (org-journal .
-	      [(1 10 2)
+	      [(1 11 1)
 	       nil "a simple org-mode based journaling mode" single])
  (org-gnome .
 	    [(0 1)
@@ -2048,7 +2054,7 @@
 	       [(1 0 0)
 		nil "collection of faces for markup language modes" single])
  (markdown-toc .
-	       [(0 1 0)
+	       [(0 1 2)
 		((markdown-mode
 		  (2 1))
 		 (dash
@@ -2472,7 +2478,7 @@
 	  [(2927)
 	   nil "Adds support for IPython to python-mode.el" single])
  (insert-shebang .
-		 [(0 9 4)
+		 [(0 9 5)
 		  nil "Insert shebang line automatically." single])
  (inline-crypt .
 	       [(0 1 4)
@@ -2588,7 +2594,7 @@
 		[(1 1 2)
 		 nil "hungry delete minor mode" single])
  (hugo .
-       [(0 1 0)
+       [(0 1 2)
 	nil "Helper functions for Hugo" single])
  (httpd .
 	[(1 0 1)
@@ -2822,6 +2828,9 @@
  (gotham-theme .
 	       [(1 1 6)
 		nil "A very dark Emacs color theme." single])
+ (gotests .
+	  [(0 0 2)
+	   nil "Emacs package for https://github.com/cweill/gotests" single])
  (gopher .
 	 [(0 0 2)
 	  nil "easily access and navigate Gopher servers" single])
@@ -3357,7 +3366,7 @@
        (2 2 0)))
      "Modern API for working with files and directories" single])
  (eyebrowse .
-	    [(0 6 9)
+	    [(0 7 0)
 	     ((dash
 	       (2 7 0))
 	      (emacs
@@ -3756,7 +3765,7 @@
 	       [(0 2 2)
 		nil "Aspell extra dictionary for Drupal" tar])
  (drupal-mode .
-	      [(0 6 1)
+	      [(0 7 0)
 	       ((php-mode
 		 (1 5 0)))
 	       "Advanced minor mode for Drupal development" tar])

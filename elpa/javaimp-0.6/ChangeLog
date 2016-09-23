@@ -1,0 +1,104 @@
+2016-05-19  Filipp Gunbin  <fgunbin@fastmail.fm>
+
+	packages/javaimp: Restructure code, add some tests.
+
+	* Restructure xml parsing code for test convenience.
+	* Add 2 simple tests.
+
+2016-04-22  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* packages/javaimp/javaimp.el (javaimp): Add a parent group
+
+	(javaimp--maven-xml-load-tree): Fix reference to free var `project-elt`.
+	(javaimp-organize-imports): Use cl-lib name.
+
+2016-04-18  Filipp Gunbin  <fgunbin@fastmail.fm>
+
+	packages/javaimp: whitespace/doc fixes
+
+2016-04-13  Filipp Gunbin  <fgunbin@fastmail.fm>
+
+	packages/javaimp: cosmetic fixes
+
+2016-04-11  Filipp Gunbin  <fgunbin@fastmail.fm>
+
+	packages/javaimp: temporary revert version
+
+2016-04-11  Filipp Gunbin  <fgunbin@fastmail.fm>
+
+	packages/javaimp: full rewrite
+
+	* Use defstruct's from cl-lib.
+	* Parse pom.xml structure into tree for correct updates.
+	* Clean up docs.
+	* Simplify code.
+
+2015-10-28  Filipp Gunbin  <fgunbin@fastmail.fm>
+
+	* packages/javaimp/javaimp.el: Update javaimp to v. 0.6.
+
+2015-10-28  Filipp Gunbin  <fgunbin@fastmail.fm>
+
+	javaimp.el: Fix Maven output start regexp.
+
+2015-04-02  Filipp Gunbin  <fgunbin@fastmail.fm>
+
+	packages/javaimp/javaimp.el: Support additional source directories.
+
+	* packages/javaimp/javaimp.el (javaimp-additional-source-dirs): New
+	defcustom.
+	(javaimp-make-mod): Add build-dir.
+	(javaimp-get-mod-build-dir): New defun.
+	(javaimp-maven-build-children): Use module build directory
+	(javaimp-get-module-classes): Add classes in 'additional-source-dirs' to
+	project classes.
+
+2015-03-30  Stefan Monnier  <monnier@iro.umontreal.ca>
+
+	* packages/javaimp/javaimp.el: Fix some compiler warnings
+
+2015-03-11  Filipp Gunbin  <fgunbin@fastmail.fm>
+
+	packages/javaimp/javaimp.el: use line-beginning-position instead of
+	forward-line
+
+2015-03-10  Filipp Gunbin  <fgunbin@fastmail.fm>
+
+	packages/javaimp/javaimp.el: replace kill-line with delete-region
+
+2014-12-08  Filipp Gunbin  <fgunbin@fastmail.fm>
+
+	minor fixes
+
+2014-10-23  Filipp Gunbin  <fgunbin@fastmail.fm>
+
+	packages/javaimp/javaimp.el: parent pom check fix
+
+2014-10-22  Filipp Gunbin  <fgunbin@fastmail.fm>
+
+	packages/javaimp/javaimp.el: added check for changes in parent pom
+
+2014-10-02  Filipp Gunbin  <fgunbin@fastmail.fm>
+
+	javaimp: doc fixes
+
+2014-09-30  Filipp Gunbin  <fgunbin@fastmail.fm>
+
+	javaimp: version 0.5
+
+2014-09-30  Filipp Gunbin  <fgunbin@fastmail.fm>
+
+	javaimp: fix for cases when maven doesn't add xml declaration
+
+2014-08-28  Filipp Gunbin  <fgunbin@fastmail.fm>
+
+	javaimp: fixed lexical-binding var placement
+
+2014-08-27  Filipp Gunbin  <fgunbin@fastmail.fm>
+
+	javaimp: converted to lexical binding, doc fixes, minor code fixes
+
+2014-07-10  Filipp Gunbin  <fgunbin@fastmail.fm>
+
+	* javaimp: New package.
+
