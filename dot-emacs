@@ -797,13 +797,10 @@
 (setq auto-mode-alist (cons '("\\.g\\'" . antlr-mode) auto-mode-alist))
 
 ;; Javascript
-(autoload 'moz-minor-mode "moz" "Mozilla Minor and Inferior Mozilla Modes" t)
-(autoload 'js2-mode "js2" nil t)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 (add-to-list 'auto-mode-alist '("\\.json$" . js-mode))
 (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
-; (add-hook 'js2-mode-hook 'moz-minor-mode)
-(add-hook 'js2-mode-hook 'js2-enter-mirror-mode)
+; (add-hook 'js2-mode-hook 'js2-enter-mirror-mode)
 (add-hook 'js2-mode-hook 'my-js2-mode-hook)
 ; (add-hook 'js2-mode-hook 'define-bracket-keys)
 (setq js2-use-font-lock-faces t
@@ -817,10 +814,10 @@
     (js2-indent-line)))
 ; (ad-activate 'js2-enter-key)
 
-(eval-after-load 'js2-mode
-  '(progn
-     (set-face-attribute 'js2-warning-face nil :underline "cyan")
-     (set-face-attribute 'js2-error-face nil   :underline "OrangeRed")))
+; (eval-after-load 'js2-mode
+;   '(progn
+;      (set-face-attribute 'js2-warning-face nil :underline "cyan")
+;      (set-face-attribute 'js2-error-face nil   :underline "OrangeRed")))
 
 (defun my-js2-mode-hook ()
   (local-set-key (kbd "C-a") 'beginning-of-line-dwim)
