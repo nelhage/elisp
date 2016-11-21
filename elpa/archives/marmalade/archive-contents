@@ -460,7 +460,7 @@
 	     [(12)
 	      nil "A theme loosely based on Tron: Legacy colors" single])
  (transmission .
-	       [(0 9)
+	       [(0 10)
 		((emacs
 		  (24 4))
 		 (let-alist
@@ -1531,7 +1531,7 @@
 		  [(0 8)
 		   nil "Various deletion strategies when editing" single])
  (palimpsest .
-	     [(0 8)
+	     [(0 9)
 	      nil "Various deletion strategies when editing" single])
  (pager-default-keybindings .
 			    [(1 1)
@@ -1571,6 +1571,9 @@
  (outlined-elisp-mode .
 		      [(1 0 5)
 		       nil "outline-minor-mode settings for emacs lisp" single])
+ (outer-spaces .
+	       [(20161029 2230)
+		nil "A minimalistic minor-mode to highlight redundant spaces" single])
  (otter-mode .
 	     [(1 2)
 	      nil "Major mode for source files of the Otter automated theorem prover" single])
@@ -3371,7 +3374,7 @@
        (2 2 0)))
      "Modern API for working with files and directories" single])
  (eyebrowse .
-	    [(0 7 0)
+	    [(0 7 2)
 	     ((dash
 	       (2 7 0))
 	      (emacs
