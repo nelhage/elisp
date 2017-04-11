@@ -1294,11 +1294,6 @@ surrounding xml expression"
 (golang-require "src/github.com/nsf/gocode/emacs/" 'go-autocomplete)
 (golang-require "src/github.com/golang/lint/misc/emacs" 'golint)
 (golang-load "src/golang.org/x/tools/refactor/rename/go-rename.el")
-(let ((oracle-dir (concat (getenv "GOPATH") "/src/code.google.com/p/go.tools/cmd/oracle")))
-  (when (file-directory-p oracle-dir)
-    (load-file (concat oracle-dir "/oracle.el"))
-    (add-hook 'go-mode-hook 'go-oracle-mode)
-    (setq go-oracle-command "oracle")))
 
 (add-hook 'go-mode-hook 'go-eldoc-setup)
 (add-hook 'go-mode-hook 'my-go-mode-hook)
