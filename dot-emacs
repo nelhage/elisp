@@ -513,19 +513,29 @@
             (ido-enable-flex-matching nil))
         (find-file (gethash (ido-completing-read "files: " ido-list) tbl))))))
 
-(defconst my-github-remote-url-re
-  "^\\(?:git@github.com:\\|https?://github.com/\\)\\([^/]+\\)/\\(.+?\\)\\(\\.git\\)?$"
-  "Regular expression to parse a github git URL")
+(defvar my-github-domains
+  '("github.com" "git.corp.stripe.com")
+  "Known github domains and GHE instances.")
+
+(defun my-github-remote-url-re ()
+  (concat
+   "^git@"
+   "\\("
+   (regexp-opt my-github-domains)
+   "\\)"
+   ":\\([^/]+\\)/\\(.+?\\)\\(\\.git\\)?$"))
 
 (defun my-github-url-for-point ()
   (let
-      ((remote (chomp (shell-command-to-string "git config remote.origin.url")))
+      ((remote (chomp (shell-command-to-string "git remote get-url origin")))
        (prefix (chomp (shell-command-to-string "git rev-parse --show-prefix")))
-       (commit (chomp (shell-command-to-string "git rev-parse HEAD"))))
-    (if (not (string-match my-github-remote-url-re remote))
+       (commit (chomp (shell-command-to-string "git rev-parse HEAD")))
+       (regex (my-github-remote-url-re)))
+    (if (not (string-match regex remote))
         (error "Unable to parse github remote"))
-    (let ((org (match-string 1 remote))
-          (repo (match-string 2 remote))
+    (let ((url (match-string 1 remote))
+          (org (match-string 2 remote))
+          (repo (match-string 3 remote))
           (lines
            (if (region-active-p)
                (concat
@@ -534,15 +544,18 @@
                 (int-to-string (line-number-at-pos (- (region-end) 1))))
              (int-to-string (line-number-at-pos (point))))))
 
-      (concat "https://github.com/"
-              org "/" repo
+      (concat "https://"
+              url
+              "/" org "/" repo
               "/blob/" commit "/"
               prefix (file-name-nondirectory (buffer-file-name))
               "#L" lines))))
 
 (defun my-github-copy-url-for-point ()
   (interactive)
-  (kill-new (my-github-url-for-point)))
+  (let ((url (my-github-url-for-point)))
+    (kill-new url)
+    (message "%s" url)))
 
 (defun my-github-goto-file ()
   (interactive)
@@ -1054,7 +1067,19 @@
 (put 'rubocop-autocorrect-on-save-p 'safe-local-variable 'booleanp)
 (defun maybe-rubocop-autocorrect-current-file ()
   (when rubocop-autocorrect-on-save-p
+    (read-only-mode)
     (rubocop-autocorrect-current-file)))
+(defun my-revert-after-rubocop-hook (buffer _)
+  (when (string-match "\\*RuboCop \\(.+\\)\\*" (buffer-name buffer))
+    (bury-buffer buffer)
+    (let ((path (match-string 1 (buffer-name buffer))))
+      (let ((buffer (get-file-buffer path)))
+        (when buffer
+          (with-current-buffer buffer
+            (revert-buffer nil t)
+            (read-only-mode -1)))))))
+
+(add-hook 'compilation-finish-functions 'my-revert-after-rubocop-hook)
 
 ;; mmm-mode and ERB
 (require 'mmm-auto)
