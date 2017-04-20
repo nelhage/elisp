@@ -267,7 +267,9 @@
       compile-command "find-makefile"
       pop-up-windows nil
       save-interprogram-paste-before-kill t
-      Man-width 80)
+      Man-width 80
+      tags-case-fold-search nil
+      )
 (eval-after-load 'grep
   '(progn
      (grep-apply-setting 'grep-use-null-device nil)
