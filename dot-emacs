@@ -1075,10 +1075,24 @@
   "Should we run rubocop autocorrect on buffer before save?")
 (make-variable-buffer-local 'rubocop-autocorrect-on-save-p)
 (put 'rubocop-autocorrect-on-save-p 'safe-local-variable 'booleanp)
+(defvar rubocop-exclude-cops nil
+  "Cops to exclude from autocorrecting in the editor")
+(make-variable-buffer-local 'rubocop-exclude-cops)
+(put 'rubocop-exclude-cops 'safe-local-variable 'list-of-stringsp)
+(defun list-of-stringsp (lst)
+  (and (listp lst)
+       (-all? 'stringp lst)))
 (defun maybe-rubocop-autocorrect-current-file ()
   (when rubocop-autocorrect-on-save-p
     (read-only-mode)
-    (rubocop-autocorrect-current-file)))
+    (let ((rubocop-autocorrect-command
+           (concat rubocop-autocorrect-command
+                   (if rubocop-exclude-cops
+                       (concat
+                        " --except="
+                        (string-join rubocop-exclude-cops ","))
+                     ""))))
+      (rubocop-autocorrect-current-file))))
 (defun my-revert-after-rubocop-hook (buffer _)
   (when (string-match "\\*RuboCop \\(.+\\)\\*" (buffer-name buffer))
     (bury-buffer buffer)
