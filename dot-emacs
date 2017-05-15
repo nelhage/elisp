@@ -1051,6 +1051,7 @@
 ; gdash graphs are .graph
 (add-to-list 'auto-mode-alist (cons "\\.graph$" 'ruby-mode))
 (add-to-list 'auto-mode-alist (cons "\\.gemspec$" 'ruby-mode))
+(add-to-list 'auto-mode-alist (cons "\\.fixturerb$" 'ruby-mode))
 (add-to-list 'interpreter-mode-alist (cons "ruby" 'ruby-mode))
 
 ; (autoload 'run-ruby "inf-ruby" "Run an inferior ruby process" t)
@@ -1058,6 +1059,7 @@
 ; (add-hook 'ruby-mode-hook 'inf-ruby-keys)
 (add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
 (defun my-ruby-mode-hook ()
+  (require 'rubocop)
   (local-set-key (kbd "TAB") 'indent-and-complete-symbol-generic)
   (make-local-variable 'ac-ignores)
   (make-local-variable 'before-save-hook)
@@ -1073,7 +1075,7 @@
 (defun my-ruby-dsl-mode-hook ()
   (setq rubocop-autocorrect-on-save-p nil)
   (remove-hook 'before-save-hook 'maybe-rubocop-autocorrect-current-file))
-(add-to-list 'auto-mode-alist (cons "\\(Rake\\|Gem\\|Guard\\|Vagrant\\)file$" 'ruby-dsl-mode))
+(add-to-list 'auto-mode-alist (cons "\\(Rake\\|Gem\\|Guard\\|Vagrant\\)file-[a-z]+$" 'ruby-dsl-mode))
 
 (defvar rubocop-autocorrect-on-save-p nil
   "Should we run rubocop autocorrect on buffer before save?")
@@ -1099,13 +1101,13 @@
       (rubocop-autocorrect-current-file))))
 (defun my-revert-after-rubocop-hook (buffer _)
   (when (string-match "\\*RuboCop \\(.+\\)\\*" (buffer-name buffer))
-    (bury-buffer buffer)
     (let ((path (match-string 1 (buffer-name buffer))))
       (let ((buffer (get-file-buffer path)))
         (when buffer
           (with-current-buffer buffer
             (revert-buffer nil t)
-            (read-only-mode -1)))))))
+            (read-only-mode -1)))))
+    (bury-buffer buffer)))
 
 (add-hook 'compilation-finish-functions 'my-revert-after-rubocop-hook)
 
@@ -1378,8 +1380,7 @@ surrounding xml expression"
       org-agenda-todo-keyword-format "%-6s"
       org-agenda-todo-ignore-deadlines t
       org-todo-keywords
-      '((sequence "TODO" "INPROGRESS"  "|" "DONE")
-        (sequence "|" "CANCELLED"  "DELEGATED"))
+      '((sequence "TODO"  "|" "DONE"))
       org-deadline-warning-days 0
       org-return-follows-link t
       org-mobile-inbox-for-pull (concat org-directory "/mobile.org")
