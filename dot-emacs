@@ -1447,8 +1447,7 @@ surrounding xml expression"
   (require 'edit-server)
   (edit-server-start)
   (find-file-noselect "~/.elisp/dot-emacs")
-  (save-window-excursion (shell))
-  (setup-terminals))
+  (save-window-excursion (shell)))
 
 ;;; Misc stuff
 
