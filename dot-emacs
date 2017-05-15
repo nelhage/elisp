@@ -1416,6 +1416,14 @@ surrounding xml expression"
      (set-face-foreground 'org-todo "#FF6666")
      (set-face-foreground 'org-done "#00FF00")))
 
+;; visual-line-mode
+
+(define-key visual-line-mode-map (kbd "C-a") 'beginning-of-visual-line)
+(setq visual-line-fringe-indicators '(nil right-curly-arrow))
+(defun my-visual-line-mode-hook ()
+  (visual-fill-column-mode 1))
+(add-hook 'visual-line-mode-hook 'my-visual-line-mode-hook)
+
 ;; SES mode
 (add-hook 'ses-mode-hook 'my-ses-mode-hook)
 (defun my-ses-mode-hook ()
