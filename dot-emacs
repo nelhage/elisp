@@ -40,7 +40,7 @@
 (global-set-key "\C-a" 'beginning-of-line-dwim)
 (global-set-key "\C-co" 'other-window)
 (global-set-key [f5] 'call-last-kbd-macro)
-(global-set-key (kbd "TAB") 'indent-and-complete-symbol-generic)
+(global-set-key (kbd "TAB") 'company-indent-or-complete-common)
 (global-set-key (kbd "M-r") 're-search-backward)
 (global-set-key (kbd "M-s") 're-search-forward)
 ; (global-set-key [up] 'increment-number-at-point)
@@ -1324,6 +1324,9 @@ surrounding xml expression"
 (add-to-list 'auto-mode-alist (cons "\\.proto$" 'protobuf-mode))
 
 ;;; ADD NEW LANGUAGE MODES HERE
+(add-hook 'rust-mode-hook #'flycheck-rust-setup)
+(add-hook 'rust-mode-hook #'racer-mode)
+(add-hook 'racer-mode-hook #'eldoc-mode)
 
 ;;Mailcrypt
 (require 'mailcrypt)
@@ -1453,7 +1456,7 @@ surrounding xml expression"
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (flycheck-ocaml tuareg lua-mode gnuplot gnuplot-mode yaml-mode thrift terraform-mode smartparens seq ruby-tools ruby-mode ruby-electric rubocop popwin magit-gh-pulls magit-gerrit javaimp inf-ruby helm go-eldoc fuzzy flycheck f exec-path-from-shell edit-server debian-changelog-mode dash-at-point company-go coffee-mode cmake-mode clojure-mode clang-format bison-mode auto-complete)))
+    (company-racer racer flycheck-rust rust-mode flycheck-ocaml tuareg lua-mode gnuplot gnuplot-mode yaml-mode thrift terraform-mode smartparens seq ruby-tools ruby-mode ruby-electric rubocop popwin magit-gh-pulls magit-gerrit javaimp inf-ruby helm go-eldoc fuzzy flycheck f exec-path-from-shell edit-server debian-changelog-mode dash-at-point company-go coffee-mode cmake-mode clojure-mode clang-format bison-mode auto-complete)))
  '(safe-local-variable-values
    (quote
     ((encoding . utf-8)
