@@ -218,7 +218,9 @@
                       :foreground "blue"
                       :weight 'bold)
   (set-face-attribute 'font-lock-string-face nil
-                      :foreground "dark red"))
+                      :foreground "dark red")
+  (set-face-attribute 'whitespace-tab nil
+                      :background 'unspecified))
 
 (defun set-normal-faces ()
   (interactive)
@@ -232,6 +234,8 @@
                       :weight 'normal)
   (set-face-attribute 'font-lock-string-face nil
                       :foreground "orange")
+  (set-face-attribute 'whitespace-tab nil
+                      :background "#133")
   (set-frame-font default-font t))
 
 (defun safe-funcall (func &rest args)
@@ -784,7 +788,12 @@
              '("cc-mode"
                (c-basic-offset . 2)
                (indent-tabs-mode . nil)
-               (c-offsets-alist . ((innamespace . [0])))))
+               (c-offsets-alist
+                . (
+                   (innamespace . 0)
+                   (arglist-intro . ?+)
+                   (arglist-clode . ?-)
+                   ))))
 
 ;;;Java
 (add-hook 'java-mode-hook 'define-bracket-keys)
@@ -820,7 +829,8 @@
       js2-allow-keywords-as-property-names t
       js2-mode-show-strict-warnings nil
       js2-bounce-indent-p t)
-(setq-default js2-basic-offset 2)
+(setq-default js2-basic-offset 2
+              js-indent-level 2)
 
 (defadvice js2-enter-key (after js2-enter-key-indent)
   (let ((js2-bounce-indent-flag nil))
@@ -1466,7 +1476,7 @@ surrounding xml expression"
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (gnuplot gnuplot-mode yaml-mode thrift terraform-mode smartparens seq ruby-tools ruby-mode ruby-electric rubocop popwin magit-gh-pulls magit-gerrit javaimp inf-ruby helm go-eldoc fuzzy flycheck f exec-path-from-shell edit-server debian-changelog-mode dash-at-point company-go coffee-mode cmake-mode clojure-mode clang-format bison-mode auto-complete)))
+    (flycheck-ocaml tuareg lua-mode gnuplot gnuplot-mode yaml-mode thrift terraform-mode smartparens seq ruby-tools ruby-mode ruby-electric rubocop popwin magit-gh-pulls magit-gerrit javaimp inf-ruby helm go-eldoc fuzzy flycheck f exec-path-from-shell edit-server debian-changelog-mode dash-at-point company-go coffee-mode cmake-mode clojure-mode clang-format bison-mode auto-complete)))
  '(safe-local-variable-values
    (quote
     ((encoding . utf-8)
