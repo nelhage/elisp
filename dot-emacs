@@ -1446,29 +1446,6 @@ surrounding xml expression"
 (put 'asm-comment-char 'safe-local-variable 'characterp)
 (put 'c-indentation-style 'safe-local-variable 'symbolp)
 
-(defvar initial-terminals '() "Terminals to create initially")
-(setq initial-terminals
-      '((term "nelhage.com" "~/")
-        ;; (shell "linux-2.6" "~/code/linux")
-        ;; (shell "barnowl-dev" "~/code/barnowl")
-        ;; (shell "llvm-dev" "~/code/llvm")
-        ;; (shell "mysql" "~/")
-        (shell "livegrep-dev" "~/code/livegrep")
-        (term "stripe-dev" "~/stripe")))
-
-(defun setup-terminals ()
-  (interactive)
-  (dolist (spec initial-terminals)
-    (destructuring-bind (type name dir) spec
-      (when (and (not (get-buffer (concat "*" name "*")))
-                 (file-exists-p dir))
-        (case type
-          (term
-           (named-term name dir))
-          (shell
-           (named-shell name dir)))))))
-
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
