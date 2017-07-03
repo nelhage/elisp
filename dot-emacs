@@ -870,6 +870,14 @@
       (setq-local flycheck-javascript-eslint-executable eslint))))
 (add-hook 'flycheck-mode-hook #'my-use-eslint-from-node-modules)
 
+(defun my-eslint-fix ()
+  "Format the current file with ESLint."
+  (interactive)
+  (if flycheck-javascript-eslint-executable
+      (progn (call-process flycheck-javascript-eslint-executable  nil "*ESLint Errors*" nil "--fix" buffer-file-name)
+             (revert-buffer t t t))
+    (message "ESLint not found.")))
+
 (require 'coffee-mode)
 (add-to-list 'auto-mode-alist '("\\.coffee$" . coffee-mode))
 (add-to-list 'auto-mode-alist '("Cakefile" . coffee-mode))
