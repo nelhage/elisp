@@ -1112,14 +1112,21 @@
 (defun maybe-rubocop-autocorrect-current-file ()
   (when rubocop-autocorrect-on-save-p
     (read-only-mode)
-    (let ((rubocop-autocorrect-command
-           (concat rubocop-autocorrect-command
-                   (if rubocop-exclude-cops
-                       (concat
-                        " --except="
-                        (string-join rubocop-exclude-cops ","))
-                     ""))))
-      (rubocop-autocorrect-current-file))))
+    (rubocop-autocorrect-current-file)))
+
+(eval-after-load 'rubocop
+  '(defun rubocop-build-command (command path)
+     (concat command
+             (if rubocop-exclude-cops
+                 (concat
+                  " --except="
+                  (string-join rubocop-exclude-cops ",")
+                  " ")
+               "")
+             (rubocop-build-requires)
+             " "
+             path)))
+
 (defun my-revert-after-rubocop-hook (buffer _)
   (when (string-match "\\*RuboCop \\(.+\\)\\*" (buffer-name buffer))
     (let ((path (match-string 1 (buffer-name buffer))))
