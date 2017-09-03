@@ -812,12 +812,6 @@
   (define-key java-mode-map "\C-c\C-dh" 'javadoc-lookup-class)
   (make-local-variable 'dabbrev-case-fold-search))
 
-;; Scala
-(require 'scala-mode-auto)
-(eval-after-load 'scala-mode
-  '(progn
-     (put 'scala-mode-indent:step 'safe-local-variable 'integerp)))
-
 ;;; ANTLR
 (autoload 'antlr-mode "antlr-mode" nil t)
 (setq auto-mode-alist (cons '("\\.g\\'" . antlr-mode) auto-mode-alist))
