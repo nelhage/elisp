@@ -54,11 +54,11 @@
 
 (let ((tmp nil))
   (mapc (lambda (e)
-                (if (not (or (and (consp e) (or (eq (car e) 'grep-mode)
-                                                (eq (car e) 'occur-mode)
-                                                (eq (car e) 'compilation-mode)))
-                             (equal e "*vc-diff*")))
-                    (setq tmp (cons e tmp))))
+          (if (not (or (and (consp e) (or (eq (car e) 'grep-mode)
+                                          (eq (car e) 'occur-mode)
+                                          (eq (car e) 'compilation-mode)))
+                       (equal e "*vc-diff*")))
+              (setq tmp (cons e tmp))))
         popwin:special-display-config)
   (setq popwin:special-display-config tmp))
 
@@ -131,6 +131,7 @@
               '(ruby-rubylint ruby ruby-jruby python-flake8 python-pylint puppet-lint))
 (setq-default flycheck-rubocoprc ".rubocop.yml")
 (setq-default flycheck-rubocop-lint-only nil)
+(setq flycheck-python-pycompile-executable "python3")
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
@@ -821,7 +822,7 @@
 (setq auto-mode-alist (cons '("\\.g\\'" . antlr-mode) auto-mode-alist))
 
 ;; Javascript
-(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+(add-to-list 'auto-mode-alist '("\\.jsx?$" . js2-mode))
 (add-to-list 'auto-mode-alist '("\\.json$" . js-mode))
 (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
 ; (add-hook 'js2-mode-hook 'js2-enter-mirror-mode)
@@ -1067,6 +1068,7 @@
 ;; ruby
 ; (autoload 'ruby-mode "ruby-mode" "" t)
 (add-to-list 'auto-mode-alist (cons "\\.rb$" 'ruby-mode))
+(add-to-list 'auto-mode-alist (cons "\\.rbi$" 'ruby-mode))
 ; gdash graphs are .graph
 (add-to-list 'auto-mode-alist (cons "\\.graph$" 'ruby-mode))
 (add-to-list 'auto-mode-alist (cons "\\.gemspec$" 'ruby-mode))
