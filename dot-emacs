@@ -760,16 +760,58 @@
       rtags-completions-enabled t)
 (push 'company-rtags company-backends)
 
+(defun rtags-enable ()
+  (rtags-start-process-unless-running)
+  (rtags-enable-standard-keybindings)
+  (local-set-key (kbd "M-.") #'rtags-find-symbol-at-point)
+  (local-set-key (kbd "M-,") #'rtags-location-stack-back))
+
 (require 'flycheck-clangcheck)
+
+;; flycheck-clangcheck monkey-patch
+;; https://github.com/kumar8600/flycheck-clangcheck/pull/10
+(defun flycheck-clangcheck-get-json (build-dir source)
+  "Get a the compile commands from `flycheck-clangcheck-dbname' at BUILD-DIR for SOURCE."
+  (let ((commands (json-read-file (expand-file-name flycheck-clangcheck-dbname
+						    build-dir)))
+	(source-truename (file-truename source)))
+    (cl-find-if (lambda (item)
+                  (string= source-truename
+                           (flycheck-clangcheck-get-truename item)))
+                commands)))
+
+(defun flycheck-clangcheck-get-truename (entry)
+  "Return the absolute path of an `ENTRY` from the compile database."
+  (let ((dir (cdr (assq 'directory entry)))
+        (file (cdr (assq 'file entry))))
+    (let ((default-directory dir))
+      (file-truename file))))(defun flycheck-clangcheck-get-json (build-dir source)
+  "Get a the compile commands from `flycheck-clangcheck-dbname' at BUILD-DIR for SOURCE."
+  (let ((commands (json-read-file (expand-file-name flycheck-clangcheck-dbname
+						    build-dir)))
+	(source-truename (file-truename source)))
+    (cl-find-if (lambda (item)
+                  (string= source-truename
+                           (flycheck-clangcheck-get-truename item)))
+                commands)))
+
+(defun flycheck-clangcheck-get-truename (item)
+  "Returns the absolute path of a JSON fragment from the compile
+   database."
+  (let ((dir (cdr (assq 'directory item)))
+        (file (cdr (assq 'file item))))
+    (let ((default-directory dir))
+      (file-truename file))))
+;; end flycheck-clangcheck monkey-patch
 
 (defun my-select-clangcheck-for-checker ()
   "Select clang-check for flycheck's checker."
-  (flycheck-set-checker-executable 'c/c++-clangcheck
-                                   "/path/to/clang-check")
   (flycheck-select-checker 'c/c++-clangcheck))
 
 (add-hook 'c-mode-hook #'my-select-clangcheck-for-checker)
+(add-hook 'c-mode-hook #'rtags-enable)
 (add-hook 'c++-mode-hook #'my-select-clangcheck-for-checker)
+(add-hook 'c++-mode-hook #'rtags-enable)
 
 ;; enable static analysis
 (setq flycheck-clangcheck-analyze t)
