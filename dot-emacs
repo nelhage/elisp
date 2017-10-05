@@ -686,29 +686,33 @@
 (add-to-list 'interpreter-mode-alist (cons "python2.5" 'python-mode))
 (add-to-list 'auto-mode-alist (cons "SConscript$" 'python-mode))
 (add-to-list 'auto-mode-alist (cons "SConstruct$" 'python-mode))
-; bazel BUILD files are python-esque
-(add-to-list 'auto-mode-alist (cons "/BUILD\\(\\..*\\)?$" 'python-mode))
-(add-to-list 'auto-mode-alist (cons "/WORKSPACE\\(\\..*\\)?$" 'python-mode))
-(add-to-list 'auto-mode-alist (cons "\\.bzl$" 'python-mode))
+
 (eval-after-load 'python
   '(progn
      (define-key python-mode-map (kbd "M-TAB") 'dabbrev-expand)))
 (setq python-indent-offset 2)
 
+;; bazel
+
+(define-derived-mode bazel-mode
+  python-mode "Bazel"
+  "Major mode for Bazel BUILD files."
+  (setq python-indent-offset 4)
+  (add-hook 'before-save-hook 'buildifier-format-file nil t))
+
 (defun buildifier-format-file ()
   (interactive)
   (let ((path (buffer-file-name (current-buffer))))
     (when path
-      (save-some-buffers)
-      (shell-command (concat "buildifier -mode=fix " path))
-      (revert-buffer t t t))))
+      (shell-command-on-region
+       (point-min)
+       (point-max)
+       (concat "buildifier -path=" path)
+       t t))))
 
-(defun pydoc (word)
-  "Run `pydoc' on WORD and display it in a buffer"
-  (interactive "Mpydoc entry: ")
-  (require 'man)
-  (let ((manual-program "pydoc"))
-    (Man-getpage-in-background word)))
+(add-to-list 'auto-mode-alist (cons "/BUILD\\(\\..*\\)?$" 'bazel-mode))
+(add-to-list 'auto-mode-alist (cons "/WORKSPACE\\(\\..*\\)?$" 'bazel-mode))
+(add-to-list 'auto-mode-alist (cons "\\.bzl$" 'bazel-mode))
 
 ;;JSIM mode
 (autoload 'jsim-mode "jsim" nil t)
