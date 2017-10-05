@@ -4,3 +4,4 @@
 *.dvi
 *.aux
 .svn/
+/elpa/archives

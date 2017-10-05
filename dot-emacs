@@ -695,6 +695,14 @@
      (define-key python-mode-map (kbd "M-TAB") 'dabbrev-expand)))
 (setq python-indent-offset 2)
 
+(defun buildifier-format-file ()
+  (interactive)
+  (let ((path (buffer-file-name (current-buffer))))
+    (when path
+      (save-some-buffers)
+      (shell-command (concat "buildifier -mode=fix " path))
+      (revert-buffer t t t))))
+
 (defun pydoc (word)
   "Run `pydoc' on WORD and display it in a buffer"
   (interactive "Mpydoc entry: ")
@@ -752,12 +760,19 @@
       rtags-completions-enabled t)
 (push 'company-rtags company-backends)
 
-(defun my-clang-local-variables-hook ()
-  (when flycheck-clang-include-path
-    (setq company-clang-arguments
-          (mapcar '(lambda (s) (concat "-I" s))
-                  flycheck-clang-include-path))))
-(add-hook 'hack-local-variables-hook 'my-clang-local-variables-hook)
+(require 'flycheck-clangcheck)
+
+(defun my-select-clangcheck-for-checker ()
+  "Select clang-check for flycheck's checker."
+  (flycheck-set-checker-executable 'c/c++-clangcheck
+                                   "/path/to/clang-check")
+  (flycheck-select-checker 'c/c++-clangcheck))
+
+(add-hook 'c-mode-hook #'my-select-clangcheck-for-checker)
+(add-hook 'c++-mode-hook #'my-select-clangcheck-for-checker)
+
+;; enable static analysis
+(setq flycheck-clangcheck-analyze t)
 
 (require 'xcscope)
 
@@ -803,6 +818,16 @@
                    (arglist-intro . ?+)
                    (arglist-clode . ?-)
                    ))))
+
+(c-add-style "llvm.org"
+             '("gnu"
+               (fill-column . 80)
+               (c++-indent-level . 2)
+               (c-basic-offset . 2)
+               (indent-tabs-mode . nil)
+               (c-offsets-alist . ((arglist-intro . ++)
+                                   (innamespace . 0)
+                                   (member-init-intro . ++)))))
 
 ;;;Java
 (add-hook 'java-mode-hook 'define-bracket-keys)
@@ -1500,7 +1525,6 @@ surrounding xml expression"
       w3m-home-page  "http://google.com")
 
 (put 'asm-comment-char 'safe-local-variable 'characterp)
-(put 'c-indentation-style 'safe-local-variable 'symbolp)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -1509,7 +1533,7 @@ surrounding xml expression"
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (visual-fill-column yaml-mode ac-rtags company-rtags rtags company-racer racer flycheck-rust rust-mode flycheck-ocaml tuareg lua-mode js2-mode gnuplot gnuplot-mode thrift terraform-mode smartparens seq ruby-tools ruby-mode ruby-electric rubocop popwin magit-gh-pulls magit-gerrit javaimp inf-ruby helm go-eldoc fuzzy flycheck f exec-path-from-shell edit-server debian-changelog-mode dash-at-point company-go coffee-mode cmake-mode clojure-mode clang-format bison-mode auto-complete)))
+    (flycheck-clangcheck visual-fill-column yaml-mode ac-rtags company-rtags rtags company-racer racer flycheck-rust rust-mode flycheck-ocaml tuareg lua-mode js2-mode gnuplot gnuplot-mode thrift terraform-mode smartparens seq ruby-tools ruby-mode ruby-electric rubocop popwin magit-gh-pulls magit-gerrit javaimp inf-ruby helm go-eldoc fuzzy flycheck f exec-path-from-shell edit-server debian-changelog-mode dash-at-point company-go coffee-mode cmake-mode clojure-mode clang-format bison-mode auto-complete)))
  '(safe-local-variable-values
    (quote
     ((encoding . utf-8)
