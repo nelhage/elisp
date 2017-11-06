@@ -788,8 +788,11 @@
   "Return the absolute path of an `ENTRY` from the compile database."
   (let ((dir (cdr (assq 'directory entry)))
         (file (cdr (assq 'file entry))))
-    (let ((default-directory dir))
-      (file-truename file))))(defun flycheck-clangcheck-get-json (build-dir source)
+    (let ((dir (if (directory-name-p dir) dir (concat dir "/"))))
+      (let ((default-directory dir))
+        (file-truename file)))))
+
+(defun flycheck-clangcheck-get-json (build-dir source)
   "Get a the compile commands from `flycheck-clangcheck-dbname' at BUILD-DIR for SOURCE."
   (let ((commands (json-read-file (expand-file-name flycheck-clangcheck-dbname
 						    build-dir)))
@@ -798,14 +801,6 @@
                   (string= source-truename
                            (flycheck-clangcheck-get-truename item)))
                 commands)))
-
-(defun flycheck-clangcheck-get-truename (item)
-  "Returns the absolute path of a JSON fragment from the compile
-   database."
-  (let ((dir (cdr (assq 'directory item)))
-        (file (cdr (assq 'file item))))
-    (let ((default-directory dir))
-      (file-truename file))))
 ;; end flycheck-clangcheck monkey-patch
 
 (defun my-select-clangcheck-for-checker ()
