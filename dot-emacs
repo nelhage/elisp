@@ -772,17 +772,31 @@
 
 (require 'flycheck-clangcheck)
 
+(make-variable-buffer-local
+ (defvar flycheck-clangcheck-db-last-modified nil
+   "last-modified-time of the compile_commands DB as of when we last examined it"))
+(make-variable-buffer-local
+ (defvar flycheck-clangcheck-json nil
+   "cached compile_commands JSON for this file"))
+
 ;; flycheck-clangcheck monkey-patch
 ;; https://github.com/kumar8600/flycheck-clangcheck/pull/10
 (defun flycheck-clangcheck-get-json (build-dir source)
   "Get a the compile commands from `flycheck-clangcheck-dbname' at BUILD-DIR for SOURCE."
-  (let ((commands (json-read-file (expand-file-name flycheck-clangcheck-dbname
-						    build-dir)))
-	(source-truename (file-truename source)))
-    (cl-find-if (lambda (item)
-                  (string= source-truename
-                           (flycheck-clangcheck-get-truename item)))
-                commands)))
+  (let ((dbpath (expand-file-name flycheck-clangcheck-dbname
+                                  build-dir)))
+    (let ((attrs (file-attributes dbpath)))
+      (if (not (equal (nth 5 attrs) flycheck-clangcheck-db-last-modified))
+          (let ((commands (json-read-file dbpath))
+                (source-truename (file-truename source)))
+            (setq
+             flycheck-clangcheck-db-last-modified (nth 5 attrs)
+             flycheck-clangcheck-json
+             (cl-find-if (lambda (item)
+                           (string= source-truename
+                                    (flycheck-clangcheck-get-truename item)))
+                         commands)))
+        flycheck-clangcheck-json))))
 
 (defun flycheck-clangcheck-get-truename (entry)
   "Return the absolute path of an `ENTRY` from the compile database."
@@ -791,16 +805,6 @@
     (let ((dir (if (directory-name-p dir) dir (concat dir "/"))))
       (let ((default-directory dir))
         (file-truename file)))))
-
-(defun flycheck-clangcheck-get-json (build-dir source)
-  "Get a the compile commands from `flycheck-clangcheck-dbname' at BUILD-DIR for SOURCE."
-  (let ((commands (json-read-file (expand-file-name flycheck-clangcheck-dbname
-						    build-dir)))
-	(source-truename (file-truename source)))
-    (cl-find-if (lambda (item)
-                  (string= source-truename
-                           (flycheck-clangcheck-get-truename item)))
-                commands)))
 ;; end flycheck-clangcheck monkey-patch
 
 (defun my-select-clangcheck-for-checker ()
