@@ -892,7 +892,7 @@
 (setq auto-mode-alist (cons '("\\.g\\'" . antlr-mode) auto-mode-alist))
 
 ;; Javascript
-(add-to-list 'auto-mode-alist '("\\.jsx?$" . js2-mode))
+(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 (add-to-list 'auto-mode-alist '("\\.json$" . js-mode))
 (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
 ; (add-hook 'js2-mode-hook 'js2-enter-mirror-mode)
@@ -950,6 +950,12 @@
 (require 'coffee-mode)
 (add-to-list 'auto-mode-alist '("\\.coffee$" . coffee-mode))
 (add-to-list 'auto-mode-alist '("Cakefile" . coffee-mode))
+
+;;; web-mode
+(add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
+(setq-default web-mode-code-indent-offset 2
+              web-mode-markup-indent-offset 2)
+(flycheck-add-mode 'javascript-eslint 'web-mode)
 
 ;;;LaTeX
 (add-hook 'latex-mode-hook 'my-latex-mode-hook)
@@ -1578,7 +1584,7 @@ surrounding xml expression"
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (flycheck-clangcheck visual-fill-column yaml-mode ac-rtags company-rtags rtags company-racer racer flycheck-rust rust-mode flycheck-ocaml tuareg lua-mode js2-mode gnuplot gnuplot-mode thrift terraform-mode smartparens seq ruby-tools ruby-mode ruby-electric rubocop popwin magit-gh-pulls magit-gerrit javaimp inf-ruby helm go-eldoc fuzzy flycheck f exec-path-from-shell edit-server debian-changelog-mode dash-at-point company-go coffee-mode cmake-mode clojure-mode clang-format bison-mode auto-complete)))
+    (web-mode flycheck-clangcheck visual-fill-column yaml-mode ac-rtags company-rtags rtags company-racer racer flycheck-rust rust-mode flycheck-ocaml tuareg lua-mode js2-mode gnuplot gnuplot-mode thrift terraform-mode smartparens seq ruby-tools ruby-mode ruby-electric rubocop popwin magit-gh-pulls magit-gerrit javaimp inf-ruby helm go-eldoc fuzzy flycheck f exec-path-from-shell edit-server debian-changelog-mode dash-at-point company-go coffee-mode cmake-mode clojure-mode clang-format bison-mode auto-complete)))
  '(safe-local-variable-values
    (quote
     ((encoding . utf-8)
