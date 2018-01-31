@@ -305,6 +305,8 @@
   (setq show-paren-delay 0)
   (show-paren-mode 1))
 
+(setq flycheck-shellcheck-follow-sources nil)
+
 (require 'shell)
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
 (add-hook 'shell-mode-hook 'my-shell-mode-hook)
@@ -608,10 +610,10 @@
 ; (safe-require 'vc-svk)
 (safe-require 'vc-git)
 (safe-require 'git)
-(when (featurep 'vc-git) (add-to-list 'vc-handled-backends 'git))
 
 ; (require 'magit)
 (global-set-key (kbd "C-c g") 'magit-status)
+(global-set-key (kbd "C-x v") 'magit-file-popup)
 (setq vc-handled-backends (delq 'Git vc-handled-backends))
 (setq vc-handled-backends (delq 'git vc-handled-backends))
 (setq magit-completing-read 'magit-ido-completing-read)
@@ -620,20 +622,6 @@
 (eval-after-load 'magit
   '(progn
      (magit-auto-revert-mode 1)))
-; (eval-after-load 'magit
-;   '(progn
-;      (set-face-background 'magit-item-highlight "grey8")
-;      (set-face-attribute 'magit-diff-add nil
-;                          :foreground 'unspecified
-;                          :inherit diff-added-face)
-;      (set-face-attribute 'magit-diff-del nil
-;                          :foreground 'unspecified
-;                          :inherit diff-removed-face)
-;      (set-face-attribute 'magit-diff-none nil
-;                          :foreground 'unspecified
-;                          :inherit diff-context-face)
-;      ;(require 'magit-svn)
-;      ))
 
 (condition-case nil
     (progn
@@ -817,7 +805,7 @@
 (add-hook 'c++-mode-hook #'rtags-enable)
 
 ;; enable static analysis
-(setq flycheck-clangcheck-analyze t)
+(setq flycheck-clangcheck-analyze nil)
 
 (require 'xcscope)
 
