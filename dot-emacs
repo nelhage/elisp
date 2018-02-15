@@ -748,7 +748,7 @@
         dabbrev-case-fold-search nil)
   (cscope-minor-mode))
 
-(setq rtags-autostart-diagnostics t
+(setq rtags-autostart-diagnostics nil
       rtags-completions-enabled t)
 (push 'company-rtags company-backends)
 
