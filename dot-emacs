@@ -522,6 +522,22 @@
             (ido-enable-flex-matching nil))
         (find-file (gethash (ido-completing-read "files: " ido-list) tbl))))))
 
+;; used for quickly opening github links to line or region
+;; configured to open in a browser right away
+(setq git-link-open-in-browser t
+      git-link-use-commit t)
+
+;; sets up stripe git enterprise as a git-link handler
+(eval-after-load 'git-link
+  '(progn
+     (add-to-list 'git-link-remote-alist
+                  '("git\\.corp\\.stripe\\.com" git-link-github))
+     (add-to-list 'git-link-commit-remote-alist
+                  '("git\\.corp\\.stripe\\.com" git-link-commit-github))))
+
+(magit-define-popup-action 'magit-file-popup ?l "Go to line on github" 'git-link)
+
+
 (defvar my-github-domains
   '("github.com" "git.corp.stripe.com")
   "Known github domains and GHE instances.")
@@ -1572,7 +1588,7 @@ surrounding xml expression"
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (web-mode flycheck-clangcheck visual-fill-column yaml-mode ac-rtags company-rtags rtags company-racer racer flycheck-rust rust-mode flycheck-ocaml tuareg lua-mode js2-mode gnuplot gnuplot-mode thrift terraform-mode smartparens seq ruby-tools ruby-mode ruby-electric rubocop popwin magit-gh-pulls magit-gerrit javaimp inf-ruby helm go-eldoc fuzzy flycheck f exec-path-from-shell edit-server debian-changelog-mode dash-at-point company-go coffee-mode cmake-mode clojure-mode clang-format bison-mode auto-complete)))
+    (git-link web-mode flycheck-clangcheck visual-fill-column yaml-mode ac-rtags company-rtags rtags company-racer racer flycheck-rust rust-mode flycheck-ocaml tuareg lua-mode js2-mode gnuplot gnuplot-mode thrift terraform-mode smartparens seq ruby-tools ruby-mode ruby-electric rubocop popwin magit-gh-pulls magit-gerrit javaimp inf-ruby helm go-eldoc fuzzy flycheck f exec-path-from-shell edit-server debian-changelog-mode dash-at-point company-go coffee-mode cmake-mode clojure-mode clang-format bison-mode auto-complete)))
  '(safe-local-variable-values
    (quote
     ((encoding . utf-8)
