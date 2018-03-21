@@ -535,7 +535,9 @@
      (add-to-list 'git-link-commit-remote-alist
                   '("git\\.corp\\.stripe\\.com" git-link-commit-github))))
 
-(magit-define-popup-action 'magit-file-popup ?l "Go to line on github" 'git-link)
+(eval-after-load 'magit
+  '(progn
+     (magit-define-popup-action 'magit-file-popup ?l "Go to line on github" 'git-link)))
 
 
 (defvar my-github-domains
