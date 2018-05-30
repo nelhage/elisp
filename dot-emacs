@@ -815,6 +815,9 @@
 
 (defun my-select-clangcheck-for-checker ()
   "Select clang-check for flycheck's checker."
+  (let ((brew-clangcheck "/usr/local/Cellar/llvm/6.0.0/bin/clang-check"))
+    (if (file-executable-p brew-clangcheck)
+        (setq flycheck-c/c++-clangcheck-executable brew-clangcheck)))
   (flycheck-select-checker 'c/c++-clangcheck))
 
 (add-hook 'c-mode-hook #'my-select-clangcheck-for-checker)
