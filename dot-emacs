@@ -1222,7 +1222,11 @@
           (with-current-buffer buffer
             (revert-buffer nil t)
             (read-only-mode -1)))))
-    (bury-buffer buffer)))
+    (with-current-buffer buffer
+      (if (zerop compilation-num-errors-found)
+          (let ((window (get-buffer-window buffer)))
+            (when window
+              (quit-window nil window)))))))
 
 (add-hook 'compilation-finish-functions 'my-revert-after-rubocop-hook)
 
