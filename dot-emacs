@@ -126,6 +126,12 @@
          (setcar (cdr ent) "^\\(?:In file included\\|                \\) from \\(.+?\\):\\([0-9]+\\)\\(:[0-9]+\\)?\\(?:\\(:\\)\\|\\(,\\)\\)?")
          (setcdr (cdr ent) (list 1 2 nil '(4 . 5)))))))
 
+(require 'ansi-color)
+(defun colorize-compilation-buffer ()
+  "Apply ANSI coloring to the compilation buffer."
+  (ansi-color-apply-on-region compilation-filter-start (point)))
+(add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
+
 (add-hook 'after-init-hook #'global-flycheck-mode)
 (setq-default flycheck-disabled-checkers
               '(ruby-rubylint ruby ruby-jruby python-flake8 python-pylint puppet-lint))
