@@ -189,6 +189,10 @@
      (safe-set-face-attribute 'diff-file-header   nil :background "gray40")
      (safe-set-face-attribute 'diff-removed-face  nil :foreground "red")
      (safe-set-face-attribute 'diff-added-face    nil :foreground "green")))
+(add-hook 'diff-mode-hook 'my-diff-mode-hook)
+
+(defun my-diff-mode-hook ()
+  (remove-hook 'before-save-hook 'delete-trailing-whitespace))
 
 (defvar try-fonts
   (list
