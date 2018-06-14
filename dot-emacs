@@ -192,7 +192,7 @@
 (add-hook 'diff-mode-hook 'my-diff-mode-hook)
 
 (defun my-diff-mode-hook ()
-  (remove-hook 'before-save-hook 'delete-trailing-whitespace))
+  (remove-hook (make-local-variable 'before-save-hook) 'delete-trailing-whitespace))
 
 (defvar try-fonts
   (list
