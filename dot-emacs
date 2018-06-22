@@ -1309,6 +1309,7 @@
     (when (re-search-forward "^<<<<<<< " nil t)
       (smerge-mode 1))))
 (add-hook 'find-file-hook 'sm-try-smerge t)
+(add-hook 'auto-revert-mode-hook 'sm-try-smerge)
 
 (defun dos-file-endings-p ()
   (string-match "dos" (symbol-name buffer-file-coding-system)))
