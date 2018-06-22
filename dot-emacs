@@ -779,7 +779,7 @@
   (cscope-minor-mode))
 
 (setq rtags-autostart-diagnostics nil
-      rtags-completions-enabled t)
+      rtags-completions-enabled nil)
 (push 'company-rtags company-backends)
 
 (defun rtags-enable ()
