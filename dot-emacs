@@ -1284,6 +1284,7 @@
 
 ;;Evil DOS file endings, eeeeeeeeevil
 (add-hook 'find-file-hook 'find-file-check-line-endings)
+(setq find-file-visit-truename t)
 
 ;; automatically set mode after I type a shebang
 (defun magic-mode-newline-and-indent ()
