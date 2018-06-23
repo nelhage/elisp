@@ -720,13 +720,24 @@
 
 (defun buildifier-format-file ()
   (interactive)
-  (let ((path (buffer-file-name (current-buffer))))
+  (let ((path (buffer-file-name (current-buffer)))
+        (buffer (current-buffer)))
     (when path
-      (shell-command-on-region
-       (point-min)
-       (point-max)
-       (concat "buildifier -path=" path)
-       t t))))
+      (with-temp-buffer
+        (let ((tmp (current-buffer)))
+          (with-current-buffer buffer
+            (let* ((status (call-process-region
+                            (point-min) (point-max)
+                            "buildifier" nil tmp nil
+                            (concat "-path=" path)))
+                   (output (with-current-buffer tmp (buffer-string))))
+              (if (zerop status)
+                  (progn
+                    (let ((pt (point)))
+                    (delete-region (point-min) (point-max))
+                    (insert output)
+                    (goto-char pt)))
+                (message output)))))))))
 
 (add-to-list 'auto-mode-alist (cons "/BUILD\\(\\..*\\)?$" 'bazel-mode))
 (add-to-list 'auto-mode-alist (cons "/WORKSPACE\\(\\..*\\)?$" 'bazel-mode))
