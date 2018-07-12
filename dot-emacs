@@ -1617,7 +1617,7 @@ surrounding xml expression"
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (lsp-mode graphviz-dot-mode git-link web-mode flycheck-clangcheck visual-fill-column ac-rtags company-rtags rtags company-racer racer flycheck-rust rust-mode flycheck-ocaml tuareg lua-mode gnuplot gnuplot-mode thrift terraform-mode smartparens seq ruby-tools ruby-mode ruby-electric rubocop popwin magit-gh-pulls magit-gerrit javaimp inf-ruby helm go-eldoc fuzzy flycheck f exec-path-from-shell edit-server debian-changelog-mode dash-at-point company-go coffee-mode cmake-mode clojure-mode clang-format bison-mode auto-complete)))
+    (scala-mode lsp-mode graphviz-dot-mode git-link web-mode flycheck-clangcheck visual-fill-column ac-rtags company-rtags rtags company-racer racer flycheck-rust rust-mode flycheck-ocaml tuareg lua-mode gnuplot gnuplot-mode thrift terraform-mode smartparens seq ruby-tools ruby-mode ruby-electric rubocop popwin magit-gh-pulls magit-gerrit javaimp inf-ruby helm go-eldoc fuzzy flycheck f exec-path-from-shell edit-server debian-changelog-mode dash-at-point company-go coffee-mode cmake-mode clojure-mode clang-format bison-mode auto-complete)))
  '(safe-local-variable-values
    (quote
     ((encoding . utf-8)
