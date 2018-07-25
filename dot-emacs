@@ -1600,6 +1600,11 @@ surrounding xml expression"
 (add-to-list 'auto-mode-alist (cons "/Makefrag$" 'makefile-mode))
 (add-to-list 'auto-mode-alist (cons "/Makefile[^/]+$" 'makefile-mode))
 
+(add-hook 'shell-mode 'my-shell-mode-hook)
+(defun my-shell-mode-hook ()
+  "Hook for shell-mode."
+  (shell-dirtrack-mode 1))
+
 ;(setq browse-url-browser-function 'w3m-other-window-new-session)
 (setq browse-url-browser-function 'browse-url-generic
       browse-url-generic-program
