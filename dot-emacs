@@ -135,7 +135,7 @@
 
 (add-hook 'after-init-hook #'global-flycheck-mode)
 (setq-default flycheck-disabled-checkers
-              '(ruby-rubylint ruby ruby-jruby python-flake8 python-pylint puppet-lint))
+              '(ruby-rubylint ruby ruby-jruby python-flake8 python-pylint puppet-lint emacs-lisp-checkdoc))
 (setq-default flycheck-rubocoprc ".rubocop.yml")
 (setq-default flycheck-rubocop-lint-only nil)
 (setq flycheck-python-pycompile-executable "python3")
