@@ -3,9 +3,7 @@
 ;; Requires emacs 24 or higher
 
 (add-to-list 'load-path "~/.elisp")
-(cd "~/.elisp")
 (load "~/.elisp/subdirs.el")
-(cd "~")
 
 (when (and (file-exists-p ".emacs.d/elpa")
            (not (file-symlink-p ".emacs.d/elpa")))
@@ -1656,3 +1654,7 @@ surrounding xml expression"
         lsp-ui-doc-enable nil)
   (add-hook 'lsp-mode-hook 'lsp-ui-mode))
 (require 'lsp-mode)
+
+(let ((local-config (expand-file-name "~/.elisp/local.el")))
+  (when (file-exists-p local-config)
+    (load local-config)))

@@ -5,3 +5,4 @@
 *.aux
 .svn/
 /elpa/archives
+local.el
