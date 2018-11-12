@@ -1627,34 +1627,6 @@ surrounding xml expression"
      (gofmt-command . "gofmt")
      (gofmt-command . "goimports")))))
 
-(defun my-ruby-maybe-sorbet-hook ()
-  (when
-      (and
-       (save-excursion
-         (goto-char (point-min))
-         (re-search-forward "^#\\s *typed:\\s *\\(true\\|strong\\|strict\\)" nil t))
-       (locate-dominating-file "." "extn.rb"))
-    (lsp-sorbet-mode-enable)))
-(add-hook 'ruby-mode-hook 'my-ruby-maybe-sorbet-hook)
-
-(defun my-lsp-before-open-hook ()
-  (when (and lsp-enable-xref (lsp--capability "definitionProvider"))
-    (setq-local xref-backend-functions (list #'lsp--xref-backend))))
-(add-hook 'lsp-before-open-hook 'my-lsp-before-open-hook)
-
-(with-eval-after-load 'lsp-mode
-  (lsp-define-stdio-client
-   lsp-sorbet-mode
-   "Ruby"
-   (lsp-make-traverser "Gemfile")
-   '("pay" "exec" "scripts/bin/typecheck" "--lsp"))
-  (setq lsp-ui-flycheck-live-reporting nil
-        lsp-ui-sideline-enable nil
-        lsp-highlight-symbol-at-point nil
-        lsp-ui-doc-enable nil)
-  (add-hook 'lsp-mode-hook 'lsp-ui-mode))
-(require 'lsp-mode)
-
 (let ((local-config (expand-file-name "~/.elisp/local.el")))
   (when (file-exists-p local-config)
     (load local-config)))
