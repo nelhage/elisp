@@ -1456,14 +1456,13 @@ surrounding xml expression"
       (load (concat (car dir) "/" path)))))
 
 (golang-require "misc/emacs" 'go-mode-load)
-(golang-require "src/github.com/nsf/gocode/emacs/" 'go-autocomplete)
 (golang-require "src/github.com/golang/lint/misc/emacs" 'golint)
 
 (add-hook 'go-mode-hook 'go-eldoc-setup)
 (add-hook 'go-mode-hook 'my-go-mode-hook)
 (defun my-go-mode-hook ()
   (set (make-local-variable 'company-backends) '(company-go))
-  (set (make-local-variable 'company-minimum-prefix-length) 0)
+  (set (make-local-variable 'company-minimum-prefix-length) 2)
   (local-set-key (kbd "M-.") 'godef-jump))
 (when (fboundp 'gofmt-before-save)
   (add-hook 'before-save-hook 'gofmt-before-save)
