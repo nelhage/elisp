@@ -138,7 +138,17 @@
 (setq-default flycheck-rubocop-lint-only nil)
 (setq flycheck-python-pycompile-executable "python3")
 
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
+(defvar delete-trailing-whitespace-p t
+  "Whether or not to delete traiing whitespace on save.")
+(make-variable-buffer-local 'delete-trailing-whitespace-p)
+
+(defun maybe-delete-trailing-whitespace ()
+  "Delete trailing whitespace if `delete-trailing-whitespace-p` is set."
+  (if delete-trailing-whitespace-p
+      (delete-trailing-whitespace)))
+(put 'delete-trailing-whitespace-p 'safe-local-variable 'booleanp)
+
+(add-hook 'before-save-hook 'maybe-delete-trailing-whitespace)
 
 (defun strip-lf ()
   (interactive)
