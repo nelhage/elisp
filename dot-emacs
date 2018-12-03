@@ -741,6 +741,9 @@
 (add-to-list 'auto-mode-alist (cons "/WORKSPACE\\(\\..*\\)?$" 'bazel-mode))
 (add-to-list 'auto-mode-alist (cons "\\.bzl$" 'bazel-mode))
 
+;; cmake
+(put 'cmake-tab-width 'safe-local-variable 'integerp)
+
 ;;JSIM mode
 (autoload 'jsim-mode "jsim" nil t)
 (setq auto-mode-alist (cons '("\.jsim$" . jsim-mode) auto-mode-alist))
