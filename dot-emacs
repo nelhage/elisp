@@ -1253,7 +1253,10 @@
       (if (zerop compilation-num-errors-found)
           (let ((window (get-buffer-window buffer)))
             (when window
-              (quit-window nil window)))))))
+              (let ((prev-window (selected-window)))
+                (quit-window nil window)
+                (when (window-minibuffer-p prev-window)
+                  (select-window prev-window)))))))))
 
 (add-hook 'compilation-finish-functions 'my-revert-after-rubocop-hook)
 
