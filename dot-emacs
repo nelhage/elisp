@@ -205,8 +205,8 @@
 
 (defvar try-fonts
   (list
-   "-*-Monaco-normal-normal-normal-*-11-*-*-*-m-0-fontset-auto9"
-   "-*-Source Code Pro-normal-normal-normal-*-11-*-*-*-m-0-iso10646-1"
+   "Source Code Pro-11"
+   "Monaco 11"
    "Mono-11"
    "-adobe-courier-medium-r-*-*-12-*-*-*-*-70-iso8859-1"))
 (defvar default-font ""
