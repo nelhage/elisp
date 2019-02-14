@@ -1643,7 +1643,8 @@ surrounding xml expression"
    (quote
     ((encoding . utf-8)
      (gofmt-command . "gofmt")
-     (gofmt-command . "goimports")))))
+     (gofmt-command . "goimports"))))
+ '(confirm-kill-processes . nil))
 
 (let ((local-config (expand-file-name "~/.elisp/local.el")))
   (when (file-exists-p local-config)
