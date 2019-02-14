@@ -1492,6 +1492,9 @@ surrounding xml expression"
 (require 'protobuf-mode)
 (add-to-list 'auto-mode-alist (cons "\\.proto$" 'protobuf-mode))
 
+;; YAML
+(add-hook 'yaml-mode 'ruler-mode)
+
 ;;; ADD NEW LANGUAGE MODES HERE
 (add-hook 'rust-mode-hook #'flycheck-rust-setup)
 (add-hook 'rust-mode-hook #'racer-mode)
