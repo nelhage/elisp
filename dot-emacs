@@ -1655,6 +1655,7 @@ surrounding xml expression"
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(confirm-kill-processes nil)
  '(package-selected-packages
    (quote
     (ledger-mode scala-mode graphviz-dot-mode git-link web-mode flycheck-clangcheck visual-fill-column ac-rtags company-rtags rtags company-racer racer flycheck-rust rust-mode flycheck-ocaml tuareg lua-mode gnuplot gnuplot-mode thrift terraform-mode smartparens seq ruby-tools ruby-mode ruby-electric rubocop popwin magit-gh-pulls magit-gerrit javaimp inf-ruby helm go-eldoc fuzzy flycheck f exec-path-from-shell edit-server debian-changelog-mode dash-at-point company-go coffee-mode cmake-mode clojure-mode clang-format bison-mode auto-complete)))
@@ -1662,8 +1663,7 @@ surrounding xml expression"
    (quote
     ((encoding . utf-8)
      (gofmt-command . "gofmt")
-     (gofmt-command . "goimports"))))
- '(confirm-kill-processes . nil))
+     (gofmt-command . "goimports")))))
 
 (let ((local-config (expand-file-name "~/.elisp/local.el")))
   (when (file-exists-p local-config)
