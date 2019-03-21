@@ -1205,6 +1205,17 @@
   (add-hook 'before-save-hook 'maybe-rubocop-autocorrect-current-file)
   (setq ruby-deep-indent-paren nil))
 
+(font-lock-add-keywords
+ 'ruby-mode
+ '(("=>"
+    (0 (progn (compose-region (match-beginning 0) (match-end 0)
+                              "⇒")
+              nil)))
+   ("!="
+    (0 (progn (compose-region (match-beginning 0) (match-end 0)
+                              "≠")
+              nil)))))
+
 (define-derived-mode ruby-dsl-mode ruby-mode "ruby-dsl")
 (add-hook 'ruby-dsl-mode-hook 'my-ruby-dsl-mode-hook)
 (defun my-ruby-dsl-mode-hook ()
