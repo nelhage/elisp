@@ -72,7 +72,9 @@
  '(company-tooltip ((t (:background "lightgray" :foreground "black"))))
  '(company-tooltip-common ((((type x)) (:inherit company-tooltip :weight bold)) (t (:inherit company-tooltip))))
  '(company-tooltip-common-selection ((((type x)) (:inherit company-tooltip-selection :weight bold)) (t (:inherit company-tooltip-selection))))
- '(company-tooltip-selection ((t (:background "steelblue" :foreground "white")))))
+ '(company-tooltip-selection ((t (:background "steelblue" :foreground "white"))))
+ '(line-number ((t (:inherit (shadow default) :background "#111166")))))
+
 
 (setq company-tooltip-limit 20
       company-minimum-prefix-length 3
@@ -271,6 +273,8 @@
 (safe-funcall 'column-number-mode 1)
 (safe-funcall 'fringe-mode '(0 . nil))
 (safe-funcall 'menu-bar-mode 0)
+(safe-funcall 'global-display-line-numbers-mode 1)
+
 ; (safe-funcall 'display-time-mode)
 ; (safe-funcall 'display-battery-mode)
 
