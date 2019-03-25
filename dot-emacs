@@ -439,99 +439,15 @@
 
 (global-set-key "\C-x\C-b" 'ibuffer-list-buffers)
 
-(require 'ido)
-(ido-mode 1)
-(ido-everywhere 1)
-(setq ido-auto-merge-work-directories-length -1
-      ido-max-directory-size (* 256 1024)
-      ido-enable-flex-matching t
-      )
-
-;(require 'helm-config)
-;(global-set-key (kbd "M-x") 'helm-M-x)
-;(global-set-key (kbd "C-x b") 'helm-buffers-list)
-
-(defun my-ido-keys ()
-  (mapc (lambda (K)
-          (let* ((key (car K)) (fun (cdr K)))
-            (define-key ido-completion-map (edmacro-parse-keys key) fun)))
-        '(("<right>" . ido-next-match)
-          ("<left>"  . ido-prev-match)
-          ("<up>"    . ignore             )
-          ("<down>"  . ignore             )
-          ("\C-n"    . ido-next-match)
-          ("\C-p"    . ido-prev-match))))
-
-(add-hook 'ido-minibuffer-setup-hook 'my-ido-keys)
-
-; (require 'iswitchb)
-; (iswitchb-mode nil)
-;
-; (defadvice iswitchb-visit-buffer (before iswitchb-undedicate-window)
-;   (undedicate-window))
-; (ad-activate 'iswitchb-visit-buffer)
-;
-; (defun iswitchb-local-keys ()
-;   (mapc (lambda (K)
-;           (let* ((key (car K)) (fun (cdr K)))
-;             (define-key iswitchb-mode-map (edmacro-parse-keys key) fun)))
-;         '(("<right>" . iswitchb-next-match)
-;           ("<left>"  . iswitchb-prev-match)
-;           ("<up>"    . ignore             )
-;           ("<down>"  . ignore             )
-;           ("\C-n"    . iswitchb-next-match)
-;           ("\C-p"    . iswitchb-prev-match))))
-;
-; (add-hook 'iswitchb-minibuffer-setup-hook 'iswitchb-local-keys)
+(require 'helm-config)
+(helm-mode 1)
+(global-set-key (kbd "M-x") #'helm-M-x)
 
 (defun my-find-file (arg)
   (interactive "P")
-  (call-interactively (if arg 'my-git-find-file 'ido-find-file)))
+  (call-interactively (if arg 'helm-ls-git-ls 'helm-find-files)))
 
 (global-set-key (kbd "C-x C-f") 'my-find-file)
-
-(defun my-git-wc-root ()
-  (let ((root (expand-file-name
-               (chomp (shell-command-to-string "git rev-parse --show-cdup")))))
-    (if (string-match "/$" root)
-        root
-      (concat root "/"))))
-
-(defun git-grep ()
-  (interactive)
-  (let ((grep-command "gr -nH -Ee ")
-        (default-directory (my-git-wc-root)))
-    (call-interactively 'grep)))
-
-(defun my-git-find-file ()
-  "Use ido to select a file from the git repo"
-  (interactive)
-  (let* ((my-project-root (my-git-wc-root))
-         (git-dir (chomp (shell-command-to-string "git rev-parse --git-dir")))
-         (project-files
-          (split-string
-           (shell-command-to-string
-            (concat "git --git-dir "
-                    (shell-quote-argument git-dir)
-                    " ls-files -c -o --exclude-standard"))
-           "\n")))
-    ;; populate hash table (display repr => path)
-    (setq tbl (make-hash-table :test 'equal))
-    (let (ido-list)
-      (mapc (lambda (path)
-              ;; format path for display in ido list
-              (setq key path)
-              ;; strip project root
-              (setq key (replace-regexp-in-string my-project-root "" key))
-              ;; remove trailing | or /
-              (setq key (replace-regexp-in-string "\\(|\\|/\\)$" "" key))
-              (puthash key (expand-file-name (concat my-project-root "/" path)) tbl)
-              (push key ido-list))
-            project-files)
-      (let ((ido-decorations (quote ("\n-> " "" "\n   " "\n   ..." "[" "]" " [No match]" " [Matched]" " [Not readable]" " [Too big]" " [Confirm]")))
-            (truncate-lines nil)
-            (ido-enable-flex-matching nil))
-        (find-file (gethash (ido-completing-read "files: " ido-list) tbl))))))
 
 ;; used for quickly opening github links to line or region
 ;; configured to open in a browser right away
@@ -1658,7 +1574,7 @@ surrounding xml expression"
  '(confirm-kill-processes nil)
  '(package-selected-packages
    (quote
-    (yaml-mode js2-mode caddyfile-mode ledger-mode company-lsp lsp-ui scala-mode lsp-mode graphviz-dot-mode git-link web-mode flycheck-clangcheck visual-fill-column ac-rtags company-rtags rtags company-racer racer flycheck-rust rust-mode flycheck-ocaml tuareg lua-mode gnuplot gnuplot-mode thrift terraform-mode smartparens seq ruby-tools ruby-mode ruby-electric rubocop popwin magit-gh-pulls magit-gerrit javaimp inf-ruby helm go-eldoc fuzzy flycheck f exec-path-from-shell edit-server debian-changelog-mode dash-at-point company-go coffee-mode cmake-mode clojure-mode clang-format bison-mode auto-complete)))
+    (helm-ls-git helm-git-files yaml-mode js2-mode caddyfile-mode ledger-mode scala-mode graphviz-dot-mode git-link web-mode flycheck-clangcheck visual-fill-column ac-rtags company-rtags rtags company-racer racer flycheck-rust rust-mode flycheck-ocaml tuareg lua-mode gnuplot gnuplot-mode thrift terraform-mode smartparens seq ruby-tools ruby-mode ruby-electric rubocop popwin magit-gh-pulls magit-gerrit javaimp inf-ruby helm go-eldoc fuzzy flycheck f exec-path-from-shell edit-server debian-changelog-mode dash-at-point company-go coffee-mode cmake-mode clojure-mode clang-format bison-mode auto-complete)))
  '(safe-local-variable-values
    (quote
     ((encoding . utf-8)
