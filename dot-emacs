@@ -440,12 +440,14 @@
 (global-set-key "\C-x\C-b" 'ibuffer-list-buffers)
 
 (require 'helm-config)
-(helm-mode 1)
-(global-set-key (kbd "M-x") #'helm-M-x)
+;; (helm-mode 1)
+(global-set-key (kbd "M-x") #'counsel-M-x)
+(ivy-mode 1)
+
 
 (defun my-find-file (arg)
   (interactive "P")
-  (call-interactively (if arg 'helm-ls-git-ls 'helm-find-files)))
+  (call-interactively (if arg 'counsel-git 'counsel-find-file)))
 
 (global-set-key (kbd "C-x C-f") 'my-find-file)
 
