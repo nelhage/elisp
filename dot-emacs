@@ -466,7 +466,7 @@
 
 (eval-after-load 'magit
   '(progn
-     (magit-define-popup-action 'magit-file-popup ?l "Go to line on github" 'git-link)))
+     (magit-define-popup-action 'magit-file-dispatch ?l "Go to line on github" 'git-link)))
 
 (defun my-git-relative-path ()
   (concat (file-name-as-directory (magit-rev-parse "--show-prefix"))
@@ -528,7 +528,7 @@
 
 ; (require 'magit)
 (global-set-key (kbd "C-c g") 'magit-status)
-(global-set-key (kbd "C-x v") 'magit-file-popup)
+(global-set-key (kbd "C-x v") 'magit-file-dispatch)
 (setq vc-handled-backends (delq 'Git vc-handled-backends))
 (setq vc-handled-backends (delq 'git vc-handled-backends))
 (setq magit-completing-read 'magit-ido-completing-read)
