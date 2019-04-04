@@ -1101,8 +1101,8 @@
 (defun my-ruby-mode-hook ()
   (require 'rubocop)
   (local-set-key (kbd "TAB") 'indent-and-complete-symbol-generic)
-  (make-local-variable 'before-save-hook)
-  (add-hook 'before-save-hook 'maybe-rubocop-autocorrect-current-file)
+  (add-hook 'after-save-hook 'maybe-rubocop-autocorrect-current-file nil t)
+  (remove-hook 'after-save-hook 'ruby-mode-set-encoding t)
   (setq ruby-deep-indent-paren nil))
 
 (font-lock-add-keywords
