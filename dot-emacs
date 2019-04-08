@@ -1100,8 +1100,8 @@
 (add-hook 'ruby-mode-hook 'my-ruby-mode-hook)
 (defun my-ruby-mode-hook ()
   (require 'rubocop)
+  (rubocop-mode 1)
   (local-set-key (kbd "TAB") 'indent-and-complete-symbol-generic)
-  (add-hook 'after-save-hook 'maybe-rubocop-autocorrect-current-file nil t)
   (remove-hook 'after-save-hook 'ruby-mode-set-encoding t)
   (setq ruby-deep-indent-paren nil))
 
@@ -1117,16 +1117,12 @@
               nil)))))
 
 (define-derived-mode ruby-dsl-mode ruby-mode "ruby-dsl")
-(add-hook 'ruby-dsl-mode-hook 'my-ruby-dsl-mode-hook)
 (defun my-ruby-dsl-mode-hook ()
-  (setq rubocop-autocorrect-on-save-p nil)
-  (remove-hook 'before-save-hook 'maybe-rubocop-autocorrect-current-file))
+  (setq rubocop-autocorrect-on-save nil))
+
+(add-hook 'ruby-dsl-mode-hook 'my-ruby-dsl-mode-hook)
 (add-to-list 'auto-mode-alist (cons "\\(Rake\\|Gem\\|Guard\\|Vagrant\\)file-[a-z]+$" 'ruby-dsl-mode))
 
-(defvar rubocop-autocorrect-on-save-p nil
-  "Should we run rubocop autocorrect on buffer before save?")
-(make-variable-buffer-local 'rubocop-autocorrect-on-save-p)
-(put 'rubocop-autocorrect-on-save-p 'safe-local-variable 'booleanp)
 (defvar rubocop-exclude-cops nil
   "Cops to exclude from autocorrecting in the editor")
 (make-variable-buffer-local 'rubocop-exclude-cops)
@@ -1134,10 +1130,10 @@
 (defun list-of-stringsp (lst)
   (and (listp lst)
        (-all? 'stringp lst)))
-(defun maybe-rubocop-autocorrect-current-file ()
-  (when rubocop-autocorrect-on-save-p
-    (read-only-mode)
-    (rubocop-autocorrect-current-file)))
+
+(setq-default rubocop-autocorrect-on-save nil)
+(make-variable-buffer-local 'rubocop-autocorrect-on-save)
+(put 'rubocop-autocorrect-on-save 'safe-local-variable 'booleanp)
 
 (eval-after-load 'rubocop
   '(defun rubocop-build-command (command path)
@@ -1151,25 +1147,6 @@
              (rubocop-build-requires)
              " "
              path)))
-
-(defun my-revert-after-rubocop-hook (buffer _)
-  (when (string-match "\\*RuboCop \\(.+\\)\\*" (buffer-name buffer))
-    (let ((path (match-string 1 (buffer-name buffer))))
-      (let ((buffer (get-file-buffer path)))
-        (when buffer
-          (with-current-buffer buffer
-            (revert-buffer nil t)
-            (read-only-mode -1)))))
-    (with-current-buffer buffer
-      (if (zerop compilation-num-errors-found)
-          (let ((window (get-buffer-window buffer)))
-            (when window
-              (let ((prev-window (selected-window)))
-                (quit-window nil window)
-                (when (window-minibuffer-p prev-window)
-                  (select-window prev-window)))))))))
-
-(add-hook 'compilation-finish-functions 'my-revert-after-rubocop-hook)
 
 ;; mmm-mode and ERB
 (require 'mmm-auto)
