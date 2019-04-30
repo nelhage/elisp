@@ -5,11 +5,12 @@
 (add-to-list 'load-path "~/.elisp")
 (load "~/.elisp/subdirs.el")
 
-(when (and (file-exists-p ".emacs.d/elpa")
-           (not (file-symlink-p ".emacs.d/elpa")))
-  (rename-file ".emacs.d/elpa" ".emacs.d/elpa.bak"))
-(unless (file-exists-p ".emacs.d/elpa")
-  (make-symbolic-link "../.elisp/elpa" ".emacs.d/elpa"))
+(let ((default-directory (expand-file-name "~")))
+  (when (and (file-exists-p ".emacs.d/elpa")
+             (not (file-symlink-p ".emacs.d/elpa")))
+    (rename-file ".emacs.d/elpa" ".emacs.d/elpa.bak"))
+  (unless (file-exists-p ".emacs.d/elpa")
+    (make-symbolic-link "../.elisp/elpa" ".emacs.d/elpa")))
 
 (require 'package)
 ; (add-to-list 'package-archives
