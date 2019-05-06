@@ -490,7 +490,7 @@
 
 (eval-after-load 'magit
   '(progn
-     (magit-define-popup-action 'magit-file-dispatch ?l "Go to line on github" 'git-link)))
+     (transient-append-suffix 'magit-file-dispatch "d" '("g" "Go to github" git-link))))
 
 (defun my-git-relative-path ()
   (concat (file-name-as-directory (magit-rev-parse "--show-prefix"))
