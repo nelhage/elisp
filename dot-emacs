@@ -480,6 +480,19 @@
 (setq git-link-open-in-browser t
       git-link-use-commit t)
 
+(defun my-git-wc-root ()
+  (let ((root (expand-file-name (magit-rev-parse "--show-cdup"))))
+    (if (string-match "/$" root)
+        root
+      (concat root "/"))))
+
+(defun git-grep ()
+  (interactive)
+  (let ((grep-command "gr -nH -Ee ")
+        (default-directory (my-git-wc-root)))
+    (call-interactively 'grep)))
+
+
 ;; sets up stripe git enterprise as a git-link handler
 (eval-after-load 'git-link
   '(progn
