@@ -8,31 +8,31 @@
 
 (defun sorbet-lsp-ruby-maybe-start-hook ()
   (when (sorbet-file-typed-p)
-    (lsp-sorbet-mode-enable)))
+    (lsp)))
 (add-hook 'ruby-mode-hook 'sorbet-lsp-ruby-maybe-start-hook)
 
+(defvar lsp--cur-workspace)
+(defvar lsp-ui-doc-position)
+
 (defun sorbet-lsp-before-open-hook ()
-  (when (and lsp-enable-xref (lsp--capability "definitionProvider"))
-    (setq-local xref-backend-functions (list #'lsp--xref-backend)))
-  (lsp-client-register-uri-handler
-   (lsp--workspace-client lsp--cur-workspace) "http" #'browse-url)
-  (lsp-client-register-uri-handler
-   (lsp--workspace-client lsp--cur-workspace) "https" #'browse-url))
+  )
 (add-hook 'lsp-before-open-hook 'sorbet-lsp-before-open-hook)
 
 (with-eval-after-load 'lsp-mode
-  (lsp-define-stdio-client
-   lsp-sorbet-mode
-   "Ruby"
-   (lsp-make-traverser "Gemfile")
-   '("pay" "exec" "scripts/bin/typecheck" "--lsp" "--cache-dir=" "-v"))
-  (setq lsp-ui-flycheck-live-reporting nil
-        lsp-ui-sideline-enable nil
-        lsp-highlight-symbol-at-point nil
-        lsp-ui-doc-enable nil)
-  (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+  (lsp-register-client
+   (make-lsp-client
+    :new-connection
+    (lsp-stdio-connection '("pay" "exec" "scripts/bin/typecheck" "--lsp"   "-v"
+                            "--enable-experimental-lsp-go-to-definition"
+                            "--enable-experimental-lsp-find-references"))
+    :major-modes '(ruby-mode)
+    :server-id 'rbls))
+  (setq lsp-ui-doc-position 'at-point)
+  (add-hook 'lsp-mode-hook 'lsp-ui-mode)
+  (add-hook 'lsp-mode-hook 'lsp-ui-doc-mode))
 
 (require 'lsp-mode)
+(require 'lsp-ui)
 
 (defun sc-2fa-process-filter (proc string)
   (with-current-buffer (process-buffer proc)
@@ -63,26 +63,5 @@
   nil)
 
 ; (with-sc-2fa #'(lambda () (message "2fa ok")))
-
-(defun sorbet-lsp-restart ()
-  (interactive)
-  (with-sc-2fa
-   (lambda ()
-     (let* ((payserver (expand-file-name "~/stripe/pay-server/"))
-            (workspace (gethash payserver lsp--workspaces)))
-       (when workspace
-         (let ((lsp--cur-workspace workspace))
-           (lsp--shutdown-cur-workspace))))
-     (dolist (buf (buffer-list))
-       (with-current-buffer buf
-         (when (and
-                (eq major-mode 'ruby-mode)
-                (sorbet-file-typed-p))
-           (lsp-mode -1)
-           (when lsp--cur-workspace
-             (condition-case nil
-                 (lsp--shutdown-cur-workspace)
-               (error (setq lsp--cur-workspace nil))))
-           (lsp-sorbet-mode-enable)))))))
 
 (provide 'sorbet-lsp)
