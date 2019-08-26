@@ -1379,9 +1379,10 @@ surrounding xml expression"
 (add-hook 'go-mode-hook 'go-eldoc-setup)
 (add-hook 'go-mode-hook 'my-go-mode-hook)
 (defun my-go-mode-hook ()
-  (set (make-local-variable 'company-backends) '(company-go))
-  (set (make-local-variable 'company-minimum-prefix-length) 2)
-  (local-set-key (kbd "M-.") 'godef-jump))
+  ;;(set (make-local-variable 'company-backends) '(company-go))
+  ;; (set (make-local-variable 'company-minimum-prefix-length) 2)
+  ;; (local-set-key (kbd "M-.") 'godef-jump)
+  (lsp-deferred))
 (when (fboundp 'gofmt-before-save)
   (add-hook 'before-save-hook 'gofmt-before-save)
   (add-to-list 'safe-local-variable-values '(gofmt-command . "goimports"))
@@ -1393,6 +1394,12 @@ surrounding xml expression"
 (let ((govet (flycheck-checker-get 'go-vet 'command)))
   (when (equal (cadr govet) "tool")
     (setf (cdr govet) (cddr govet))))
+
+;; lsp configuration
+(defun my-lsp-mode-hook ()
+  )
+(setq lsp-ui-sideline-enable nil)
+(add-hook 'lsp-mode-hook 'my-lsp-mode-hook)
 
 ;; protobufs
 (require 'protobuf-mode)
