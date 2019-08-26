@@ -25,3 +25,6 @@
 [submodule "site/mmm-mode"]
 	path = site/mmm-mode
 	url = git://github.com/purcell/mmm-mode.git
+[submodule "site/tla-tools"]
+	path = site/tla-tools
+	url = https://github.com/mrc/tla-tools
