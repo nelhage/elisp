@@ -890,7 +890,7 @@
                 (or (buffer-file-name) default-directory)
                 "node_modules"))
          (eslint (and root
-                      (expand-file-name "node_modules/eslint/bin/eslint.js"
+                      (expand-file-name "node_modules/.bin/eslint"
                                         root))))
     (when (and eslint (file-executable-p eslint))
       (setq-local flycheck-javascript-eslint-executable eslint))))
@@ -909,6 +909,23 @@
 (add-to-list 'auto-mode-alist '("Cakefile" . coffee-mode))
 
 (add-to-list 'auto-mode-alist '("\\.tsx$" . typescript-mode))
+(add-hook 'typescript-mode-hook 'lsp)
+(defun my-typescript-hook ()
+  )
+(add-hook 'typescript-mode-hook 'my-typescript-hook)
+
+;;; prettier
+(setq prettier-js-command "npx"
+      prettier-js-args '("prettier"))
+
+(defvar prettier-prettify-on-save nil "Whether to run prettier-js on save")
+(make-variable-buffer-local 'prettier-prettify-on-save)
+(put 'prettier-prettify-on-save 'safe-local-variable 'booleanp)
+(defun my-javascript-prettier-hook ()
+  (when prettier-prettify-on-save (prettier-js-mode))
+  (add-hook 'hack-local-variables-hook 'my-javascript-prettier-hook))
+(add-hook 'typescript-mode-hook 'my-javascript-prettier-hook)
+(add-hook 'js2-mode-hook 'my-javascript-prettier-hook)
 
 ;;; web-mode
 (add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
