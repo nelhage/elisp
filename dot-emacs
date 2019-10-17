@@ -139,6 +139,10 @@
 
 (add-hook 'before-save-hook 'maybe-delete-trailing-whitespace)
 
+(defun dont-delete-trailing-whitespace ()
+  (setq delete-trailing-whitespace-p nil))
+(add-hook 'diff-mode 'dont-delete-trailing-whitespace)
+
 (defun strip-lf ()
   (interactive)
   (save-excursion
