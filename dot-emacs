@@ -1421,7 +1421,10 @@ surrounding xml expression"
 ;; lsp configuration
 (defun my-lsp-mode-hook ()
   )
-(setq lsp-ui-sideline-enable nil)
+(setq lsp-ui-sideline-enable nil
+      lsp-ui-flycheck-list-position 'right
+      lsp-ui-flycheck-enable t
+      lsp-ui-flycheck-live-reporting nil)
 (add-hook 'lsp-mode-hook 'my-lsp-mode-hook)
 (require 'yasnippet)
 
