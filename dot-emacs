@@ -1435,10 +1435,13 @@ surrounding xml expression"
 ;; YAML
 (add-hook 'yaml-mode 'ruler-mode)
 
-;;; ADD NEW LANGUAGE MODES HERE
+;; Rust
 (add-hook 'rust-mode-hook #'flycheck-rust-setup)
+(add-hook 'rust-mode-hook #'rust-enable-format-on-save)
 (add-hook 'rust-mode-hook #'racer-mode)
 (add-hook 'racer-mode-hook #'eldoc-mode)
+
+;;; ADD NEW LANGUAGE MODES HERE
 
 ;;Mailcrypt
 (require 'mailcrypt)
