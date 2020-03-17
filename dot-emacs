@@ -283,7 +283,7 @@
       mouse-wheel-progressive-speed nil
       confirm-kill-emacs 'yes-or-no-p
       confirm-kill-processes nil
-      x-select-enable-clipboard t
+      select-enable-clipboard t
       uniquify-buffer-name-style 'post-forward-angle-brackets
       outline-regexp "\\s *\\*+"
       comint-prompt-read-only t
