@@ -1368,11 +1368,6 @@ surrounding xml expression"
 
 (add-to-list 'auto-mode-alist '("\\.pp$" . puppet-mode))
 
-;; markdown
-(autoload 'markdown-mode "markdown-mode.el"
-   "Major mode for editing Markdown files" t)
-(add-to-list 'auto-mode-alist '("\\.\\(md\\|markdown\\)$" . markdown-mode))
-
 ;; golang
 
 (defun golang-roots ()
