@@ -1431,7 +1431,10 @@ surrounding xml expression"
 ;; Rust
 (add-hook 'rust-mode-hook #'flycheck-rust-setup)
 (add-hook 'rust-mode-hook #'rust-enable-format-on-save)
-; (add-hook 'rust-mode-hook #'racer-mode)
+(eval-after-load 'rust-mode
+  '(progn
+     (require 'lsp-rust)
+     (add-hook 'rust-mode-hook #'lsp)))
 ; (add-hook 'racer-mode-hook #'eldoc-mode)
 
 ;;; ADD NEW LANGUAGE MODES HERE
