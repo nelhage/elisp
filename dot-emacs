@@ -205,21 +205,6 @@
 (defvar default-font ""
   "The default font")
 
-(when window-system
-  (let ((try try-fonts))
-    (while (and try (not (font-info (car try))))
-      (setq try (cdr try)))
-    (setq default-font (car try)))
-  (setq default-frame-alist
-        `((menu-bar-lines . 0)
-          (font . ,default-font)
-          (foreground-color . "#AAA")
-          (background-color . "black")
-          (background-mode . 'dark)
-          (vertical-scroll-bars . nil)
-          (tool-bar-lines . 0))))
-
-
 (defun set-projector-faces ()
   (interactive)
   (set-face-attribute 'default nil
@@ -250,7 +235,20 @@
                       :foreground "orange")
   (set-face-attribute 'whitespace-tab nil
                       :background "#133")
-  (set-frame-font default-font t))
+  (when default-font
+    (set-frame-font default-font t)))
+
+(when window-system
+  (let ((try try-fonts))
+    (while (and try (not (font-info (car try))))
+      (setq try (cdr try)))
+    (setq default-font (car try)))
+  (setq default-frame-alist
+        `((menu-bar-lines . 0)
+          (font . ,default-font)
+          (vertical-scroll-bars . nil)
+          (tool-bar-lines . 0)))
+  (set-normal-faces))
 
 (defun safe-funcall (func &rest args)
   "Call FUNC on ARGS if and only if FUNC is defined as a function."
