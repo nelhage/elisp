@@ -117,8 +117,13 @@
 (require 'ansi-color)
 (defun colorize-compilation-buffer ()
   "Apply ANSI coloring to the compilation buffer."
-  (ansi-color-apply-on-region compilation-filter-start (point)))
+  (let ((inhibit-read-only t))
+    (ansi-color-apply-on-region compilation-filter-start (point))))
 (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
+(defun recolorize-buffer ()
+  (interactive)
+  (let ((inhibit-read-only t))
+    (ansi-color-apply-on-region (point-min) (point-max))))
 
 (add-hook 'after-init-hook #'global-flycheck-mode)
 (setq-default flycheck-disabled-checkers
