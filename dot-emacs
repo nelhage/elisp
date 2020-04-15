@@ -202,7 +202,7 @@
    "Monaco 11"
    "Mono-11"
    "-adobe-courier-medium-r-*-*-12-*-*-*-*-70-iso8859-1"))
-(defvar default-font ""
+(defvar default-font nil
   "The default font")
 
 (defun set-projector-faces ()
@@ -238,17 +238,21 @@
   (when default-font
     (set-frame-font default-font t)))
 
-(when window-system
-  (let ((try try-fonts))
-    (while (and try (not (font-info (car try))))
-      (setq try (cdr try)))
-    (setq default-font (car try)))
-  (setq default-frame-alist
-        `((menu-bar-lines . 0)
-          (font . ,default-font)
-          (vertical-scroll-bars . nil)
-          (tool-bar-lines . 0)))
-  (set-normal-faces))
+(defun my-make-frame-hook (frame)
+  (message "make-frame %s graphic: %s" frame  (display-graphic-p frame))
+  (when (display-graphic-p frame)
+    (let ((try try-fonts))
+      (while (and try (not (font-info (car try) frame)))
+        (setq try (cdr try)))
+      (setq default-font (car try)))
+    (setq default-frame-alist
+          `((menu-bar-lines . 0)
+            (font . ,default-font)
+            (vertical-scroll-bars . nil)
+            (tool-bar-lines . 0)))
+    (set-normal-faces)))
+(add-hook 'after-make-frame-functions 'my-make-frame-hook)
+(my-make-frame-hook nil)
 
 (defun safe-funcall (func &rest args)
   "Call FUNC on ARGS if and only if FUNC is defined as a function."
