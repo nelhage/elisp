@@ -720,64 +720,9 @@
         dabbrev-case-fold-search nil)
   (cscope-minor-mode))
 
-(setq rtags-autostart-diagnostics nil
-      rtags-completions-enabled nil)
-(push 'company-rtags company-backends)
-
-(defun rtags-enable ()
-  (rtags-start-process-unless-running)
-  (rtags-enable-standard-keybindings)
-  (local-set-key (kbd "M-.") #'rtags-find-symbol-at-point)
-  (local-set-key (kbd "M-,") #'rtags-location-stack-back))
-
-(require 'flycheck-clangcheck)
-
-(make-variable-buffer-local
- (defvar flycheck-clangcheck-db-last-modified nil
-   "last-modified-time of the compile_commands DB as of when we last examined it"))
-(make-variable-buffer-local
- (defvar flycheck-clangcheck-json nil
-   "cached compile_commands JSON for this file"))
-
-;; flycheck-clangcheck monkey-patch
-;; https://github.com/kumar8600/flycheck-clangcheck/pull/10
-(defun flycheck-clangcheck-get-json (build-dir source)
-  "Get a the compile commands from `flycheck-clangcheck-dbname' at BUILD-DIR for SOURCE."
-  (let ((dbpath (expand-file-name flycheck-clangcheck-dbname
-                                  build-dir)))
-    (let ((attrs (file-attributes dbpath)))
-      (if (not (equal (nth 5 attrs) flycheck-clangcheck-db-last-modified))
-          (let ((commands (json-read-file dbpath))
-                (source-truename (file-truename source)))
-            (setq
-             flycheck-clangcheck-db-last-modified (nth 5 attrs)
-             flycheck-clangcheck-json
-             (cl-find-if (lambda (item)
-                           (string= source-truename
-                                    (flycheck-clangcheck-get-truename item)))
-                         commands)))
-        flycheck-clangcheck-json))))
-
-(defun flycheck-clangcheck-get-truename (entry)
-  "Return the absolute path of an `ENTRY` from the compile database."
-  (let ((dir (cdr (assq 'directory entry)))
-        (file (cdr (assq 'file entry))))
-    (let ((dir (if (directory-name-p dir) dir (concat dir "/"))))
-      (let ((default-directory dir))
-        (file-truename file)))))
-;; end flycheck-clangcheck monkey-patch
-
-(defun my-select-clangcheck-for-checker ()
-  "Select clang-check for flycheck's checker."
-  (let ((brew-clangcheck "/usr/local/Cellar/llvm/8.0.0/bin/clang-check"))
-    (if (file-executable-p brew-clangcheck)
-        (setq flycheck-c/c++-clangcheck-executable brew-clangcheck)))
-  (flycheck-select-checker 'c/c++-clangcheck))
-
-(add-hook 'c-mode-hook #'my-select-clangcheck-for-checker)
-(add-hook 'c-mode-hook #'rtags-enable)
-(add-hook 'c++-mode-hook #'my-select-clangcheck-for-checker)
-(add-hook 'c++-mode-hook #'rtags-enable)
+(let ((clangd-versions (file-expand-wildcards "/usr/bin/clangd-*")))
+  (when clangd-versions
+    (setq lsp-clients-clangd-executable (car (last (sort clangd-versions #'<))))))
 
 ;; enable static analysis
 (setq flycheck-clangcheck-analyze nil)
