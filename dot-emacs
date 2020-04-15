@@ -887,7 +887,9 @@
 (add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
 (setq-default web-mode-code-indent-offset 2
               web-mode-markup-indent-offset 2)
-(flycheck-add-mode 'javascript-eslint 'web-mode)
+(eval-after-load 'flycheck
+  '(flycheck-add-mode 'javascript-eslint
+                      'web-mode))
 
 ;;;LaTeX
 (add-hook 'latex-mode-hook 'my-latex-mode-hook)
@@ -1361,9 +1363,10 @@ surrounding xml expression"
     (when (not (string-equal "" goimports))
       (setq gofmt-command (replace-regexp-in-string "\n$" "" goimports)))))
 
-(let ((govet (flycheck-checker-get 'go-vet 'command)))
-  (when (equal (cadr govet) "tool")
-    (setf (cdr govet) (cddr govet))))
+(eval-after-load 'flycheck
+  '(let ((govet (flycheck-checker-get 'go-vet 'command)))
+     (when (equal (cadr govet) "tool")
+       (setf (cdr govet) (cddr govet)))))
 
 ;; lsp configuration
 (defun my-lsp-mode-hook ()
