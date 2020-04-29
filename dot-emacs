@@ -536,18 +536,6 @@
 (require 'windmove)
 (windmove-default-keybindings)
 
-;;Templates
-(require 'template)
-(template-initialize)
-(setq template-auto-insert t)
-(setq template-auto-update nil)
-
-(add-to-list 'template-expansion-alist
-             (list "AUTHOR"
-                   '(insert (concat
-                             user-full-name
-                             " <" user-mail-address "> "))))
-
 (defun define-bracket-keys ()
   (interactive)
   (local-set-key "{" 'insert-brackets)
@@ -621,12 +609,6 @@
   (local-set-key "\C-c\C-v" 'cperl-build-manpage)
   (local-set-key "\C-c\C-c" 'cperl-build-manpage)
   (setq indent-tabs-mode nil))
-
-(add-to-list 'template-expansion-alist
-             (list "PERL_PACKAGE"
-                   '(insert (perl-guess-package
-                             (concat (car template-file)
-                                     (cadr template-file))))))
 
 (add-to-list 'auto-mode-alist (cons "\\.t$" 'perl-mode))
 (add-to-list 'auto-mode-alist (cons "\\.xs$" 'c-mode))
