@@ -1142,7 +1142,7 @@
 
 ;; LLVM development
 
-(let ((llvm-el (expand-file-name "~/code/llvm/utils/emacs")))
+(let ((llvm-el (expand-file-name "~/code/llvm/llvm/utils/emacs")))
   (when (file-exists-p llvm-el)
     (load-file (concat llvm-el "/emacs.el"))
     (add-to-list 'load-path llvm-el)
