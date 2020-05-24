@@ -244,7 +244,6 @@
     (set-frame-font default-font t)))
 
 (defun my-make-frame-hook (frame)
-  (message "make-frame %s graphic: %s" frame  (display-graphic-p frame))
   (when (display-graphic-p frame)
     (let ((try try-fonts))
       (while (and try (not (font-info (car try) frame)))
