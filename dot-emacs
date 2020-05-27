@@ -1329,7 +1329,6 @@ surrounding xml expression"
 (golang-require "misc/emacs" 'go-mode-load)
 (golang-require "src/github.com/golang/lint/misc/emacs" 'golint)
 
-(add-hook 'go-mode-hook 'go-eldoc-setup)
 (add-hook 'go-mode-hook 'my-go-mode-hook)
 (defun my-go-mode-hook ()
   ;;(set (make-local-variable 'company-backends) '(company-go))
@@ -1530,7 +1529,7 @@ surrounding xml expression"
  '(confirm-kill-processes nil)
  '(package-selected-packages
    (quote
-    (gnu-elpa-keyring-update ivy swiper prettier-js typescript-mode polymode magit-popup rust-mode visual-fill-column lsp-mode lsp-ui counsel helm-ls-git helm-git-files yaml-mode js2-mode caddyfile-mode ledger-mode scala-mode graphviz-dot-mode git-link flycheck-clangcheck visual-fill-column ac-rtags company-rtags flycheck-rust rust-mode flycheck-ocaml lua-mode gnuplot gnuplot-mode thrift terraform-mode seq ruby-tools ruby-mode ruby-electric rubocop popwin magit-gh-pulls magit-gerrit javaimp inf-ruby helm go-eldoc fuzzy flycheck f exec-path-from-shell edit-server debian-changelog-mode dash-at-point company-go coffee-mode cmake-mode clojure-mode clang-format bison-mode auto-complete)))
+    (gnu-elpa-keyring-update ivy swiper prettier-js typescript-mode polymode magit-popup rust-mode visual-fill-column lsp-mode lsp-ui counsel helm-ls-git helm-git-files yaml-mode js2-mode caddyfile-mode ledger-mode scala-mode graphviz-dot-mode git-link flycheck-clangcheck visual-fill-column ac-rtags company-rtags flycheck-rust rust-mode flycheck-ocaml lua-mode gnuplot gnuplot-mode thrift terraform-mode seq ruby-tools ruby-mode ruby-electric rubocop popwin magit-gh-pulls magit-gerrit javaimp inf-ruby helm fuzzy flycheck f exec-path-from-shell edit-server debian-changelog-mode dash-at-point company-go coffee-mode cmake-mode clojure-mode clang-format bison-mode auto-complete)))
  '(safe-local-variable-values
    (quote
     ((encoding . utf-8)
