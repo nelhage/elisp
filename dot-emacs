@@ -1372,6 +1372,7 @@ surrounding xml expression"
 (eval-after-load 'rust-mode
   '(progn
      (require 'lsp-rust)
+     (lsp-rust-switch-server 'rust-analyzer)
      (add-hook 'rust-mode-hook #'lsp)))
 ; (add-hook 'racer-mode-hook #'eldoc-mode)
 
