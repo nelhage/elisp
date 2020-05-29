@@ -26,7 +26,6 @@
 (require 'uniquify)
 (require 'utils)
 (require 'structured)
-(require 'dirvars)
 
 ;;Global key bindings
 (global-set-key (kbd "<deletechar>") 'backward-delete-char)
