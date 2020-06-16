@@ -1367,10 +1367,10 @@ surrounding xml expression"
 
 ;; Rust
 (add-hook 'rust-mode-hook #'flycheck-rust-setup)
-(add-hook 'rust-mode-hook #'rust-enable-format-on-save)
 (eval-after-load 'rust-mode
   '(progn
      (require 'lsp-rust)
+     (setq-default rust-format-on-save t)
      (lsp-rust-switch-server 'rust-analyzer)
      (add-hook 'rust-mode-hook #'lsp)))
 ; (add-hook 'racer-mode-hook #'eldoc-mode)
