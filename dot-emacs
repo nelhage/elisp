@@ -1355,7 +1355,10 @@ surrounding xml expression"
 (setq lsp-ui-sideline-enable nil
       lsp-ui-flycheck-list-position 'right
       lsp-ui-flycheck-enable t
-      lsp-ui-flycheck-live-reporting nil)
+      lsp-ui-flycheck-live-reporting nil
+      lsp-auto-execute-action nil
+      lsp-signature-auto-activate nil
+      )
 (add-hook 'lsp-mode-hook 'my-lsp-mode-hook)
 
 ;; protobufs
