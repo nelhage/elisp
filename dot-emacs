@@ -427,7 +427,7 @@
   (let ((default-directory directory))
     (ansi-term (getenv "SHELL") name)))
 
-(add-to-list 'auto-mode-alist (cons "bash-fc-[0-9]+$" 'sh-mode))
+(add-to-list 'auto-mode-alist (cons "/bash-fc" 'sh-mode))
 
 (defun dedicate-window (&optional window)
   (interactive)
