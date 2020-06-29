@@ -1462,9 +1462,6 @@ surrounding xml expression"
 (defun my-ses-mode-hook ()
   (whitespace-mode -1))
 
-;;Livejournal
-(autoload 'lj-login "ljupdate" "Log in to Livejournal" t)
-
 ;;Disabled commands
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
