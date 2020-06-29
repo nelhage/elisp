@@ -291,6 +291,7 @@
       save-interprogram-paste-before-kill t
       Man-width 80
       tags-case-fold-search nil
+      line-move-visual nil
       )
 (eval-after-load 'grep
   '(progn
@@ -1389,7 +1390,6 @@ surrounding xml expression"
 ;; Org mode
 
 (setq org-directory "~/nelhage/org")
-(require 'org-mobile)
 (setq org-hide-leading-stars t
       org-log-done 'time
       org-agenda-files (list (concat org-directory "/todo.org")
@@ -1415,10 +1415,7 @@ surrounding xml expression"
       org-todo-keywords
       '((sequence "TODO"  "|" "DONE"))
       org-deadline-warning-days 0
-      org-return-follows-link t
-      org-mobile-inbox-for-pull (concat org-directory "/mobile.org")
-      org-mobile-directory "~/Dropbox/org/mobile"
-      line-move-visual nil)
+      org-return-follows-link t)
 
 (eval-after-load 'org-agenda
   '(progn
