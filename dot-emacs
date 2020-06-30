@@ -1447,12 +1447,38 @@ surrounding xml expression"
      (set-face-foreground 'org-done "#00FF00")))
 
 ;; visual-line-mode
+;; https://www.emacswiki.org/emacs/UnfillParagraph
+(defun unfill-paragraph (&optional region)
+  "Takes a multi-line paragraph and makes it into a single line of text."
+  (interactive (progn (barf-if-buffer-read-only) '(t)))
+  (let ((fill-column (point-max))
+        ;; This would override `fill-column' if it's an integer.
+        (emacs-lisp-docstring-fill-column t))
+    (fill-paragraph nil region)))
 
 (define-key visual-line-mode-map (kbd "C-a") 'beginning-of-visual-line)
+(define-key visual-line-mode-map (kbd "M-q") 'unfill-paragraph)
+(define-key visual-line-mode-map (kbd "DEL") 'delete-backward-char)
 (setq visual-line-fringe-indicators '(nil right-curly-arrow))
 (defun my-visual-line-mode-hook ()
   (visual-fill-column-mode 1))
 (add-hook 'visual-line-mode-hook 'my-visual-line-mode-hook)
+
+;; Markdown
+(defun my-markdown-mode-hook ()
+  (company-mode -1))
+(add-hook 'markdown-mode 'my-markdown-mode-hook)
+
+(eval-after-load 'markdown-mode
+  '(progn
+     (defun hugo-insert-shortcode (shortcode)
+       (interactive "MShortcode: ")
+       (let ((code (car (split-string shortcode " "))))
+         (insert "{{<" shortcode ">}}")
+         (save-excursion
+           (insert "{{</" code ">}}"))))
+
+     (define-key markdown-mode-map (kbd "C-c s") 'hugo-insert-shortcode)))
 
 ;; SES mode
 (add-hook 'ses-mode-hook 'my-ses-mode-hook)
