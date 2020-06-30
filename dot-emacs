@@ -490,6 +490,7 @@
 (setq git-link-open-in-browser t
       git-link-use-commit t)
 
+(autoload 'magit-rev-parse "magit-git")
 (defun my-git-wc-root ()
   (let ((root (expand-file-name (magit-rev-parse "--show-cdup"))))
     (if (string-match "/$" root)
