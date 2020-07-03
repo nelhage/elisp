@@ -292,7 +292,7 @@
       Man-width 80
       tags-case-fold-search nil
       line-move-visual nil
-      )
+      create-lockfiles nil)
 (eval-after-load 'grep
   '(progn
      (grep-apply-setting 'grep-use-null-device nil)
