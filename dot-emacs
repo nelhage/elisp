@@ -1468,7 +1468,7 @@ surrounding xml expression"
 ;; Markdown
 (defun my-markdown-mode-hook ()
   (company-mode -1))
-(add-hook 'markdown-mode 'my-markdown-mode-hook)
+(add-hook 'markdown-mode-hook 'my-markdown-mode-hook)
 
 (eval-after-load 'markdown-mode
   '(progn
