@@ -1158,16 +1158,6 @@
 (add-to-list 'auto-mode-alist '("sites-\\(available\\|enabled\\)/" . apache-mode))
 
 
-;; google calendar client
-
-(load-library "g")
-(setq g-user-email "nelhage@gmail.com")
-(setq g-html-handler 'browse-url-of-buffer)
-
-;; Mediawiki
-(require 'mediawiki)
-(setq mediawiki-site-alist '())
-
 ;;Evil DOS file endings, eeeeeeeeevil
 (add-hook 'find-file-hook 'find-file-check-line-endings)
 (setq find-file-visit-truename t)
