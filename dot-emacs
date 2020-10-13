@@ -17,6 +17,7 @@
 ;      '("marmalade" .
 ;       "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+(async-bytecomp-package-mode 1)
 (package-initialize)
 
 (setq exec-path-from-shell-variables '("PATH" "MANPATH" "GOROOT" "GOPATH" "TEXINPUTS"))
