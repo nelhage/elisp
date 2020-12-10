@@ -539,8 +539,7 @@
 
 (defun define-bracket-keys ()
   (interactive)
-  (local-set-key "{" 'insert-brackets)
-  (local-set-key "}" 'insert-close))
+  (electric-pair-local-mode))
 
 ;;Version control
 (defmacro advise-to-save-windows (func)
