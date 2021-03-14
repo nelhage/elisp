@@ -2,6 +2,9 @@
 ;;.emacs file for Nelson Elhage (nelhage@nelhage.com)
 ;; Requires emacs 24 or higher
 
+(if (file-directory-p "/opt/homebrew")
+    (setq shell-file-name "/opt/homebrew/bin/bash"))
+
 (add-to-list 'load-path "~/.elisp")
 (load "~/.elisp/subdirs.el")
 
@@ -17,7 +20,8 @@
 ;      '("marmalade" .
 ;       "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-(async-bytecomp-package-mode 1)
+(when (fboundp 'async-bytecomp-package-mode)
+  (async-bytecomp-package-mode 1))
 (package-initialize)
 
 (setq exec-path-from-shell-variables '("PATH" "MANPATH" "GOROOT" "GOPATH" "TEXINPUTS"))
