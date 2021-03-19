@@ -561,11 +561,6 @@
       (require feature)
     ('file-error . nil)))
 
-(safe-require 'psvn)
-; (safe-require 'vc-svk)
-(safe-require 'vc-git)
-(safe-require 'git)
-
 ; (require 'magit)
 (global-set-key (kbd "C-c g") 'magit-status)
 (global-set-key (kbd "C-x v") 'magit-file-dispatch)
