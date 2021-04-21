@@ -22,6 +22,9 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 (when (fboundp 'async-bytecomp-package-mode)
   (async-bytecomp-package-mode 1))
+(when (and (gnutls-available-p)
+           (string-equal system-type "darwin"))
+  (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 (package-initialize)
 
 (setq exec-path-from-shell-variables '("PATH" "MANPATH" "GOROOT" "GOPATH" "TEXINPUTS"))
