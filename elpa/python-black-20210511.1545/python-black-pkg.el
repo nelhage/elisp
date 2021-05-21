@@ -1,0 +1,2 @@
+;;; Generated package description from python-black.el  -*- no-byte-compile: t -*-
+(define-package "python-black" "20210511.1545" "Reformat Python using python-black" '((emacs "25") (dash "2.16.0") (reformatter "0.3")) :commit "6b6ab71d2762b6da703f8d1d3d964b712a98939e" :authors '(("wouter bolsterlee" . "wouter@bolsterl.ee")) :maintainer '("wouter bolsterlee" . "wouter@bolsterl.ee") :keywords '("languages") :url "https://github.com/wbolster/emacs-python-black")

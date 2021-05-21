@@ -1,0 +1,2 @@
+;;; Generated package description from svelte-mode.el  -*- no-byte-compile: t -*-
+(define-package "svelte-mode" "20210222.1037" "Emacs major mode for Svelte" '((emacs "26.1")) :commit "25d0018036f44ff9bd685a1c9a76d8ba57c1024d" :authors '(("Leaf" . "leafvocation@gmail.com")) :maintainer '("Leaf" . "leafvocation@gmail.com") :keywords '("wp" "languages") :url "https://github.com/leafOfTree/svelte-mode")
