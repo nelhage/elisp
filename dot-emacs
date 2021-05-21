@@ -621,14 +621,12 @@
 (add-to-list 'interpreter-mode-alist (cons "python2.5" 'python-mode))
 (add-to-list 'auto-mode-alist (cons "SConscript$" 'python-mode))
 (add-to-list 'auto-mode-alist (cons "SConstruct$" 'python-mode))
+(add-to-list 'auto-mode-alist (cons "\\.ipy$" 'python-mode))
 
 (eval-after-load 'python
   '(progn
      (define-key python-mode-map (kbd "M-TAB") 'dabbrev-expand)))
 (setq python-indent-offset 2)
-
-(if (file-exists-p "/Users/nelhage/miniforge3/bin/black")
-    (setq python-black-command "/Users/nelhage/miniforge3/bin/black"))
 
 ;; bazel
 
