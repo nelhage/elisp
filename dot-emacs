@@ -1555,7 +1555,7 @@ surrounding xml expression"
   (when (file-exists-p local-config)
     (load local-config)))
 
-(require 'sorbet-lsp)
+; (require 'sorbet-lsp)
 
 (load "tla-tools/tla-tools.el")
 (load "tla-tools/tla-pcal-mode")
