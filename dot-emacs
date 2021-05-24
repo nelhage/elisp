@@ -1300,13 +1300,13 @@ surrounding xml expression"
     roots))
 
 (defun golang-require (path feature)
-  (let ((dir (member-if (lambda (dir) (file-directory-p (concat dir "/" path))) (golang-roots))))
+  (let ((dir (cl-member-if (lambda (dir) (file-directory-p (concat dir "/" path))) (golang-roots))))
     (when dir
       (add-to-list 'load-path (expand-file-name (concat (car dir) "/" path)))
       (require feature))))
 
 (defun golang-load (path)
-  (let ((dir (member-if (lambda (dir) (file-exists-p (concat dir "/" path))) (golang-roots))))
+  (let ((dir (cl-member-if (lambda (dir) (file-exists-p (concat dir "/" path))) (golang-roots))))
     (when dir
       (load (concat (car dir) "/" path)))))
 
