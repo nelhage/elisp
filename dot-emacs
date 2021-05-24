@@ -1346,6 +1346,16 @@ surrounding xml expression"
       )
 (add-hook 'lsp-mode-hook 'my-lsp-mode-hook)
 
+(defvar my-enable-lsp nil
+  "Enable LSP for this file/directory")
+(make-variable-buffer-local 'my-enable-lsp)
+(put 'my-enable-lsp 'safe-local-variable 'booleanp)
+
+(defun my-maybe-enable-lsp-mode ()
+  (when my-enable-lsp
+    (lsp)))
+(add-hook 'hack-local-variables-hook 'my-maybe-enable-lsp-mode)
+
 ;; protobufs
 (require 'protobuf-mode)
 (add-to-list 'auto-mode-alist (cons "\\.proto$" 'protobuf-mode))
