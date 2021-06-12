@@ -712,7 +712,7 @@
 
 (let ((clangd-versions (file-expand-wildcards "/usr/bin/clangd-*")))
   (when clangd-versions
-    (setq lsp-clients-clangd-executable (car (last (sort clangd-versions #'<))))))
+    (setq lsp-clients-clangd-executable (first (sort clangd-versions #'string>)))))
 
 ;; enable static analysis
 (setq flycheck-clangcheck-analyze nil)
