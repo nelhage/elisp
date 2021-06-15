@@ -1385,22 +1385,18 @@ surrounding xml expression"
 
 ;; Org mode
 
-(setq org-directory "~/nelhage/org")
+(setq org-directory "~/Sync/org")
 (setq org-hide-leading-stars t
       org-log-done 'time
-      org-agenda-files (list (concat org-directory "/todo.org")
-                             (concat org-directory "/stripe.org"))
+      org-agenda-files (list (concat org-directory "/todo.org"))
       org-agenda-window-setup 'current-window
       org-agenda-restore-windows-after-quit t
       org-default-notes-file (concat org-directory "/notes.org")
-      org-remember-templates
-      '(("Todo" ?t "* TODO %?\n" "todo.org" "Tasks")
-        ("Stripe" ?s "* TODO %?\n" "stripe.org" "Stripe")
-        ("Buy" ?b "* TODO %?" "todo.org" "To Buy"))
+      my-org-work-file (concat org-directory "work.org")
       org-agenda-custom-commands
       '(("W" "Work agenda" agenda ""
          ((org-agenda-files
-           (list (concat org-directory "/stripe.org")))))
+           (list my-org-work-file))))
         ("O" "Other agenda" agenda ""
          ((org-agenda-files
            (list (concat org-directory "/todo.org"))))))
@@ -1546,6 +1542,7 @@ surrounding xml expression"
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(confirm-kill-processes nil)
+ '(org-agenda-files nil)
  '(package-selected-packages
    '(cuda-mode haskell-mode forge svelte-mode lsp-pyright py-isort isortify python-black reformatter docker-compose-mode dockerfile-mode mode-line-bell elixir-mode flycheck-elixir erlang csv csv-mode gnu-elpa-keyring-update ivy swiper prettier-js typescript-mode polymode magit-popup rust-mode visual-fill-column lsp-mode lsp-ui counsel helm-ls-git helm-git-files yaml-mode js2-mode caddyfile-mode ledger-mode scala-mode graphviz-dot-mode git-link flycheck-clangcheck visual-fill-column ac-rtags company-rtags flycheck-rust rust-mode flycheck-ocaml lua-mode gnuplot gnuplot-mode thrift terraform-mode seq ruby-tools ruby-mode ruby-electric rubocop popwin magit-gh-pulls magit-gerrit javaimp inf-ruby helm fuzzy flycheck f exec-path-from-shell edit-server debian-changelog-mode dash-at-point company-go coffee-mode cmake-mode clojure-mode clang-format bison-mode auto-complete))
  '(safe-local-variable-values
