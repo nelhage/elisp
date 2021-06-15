@@ -802,6 +802,8 @@
       js2-bounce-indent-p t)
 (setq-default js2-basic-offset 2
               js-indent-level 2)
+(put 'svelte-basic-offset 'safe-local-variable 'integerp)
+(put 'sgml-basic-offset 'safe-local-variable 'integerp)
 
 (defadvice js2-enter-key (after js2-enter-key-indent)
   (let ((js2-bounce-indent-flag nil))
