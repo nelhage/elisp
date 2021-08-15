@@ -712,7 +712,7 @@
 
 (let ((clangd-versions (file-expand-wildcards "/usr/bin/clangd-*")))
   (when clangd-versions
-    (setq lsp-clients-clangd-executable (first (sort clangd-versions #'string>)))))
+    (setq lsp-clients-clangd-executable (car (sort clangd-versions #'string>)))))
 
 ;; enable static analysis
 (setq flycheck-clangcheck-analyze nil)
@@ -759,7 +759,7 @@
                 . (
                    (innamespace . 0)
                    (arglist-intro . ?+)
-                   (arglist-clode . ?-)
+                   (arglist-close . ?-)
                    ))))
 
 (c-add-style "llvm.org"
