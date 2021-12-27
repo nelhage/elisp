@@ -628,6 +628,13 @@
      (define-key python-mode-map (kbd "M-TAB") 'dabbrev-expand)))
 (setq python-indent-offset 2)
 
+(defun my-python-venv-p (str)
+  (let ((venvroot (expand-file-name "~/venv/"))
+        (path (expand-file-name str)))
+    (let ((case-fold-search nil))
+      (string-match (concat "^" venvroot "[^/]+/bin/python") str))))
+(put 'lsp-python-ms-python-executable 'safe-local-variable 'my-python-venv-p)
+
 ;; bazel
 
 (define-derived-mode bazel-mode
