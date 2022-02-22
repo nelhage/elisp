@@ -630,13 +630,7 @@
   '(progn
      (define-key python-mode-map (kbd "M-TAB") 'dabbrev-expand)))
 (setq python-indent-offset 2)
-
-(defun my-python-venv-p (str)
-  (let ((venvroot (expand-file-name "~/venv/"))
-        (path (expand-file-name str)))
-    (let ((case-fold-search nil))
-      (string-match (concat "^" venvroot "[^/]+/bin/python") str))))
-(put 'lsp-python-ms-python-executable 'safe-local-variable 'my-python-venv-p)
+(setq lsp-pylsp-plugins-flake8-ignore ["E501" "E741"])
 
 ;; bazel
 
@@ -1554,7 +1548,7 @@ surrounding xml expression"
  '(confirm-kill-processes nil)
  '(ns-command-modifier 'meta)
  '(package-selected-packages
-   '(direnv swift-mode flycheck-julia julia-mode julia-repl cuda-mode haskell-mode forge svelte-mode lsp-python-ms lsp-pyright py-isort isortify python-black reformatter docker-compose-mode dockerfile-mode mode-line-bell elixir-mode flycheck-elixir erlang csv csv-mode gnu-elpa-keyring-update ivy swiper prettier-js typescript-mode polymode magit-popup rust-mode visual-fill-column lsp-mode lsp-ui counsel helm-ls-git helm-git-files yaml-mode js2-mode caddyfile-mode ledger-mode scala-mode graphviz-dot-mode git-link flycheck-clangcheck visual-fill-column ac-rtags company-rtags flycheck-rust rust-mode flycheck-ocaml lua-mode gnuplot gnuplot-mode thrift terraform-mode seq ruby-tools ruby-mode ruby-electric rubocop popwin magit-gh-pulls magit-gerrit javaimp inf-ruby helm fuzzy flycheck f exec-path-from-shell edit-server debian-changelog-mode dash-at-point company-go coffee-mode cmake-mode clojure-mode clang-format bison-mode auto-complete))
+   '(ein direnv swift-mode flycheck-julia julia-mode julia-repl cuda-mode haskell-mode forge svelte-mode lsp-python-ms lsp-pyright py-isort isortify python-black reformatter docker-compose-mode dockerfile-mode mode-line-bell elixir-mode flycheck-elixir erlang csv csv-mode gnu-elpa-keyring-update ivy swiper prettier-js typescript-mode polymode magit-popup rust-mode visual-fill-column lsp-mode lsp-ui counsel helm-ls-git helm-git-files yaml-mode js2-mode caddyfile-mode ledger-mode scala-mode graphviz-dot-mode git-link flycheck-clangcheck visual-fill-column ac-rtags company-rtags flycheck-rust rust-mode flycheck-ocaml lua-mode gnuplot gnuplot-mode thrift terraform-mode seq ruby-tools ruby-mode ruby-electric rubocop popwin magit-gh-pulls magit-gerrit javaimp inf-ruby helm fuzzy flycheck f exec-path-from-shell edit-server debian-changelog-mode dash-at-point company-go coffee-mode cmake-mode clojure-mode clang-format bison-mode auto-complete))
  '(safe-local-variable-values
    '((lsp-disabled-clients mspyls)
      (lsp-pylsp-plugins-yapf-enabled . t)
