@@ -630,7 +630,11 @@
   '(progn
      (define-key python-mode-map (kbd "M-TAB") 'dabbrev-expand)))
 (setq python-indent-offset 2)
-(setq lsp-pylsp-plugins-flake8-ignore ["E501" "E741"])
+(setq lsp-pylsp-plugins-flake8-ignore ["E501" "E741" "E111" "E302"])
+
+(put 'lsp-pylsp-plugins-flake8-enabled 'safe-local-variable 'booleanp)
+(put 'lsp-pylsp-plugins-pycodestyle-enabled 'safe-local-variable 'booleanp)
+(put 'lsp-pylsp-plugins-pydocstyle-enabled 'safe-local-variable 'booleanp)
 
 ;; bazel
 
