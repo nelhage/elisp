@@ -1,0 +1,2 @@
+;;; Generated package description from /Users/nelhage/.emacs.d/elpa/markdown-mode-20221105.236/markdown-mode.el  -*- no-byte-compile: t -*-
+(define-package "markdown-mode" "20221105.236" "Major mode for Markdown-formatted text" '((emacs "26.1")) :commit "c338cdff80012893e64ba62a199281f430db7021" :authors '(("Jason R. Blevins" . "jblevins@xbeta.org")) :maintainer '("Jason R. Blevins" . "jblevins@xbeta.org") :keywords '("markdown" "github flavored markdown" "itex") :url "https://jblevins.org/projects/markdown-mode/")

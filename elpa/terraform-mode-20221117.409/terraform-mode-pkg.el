@@ -1,0 +1,2 @@
+;;; Generated package description from /Users/nelhage/.emacs.d/elpa/terraform-mode-20221117.409/terraform-mode.el  -*- no-byte-compile: t -*-
+(define-package "terraform-mode" "20221117.409" "Major mode for terraform configuration file" '((emacs "24.3") (hcl-mode "0.3") (dash "2.17.0")) :commit "80f0433358b79ed4ba88c51829c7359baa1af8b1" :authors '(("Syohei YOSHIDA" . "syohex@gmail.com")) :maintainer '("Syohei YOSHIDA" . "syohex@gmail.com") :url "https://github.com/syohex/emacs-terraform-mode")

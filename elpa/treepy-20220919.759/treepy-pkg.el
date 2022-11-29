@@ -1,0 +1,2 @@
+;;; Generated package description from /Users/nelhage/.emacs.d/elpa/treepy-20220919.759/treepy.el  -*- no-byte-compile: t -*-
+(define-package "treepy" "20220919.759" "Generic tree traversal tools" '((emacs "25.1")) :commit "de1a2ddc3fd7152d0bfbd9e14312ff8a4864ab2b" :authors '(("Daniel Barreto" . "daniel.barreto.n@gmail.com")) :maintainer '("Daniel Barreto" . "daniel.barreto.n@gmail.com") :keywords '("lisp" "maint" "tools") :url "https://github.com/volrath/treepy.el")

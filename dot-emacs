@@ -140,6 +140,7 @@
 (setq-default flycheck-rubocoprc ".rubocop.yml")
 (setq-default flycheck-rubocop-lint-only nil)
 (setq flycheck-python-pycompile-executable "python3")
+(setq lsp-pylsp-plugins-mccabe-enabled nil)
 
 (defvar delete-trailing-whitespace-p t
   "Whether or not to delete traiing whitespace on save.")
@@ -630,7 +631,7 @@
   '(progn
      (define-key python-mode-map (kbd "M-TAB") 'dabbrev-expand)))
 (setq python-indent-offset 2)
-(setq lsp-pylsp-plugins-flake8-ignore ["E501" "E741" "E111" "E302"])
+(setq lsp-pylsp-plugins-flake8-ignore ["E501" "E741" "E111" "E302" "W503"])
 
 (put 'lsp-pylsp-plugins-flake8-enabled 'safe-local-variable 'booleanp)
 (put 'lsp-pylsp-plugins-pycodestyle-enabled 'safe-local-variable 'booleanp)
