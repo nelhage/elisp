@@ -517,15 +517,6 @@
         (default-directory (my-git-wc-root)))
     (call-interactively 'grep)))
 
-
-;; sets up stripe git enterprise as a git-link handler
-(eval-after-load 'git-link
-  '(progn
-     (add-to-list 'git-link-remote-alist
-                  '("git\\.corp\\.stripe\\.com" git-link-github))
-     (add-to-list 'git-link-commit-remote-alist
-                  '("git\\.corp\\.stripe\\.com" git-link-commit-github))))
-
 (eval-after-load 'magit
   '(progn
      (transient-append-suffix 'magit-file-dispatch "d" '("g" "Go to github" git-link))))
@@ -537,15 +528,6 @@
 (defun copy-git-path ()
   (interactive)
   (kill-new (my-git-relative-path)))
-
-(defun pay-test-this-file ()
-  (interactive)
-  (compile (concat "pay test " (my-git-relative-path))))
-
-(defun pay-test-at-point ()
-  (interactive)
-  (compile (concat "pay test " (my-git-relative-path)
-                   " -l " (int-to-string (line-number-at-pos)))))
 
 (require 'windmove)
 (windmove-default-keybindings)
