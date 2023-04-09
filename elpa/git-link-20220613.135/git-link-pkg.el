@@ -1,2 +1,0 @@
-;;; Generated package description from /Users/nelhage/.emacs.d/elpa/git-link-20220613.135/git-link.el  -*- no-byte-compile: t -*-
-(define-package "git-link" "20220613.135" "Get the GitHub/Bitbucket/GitLab URL for a buffer location" '((emacs "24.3")) :commit "fe2e8aa92dd8f1a9fb3f471658701487ff21f22b" :authors '(("Skye Shaw" . "skye.shaw@gmail.com")) :maintainer '("Skye Shaw" . "skye.shaw@gmail.com") :keywords '("git" "vc" "github" "bitbucket" "gitlab" "sourcehut" "aws" "azure" "convenience") :url "http://github.com/sshaw/git-link")
