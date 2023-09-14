@@ -130,7 +130,7 @@
   (let ((inhibit-read-only t))
     (ansi-color-apply-on-region compilation-filter-start (point))))
 (add-hook 'compilation-filter-hook 'colorize-compilation-buffer)
-(defun recolorize-buffer ()
+(defun ansi-colorize-buffer ()
   (interactive)
   (let ((inhibit-read-only t))
     (ansi-color-apply-on-region (point-min) (point-max))))
@@ -512,17 +512,14 @@
 (setq git-link-open-in-browser t
       git-link-use-commit t)
 
-(autoload 'magit-rev-parse "magit-git")
+(autoload 'magit-toplevel "magit-git")
 (defun my-git-wc-root ()
-  (let ((root (expand-file-name (magit-rev-parse "--show-cdup"))))
-    (if (string-match "/$" root)
-        root
-      (concat root "/"))))
+  (magit-toplevel))
 
 (defun git-grep ()
   (interactive)
   (let ((grep-command "gr -nH -Ee ")
-        (default-directory (my-git-wc-root)))
+        (default-directory (magit-toplevel)))
     (call-interactively 'grep)))
 
 (eval-after-load 'magit
@@ -562,9 +559,9 @@
       lsp-ui-flycheck-list-position 'right
       lsp-ui-flycheck-enable t
       lsp-ui-flycheck-live-reporting nil
+      lsp-ui-doc-position 'at-point
       lsp-auto-execute-action nil
-      lsp-signature-auto-activate nil
-      )
+      lsp-signature-auto-activate nil)
 (add-hook 'lsp-mode-hook 'my-lsp-mode-hook)
 
 (defvar my-enable-lsp nil
@@ -1440,7 +1437,8 @@ surrounding xml expression"
 (eval-after-load 'org-agenda
   '(progn
      (set-face-attribute 'org-todo nil
-                         :inverse-video nil)))
+                         :inverse-video nil)
+     (define-key org-mode-map (kbd "C-<return>") 'org-insert-heading)))
 
 (defun org-agenda-skip-future-scheduled ()
   (let ((end (save-excursion (progn (outline-next-heading) (1- (point))))))
@@ -1458,6 +1456,7 @@ surrounding xml expression"
 
 (eval-after-load 'org
   '(progn
+     (add-to-list 'org-export-backends 'md)
      (define-key org-mode-map (kbd "C-c t") 'org-todo)
      (define-key org-mode-map (kbd "M-TAB") 'org-cycle)
      (define-key org-mode-map (kbd "M-p") 'outline-backward-same-level)
@@ -1579,7 +1578,7 @@ surrounding xml expression"
  '(confirm-kill-processes nil)
  '(ns-command-modifier 'meta)
  '(package-selected-packages
-   '(jinja2-mode ninja-mode verilog-mode conda ein direnv swift-mode flycheck-julia julia-mode julia-repl cuda-mode haskell-mode forge svelte-mode lsp-python-ms lsp-pyright py-isort isortify python-black reformatter docker-compose-mode dockerfile-mode mode-line-bell elixir-mode flycheck-elixir erlang csv csv-mode gnu-elpa-keyring-update ivy swiper prettier-js typescript-mode polymode magit-popup rust-mode visual-fill-column lsp-mode lsp-ui counsel helm-ls-git helm-git-files yaml-mode js2-mode caddyfile-mode ledger-mode scala-mode graphviz-dot-mode git-link flycheck-clangcheck visual-fill-column ac-rtags company-rtags flycheck-rust rust-mode flycheck-ocaml lua-mode gnuplot gnuplot-mode thrift terraform-mode seq ruby-tools ruby-mode ruby-electric rubocop popwin magit-gh-pulls magit-gerrit javaimp inf-ruby helm fuzzy flycheck f exec-path-from-shell edit-server debian-changelog-mode dash-at-point company-go coffee-mode cmake-mode clojure-mode clang-format bison-mode auto-complete))
+   '(jinja2-mode python-mode ninja-mode verilog-mode conda ein direnv swift-mode flycheck-julia julia-mode julia-repl cuda-mode haskell-mode forge svelte-mode lsp-python-ms lsp-pyright py-isort isortify python-black reformatter docker-compose-mode dockerfile-mode mode-line-bell elixir-mode flycheck-elixir erlang csv csv-mode gnu-elpa-keyring-update ivy swiper prettier-js typescript-mode polymode magit-popup rust-mode visual-fill-column lsp-mode lsp-ui counsel helm-ls-git helm-git-files yaml-mode js2-mode caddyfile-mode ledger-mode scala-mode graphviz-dot-mode git-link flycheck-clangcheck visual-fill-column ac-rtags company-rtags flycheck-rust rust-mode flycheck-ocaml lua-mode gnuplot gnuplot-mode thrift terraform-mode seq ruby-tools ruby-mode ruby-electric rubocop popwin magit-gh-pulls magit-gerrit javaimp inf-ruby helm fuzzy flycheck f exec-path-from-shell edit-server debian-changelog-mode dash-at-point company-go coffee-mode cmake-mode clojure-mode clang-format bison-mode auto-complete))
  '(safe-local-variable-values
    '((lsp-disabled-clients mspyls pylsp)
      (lsp-pylsp-plugins-yapf-enabled . t)
