@@ -311,7 +311,9 @@
       Man-width 80
       tags-case-fold-search nil
       line-move-visual nil
-      create-lockfiles nil)
+      create-lockfiles nil
+      frame-inhibit-implied-resize t
+      pixel-scroll-precision-mode t)
 (eval-after-load 'grep
   '(progn
      (grep-apply-setting 'grep-use-null-device nil)
@@ -1432,7 +1434,9 @@ surrounding xml expression"
       org-todo-keywords
       '((sequence "TODO"  "|" "DONE"))
       org-deadline-warning-days 0
-      org-return-follows-link t)
+      org-return-follows-link t
+      org-export-with-sub-superscripts nil
+      org-use-sub-superscripts nil)
 
 (eval-after-load 'org-agenda
   '(progn
