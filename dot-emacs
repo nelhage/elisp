@@ -1226,7 +1226,7 @@
     ))
 
 ;;nxml-mode
-(load "~/.elisp/nxml/rng-auto.el")
+; (load "~/.elisp/nxml/rng-auto.el")
 (fset 'xml-mode 'nxml-mode)
 (add-to-list 'auto-mode-alist
              (cons (concat "\\."
