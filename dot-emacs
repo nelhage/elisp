@@ -1045,6 +1045,7 @@
 (add-hook 'lisp-interaction-mode-hook 'define-elisp-keys)
 (add-hook 'lisp-interaction-mode-hook 'my-lisp-mode-common-hook)
 (add-hook 'lisp-interaction-mode-hook 'pretty-lambdas)
+(add-hook 'lisp-data-mode 'define-elisp-keys)
 
 ;;Lisp keybindings
 
