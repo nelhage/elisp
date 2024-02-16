@@ -1484,6 +1484,15 @@ surrounding xml expression"
         (emacs-lisp-docstring-fill-column t))
     (fill-paragraph nil region)))
 
+(defun unfill-region (min max)
+  "Convert multi-line paragraphs into single lines of text."
+  (interactive "r")
+  (barf-if-buffer-read-only)
+  (let ((fill-column (point-max))
+        ;; This would override `fill-column' if it's an integer.
+        (emacs-lisp-docstring-fill-column t))
+    (fill-region min max)))
+
 (define-key visual-line-mode-map (kbd "C-a") 'beginning-of-visual-line)
 (define-key visual-line-mode-map (kbd "M-q") 'unfill-paragraph)
 (define-key visual-line-mode-map (kbd "DEL") 'delete-backward-char)
