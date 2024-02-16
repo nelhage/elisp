@@ -322,6 +322,15 @@
      (defun grep-default-command ()
        grep-command)))
 
+(defvar my-persistent-man-cache nil
+  "A persistent cache for Man-completion-table")
+
+(defadvice Man-completion-table (around man-completion-persist-cache)
+  (let ((Man-completion-cache my-persistent-man-cache))
+    ad-do-it
+    (setq my-persistent-man-cache Man-completion-cache)))
+(ad-activate 'Man-completion-table)
+
 (defun chomp (str)
   "Chomp leading and tailing whitespace from STR."
   (while (string-match "\\`\n+\\|^\\s-+\\|\\s-+$\\|\n+\\'"
