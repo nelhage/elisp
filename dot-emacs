@@ -105,9 +105,6 @@
       (epa-file-enable))
   ('file-error . nil))
 
-(autoload 'nethack "nethack" "Play Nethack." t)
-(setq nethack-program "/usr/games/nethack-lisp")
-
 ;; DocView / Image Viewer
 (eval-after-load 'doc-view
   '(progn
@@ -740,11 +737,6 @@
 (add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
 (autoload 'css-mode "css-mode" "Major mode for editing CSS files" t)
 
-;;OCaml
-(add-to-list 'auto-mode-alist '("\\.ml[iylp]?$" . caml-mode))
-(autoload 'caml-mode "caml" "Major mode for editing Caml code." t)
-(autoload 'run-caml "inf-caml" "Run an inferior Caml process." t)
-
 ;;Lua
 (add-to-list 'auto-mode-alist '("\\.lua" . lua-mode))
 (add-to-list 'interpreter-mode-alist '("lua" . lua-mode))
@@ -1282,10 +1274,6 @@ surrounding xml expression"
     (nxml-forward-element)
     (kill-region start (point))))
 
-;;;psgml-mode
-; (autoload 'sgml-mode "psgml" "Major mode to edit SGML files." t)
-; (autoload 'xml-mode "psgml" "Major mode to edit XML files." t)
-
 (setq sgml-set-face t
       sgml-indent-data t
       sgml-auto-activate-dtd t)
@@ -1403,10 +1391,6 @@ surrounding xml expression"
 (add-hook 'verilog-mode-hook 'my-verilog-mode-hook)
 
 ;;; ADD NEW LANGUAGE MODES HERE
-
-;;Mailcrypt
-(require 'mailcrypt)
-(mc-setversion "gpg")
 
 (setq ediff-split-window-function 'split-window-horizontally)
 
@@ -1609,9 +1593,6 @@ surrounding xml expression"
     (load local-config)))
 
 ; (require 'sorbet-lsp)
-
-(load "tla-tools/tla-tools.el")
-(load "tla-tools/tla-pcal-mode")
 
 (setq gc-cons-threshold (max gc-cons-threshold 30000000))
 (setq read-process-output-max (* 1024 1024))
