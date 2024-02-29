@@ -1295,20 +1295,6 @@ surrounding xml expression"
 ; (add-hook 'sgml-mode-hook 'zencoding-mode)
 ; (add-hook 'nxml-mode-hook 'zencoding-mode)
 
-;;;Mason-mode
-(defun mason-mode ()
-  (interactive)
-  (html-mode)
-  (mmm-ify-by-class 'mason))
-
-;;Jifty mason components
-(add-to-list 'auto-mode-alist '("web/templates/[^.]*$" . mason-mode))
-(add-to-list 'magic-mode-alist `(,(concat
-                                   "<%" (regexp-opt '("args" "init") t) ">")
-                                 . mason-mode))
-(add-to-list 'magic-mode-alist '("\\`<&" . mason-mode))
-;(mmm-add-mode-ext-class 'sgml-mode "web/templates/[^.]*$" 'mason)
-
 ;; html
 (add-hook 'html-mode-hook 'my-html-mode-hook)
 
