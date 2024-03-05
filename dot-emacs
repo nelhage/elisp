@@ -46,6 +46,7 @@
 (global-set-key "\C-cc" 'compile)
 (global-set-key "\C-a" 'beginning-of-line-dwim)
 (global-set-key "\C-co" 'other-window)
+(global-set-key "\C-c." 'browse-url-at-point)
 (global-set-key [f5] 'call-last-kbd-macro)
 (global-set-key (kbd "TAB") 'company-indent-or-complete-common)
 (global-set-key (kbd "M-r") 're-search-backward)
