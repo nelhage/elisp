@@ -311,10 +311,12 @@
       create-lockfiles nil
       frame-inhibit-implied-resize t
       pixel-scroll-precision-mode t)
+
 (eval-after-load 'grep
   '(progn
      (grep-apply-setting 'grep-use-null-device nil)
-     (grep-apply-setting 'grep-command "gr -nH -Ee ")
+     (grep-apply-setting 'grep-command
+                         (if (executable-find "rg") "rg --no-heading -nH -e " "gr -nH -Ee "))
 
      (defun grep-default-command ()
        grep-command)))
@@ -530,8 +532,7 @@
 
 (defun git-grep ()
   (interactive)
-  (let ((grep-command "gr -nH -Ee ")
-        (default-directory (magit-toplevel)))
+  (let ((default-directory (magit-toplevel)))
     (call-interactively 'grep)))
 
 (eval-after-load 'magit
