@@ -1495,8 +1495,10 @@ surrounding xml expression"
 
 ;; Markdown
 (defun my-markdown-mode-hook ()
-  (company-mode -1))
+  (company-mode -1)
+  (setq-local adaptive-fill-regexp "[ \t]*"))
 (add-hook 'markdown-mode-hook 'my-markdown-mode-hook)
+(add-hook 'gfm-mode-hook 'my-markdown-mode-hook)
 
 (eval-after-load 'markdown-mode
   '(progn
