@@ -1531,6 +1531,14 @@ surrounding xml expression"
 
      (define-key markdown-mode-map (kbd "C-c s") 'hugo-insert-shortcode)))
 
+;; Obsidian
+(require 'obsidian)
+(obsidian-specify-path (expand-file-name "~/Sync/Obsidian/nelhage/"))
+(setq obsidian-daily-notes-directory "Daily"
+      obsidian-templates-directory "Templates"
+      obsidian-daily-note-template "Daily.md")
+
+
 ;; SES mode
 (add-hook 'ses-mode-hook 'my-ses-mode-hook)
 (defun my-ses-mode-hook ()
