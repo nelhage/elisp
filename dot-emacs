@@ -514,7 +514,9 @@
     (add-to-list 'ivy-sort-matches-functions-alist
                  (cons 'counsel-describe-function 'ivy--shorter-matches-first))
     (add-to-list 'ivy-sort-matches-functions-alist
-                 (cons 'counsel-M-x 'ivy--shorter-matches-first))))
+                 (cons 'counsel-M-x 'ivy--shorter-matches-first))
+    (add-to-list 'ivy-sort-matches-functions-alist
+                 (cons 'help--symbol-completion-table 'ivy--shorter-matches-first))))
 
 (defun my-find-file (arg)
   (interactive "P")
