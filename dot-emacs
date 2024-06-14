@@ -1514,7 +1514,9 @@ surrounding xml expression"
 ;; Markdown
 (defun my-markdown-mode-hook ()
   (company-mode -1)
-  (setq-local adaptive-fill-regexp "[ \t]*"))
+  (setq-local adaptive-fill-regexp "[ \t]*")
+  (local-set-key (kbd "M-n") 'markdown-outline-next)
+  (local-set-key (kbd "M-p") 'markdown-outline-previous))
 (add-hook 'markdown-mode-hook 'my-markdown-mode-hook)
 (add-hook 'gfm-mode-hook 'my-markdown-mode-hook)
 
