@@ -1537,6 +1537,31 @@ surrounding xml expression"
       (save-excursion
         (insert suffix)))))
 
+(defun my-markdown-outdent-line ()
+  "Outdent the current line.
+
+Toggle through indentation positions in reverse order."
+  (interactive)
+  (let ((positions (markdown-calc-indents))
+        (point-pos (current-column))
+        (_ (back-to-indentation))
+        (cur-pos (current-column)))
+    (setq positions (sort (delete-dups positions) '<))
+    (let* ((next-pos (markdown-outdent-find-next-position cur-pos positions))
+           (new-point-pos (max (+ point-pos (- next-pos cur-pos)) 0)))
+      (indent-line-to next-pos)
+      (move-to-column new-point-pos))))
+
+(defun my-markdown-shifttab ()
+  "Handle S-TAB keybinding based on context.
+When in a table, move backward one cell.
+Otherwise, unindent."
+  (interactive)
+  (cond ((markdown-table-at-point-p)
+         (call-interactively #'markdown-table-backward-cell))
+        (t (my-markdown-outdent-line))))
+
+
 
 (eval-after-load 'markdown-mode
   '(progn
@@ -1548,6 +1573,8 @@ surrounding xml expression"
      (define-key markdown-mode-map (kbd "M-<up>") 'markdown-move-up)
      (define-key markdown-mode-map (kbd "M-<right>") 'markdown-demote-list-item)
      (define-key markdown-mode-map (kbd "M-<left>") 'markdown-promote-list-item)
+
+     (define-key markdown-mode-map (kbd "S-<tab>") 'my-markdown-shifttab)
 
      (setq markdown-list-indent-width 2)))
 
