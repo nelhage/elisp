@@ -1412,6 +1412,17 @@ surrounding xml expression"
 
 ;;; ADD NEW LANGUAGE MODES HERE
 
+;; Proof General and Coq
+(setq proof-auto-raise-buffers t
+      proof-three-window-enable nil
+      proof-output-tooltips t
+      proof-three-window-mode-policy 'hybrid)
+(set-face-attribute proof-locked-face nil
+                    :background "navy")
+
+(set-face-attribute proof-mouse-highlight-face nil
+                    :background "DarkGoldenrod4")
+
 ;; nix
 ; (add-to-list 'before-save-hook 'nix-format-before-save)
 
@@ -1677,7 +1688,7 @@ Otherwise, unindent."
  '(confirm-kill-processes nil)
  '(ns-command-modifier 'meta)
  '(package-selected-packages
-   '(adaptive-wrap obsidian web-mode nix-mode jinja2-mode ninja-mode verilog-mode conda ein direnv swift-mode flycheck-julia julia-mode julia-repl cuda-mode haskell-mode forge svelte-mode lsp-python-ms lsp-pyright py-isort isortify python-black reformatter docker-compose-mode dockerfile-mode mode-line-bell elixir-mode flycheck-elixir erlang csv csv-mode gnu-elpa-keyring-update ivy swiper prettier-js typescript-mode polymode magit-popup rust-mode visual-fill-column lsp-mode lsp-ui counsel helm-ls-git helm-git-files yaml-mode js2-mode caddyfile-mode ledger-mode scala-mode graphviz-dot-mode git-link flycheck-clangcheck visual-fill-column ac-rtags company-rtags flycheck-rust rust-mode flycheck-ocaml lua-mode gnuplot gnuplot-mode thrift terraform-mode seq ruby-tools ruby-mode ruby-electric rubocop popwin magit-gh-pulls magit-gerrit javaimp inf-ruby helm fuzzy flycheck f exec-path-from-shell edit-server debian-changelog-mode dash-at-point company-go coffee-mode cmake-mode clojure-mode clang-format bison-mode auto-complete))
+   '(company-coq proof-general adaptive-wrap obsidian web-mode nix-mode jinja2-mode ninja-mode verilog-mode conda ein direnv swift-mode flycheck-julia julia-mode julia-repl cuda-mode haskell-mode forge svelte-mode lsp-python-ms lsp-pyright py-isort isortify python-black reformatter docker-compose-mode dockerfile-mode mode-line-bell elixir-mode flycheck-elixir erlang csv csv-mode gnu-elpa-keyring-update ivy swiper prettier-js typescript-mode polymode magit-popup rust-mode visual-fill-column lsp-mode lsp-ui counsel helm-ls-git helm-git-files yaml-mode js2-mode caddyfile-mode ledger-mode scala-mode graphviz-dot-mode git-link flycheck-clangcheck visual-fill-column ac-rtags company-rtags flycheck-rust rust-mode flycheck-ocaml lua-mode gnuplot gnuplot-mode thrift terraform-mode seq ruby-tools ruby-mode ruby-electric rubocop popwin magit-gh-pulls magit-gerrit javaimp inf-ruby helm fuzzy flycheck f exec-path-from-shell edit-server debian-changelog-mode dash-at-point company-go coffee-mode cmake-mode clojure-mode clang-format bison-mode auto-complete))
  '(safe-local-variable-values
    '((lsp-disabled-clients mspyls pylsp)
      (lsp-pylsp-plugins-yapf-enabled . t)
