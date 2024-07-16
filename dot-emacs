@@ -724,8 +724,7 @@
 (add-to-list 'auto-mode-alist (cons "\.uasm$" 'uasm-mode))
 (defun uasm-mode ()
   (interactive)
-  (make-local-variable 'asm-comment-char)
-  (setq asm-comment-char ?|)
+  (set (make-local-variable 'asm-comment-char) ?|)
   (asm-mode))
 
 ;;PHP mode
@@ -1517,12 +1516,17 @@ surrounding xml expression"
 (define-key visual-line-mode-map (kbd "C-a") 'beginning-of-visual-line)
 (define-key visual-line-mode-map (kbd "M-q") 'unfill-paragraph)
 (define-key visual-line-mode-map (kbd "DEL") 'delete-backward-char)
-(setq visual-line-fringe-indicators '(nil right-curly-arrow))
+(setq visual-line-fringe-indicators '(nil right-curly-arrow)
+      word-wrap-by-category t)
 (defun my-visual-line-mode-hook ()
   (visual-fill-column-mode 1)
   (when (derived-mode-p 'markdown-mode 'org-mode)
     (adaptive-wrap-prefix-mode 1)))
 (add-hook 'visual-line-mode-hook 'my-visual-line-mode-hook)
+
+;;; Allow line-ewrapping inside of URLs
+(modify-category-entry ?- ?|)
+(modify-category-entry ?/ ?|)
 
 ;; Markdown
 (defun my-markdown-mode-hook ()
@@ -1599,11 +1603,17 @@ Otherwise, unindent."
 (add-hook 'obsidian-mode-hook 'auto-revert-mode)
 (add-hook 'obsidian-mode-hook 'visual-line-mode)
 
+(defun my-obsidian-mode-hook ()
+  (set (make-local-variable 'markdown-list-indent-width) 4))
+
+(add-hook 'obsidian-mode-hook 'my-obsidian-mode-hook)
+
 (progn
   (defvar obsidian-menu-map (make-sparse-keymap "Obsidian"))
   (define-key global-map (kbd "C-x /") obsidian-menu-map)
   (define-key obsidian-menu-map "c" '("Capture note" . obsidian-capture))
   (define-key obsidian-menu-map "n" '("daily Note" . obsidian-daily-note))
+  (define-key obsidian-menu-map "." 'obsidian-daily-note)
   (define-key obsidian-menu-map "f" '("Follow link" . obsidian-follow-link-at-point))
   (define-key obsidian-menu-map "j" '("Jump" . obsidian-jump))
   (define-key obsidian-menu-map "l" '("Link" . obsidian-insert-link))
