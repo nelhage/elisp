@@ -2,9 +2,6 @@
 ;;.emacs file for Nelson Elhage (nelhage@nelhage.com)
 ;; Requires emacs 24 or higher
 
-(if (file-directory-p "/opt/homebrew")
-    (setq shell-file-name "/opt/homebrew/bin/bash"))
-
 (add-to-list 'load-path "~/.elisp")
 (load "~/.elisp/subdirs.el")
 
