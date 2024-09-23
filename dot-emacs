@@ -1407,16 +1407,6 @@ surrounding xml expression"
   (set (make-variable-buffer-local 'lsp-enable-indentation) nil))
 (add-hook 'verilog-mode-hook 'my-verilog-mode-hook)
 
-;;; ADD NEW LANGUAGE MODES HERE
-
-(eval-after-load 'apheleia
-  '(progn
-     (setf (alist-get 'python-mode apheleia-mode-alist)
-           '(ruff-isort ruff))
-     (setf (alist-get 'python-ts-mode apheleia-mode-alist)
-           '(ruff-isort ruff))))
-
-
 ;; Proof General and Coq
 (eval-after-load 'proof-general
   '(progn
@@ -1432,6 +1422,26 @@ surrounding xml expression"
 
 ;; nix
 ; (add-to-list 'before-save-hook 'nix-format-before-save)
+
+;;; ADD NEW LANGUAGE MODES HERE
+
+(eval-after-load 'apheleia
+  '(progn
+     (setf (alist-get 'python-mode apheleia-mode-alist)
+           '(ruff-isort ruff))
+     (setf (alist-get 'python-ts-mode apheleia-mode-alist)
+           '(ruff-isort ruff))))
+
+(defun my-claude-api-key ()
+  (let ((auths (auth-source-search :host "api.anthropic.com")))
+    (if auths
+        (auth-info-password (car auths))
+      (error "No API key found for api.anthropic.com"))))
+
+(setq
+ gptel-model "claude-3-sonnet-20240229"
+ gptel-backend (gptel-make-anthropic "Claude"
+                 :stream t :key #'my-claude-api-key))
 
 (setq ediff-split-window-function 'split-window-horizontally)
 
@@ -1706,7 +1716,7 @@ Otherwise, unindent."
  '(confirm-kill-processes nil)
  '(ns-command-modifier 'meta)
  '(package-selected-packages
-   '(apheleia envrc company-coq proof-general adaptive-wrap obsidian web-mode nix-mode jinja2-mode ninja-mode verilog-mode conda ein swift-mode flycheck-julia julia-mode julia-repl cuda-mode haskell-mode forge svelte-mode lsp-python-ms lsp-pyright py-isort isortify python-black reformatter docker-compose-mode dockerfile-mode mode-line-bell elixir-mode flycheck-elixir erlang csv csv-mode gnu-elpa-keyring-update ivy swiper prettier-js typescript-mode polymode magit-popup rust-mode visual-fill-column lsp-mode lsp-ui counsel helm-ls-git helm-git-files yaml-mode js2-mode caddyfile-mode ledger-mode scala-mode graphviz-dot-mode git-link flycheck-clangcheck visual-fill-column ac-rtags company-rtags flycheck-rust rust-mode flycheck-ocaml lua-mode gnuplot gnuplot-mode thrift terraform-mode seq ruby-tools ruby-mode ruby-electric rubocop popwin magit-gh-pulls magit-gerrit javaimp inf-ruby helm fuzzy flycheck f exec-path-from-shell edit-server debian-changelog-mode dash-at-point company-go coffee-mode cmake-mode clojure-mode clang-format bison-mode auto-complete))
+   '(gptel apheleia envrc company-coq proof-general adaptive-wrap obsidian web-mode nix-mode jinja2-mode ninja-mode verilog-mode conda ein swift-mode flycheck-julia julia-mode julia-repl cuda-mode haskell-mode forge svelte-mode lsp-python-ms lsp-pyright py-isort isortify python-black reformatter docker-compose-mode dockerfile-mode mode-line-bell elixir-mode flycheck-elixir erlang csv csv-mode gnu-elpa-keyring-update ivy swiper prettier-js typescript-mode polymode magit-popup rust-mode visual-fill-column lsp-mode lsp-ui counsel helm-ls-git helm-git-files yaml-mode js2-mode caddyfile-mode ledger-mode scala-mode graphviz-dot-mode git-link flycheck-clangcheck visual-fill-column ac-rtags company-rtags flycheck-rust rust-mode flycheck-ocaml lua-mode gnuplot gnuplot-mode thrift terraform-mode seq ruby-tools ruby-mode ruby-electric rubocop popwin magit-gh-pulls magit-gerrit javaimp inf-ruby helm fuzzy flycheck f exec-path-from-shell edit-server debian-changelog-mode dash-at-point company-go coffee-mode cmake-mode clojure-mode clang-format bison-mode auto-complete))
  '(safe-local-variable-values
    '((lsp-disabled-clients mspyls pylsp)
      (lsp-pylsp-plugins-yapf-enabled . t)
