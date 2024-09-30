@@ -1,2 +1,0 @@
-;; Generated package description from swift-mode.el  -*- no-byte-compile: t -*-
-(define-package "swift-mode" "8.4.2" "Major-mode for Apple's Swift programming language" '((emacs "24.4") (seq "2.3")) :authors '(("taku0 (http://github.com/taku0)") ("Chris Barrett" . "chris.d.barrett@me.com") ("Bozhidar Batsov" . "bozhidar@batsov.com") ("Arthur Evstifeev" . "lod@pisem.net")) :maintainer '("taku0 (http://github.com/taku0)") :keywords '("languages" "swift") :url "https://github.com/swift-emacs/swift-mode")

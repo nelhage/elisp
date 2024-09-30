@@ -1,0 +1,2 @@
+;; Generated package description from csv-mode.el  -*- no-byte-compile: t -*-
+(define-package "csv-mode" "1.27" "Major mode for editing comma/char separated values" '((emacs "27.1") (cl-lib "0.5")) :commit "a16e9d8b0952de1badf6da8e652b178a7f6c4498" :url "https://elpa.gnu.org/packages/csv-mode.html" :authors '(("Francis J. Wright" . "F.J.Wright@qmul.ac.uk")) :maintainer '(nil . "emacs-devel@gnu.org") :keywords '("convenience"))
