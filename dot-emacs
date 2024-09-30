@@ -1432,6 +1432,8 @@ surrounding xml expression"
      (setf (alist-get 'python-ts-mode apheleia-mode-alist)
            '(ruff-isort ruff))))
 
+;; gptel
+
 (defun my-claude-api-key ()
   (let ((auths (auth-source-search :host "api.anthropic.com")))
     (if auths
@@ -1442,6 +1444,19 @@ surrounding xml expression"
  gptel-model "claude-3-sonnet-20240229"
  gptel-backend (gptel-make-anthropic "Claude"
                  :stream t :key #'my-claude-api-key))
+
+(progn
+  (defvar gptel-menu-map (make-sparse-keymap "LLM"))
+  (add-to-list 'yank-excluded-properties 'gptel)
+
+  (define-key global-map (kbd "C-x g") gptel-menu-map)
+  (define-key gptel-menu-map "g" '("Open chat buffer" . gptel))
+  (define-key gptel-menu-map "a" '("Add to context" . gptel-context-add))
+  (define-key gptel-menu-map "m" '("Menu" . gptel-menu)))
+
+(defun gptel-context-clear ()
+  (interactive)
+  (setq gptel-context--alist nil))
 
 (setq ediff-split-window-function 'split-window-horizontally)
 
