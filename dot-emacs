@@ -1425,13 +1425,6 @@ surrounding xml expression"
 
 ;;; ADD NEW LANGUAGE MODES HERE
 
-(eval-after-load 'apheleia
-  '(progn
-     (setf (alist-get 'python-mode apheleia-mode-alist)
-           '(ruff-isort ruff))
-     (setf (alist-get 'python-ts-mode apheleia-mode-alist)
-           '(ruff-isort ruff))))
-
 ;; gptel
 
 (defun my-claude-api-key ()
