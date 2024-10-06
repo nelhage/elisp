@@ -53,6 +53,7 @@
 ; (global-set-key [up] 'increment-number-at-point)
 ; (global-set-key [down] 'decrement-number-at-point)
 (global-set-key (kbd "C-x C-c") 'server-edit)
+(global-set-key (kbd "M-`") 'other-frame)
 
 (setq window-number-prefix "\C-c")
 (require 'window-number)
