@@ -1409,17 +1409,22 @@ surrounding xml expression"
 (add-hook 'verilog-mode-hook 'my-verilog-mode-hook)
 
 ;; Proof General and Coq
-(eval-after-load 'proof-general
+(setq
+ ;; proof-auto-raise-buffers t
+ proof-three-window-enable t
+ proof-output-tooltips t
+ proof-three-window-mode-policy 'smart)
+
+(eval-after-load 'proof-faces
   '(progn
-     (setq proof-auto-raise-buffers t
-           proof-three-window-enable nil
-           proof-output-tooltips t
-           proof-three-window-mode-policy 'hybrid)
      (set-face-attribute proof-locked-face nil
                          :background "navy")
 
      (set-face-attribute proof-mouse-highlight-face nil
-                         :background "DarkGoldenrod4")))
+                         :background "DarkGoldenrod4")
+     'done))
+
+;;; ADD NEW LANGUAGE MODES HERE
 
 ;; nix
 ; (add-to-list 'before-save-hook 'nix-format-before-save)
