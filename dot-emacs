@@ -1424,12 +1424,8 @@ surrounding xml expression"
                          :background "DarkGoldenrod4")
      'done))
 
-;;; ADD NEW LANGUAGE MODES HERE
-
 ;; nix
 ; (add-to-list 'before-save-hook 'nix-format-before-save)
-
-;;; ADD NEW LANGUAGE MODES HERE
 
 ;; gptel
 
