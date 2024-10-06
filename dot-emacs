@@ -1430,10 +1430,7 @@ surrounding xml expression"
 ;; gptel
 
 (defun my-claude-api-key ()
-  (let ((auths (auth-source-search :host "api.anthropic.com")))
-    (if auths
-        (auth-info-password (car auths))
-      (error "No API key found for api.anthropic.com"))))
+  (auth-source-pick-first-password :host "api.anthropic.com"))
 
 (setq
  gptel-model "claude-3-sonnet-20240229"
@@ -1445,12 +1442,14 @@ surrounding xml expression"
   (setq gptel-context--alist nil))
 
 (progn
+  (add-hook 'gptel-mode-hook 'visual-line-mode)
+
   (defvar gptel-menu-map (make-sparse-keymap "LLM"))
   (add-to-list 'yank-excluded-properties 'gptel)
 
   (define-key global-map (kbd "C-x g") gptel-menu-map)
   (define-key gptel-menu-map "g" '("Open chat buffer" . gptel))
-  (define-key gptel-menu-map "a" '("Add to context" . gptel-context-add))
+  (define-key gptel-menu-map "a" '("Add to context" . gptel-add))
   (define-key gptel-menu-map "m" '("Menu" . gptel-menu))
   (define-key gptel-menu-map "x" '("Clear context" . gptel-context-clear)))
 
