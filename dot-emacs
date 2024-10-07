@@ -567,7 +567,7 @@
 (eval-after-load 'lsp-mode
   '(progn
      (add-to-list 'lsp-disabled-clients 'mspyls)
-     ))
+     (add-to-list 'lsp-disabled-clients 'ruff)))
 (defun my-lsp-mode-hook ()
   )
 (setq lsp-ui-sideline-enable nil
