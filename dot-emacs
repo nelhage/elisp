@@ -1440,6 +1440,10 @@ surrounding xml expression"
  gptel-backend (gptel-make-anthropic "Claude"
                  :stream t :key #'my-claude-api-key))
 
+(defun gptel-context-clear ()
+  (interactive)
+  (setq gptel-context--alist nil))
+
 (progn
   (defvar gptel-menu-map (make-sparse-keymap "LLM"))
   (add-to-list 'yank-excluded-properties 'gptel)
@@ -1447,11 +1451,9 @@ surrounding xml expression"
   (define-key global-map (kbd "C-x g") gptel-menu-map)
   (define-key gptel-menu-map "g" '("Open chat buffer" . gptel))
   (define-key gptel-menu-map "a" '("Add to context" . gptel-context-add))
-  (define-key gptel-menu-map "m" '("Menu" . gptel-menu)))
+  (define-key gptel-menu-map "m" '("Menu" . gptel-menu))
+  (define-key gptel-menu-map "x" '("Clear context" . gptel-context-clear)))
 
-(defun gptel-context-clear ()
-  (interactive)
-  (setq gptel-context--alist nil))
 
 (setq ediff-split-window-function 'split-window-horizontally)
 
