@@ -667,8 +667,12 @@
 (eval-after-load 'python
   '(progn
      (define-key python-mode-map (kbd "M-TAB") 'dabbrev-expand)))
-(setq python-indent-offset 2)
+(setq python-indent-offset 4)
 (require 'lsp-pyright)
+
+(with-eval-after-load 'apheleia
+  (setf (alist-get 'python-mode apheleia-mode-alist)
+        '(ruff-isort ruff)))
 
 ;; bazel
 
