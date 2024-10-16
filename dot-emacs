@@ -1489,6 +1489,7 @@ surrounding xml expression"
       org-export-with-section-numbers nil
       org-use-sub-superscripts nil
       org-export-initial-scope 'subtree
+      org-export-with-toc nil
       org-html-postamble nil)
 
 (eval-after-load 'org-agenda
