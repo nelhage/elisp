@@ -481,7 +481,17 @@
 
 ; (require 'helm-config)
 ;; (helm-mode 1)
+
+(defun my-yank-pop (&optional arg)
+  (interactive "p")
+  (if (or (eq last-command 'yank)
+          (eq last-command 'yank-pop))
+      (yank-pop arg)
+    (counsel-yank-pop)))
+
 (global-set-key (kbd "M-x") #'counsel-M-x)
+(global-set-key (kbd "M-y") #'my-yank-pop)
+(global-set-key (kbd "C-M-y") #'counsel-yank-pop)
 (ivy-mode 1)
 
 (setq auto-mode-alist
