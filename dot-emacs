@@ -1677,8 +1677,7 @@ Otherwise, unindent."
   (server-start)
   (require 'edit-server)
   (edit-server-start)
-  (find-file-noselect "~/.elisp/dot-emacs")
-  (save-window-excursion (shell)))
+  (find-file-noselect "~/.elisp/dot-emacs"))
 
 ;;; Misc stuff
 
