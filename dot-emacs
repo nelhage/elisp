@@ -1639,6 +1639,31 @@ Otherwise, unindent."
 
 ;; Obsidian
 (require 'obsidian)
+
+(with-eval-after-load 'obsidian
+  (when (executable-find "obsidian-scan")
+    (defun my-obsidian-update ()
+      (interactive)
+      (let* ((inventory (with-temp-buffer
+                          (call-process "obsidian-scan" nil t nil obsidian-directory)
+                          (goto-char 0)
+                          (json-parse-buffer)))
+             (notes (gethash "notes" inventory)))
+        (setq obsidian--tags-list
+              (let ((all-tags (make-hash-table :test 'equal)))
+                (seq-doseq (note notes)
+                  (seq-doseq (tag (gethash "tags" note))
+                    (puthash tag t all-tags)))
+                (hash-table-keys all-tags))
+              obsidian-files-cache
+              (mapcar #'(lambda (doc) (f-join obsidian-directory (gethash "file" doc))) notes))
+        (seq-doseq (note notes)
+          (seq-doseq (alias (gethash "aliases" note))
+            (obsidian--add-alias alias (gethash "file" note))))))
+
+    (dolist (fn '(obsidian-update obsidian-reset-cache obsidian-update-tags-list))
+      (defalias fn 'my-obsidian-update))))
+
 (obsidian-specify-path (expand-file-name "~/Sync/Obsidian/nelhage/"))
 (setq obsidian-daily-notes-directory "Daily"
       obsidian-templates-directory "Templates"
