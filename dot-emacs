@@ -1663,32 +1663,44 @@ Otherwise, unindent."
               (mapcar #'(lambda (doc) (f-join obsidian-directory (gethash "file" doc))) notes))
         (seq-doseq (note notes)
           (seq-doseq (alias (gethash "aliases" note))
-            (obsidian--add-alias alias (gethash "file" note))))))
+            (obsidian--add-alias alias (gethash "file" note)))))
+      (setq obsidian-cache-timestamp (float-time)))
 
     (dolist (fn '(obsidian-update obsidian-reset-cache obsidian-update-tags-list))
-      (defalias fn 'my-obsidian-update))))
+      (defalias fn 'my-obsidian-update)))
 
-(obsidian-specify-path (expand-file-name "~/Sync/Obsidian/nelhage/"))
-(setq obsidian-daily-notes-directory "Daily"
-      obsidian-templates-directory "Templates"
-      obsidian-daily-note-template "Daily.md")
-(global-obsidian-mode t)
-(add-hook 'obsidian-mode-hook 'auto-revert-mode)
-(add-hook 'obsidian-mode-hook 'visual-line-mode)
+  (defun my-obsidian-jump-or-create ()
+    "Jump to or create Obsidian note."
+    (interactive)
+    (obsidian-update)
+    (let* ((files (obsidian-list-all-files))
+           (dict (make-hash-table :test 'equal))
+           (_ (-map (lambda (f) (puthash (file-relative-name f obsidian-directory) f dict)) files))
+           (choices (-sort #'string< (-distinct (-concat (obsidian--all-aliases) (hash-table-keys dict)))))
+           (choice (completing-read "Jump to: " choices))
+           (target (obsidian--get-alias choice (s-concat obsidian-directory "/" choice))))
+      (find-file target)))
 
-(defun my-obsidian-mode-hook ()
-  (set (make-local-variable 'markdown-list-indent-width) 4))
+  (obsidian-specify-path (expand-file-name "~/Sync/Obsidian/nelhage/"))
+  (setq obsidian-daily-notes-directory "Daily"
+        obsidian-templates-directory "Templates"
+        obsidian-daily-note-template "Daily.md")
+  (global-obsidian-mode t)
+  (add-hook 'obsidian-mode-hook 'auto-revert-mode)
+  (add-hook 'obsidian-mode-hook 'visual-line-mode)
 
-(add-hook 'obsidian-mode-hook 'my-obsidian-mode-hook)
+  (defun my-obsidian-mode-hook ()
+    (set (make-local-variable 'markdown-list-indent-width) 4))
 
-(progn
+  (add-hook 'obsidian-mode-hook 'my-obsidian-mode-hook)
+
   (defvar obsidian-menu-map (make-sparse-keymap "Obsidian"))
   (define-key global-map (kbd "C-x /") obsidian-menu-map)
   (define-key obsidian-menu-map "c" '("Capture note" . obsidian-capture))
   (define-key obsidian-menu-map "n" '("daily Note" . obsidian-daily-note))
   (define-key obsidian-menu-map "." 'obsidian-daily-note)
   (define-key obsidian-menu-map "f" '("Follow link" . obsidian-follow-link-at-point))
-  (define-key obsidian-menu-map "j" '("Jump" . obsidian-jump))
+  (define-key obsidian-menu-map "j" '("Jump" . my-obsidian-jump-or-create))
   (define-key obsidian-menu-map "l" '("Link" . obsidian-insert-link))
   (define-key obsidian-menu-map "q" 'keyboard-quit)
   (define-key obsidian-menu-map (kbd "C-g") 'keyboard-quit)
@@ -1696,6 +1708,8 @@ Otherwise, unindent."
   (define-key obsidian-menu-map "t" '("Tag find" . obsidian-tag-find))
   (define-key obsidian-menu-map "u" '("Update" . obsidian-update))
   (define-key obsidian-menu-map "w" '("Wikilink" . obsidian-insert-wikilink)))
+
+
 
 ;; SES mode
 (add-hook 'ses-mode-hook 'my-ses-mode-hook)
