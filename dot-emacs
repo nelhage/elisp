@@ -477,6 +477,10 @@
   (dired-omit-mode 1))
 (setq dired-listing-switches "-l")
 
+(when (and (eq system-type 'darwin)
+           (executable-find "gls"))
+  (setq insert-directory-program "gls"))
+
 (global-set-key "\C-x\C-b" 'ibuffer-list-buffers)
 
 ; (require 'helm-config)
