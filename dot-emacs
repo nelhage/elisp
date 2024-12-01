@@ -655,13 +655,13 @@
 (setq inf-perl-shell-program "/usr/bin/re.pl")
 
 (defun my-perl-mode-hook ()
-  (require 'perl-utils)
+  ;; (require 'perl-utils)
   (local-set-key "\C-cp" 'perl-check-pod)
-  (local-set-key "{" 'perl-insert-brackets)
+  ;; (local-set-key "{" 'perl-insert-brackets)
   (local-set-key "}" 'insert-close)
   (local-set-key "\C-c\C-d" (make-sparse-keymap))
   (local-set-key "\C-c\C-dh" 'cperl-perldoc)
-  (local-set-key "\C-ct" 'perl-add-test)
+  ;; (local-set-key "\C-ct" 'perl-add-test)
   (local-set-key (kbd "C-M-\\") 'indent-region)
   (local-set-key "\C-c\C-v" 'cperl-build-manpage)
   (local-set-key "\C-c\C-c" 'cperl-build-manpage)
@@ -829,15 +829,6 @@
 ;;;Java
 (add-hook 'java-mode-hook 'define-bracket-keys)
 (add-hook 'java-mode-hook 'my-java-mode-hook)
-
-(defun my-java-mode-hook ()
-  (setq *javadoc-base-url* "file:///usr/share/doc/sun-java5-doc/html/api/")
-  (require 'javadoc)
-  (require 'java-utils)
-  (javadoc-load-classes)
-  (define-key java-mode-map "\C-c\C-d" (make-sparse-keymap))
-  (define-key java-mode-map "\C-c\C-dh" 'javadoc-lookup-class)
-  (make-local-variable 'dabbrev-case-fold-search))
 
 ;;; ANTLR
 (autoload 'antlr-mode "antlr-mode" nil t)
@@ -1733,8 +1724,6 @@ Otherwise, unindent."
   (find-file-noselect "~/.elisp/dot-emacs"))
 
 ;;; Misc stuff
-
-(require 'kerberos)
 
 (setq asm-comment-char ?\;)
 
