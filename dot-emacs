@@ -182,11 +182,7 @@
 
 ;;Set up fonts and colors
 (when (fboundp 'global-font-lock-mode)
-  (setq font-lock-face-attributes
-        '((font-lock-comment-face  "OrangeRed")
-          (font-lock-function-name-face "#5555AA")
-          (font-lock-keyword-face "Cyan1")
-          (font-lock-string-face "orange")))
+  (load-theme 'base16-isotope t)
   (require 'font-lock)
   (require 'whitespace)
   (require 'jit-lock)
@@ -225,39 +221,6 @@
 (defvar default-font nil
   "The default font")
 
-(defun set-projector-faces ()
-  (interactive)
-  (set-face-attribute 'default nil
-                      :height 150
-                      :foreground "black"
-                      :background "white")
-  (set-face-attribute 'font-lock-comment-face nil
-                      :foreground "dark green")
-  (set-face-attribute 'font-lock-keyword-face nil
-                      :foreground "blue"
-                      :weight 'bold)
-  (set-face-attribute 'font-lock-string-face nil
-                      :foreground "dark red")
-  (set-face-attribute 'whitespace-tab nil
-                      :background 'unspecified))
-
-(defun set-normal-faces ()
-  (interactive)
-  (set-face-attribute 'default nil
-                      :foreground "#AAA"
-                      :background "black")
-  (set-face-attribute 'font-lock-comment-face nil
-                      :foreground "OrangeRed")
-  (set-face-attribute 'font-lock-keyword-face nil
-                      :foreground "Cyan1"
-                      :weight 'normal)
-  (set-face-attribute 'font-lock-string-face nil
-                      :foreground "orange")
-  (set-face-attribute 'whitespace-tab nil
-                      :background "#133")
-  (when default-font
-    (set-frame-font default-font t)))
-
 (defun my-make-frame-hook (frame)
   (when (display-graphic-p frame)
     (let ((try try-fonts))
@@ -268,8 +231,7 @@
           `((menu-bar-lines . 0)
             (font . ,default-font)
             (vertical-scroll-bars . nil)
-            (tool-bar-lines . 0)))
-    (set-normal-faces)))
+            (tool-bar-lines . 0)))))
 (add-hook 'after-make-frame-functions 'my-make-frame-hook)
 (my-make-frame-hook nil)
 
@@ -1761,9 +1723,10 @@ Otherwise, unindent."
  '(company-tooltip-common ((((type x)) (:inherit company-tooltip :weight bold)) (t (:inherit company-tooltip))))
  '(company-tooltip-common-selection ((((type x)) (:inherit company-tooltip-selection :weight bold)) (t (:inherit company-tooltip-selection))))
  '(company-tooltip-selection ((t (:background "steelblue" :foreground "white"))))
- '(line-number ((t (:inherit (shadow default) :background "#111166"))))
+ ;; '(line-number ((t (:inherit (shadow default) :background "#111166"))))
  '(magit-hash ((t (:foreground "DodgerBlue1"))))
- '(mode-line ((t (:background "DarkGoldenrod2" :foreground "black" :box (:line-width -1 :style released-button))))))
+ ;; '(mode-line ((t (:background "DarkGoldenrod2" :foreground "black" :box (:line-width -1 :style released-button)))))
+ )
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -1771,9 +1734,11 @@ Otherwise, unindent."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(confirm-kill-processes nil)
+ '(custom-safe-themes
+   '("e223120256455daba01b6c68510b48fac813acab05c314510e47aea377b23634" default))
  '(ns-command-modifier 'meta)
  '(package-selected-packages
-   '(gptel apheleia envrc company-coq proof-general adaptive-wrap obsidian web-mode nix-mode jinja2-mode ninja-mode verilog-mode conda ein swift-mode flycheck-julia julia-mode julia-repl cuda-mode haskell-mode svelte-mode lsp-python-ms lsp-pyright py-isort isortify python-black reformatter docker-compose-mode dockerfile-mode mode-line-bell elixir-mode flycheck-elixir erlang csv csv-mode gnu-elpa-keyring-update ivy swiper prettier-js typescript-mode polymode magit-popup rust-mode visual-fill-column lsp-mode lsp-ui counsel helm-ls-git helm-git-files yaml-mode js2-mode caddyfile-mode ledger-mode scala-mode graphviz-dot-mode git-link flycheck-clangcheck visual-fill-column ac-rtags company-rtags flycheck-rust rust-mode flycheck-ocaml lua-mode gnuplot gnuplot-mode thrift terraform-mode seq ruby-tools ruby-mode ruby-electric rubocop popwin magit-gh-pulls magit-gerrit javaimp inf-ruby helm fuzzy flycheck f exec-path-from-shell edit-server debian-changelog-mode dash-at-point company-go coffee-mode cmake-mode clojure-mode clang-format bison-mode auto-complete))
+   '(base16-theme gptel apheleia envrc company-coq proof-general adaptive-wrap obsidian web-mode nix-mode jinja2-mode ninja-mode verilog-mode conda ein swift-mode flycheck-julia julia-mode julia-repl cuda-mode haskell-mode svelte-mode lsp-python-ms lsp-pyright py-isort isortify python-black reformatter docker-compose-mode dockerfile-mode mode-line-bell elixir-mode flycheck-elixir erlang csv csv-mode gnu-elpa-keyring-update ivy swiper prettier-js typescript-mode polymode magit-popup rust-mode visual-fill-column lsp-mode lsp-ui counsel helm-ls-git helm-git-files yaml-mode js2-mode caddyfile-mode ledger-mode scala-mode graphviz-dot-mode git-link flycheck-clangcheck visual-fill-column ac-rtags company-rtags flycheck-rust rust-mode flycheck-ocaml lua-mode gnuplot gnuplot-mode thrift terraform-mode seq ruby-tools ruby-mode ruby-electric rubocop popwin magit-gh-pulls magit-gerrit javaimp inf-ruby helm fuzzy flycheck f exec-path-from-shell edit-server debian-changelog-mode dash-at-point company-go coffee-mode cmake-mode clojure-mode clang-format bison-mode auto-complete))
  '(safe-local-variable-values
    '((lsp-disabled-clients mspyls pylsp)
      (lsp-pylsp-plugins-yapf-enabled . t)
