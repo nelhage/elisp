@@ -1354,12 +1354,11 @@ surrounding xml expression"
 
 ;; Rust
 (add-hook 'rust-mode-hook #'flycheck-rust-setup)
-(eval-after-load 'rust-mode
-  '(progn
-     (require 'lsp-rust)
-     (setq-default rust-format-on-save t)
-     (lsp-rust-switch-server 'rust-analyzer)
-     (add-hook 'rust-mode-hook #'lsp)))
+(with-eval-after-load 'rust-mode
+  (require 'lsp-rust)
+  (setq-default rust-format-on-save t)
+  (lsp-rust-switch-server 'rust-analyzer)
+  (add-hook 'rust-mode-hook #'lsp-deferred))
 ; (add-hook 'racer-mode-hook #'eldoc-mode)
 
 (eval-after-load 'verilog-mode
