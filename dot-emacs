@@ -106,20 +106,18 @@
   ('file-error . nil))
 
 ;; DocView / Image Viewer
-(eval-after-load 'doc-view
-  '(progn
-     (define-key doc-view-mode-map (kbd "C-v") 'doc-view-scroll-up-or-next-page)
-     (define-key doc-view-mode-map (kbd "M-v") 'doc-view-scroll-down-or-previous-page)
-     (define-key doc-view-mode-map (kbd "C-e") 'image-eol)
-     (define-key doc-view-mode-map (kbd "C-a") 'image-bol)
-     (define-key doc-view-mode-map (kbd "C-c t") 'doc-view-open-text)))
+(with-eval-after-load 'doc-view
+  (define-key doc-view-mode-map (kbd "C-v") 'doc-view-scroll-up-or-next-page)
+  (define-key doc-view-mode-map (kbd "M-v") 'doc-view-scroll-down-or-previous-page)
+  (define-key doc-view-mode-map (kbd "C-e") 'image-eol)
+  (define-key doc-view-mode-map (kbd "C-a") 'image-bol)
+  (define-key doc-view-mode-map (kbd "C-c t") 'doc-view-open-text))
 
-(eval-after-load 'compile
-  '(progn
-     (let ((ent (assq 'gcc-include compilation-error-regexp-alist-alist)))
-       (when ent
-         (setcar (cdr ent) "^\\(?:In file included\\|                \\) from \\(.+?\\):\\([0-9]+\\)\\(:[0-9]+\\)?\\(?:\\(:\\)\\|\\(,\\)\\)?")
-         (setcdr (cdr ent) (list 1 2 nil '(4 . 5)))))))
+(with-eval-after-load 'compile
+  (let ((ent (assq 'gcc-include compilation-error-regexp-alist-alist)))
+    (when ent
+      (setcar (cdr ent) "^\\(?:In file included\\|                \\) from \\(.+?\\):\\([0-9]+\\)\\(:[0-9]+\\)?\\(?:\\(:\\)\\|\\(,\\)\\)?")
+      (setcdr (cdr ent) (list 1 2 nil '(4 . 5))))))
 
 (require 'ansi-color)
 (defun colorize-compilation-buffer ()
@@ -200,12 +198,11 @@
   (when (facep face)
     (apply 'set-face-attribute face frame args)))
 
-(eval-after-load 'diff-mode
-  '(progn
-     (safe-set-face-attribute 'diff-refine-change nil :background "gray20")
-     (safe-set-face-attribute 'diff-file-header   nil :background "gray40")
-     (safe-set-face-attribute 'diff-removed-face  nil :foreground "red")
-     (safe-set-face-attribute 'diff-added-face    nil :foreground "green")))
+(with-eval-after-load 'diff-mode
+  (safe-set-face-attribute 'diff-refine-change nil :background "gray20")
+  (safe-set-face-attribute 'diff-file-header   nil :background "gray40")
+  (safe-set-face-attribute 'diff-removed-face  nil :foreground "red")
+  (safe-set-face-attribute 'diff-added-face    nil :foreground "green"))
 (add-hook 'diff-mode-hook 'my-diff-mode-hook)
 
 (defun my-diff-mode-hook ()
@@ -274,14 +271,13 @@
       frame-inhibit-implied-resize t
       pixel-scroll-precision-mode t)
 
-(eval-after-load 'grep
-  '(progn
-     (grep-apply-setting 'grep-use-null-device nil)
-     (grep-apply-setting 'grep-command
-                         (if (executable-find "rg") "rg --no-heading -nH -e " "gr -nH -Ee "))
+(with-eval-after-load 'grep
+  (grep-apply-setting 'grep-use-null-device nil)
+  (grep-apply-setting 'grep-command
+                      (if (executable-find "rg") "rg --no-heading -nH -e " "gr -nH -Ee "))
 
-     (defun grep-default-command ()
-       grep-command)))
+  (defun grep-default-command ()
+    grep-command))
 
 (defvar my-persistent-man-cache nil
   "A persistent cache for Man-completion-table")
@@ -299,13 +295,12 @@
     (setq str (replace-match "" t t str)))
   str)
 
-(eval-after-load 'calc
-  '(progn
-     (defadvice calc (around calc-pop-up-windows)
-       (let ((pop-up-windows t))
-         ad-do-it))
-     (ad-activate 'calc)
-     (define-key calc-mode-map (kbd "C-/") 'calc-undo)))
+(with-eval-after-load 'calc
+  (defadvice calc (around calc-pop-up-windows)
+    (let ((pop-up-windows t))
+      ad-do-it))
+  (ad-activate 'calc)
+  (define-key calc-mode-map (kbd "C-/") 'calc-undo))
 
 (setq-default tab-width 8
               truncate-lines t
@@ -362,53 +357,52 @@
   (interactive)
   (term-send-raw-string "\0"))
 
-(eval-after-load 'term
-  '(progn
-     (setq term-default-bg-color 'unspecified)
-     (setq term-default-fg-color 'unspecified)
+(with-eval-after-load 'term
+  (setq term-default-bg-color 'unspecified)
+  (setq term-default-fg-color 'unspecified)
 
-     ;;(define-key term-raw-map (kbd "C-x M-x") 'execute-extended-command)
-     (define-key term-raw-map (kbd "<mouse-4>") 'term-send-up)
-     (define-key term-raw-map (kbd "<mouse-5>") 'term-send-down)
-     (define-key term-raw-map (kbd "C-SPC") 'term-send-c-space)
-     ;; (define-key term-raw-map (kbd "ESC") 'term-send-raw-meta)
-     (define-key term-raw-map (kbd "C-/") 'term-send-undo)
-     (define-key term-raw-map (kbd "<mouse-1>") 'maybe-browse-url-at-point)
+  ;;(define-key term-raw-map (kbd "C-x M-x") 'execute-extended-command)
+  (define-key term-raw-map (kbd "<mouse-4>") 'term-send-up)
+  (define-key term-raw-map (kbd "<mouse-5>") 'term-send-down)
+  (define-key term-raw-map (kbd "C-SPC") 'term-send-c-space)
+  ;; (define-key term-raw-map (kbd "ESC") 'term-send-raw-meta)
+  (define-key term-raw-map (kbd "C-/") 'term-send-undo)
+  (define-key term-raw-map (kbd "<mouse-1>") 'maybe-browse-url-at-point)
 
-     (let ((i 1))
-       (while (<= i 12)
-         (define-key term-raw-map (vector (make-symbol (concat "f" (int-to-string i))))
-           'my-term-send-fN)
-         (setq i (+ i 1))))
+  (let ((i 1))
+    (while (<= i 12)
+      (define-key term-raw-map (vector (make-symbol (concat "f" (int-to-string i))))
+                  'my-term-send-fN)
+      (setq i (+ i 1))))
 
-     (defun my-term-send-fN ()
-       (interactive)
-       (let ((evt last-input-event))
-         (when (and (symbolp evt)
-                    (string-match "^f\\([0-9]+\\)" (symbol-name evt)))
-           (let ((n (string-to-int (match-string 1 (symbol-name evt)))))
-             (message "%s" n)
-             (term-send-raw-string
-              (format "\eO%c" (+ ?O n)))))))
+  (defun my-term-send-fN ()
+    (interactive)
+    (let ((evt last-input-event))
+      (when (and (symbolp evt)
+                 (string-match "^f\\([0-9]+\\)" (symbol-name evt)))
+        (let ((n (string-to-int (match-string 1 (symbol-name evt)))))
+          (message "%s" n)
+          (term-send-raw-string
+           (format "\eO%c" (+ ?O n)))))))
 
-     (defun term-send-raw-meta ()
-       (interactive)
-       (let ((char last-input-event))
-         (when (symbolp last-input-event)
-           ;; Convert `return' to C-m, etc.
-           (let ((tmp (get char 'event-symbol-elements)))
-             (when tmp
-               (setq char (car tmp)))
-             (when (symbolp char)
-               (setq tmp (get char 'ascii-character))
-               (when tmp
-                 (setq char tmp)))))
-         (setq char (logand char (lognot ?\M-\^@)))
-         (term-send-raw-string (if (and (numberp char)
-                                        (> char 127)
-                                        (< char 256))
-                                   (make-string 1 char)
-                                 (format "\e%c" char)))))))
+  (defun term-send-raw-meta ()
+    (interactive)
+    (let ((char last-input-event))
+      (when (symbolp last-input-event)
+        ;; Convert `return' to C-m, etc.
+        (let ((tmp (get char 'event-symbol-elements)))
+          (when tmp
+            (setq char (car tmp)))
+          (when (symbolp char)
+            (setq tmp (get char 'ascii-character))
+            (when tmp
+              (setq char tmp)))))
+      (setq char (logand char (lognot ?\M-\^@)))
+      (term-send-raw-string (if (and (numberp char)
+                                     (> char 127)
+                                     (< char 256))
+                                (make-string 1 char)
+                              (format "\e%c" char))))))
 
 (defun term-send-undo ()
   (interactive)
@@ -513,9 +507,8 @@
   (let ((default-directory (magit-toplevel)))
     (call-interactively 'grep)))
 
-(eval-after-load 'magit
-  '(progn
-     (transient-append-suffix 'magit-file-dispatch "d" '("g" "Go to github" git-link))))
+(with-eval-after-load 'magit
+  (transient-append-suffix 'magit-file-dispatch "d" '("g" "Go to github" git-link)))
 
 (defun my-git-relative-path ()
   (concat (file-name-as-directory (magit-rev-parse "--show-prefix"))
@@ -540,10 +533,11 @@
       (error "LSP has already been loaded, cannot customize the prefix."))
   (defvar lsp-keymap-prefix)
   (setq lsp-keymap-prefix "C-c l"))
-(eval-after-load 'lsp-mode
-  '(progn
-     (add-to-list 'lsp-disabled-clients 'mspyls)
-     (add-to-list 'lsp-disabled-clients 'ruff)))
+
+(with-eval-after-load 'lsp-mode
+  (add-to-list 'lsp-disabled-clients 'mspyls)
+  (add-to-list 'lsp-disabled-clients 'ruff))
+
 (defun my-lsp-mode-hook ()
   )
 (setq lsp-ui-sideline-enable nil
@@ -589,9 +583,9 @@
 (setq magit-completing-read 'magit-ido-completing-read)
 (setq magit-push-always-verify nil
       magit-branch-arguments '())
-(eval-after-load 'magit
-  '(progn
-     (magit-auto-revert-mode 1)))
+
+(with-eval-after-load 'magit
+  (magit-auto-revert-mode 1))
 
 (condition-case nil
     (progn
@@ -640,9 +634,9 @@
 (add-to-list 'auto-mode-alist (cons "SConstruct$" 'python-mode))
 (add-to-list 'auto-mode-alist (cons "\\.ipy$" 'python-mode))
 
-(eval-after-load 'python
-  '(progn
-     (define-key python-mode-map (kbd "M-TAB") 'dabbrev-expand)))
+(with-eval-after-load 'python
+  (define-key python-mode-map (kbd "M-TAB") 'dabbrev-expand))
+
 (setq python-indent-offset 4)
 (require 'lsp-pyright)
 
@@ -886,7 +880,7 @@
               web-mode-enable-auto-quoting nil
               web-mode-enable-auto-indentation nil
               )
-(eval-after-load 'flycheck
+(with-eval-after-load 'flycheck
   '(flycheck-add-mode 'javascript-eslint
                       'web-mode))
 
@@ -917,39 +911,37 @@
   (reftex-mode 1)
   (flyspell-mode 1))
 
-(eval-after-load 'tex
-  '(progn
-     (setq TeX-command-list
-           (cons '("Gv" "gv %s.ps" TeX-run-background t t :help "Run gv on postscript")
-                 TeX-command-list))
-     (setq TeX-command-list
-           (cons '("Evince" "evince %s.ps" TeX-run-background t t :help "Run evince on postscript")
-                 TeX-command-list))
-     (setq TeX-command-list
-           (cons '("xpdf" "xpdf %s.pdf" TeX-run-background t t :help "Run xpdf on PDF")
-                 TeX-command-list))
-     (setq TeX-command-list
-           (cons '("PDF" "dvipdf %s.dvi" TeX-run-background t t :help "Generate a PDF")
-                 TeX-command-list))
-     (setq TeX-command-list
-           (cons '("PDFLatex" "pdflatex %s.tex" TeX-run-background t t :help "Run pdflatex")
-                 TeX-command-list))
-     (let ((pdfview (assoc-string "^pdf$" TeX-output-view-style)))
-       (setcdr (cdr pdfview) (list "evince %o")))
-     (setq TeX-print-command "pdf2ps %s.pdf - | lpr -P%p -h")
-     (TeX-global-PDF-mode)))
+(with-eval-after-load 'tex
+  (setq TeX-command-list
+        (cons '("Gv" "gv %s.ps" TeX-run-background t t :help "Run gv on postscript")
+              TeX-command-list))
+  (setq TeX-command-list
+        (cons '("Evince" "evince %s.ps" TeX-run-background t t :help "Run evince on postscript")
+              TeX-command-list))
+  (setq TeX-command-list
+        (cons '("xpdf" "xpdf %s.pdf" TeX-run-background t t :help "Run xpdf on PDF")
+              TeX-command-list))
+  (setq TeX-command-list
+        (cons '("PDF" "dvipdf %s.dvi" TeX-run-background t t :help "Generate a PDF")
+              TeX-command-list))
+  (setq TeX-command-list
+        (cons '("PDFLatex" "pdflatex %s.tex" TeX-run-background t t :help "Run pdflatex")
+              TeX-command-list))
+  (let ((pdfview (assoc-string "^pdf$" TeX-output-view-style)))
+    (setcdr (cdr pdfview) (list "evince %o")))
+  (setq TeX-print-command "pdf2ps %s.pdf - | lpr -P%p -h")
+  (TeX-global-PDF-mode))
 
 (defun TeX-count-words ()
   (interactive)
   (save-excursion
     (shell-command-on-region (point-min) (point-max) "detex | wc -w")))
 
-(eval-after-load 'info
-  '(progn
-     (setq Info-directory-list
-           (cons "~/.elisp/auctex/doc" Info-default-directory-list))
-     (define-key Info-mode-map "B" 'Info-history-back)
-     (define-key Info-mode-map "F" 'Info-history-forward)))
+(with-eval-after-load 'info
+  (setq Info-directory-list
+        (cons "~/.elisp/auctex/doc" Info-default-directory-list))
+  (define-key Info-mode-map "B" 'Info-history-back)
+  (define-key Info-mode-map "F" 'Info-history-forward))
 
 ;;;Lisps
 ;;;Scheme
@@ -1141,18 +1133,18 @@
 (make-variable-buffer-local 'rubocop-autocorrect-on-save)
 (put 'rubocop-autocorrect-on-save 'safe-local-variable 'booleanp)
 
-(eval-after-load 'rubocop
-  '(defun rubocop-build-command (command path)
-     (concat command
-             (if rubocop-exclude-cops
-                 (concat
-                  " --except="
-                  (string-join rubocop-exclude-cops ",")
-                  " ")
-               "")
-             (rubocop-build-requires)
-             " "
-             path)))
+(with-eval-after-load 'rubocop
+  (defun rubocop-build-command (command path)
+    (concat command
+            (if rubocop-exclude-cops
+                (concat
+                 " --except="
+                 (string-join rubocop-exclude-cops ",")
+                 " ")
+              "")
+            (rubocop-build-requires)
+            " "
+            path)))
 
 ;; Matlab
 
@@ -1198,10 +1190,9 @@
       (normal-mode))))
 
 ;; smerge-mode
-(eval-after-load "smerge-mode"
-  '(progn
-     (set-face-background 'smerge-refined-change "#003333")
-     (setq smerge-base-re "^|||||||.*\n")))
+(with-eval-after-load "smerge-mode"
+  (set-face-background 'smerge-refined-change "#003333")
+  (setq smerge-base-re "^|||||||.*\n"))
 
 (defun sm-try-smerge ()
   (save-excursion
@@ -1282,10 +1273,9 @@ surrounding xml expression"
 (add-to-list 'auto-mode-alist '("\\.dot\\'" . graphviz-dot-mode))
 (autoload 'graphviz-dot-mode "graphviz-dot-mode" "Major mode for editing Graphviz dot files" t)
 
-(eval-after-load 'graphviz-dot-mode
-  '(progn
-     (define-key graphviz-dot-mode-map (kbd ";") 'self-insert-command)
-     (define-key graphviz-dot-mode-map (kbd "C-c C-c") 'graphviz-dot-preview)))
+(with-eval-after-load 'graphviz-dot-mode
+  (define-key graphviz-dot-mode-map (kbd ";") 'self-insert-command)
+  (define-key graphviz-dot-mode-map (kbd "C-c C-c") 'graphviz-dot-preview))
 
 ;;; ESS
 
@@ -1340,10 +1330,10 @@ surrounding xml expression"
     (when (not (string-equal "" goimports))
       (setq gofmt-command (replace-regexp-in-string "\n$" "" goimports)))))
 
-(eval-after-load 'flycheck
-  '(let ((govet (flycheck-checker-get 'go-vet 'command)))
-     (when (equal (cadr govet) "tool")
-       (setf (cdr govet) (cddr govet)))))
+(with-eval-after-load 'flycheck
+  (let ((govet (flycheck-checker-get 'go-vet 'command)))
+    (when (equal (cadr govet) "tool")
+      (setf (cdr govet) (cddr govet)))))
 
 ;; protobufs
 (require 'protobuf-mode)
@@ -1361,13 +1351,12 @@ surrounding xml expression"
   (add-hook 'rust-mode-hook #'lsp-deferred))
 ; (add-hook 'racer-mode-hook #'eldoc-mode)
 
-(eval-after-load 'verilog-mode
-  '(progn
-     (setq verilog-indent-level 2
-           verilog-indent-level-module 2
-           verilog-indent-level-declaration 2)
+(with-eval-after-load 'verilog-mode
+  (setq verilog-indent-level 2
+        verilog-indent-level-module 2
+        verilog-indent-level-declaration 2)
 
-     (defun verilog-set-compile-command ())))
+  (defun verilog-set-compile-command ()))
 
 (defun my-verilog-mode-hook ()
   (let ((ent (assq 'verilog-verilator compilation-error-regexp-alist-alist)))
@@ -1385,14 +1374,12 @@ surrounding xml expression"
  proof-output-tooltips t
  proof-three-window-mode-policy 'smart)
 
-(eval-after-load 'proof-faces
-  '(progn
-     (set-face-attribute proof-locked-face nil
-                         :background "navy")
+(with-eval-after-load 'proof-faces
+  (set-face-attribute proof-locked-face nil
+                      :background "navy")
 
-     (set-face-attribute proof-mouse-highlight-face nil
-                         :background "DarkGoldenrod4")
-     'done))
+  (set-face-attribute proof-mouse-highlight-face nil
+                      :background "DarkGoldenrod4"))
 
 ;; nix
 ; (add-to-list 'before-save-hook 'nix-format-before-save)
@@ -1458,11 +1445,10 @@ surrounding xml expression"
       org-export-with-toc nil
       org-html-postamble nil)
 
-(eval-after-load 'org-agenda
-  '(progn
-     (set-face-attribute 'org-todo nil
-                         :inverse-video nil)
-     (define-key org-mode-map (kbd "C-<return>") 'org-insert-heading)))
+(with-eval-after-load 'org-agenda
+  (set-face-attribute 'org-todo nil
+                      :inverse-video nil)
+  (define-key org-mode-map (kbd "C-<return>") 'org-insert-heading))
 
 (defun org-agenda-skip-future-scheduled ()
   (let ((end (save-excursion (progn (outline-next-heading) (1- (point))))))
@@ -1478,21 +1464,19 @@ surrounding xml expression"
 (global-set-key (kbd "C-c r") 'org-remember)
 (global-set-key (kbd "C-c a") 'org-agenda)
 
-(eval-after-load 'org
-  '(progn
-     (add-to-list 'org-export-backends 'md)
-     (define-key org-mode-map (kbd "C-c t") 'org-todo)
-     (define-key org-mode-map (kbd "M-TAB") 'org-cycle)
-     (define-key org-mode-map (kbd "M-p") 'outline-backward-same-level)
-     (define-key org-mode-map (kbd "M-n") 'outline-forward-same-level)
-     ;(define-key org-mode-map (kbd "RET") 'org-meta-return)
-     (set-face-foreground 'org-todo "#FF6666")
-     (set-face-foreground 'org-done "#00FF00")))
+(with-eval-after-load 'org
+  (add-to-list 'org-export-backends 'md)
+  (define-key org-mode-map (kbd "C-c t") 'org-todo)
+  (define-key org-mode-map (kbd "M-TAB") 'org-cycle)
+  (define-key org-mode-map (kbd "M-p") 'outline-backward-same-level)
+  (define-key org-mode-map (kbd "M-n") 'outline-forward-same-level)
+                                        ;(define-key org-mode-map (kbd "RET") 'org-meta-return)
+  (set-face-foreground 'org-todo "#FF6666")
+  (set-face-foreground 'org-done "#00FF00"))
 
-(eval-after-load 'calendar
-  '(progn
-     (setq calendar-week-start-day 1)
-     (calendar-set-date-style 'iso)))
+(with-eval-after-load 'calendar
+  (setq calendar-week-start-day 1)
+  (calendar-set-date-style 'iso))
 
 ;; visual-line-mode
 ;; https://www.emacswiki.org/emacs/UnfillParagraph
@@ -1578,20 +1562,19 @@ Otherwise, unindent."
 
 
 
-(eval-after-load 'markdown-mode
-  '(progn
-     (define-key markdown-mode-map (kbd "C-c s") 'hugo-insert-shortcode)
-     (define-key markdown-mode-map (kbd "C-c C-c") 'markdown-do)
-     (define-key markdown-mode-map (kbd "M-n") 'markdown-outline-next)
-     (define-key markdown-mode-map (kbd "M-p") 'markdown-outline-previous)
-     (define-key markdown-mode-map (kbd "M-<down>") 'markdown-move-down)
-     (define-key markdown-mode-map (kbd "M-<up>") 'markdown-move-up)
-     (define-key markdown-mode-map (kbd "M-<right>") 'markdown-demote-list-item)
-     (define-key markdown-mode-map (kbd "M-<left>") 'markdown-promote-list-item)
+(with-eval-after-load 'markdown-mode
+  (define-key markdown-mode-map (kbd "C-c s") 'hugo-insert-shortcode)
+  (define-key markdown-mode-map (kbd "C-c C-c") 'markdown-do)
+  (define-key markdown-mode-map (kbd "M-n") 'markdown-outline-next)
+  (define-key markdown-mode-map (kbd "M-p") 'markdown-outline-previous)
+  (define-key markdown-mode-map (kbd "M-<down>") 'markdown-move-down)
+  (define-key markdown-mode-map (kbd "M-<up>") 'markdown-move-up)
+  (define-key markdown-mode-map (kbd "M-<right>") 'markdown-demote-list-item)
+  (define-key markdown-mode-map (kbd "M-<left>") 'markdown-promote-list-item)
 
-     (define-key markdown-mode-map (kbd "S-<tab>") 'my-markdown-shifttab)
+  (define-key markdown-mode-map (kbd "S-<tab>") 'my-markdown-shifttab)
 
-     (setq markdown-list-indent-width 2)))
+  (setq markdown-list-indent-width 2))
 
 ;; Obsidian
 (require 'obsidian)
