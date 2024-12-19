@@ -7,11 +7,10 @@
     (goto-char 0)
     (read (current-buffer))))
 
-(defvar base16--all-themes (read-from-file (expand-file-name "~/.elisp/base16.el")))
+(defvar base16--all-themes (read-from-file (expand-file-name "~/.elisp/base16-theme-list.el")))
 (defvar base16--theme-list base16--all-themes)
 (defvar base16--theme-idx 0)
 (defvar base16--liked-themes '())
-
 
 (defun base16--active-theme ()
   (nth base16--theme-idx base16--theme-list))
@@ -37,10 +36,17 @@
       (setq base16--liked-themes (delq theme base16--liked-themes))
       (message "Removed from liked: %s" theme))))
 
-(define-key global-map (kbd "C-x .") 'base16-next-theme)
-(define-key global-map (kbd "C-x ,") 'base16-prev-theme)
-(define-key global-map (kbd "C-x !") 'base16-like-theme)
+(defun base16-which-theme ()
+  (interactive)
+  (let ((theme (base16--active-theme)))
+    (message "Active theme: %s" theme)))
 
+(define-key global-map (kbd "C-x t") (make-sparse-keymap))
+(define-key global-map (kbd "C-x t n") 'base16-next-theme)
+(define-key global-map (kbd "C-x t p") 'base16-prev-theme)
+(define-key global-map (kbd "C-x t !") 'base16-like-theme)
+(define-key global-map (kbd "C-x t .") 'base16-which-theme)
+(define-key global-map (kbd "C-x t w") 'base16-save-liked)
 
 (defun base16-save-liked ()
   (interactive)
