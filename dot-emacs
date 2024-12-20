@@ -549,15 +549,19 @@
       lsp-signature-auto-activate nil)
 (add-hook 'lsp-mode-hook 'my-lsp-mode-hook)
 
-(defvar my-enable-lsp nil
-  "Enable LSP for this file/directory")
-(make-variable-buffer-local 'my-enable-lsp)
-(put 'my-enable-lsp 'safe-local-variable 'booleanp)
+(let ((lexical-binding t))
+  (defun my-make-diagnostics-filter (remove-if)
+    (lambda (param workspace)
+      (let* ((diagnostics (gethash "diagnostics" param))
+             (filtered (cl-remove-if remove-if diagnostics)))
+        (puthash "diagnostics" filtered param))
+      param))
 
-(defun my-maybe-enable-lsp-mode ()
-  (when my-enable-lsp
-    (lsp)))
-(add-hook 'hack-local-variables-hook 'my-maybe-enable-lsp-mode)
+  (setq my-lsp-filter-hints
+        (my-make-diagnostics-filter
+         (lambda (diag)
+           (let ((severity (gethash "severity" diag 0)))
+             (>= severity 4))))))
 
 ;;Version control
 (defmacro advise-to-save-windows (func)
@@ -633,6 +637,10 @@
 (add-to-list 'auto-mode-alist (cons "SConscript$" 'python-mode))
 (add-to-list 'auto-mode-alist (cons "SConstruct$" 'python-mode))
 (add-to-list 'auto-mode-alist (cons "\\.ipy$" 'python-mode))
+
+(defun my-python-mode-hook ()
+  (setq lsp-diagnostic-filter my-lsp-filter-hints))
+(add-hook 'python-mode-hook 'my-python-mode-hook)
 
 (with-eval-after-load 'python
   (define-key python-mode-map (kbd "M-TAB") 'dabbrev-expand))
