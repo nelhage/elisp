@@ -55,8 +55,8 @@
 (global-set-key (kbd "C-x C-c") 'server-edit)
 (global-set-key (kbd "M-`") 'other-frame)
 
-(setq window-number-prefix "\C-c")
 (require 'window-number)
+(window-number-define-keys window-number-mode-map "C-c ")
 (window-number-mode 1)
 (require 'popwin)
 
@@ -1652,7 +1652,7 @@ Otherwise, unindent."
    '("e223120256455daba01b6c68510b48fac813acab05c314510e47aea377b23634" default))
  '(ns-command-modifier 'meta)
  '(package-selected-packages
-   '(base16-theme gptel apheleia envrc company-coq proof-general adaptive-wrap obsidian web-mode nix-mode jinja2-mode ninja-mode verilog-mode conda ein swift-mode flycheck-julia julia-mode julia-repl cuda-mode haskell-mode svelte-mode lsp-python-ms lsp-pyright py-isort isortify python-black reformatter docker-compose-mode dockerfile-mode mode-line-bell elixir-mode flycheck-elixir erlang csv csv-mode gnu-elpa-keyring-update ivy swiper prettier-js typescript-mode polymode magit-popup rust-mode visual-fill-column lsp-mode lsp-ui counsel helm-ls-git helm-git-files yaml-mode js2-mode caddyfile-mode ledger-mode scala-mode graphviz-dot-mode git-link flycheck-clangcheck visual-fill-column ac-rtags company-rtags flycheck-rust rust-mode flycheck-ocaml lua-mode gnuplot gnuplot-mode thrift terraform-mode seq ruby-tools ruby-mode ruby-electric rubocop popwin magit-gh-pulls magit-gerrit javaimp inf-ruby helm fuzzy flycheck f exec-path-from-shell edit-server debian-changelog-mode dash-at-point company-go coffee-mode cmake-mode clojure-mode clang-format bison-mode auto-complete))
+   '(window-number base16-theme gptel apheleia envrc company-coq proof-general adaptive-wrap obsidian web-mode nix-mode jinja2-mode ninja-mode verilog-mode conda ein swift-mode flycheck-julia julia-mode julia-repl cuda-mode haskell-mode svelte-mode lsp-python-ms lsp-pyright py-isort isortify python-black reformatter docker-compose-mode dockerfile-mode mode-line-bell elixir-mode flycheck-elixir erlang csv csv-mode gnu-elpa-keyring-update ivy swiper prettier-js typescript-mode polymode magit-popup rust-mode visual-fill-column lsp-mode lsp-ui counsel helm-ls-git helm-git-files yaml-mode js2-mode caddyfile-mode ledger-mode scala-mode graphviz-dot-mode git-link flycheck-clangcheck visual-fill-column ac-rtags company-rtags flycheck-rust rust-mode flycheck-ocaml lua-mode gnuplot gnuplot-mode thrift terraform-mode seq ruby-tools ruby-mode ruby-electric rubocop popwin magit-gh-pulls magit-gerrit javaimp inf-ruby helm fuzzy flycheck f exec-path-from-shell edit-server debian-changelog-mode dash-at-point company-go coffee-mode cmake-mode clojure-mode clang-format bison-mode auto-complete))
  '(safe-local-variable-values
    '((lsp-disabled-clients mspyls pylsp)
      (lsp-pylsp-plugins-yapf-enabled . t)
@@ -1670,3 +1670,9 @@ Otherwise, unindent."
 
 (setq gc-cons-threshold (max gc-cons-threshold 30000000))
 (setq read-process-output-max (* 1024 1024))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
