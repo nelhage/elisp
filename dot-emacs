@@ -1,4 +1,4 @@
-;; -*- mode: emacs-lisp; indent-tabs-mode: nil -*-
+;; -*- mode: emacs-lisp; indent-tabs-mode: nil; lexical-binding: t -*-
 ;;.emacs file for Nelson Elhage (nelhage@nelhage.com)
 ;; Requires emacs 24 or higher
 
@@ -369,22 +369,6 @@
   (define-key term-raw-map (kbd "C-/") 'term-send-undo)
   (define-key term-raw-map (kbd "<mouse-1>") 'maybe-browse-url-at-point)
 
-  (let ((i 1))
-    (while (<= i 12)
-      (define-key term-raw-map (vector (make-symbol (concat "f" (int-to-string i))))
-                  'my-term-send-fN)
-      (setq i (+ i 1))))
-
-  (defun my-term-send-fN ()
-    (interactive)
-    (let ((evt last-input-event))
-      (when (and (symbolp evt)
-                 (string-match "^f\\([0-9]+\\)" (symbol-name evt)))
-        (let ((n (string-to-int (match-string 1 (symbol-name evt)))))
-          (message "%s" n)
-          (term-send-raw-string
-           (format "\eO%c" (+ ?O n)))))))
-
   (defun term-send-raw-meta ()
     (interactive)
     (let ((char last-input-event))
@@ -480,6 +464,7 @@
         (alt  (where-is-internal #'ivy-alt-done ivy-minibuffer-map t)))
     (define-key counsel-find-file-map done #'ivy-alt-done)
     (define-key counsel-find-file-map alt  #'ivy-done)
+    (setq ivy-sort-max-size 1000)
     (add-to-list 'ivy-sort-matches-functions-alist
                  (cons 'counsel-describe-function 'ivy--shorter-matches-first))
     (add-to-list 'ivy-sort-matches-functions-alist
@@ -498,7 +483,7 @@
 (setq git-link-open-in-browser t
       git-link-use-commit t)
 
-(autoload 'magit-toplevel "magit-git")
+(autoload 'magit-toplevel "magit")
 (defun my-git-wc-root ()
   (magit-toplevel))
 
@@ -549,19 +534,7 @@
       lsp-signature-auto-activate nil)
 (add-hook 'lsp-mode-hook 'my-lsp-mode-hook)
 
-(let ((lexical-binding t))
-  (defun my-make-diagnostics-filter (remove-if)
-    (lambda (param workspace)
-      (let* ((diagnostics (gethash "diagnostics" param))
-             (filtered (cl-remove-if remove-if diagnostics)))
-        (puthash "diagnostics" filtered param))
-      param))
-
-  (setq my-lsp-filter-hints
-        (my-make-diagnostics-filter
-         (lambda (diag)
-           (let ((severity (gethash "severity" diag 0)))
-             (>= severity 4))))))
+(load "lsp-filters")
 
 ;;Version control
 (defmacro advise-to-save-windows (func)
@@ -919,7 +892,7 @@
   (reftex-mode 1)
   (flyspell-mode 1))
 
-(with-eval-after-load 'tex
+(with-eval-after-load 'tex-mode
   (setq TeX-command-list
         (cons '("Gv" "gv %s.ps" TeX-run-background t t :help "Run gv on postscript")
               TeX-command-list))
@@ -1277,14 +1250,6 @@ surrounding xml expression"
 (defun my-html-mode-hook ()
   (local-set-key (kbd "C-c C-e") 'sgml-close-tag))
 
-;; dot-mode
-(add-to-list 'auto-mode-alist '("\\.dot\\'" . graphviz-dot-mode))
-(autoload 'graphviz-dot-mode "graphviz-dot-mode" "Major mode for editing Graphviz dot files" t)
-
-(with-eval-after-load 'graphviz-dot-mode
-  (define-key graphviz-dot-mode-map (kbd ";") 'self-insert-command)
-  (define-key graphviz-dot-mode-map (kbd "C-c C-c") 'graphviz-dot-preview))
-
 ;;; ESS
 
 ; (require 'ess-site)
@@ -1372,7 +1337,7 @@ surrounding xml expression"
       (setcar (cdr ent) "%\\(Error\\|Warning\\)\\(-[^:]+\\|\\):[\n ]*\\([^ \t:]+\\):\\([0-9]+\\):\\([0-9]+\\):")
       (setcdr (cdr ent) '(3 4 5))
       (add-to-list 'compilation-error-regexp-alist 'verilog-verilator)))
-  (set (make-variable-buffer-local 'lsp-enable-indentation) nil))
+  (setq-local lsp-enable-indentation nil))
 (add-hook 'verilog-mode-hook 'my-verilog-mode-hook)
 
 ;; Proof General and Coq
@@ -1457,16 +1422,6 @@ surrounding xml expression"
   (set-face-attribute 'org-todo nil
                       :inverse-video nil)
   (define-key org-mode-map (kbd "C-<return>") 'org-insert-heading))
-
-(defun org-agenda-skip-future-scheduled ()
-  (let ((end (save-excursion (progn (outline-next-heading) (1- (point))))))
-    (when (re-search-forward org-scheduled-time-regexp end t)
-      (let ((ss (match-string 1))
-            (sd (org-time-string-to-absolute (match-string 1))))
-        (if (> sd (calendar-absolute-from-gregorian date))
-            end)))))
-
-; (setq org-agenda-skip-function 'org-agenda-skip-future-scheduled)
 
 ; (org-remember-insinuate)
 (global-set-key (kbd "C-c r") 'org-remember)
@@ -1686,11 +1641,6 @@ Otherwise, unindent."
 
 (add-to-list 'auto-mode-alist (cons "/Makefrag$" 'makefile-mode))
 (add-to-list 'auto-mode-alist (cons "/Makefile[^/]+$" 'makefile-mode))
-
-(add-hook 'shell-mode 'my-shell-mode-hook)
-(defun my-shell-mode-hook ()
-  "Hook for shell-mode."
-  (shell-dirtrack-mode 1))
 
 ;(setq browse-url-browser-function 'w3m-other-window-new-session)
 (setq browse-url-browser-function 'browse-url-generic
