@@ -3,7 +3,6 @@
 ;; Requires emacs 24 or higher
 
 (add-to-list 'load-path "~/.elisp")
-(load "~/.elisp/subdirs.el")
 
 (let ((default-directory (expand-file-name "~")))
   (when (and (file-exists-p ".emacs.d/elpa")
