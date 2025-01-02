@@ -1048,12 +1048,6 @@
 (defun my-lisp-mode-common-hook ()
   (setq indent-tabs-mode nil))
 
-;; proto
-(require 'proto-mode)
-(add-hook 'proto-mode-hook 'define-lisp-keys)
-(setq auto-mode-alist
-      (cl-remove-if (lambda (k) (and (consp k) (eq (cdr k) 'proto-mode))) auto-mode-alist))
-
 ;;;Haskell
 
 (require 'haskell-mode)
@@ -1307,10 +1301,6 @@ surrounding xml expression"
   (let ((govet (flycheck-checker-get 'go-vet 'command)))
     (when (equal (cadr govet) "tool")
       (setf (cdr govet) (cddr govet)))))
-
-;; protobufs
-(require 'protobuf-mode)
-(add-to-list 'auto-mode-alist (cons "\\.proto$" 'protobuf-mode))
 
 ;; YAML
 (add-hook 'yaml-mode 'ruler-mode)
