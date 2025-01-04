@@ -670,45 +670,12 @@
 ;; cmake
 (put 'cmake-tab-width 'safe-local-variable 'integerp)
 
-;;JSIM mode
-(autoload 'jsim-mode "jsim" nil t)
-(setq auto-mode-alist (cons '("\.jsim$" . jsim-mode) auto-mode-alist))
-
-(add-to-list 'auto-mode-alist (cons "\.uasm$" 'uasm-mode))
-(defun uasm-mode ()
-  (interactive)
-  (set (make-local-variable 'asm-comment-char) ?|)
-  (asm-mode))
-
-;;PHP mode
-(add-to-list 'auto-mode-alist '("\\.php[34s]?$" . php-mode))
-(add-to-list 'magic-mode-alist '("<\\?php" . php-mode))
-(autoload 'php-mode "php-mode" "Major mode for editing php." t)
-
-;;Smarty template mode
-(require 'smarty-mode)
-
-;;CSS mode
-(setq c-emacs-features nil)     ;;; Workaround a bug in css-mode.el
-(add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
-(autoload 'css-mode "css-mode" "Major mode for editing CSS files" t)
-
-;;Lua
-(add-to-list 'auto-mode-alist '("\\.lua" . lua-mode))
-(add-to-list 'interpreter-mode-alist '("lua" . lua-mode))
-(autoload 'lua-mode "lua-mode" "Major mode for editing Lua code." t)
-
-(add-hook 'caml-mode-hook 'my-caml-mode-hook)
-(defun my-caml-mode-hook ()
-  (require 'caml-font))
-
 ;;C and c derivatives
 (defun my-c-mode-common-hook ()
   ;; my customizations for all of c-mode, c++-mode, objc-mode, java-mode
   (c-set-offset 'substatement-open 0)
   (setq c-basic-offset 4
-        dabbrev-case-fold-search nil)
-  (cscope-minor-mode))
+        dabbrev-case-fold-search nil))
 
 (let ((clangd-versions (file-expand-wildcards "/usr/bin/clangd-*")))
   (when clangd-versions
@@ -717,14 +684,8 @@
 ;; enable static analysis
 (setq flycheck-clangcheck-analyze nil)
 
-(require 'xcscope)
-
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 (add-hook 'c-mode-common-hook 'define-bracket-keys)
-
-(define-key cscope:map (kbd "C-c .") 'cscope-find-global-definition-no-prompting)
-(define-key cscope:map (kbd "C-c *") 'cscope-pop-mark)
-(setq cscope-do-not-update-database t)
 
 (defun pidof (name)
   (with-temp-buffer
@@ -765,10 +726,6 @@
 ;;;Java
 (add-hook 'java-mode-hook 'define-bracket-keys)
 (add-hook 'java-mode-hook 'my-java-mode-hook)
-
-;;; ANTLR
-(autoload 'antlr-mode "antlr-mode" nil t)
-(setq auto-mode-alist (cons '("\\.g\\'" . antlr-mode) auto-mode-alist))
 
 ;; Javascript
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
@@ -933,25 +890,6 @@
                                     ,(make-char 'greek-iso8859-7 107))
                     nil))))))
 
-(require 'quack)
-
-(setq quack-programs '()
-      quack-fontify-style 'emacs)
-
-(defmacro define-scheme-implementation (name &optional args)
-  `(setq quack-programs (cons ,(if args (concat name " " args) name) quack-programs)))
-;  `(defun ,(intern (concat "scheme-use-" name)) ()
-;    (interactive)
-;    (setq scheme-program-name ,(concat name " " (or args "")))))
-
-(define-scheme-implementation "mzscheme")
-(define-scheme-implementation "mechanics")
-(define-scheme-implementation "guile" "--debug -- -emacs")
-(define-scheme-implementation "mit-scheme")
-(define-scheme-implementation "kawa")
-(define-scheme-implementation "csi")
-(define-scheme-implementation "scheme48")
-(define-scheme-implementation "racket")
 
 (add-to-list 'auto-mode-alist
              (cons (concat "/\\."
