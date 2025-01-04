@@ -1073,7 +1073,7 @@
 (let ((llvm-el (expand-file-name "~/code/llvm/llvm/utils/emacs")))
   (when (file-exists-p llvm-el)
     (load-file (concat llvm-el "/emacs.el"))
-    (add-to-list 'load-path llvm-el)
+    (add-to-list 'load-path llvm-el nil 'string=)
     (require 'llvm-mode)
     (require 'tablegen-mode)))
 
@@ -1209,7 +1209,7 @@ surrounding xml expression"
 (defun golang-require (path feature)
   (let ((dir (cl-member-if (lambda (dir) (file-directory-p (concat dir "/" path))) (golang-roots))))
     (when dir
-      (add-to-list 'load-path (expand-file-name (concat (car dir) "/" path)))
+      (add-to-list 'load-path (expand-file-name (concat (car dir) "/" path)) nil 'string=)
       (require feature))))
 
 (defun golang-load (path)
