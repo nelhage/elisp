@@ -1281,7 +1281,8 @@ surrounding xml expression"
                       :background "DarkGoldenrod4"))
 
 ;; nix
-; (add-to-list 'before-save-hook 'nix-format-before-save)
+(with-eval-after-load 'nix-mode
+  (add-to-list 'nix-mode-hook 'apheleia-mode))
 
 ;; gptel
 
