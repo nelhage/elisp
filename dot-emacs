@@ -179,7 +179,7 @@
 
 ;;Set up fonts and colors
 (when (fboundp 'global-font-lock-mode)
-  (load-theme 'base16-framer t)
+  (load-theme 'base16-isotope t)
   (require 'font-lock)
   (require 'whitespace)
   (require 'jit-lock)
