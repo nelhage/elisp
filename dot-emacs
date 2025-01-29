@@ -1411,6 +1411,7 @@ surrounding xml expression"
 (defun my-markdown-mode-hook ()
   (company-mode -1)
   (setq-local adaptive-fill-regexp "[ \t]*")
+  (require 'flycheck-aspell)
   (setq flycheck-checker 'markdown-aspell-dynamic))
 (add-hook 'markdown-mode-hook 'my-markdown-mode-hook)
 (add-hook 'gfm-mode-hook 'my-markdown-mode-hook)
@@ -1499,7 +1500,8 @@ Otherwise, unindent."
   (add-hook 'obsidian-mode-hook 'visual-line-mode)
 
   (defun my-obsidian-mode-hook ()
-    (set (make-local-variable 'markdown-list-indent-width) 4))
+    (setq-local markdown-list-indent-width 4)
+    (add-to-list 'flycheck-disabled-checkers 'markdown-aspell-dynamic))
 
   (add-hook 'obsidian-mode-hook 'my-obsidian-mode-hook)
 
