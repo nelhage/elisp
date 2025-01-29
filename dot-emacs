@@ -1393,10 +1393,15 @@ surrounding xml expression"
 (setq visual-line-fringe-indicators '(nil right-curly-arrow)
       word-wrap-by-category t)
 (defun my-visual-line-mode-hook ()
-  (visual-fill-column-mode 1)
+  (visual-fill-column-mode (if visual-line-mode 1 -1))
   (when (derived-mode-p 'markdown-mode 'org-mode)
     (adaptive-wrap-prefix-mode 1)))
 (add-hook 'visual-line-mode-hook 'my-visual-line-mode-hook)
+
+(defun my-truncate-lines ()
+  (interactive)
+  (visual-line-mode -1)
+  (setq truncate-lines t))
 
 ;;; Allow line-ewrapping inside of URLs
 (modify-category-entry ?- ?|)
