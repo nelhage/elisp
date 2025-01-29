@@ -39,8 +39,8 @@ is already at the beginning of the text."
         (goto-char p)))))
 
 (defun decrement-number-at-point (&optional amount)
-  (interactive "p")
   "Decrement the number under point by `amount'"
+  (interactive "p")
   (increment-number-at-point (- (abs amount))))
 
 (provide 'utils)
