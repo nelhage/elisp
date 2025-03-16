@@ -104,6 +104,10 @@
       (epa-file-enable))
   ('file-error . nil))
 
+(defun yank-as-rectangle ()
+  (interactive)
+  (insert-rectangle (s-split "\n" (current-kill 0))))
+
 ;; DocView / Image Viewer
 (with-eval-after-load 'doc-view
   (define-key doc-view-mode-map (kbd "C-v") 'doc-view-scroll-up-or-next-page)
