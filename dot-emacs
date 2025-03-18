@@ -1484,7 +1484,7 @@ Otherwise, unindent."
 (require 'obsidian)
 
 (with-eval-after-load 'obsidian
-  (require 'obsidian-scan)
+  (safe-require 'obsidian-scan)
 
   (defun my-obsidian-jump-or-create ()
     "Jump to or create Obsidian note."
