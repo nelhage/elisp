@@ -1416,6 +1416,7 @@ surrounding xml expression"
 (defun my-markdown-mode-hook ()
   (company-mode -1)
   (setq-local adaptive-fill-regexp "[ \t]*")
+  (setq-local fill-column 90)
   (require 'flycheck-aspell)
   (setq flycheck-checker 'markdown-aspell-dynamic))
 (add-hook 'markdown-mode-hook 'my-markdown-mode-hook)
