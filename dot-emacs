@@ -1305,7 +1305,7 @@ surrounding xml expression"
   (auth-source-pick-first-password :host "api.anthropic.com"))
 
 (setq
- gptel-model "claude-3-sonnet-20240229"
+ gptel-model "claude-3-7-sonnet"
  gptel-backend (gptel-make-anthropic "Claude"
                  :stream t :key #'my-claude-api-key))
 
