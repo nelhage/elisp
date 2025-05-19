@@ -991,8 +991,6 @@
   (setq indent-tabs-mode nil))
 
 ;;;Haskell
-
-(require 'haskell-mode)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
 (add-to-list 'auto-mode-alist (cons "\\.l?hsc?$" 'haskell-mode))
@@ -1498,7 +1496,7 @@ Otherwise, unindent."
            (target (obsidian--get-alias choice (s-concat obsidian-directory "/" choice))))
       (find-file target)))
 
-  (obsidian-specify-path (expand-file-name "~/Sync/Obsidian/nelhage/"))
+  (setq obsidian-directory (expand-file-name "~/Sync/Obsidian/nelhage/"))
   (setq obsidian-daily-notes-directory "Daily"
         obsidian-templates-directory "Templates"
         obsidian-daily-note-template "Daily.md")
@@ -1583,18 +1581,36 @@ Otherwise, unindent."
  ;; If there is more than one, they won't work right.
  '(confirm-kill-processes nil)
  '(custom-safe-themes
-   '("e223120256455daba01b6c68510b48fac813acab05c314510e47aea377b23634" default))
+   '("e223120256455daba01b6c68510b48fac813acab05c314510e47aea377b23634"
+     default))
  '(ns-command-modifier 'meta)
  '(package-selected-packages
-   '(mistty flycheck-aspell window-number base16-theme gptel apheleia envrc company-coq proof-general adaptive-wrap obsidian web-mode nix-mode jinja2-mode ninja-mode verilog-mode conda ein swift-mode flycheck-julia julia-mode julia-repl cuda-mode haskell-mode svelte-mode lsp-python-ms lsp-pyright py-isort isortify python-black reformatter docker-compose-mode dockerfile-mode mode-line-bell elixir-mode flycheck-elixir erlang csv csv-mode gnu-elpa-keyring-update ivy swiper prettier-js typescript-mode polymode magit-popup rust-mode visual-fill-column lsp-mode lsp-ui counsel helm-ls-git helm-git-files yaml-mode js2-mode caddyfile-mode ledger-mode scala-mode graphviz-dot-mode git-link flycheck-clangcheck visual-fill-column ac-rtags company-rtags flycheck-rust rust-mode flycheck-ocaml lua-mode gnuplot gnuplot-mode thrift terraform-mode seq ruby-tools ruby-mode ruby-electric rubocop popwin magit-gh-pulls magit-gerrit javaimp inf-ruby helm fuzzy flycheck f exec-path-from-shell edit-server debian-changelog-mode dash-at-point company-go coffee-mode cmake-mode clojure-mode clang-format bison-mode auto-complete))
+   '(ac-rtags adaptive-wrap apheleia auto-complete base16-theme
+              bison-mode caddyfile-mode chatgpt-shell clang-format
+              clojure-mode cmake-mode coffee-mode company-coq
+              company-go company-rtags conda counsel csv csv-mode
+              cuda-mode dash-at-point debian-changelog-mode
+              docker-compose-mode dockerfile-mode edit-server ein
+              elixir-mode envrc erlang exec-path-from-shell f flycheck
+              flycheck-aspell flycheck-clangcheck flycheck-elixir
+              flycheck-julia flycheck-ocaml flycheck-rust fuzzy
+              git-link gnu-elpa-keyring-update gnuplot gnuplot-mode
+              gptel graphviz-dot-mode haskell-mode helm helm-git-files
+              helm-ls-git inf-ruby isortify ivy javaimp jinja2-mode
+              js2-mode julia-mode julia-repl ledger-mode lsp-pyright
+              lsp-python-ms lsp-ui lua-mode magit-gerrit
+              magit-gh-pulls magit-popup mistty mode-line-bell
+              ninja-mode nix-mode obsidian polymode popwin prettier-js
+              py-isort python-black reformatter rubocop ruby-electric
+              ruby-mode ruby-tools rust-mode rust-mode scala-mode seq
+              svelte-mode swiper terraform-mode typescript-mode
+              verilog-mode visual-fill-column visual-fill-column
+              web-mode window-number yaml-mode))
  '(safe-local-variable-values
    '((lsp-disabled-clients mspyls pylsp)
      (lsp-pylsp-plugins-yapf-enabled . t)
-     (lsp-enabled-clients
-      '(pylsp))
-     (encoding . utf-8)
-     (gofmt-command . "gofmt")
-     (gofmt-command . "goimports"))))
+     (lsp-enabled-clients '(pylsp)) (encoding . utf-8)
+     (gofmt-command . "gofmt") (gofmt-command . "goimports"))))
 
 (let ((local-config (expand-file-name "~/.elisp/local.el")))
   (when (file-exists-p local-config)
