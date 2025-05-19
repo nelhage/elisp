@@ -546,6 +546,12 @@
 
 (load "lsp-filters")
 
+(defun my-stop-all-spinners ()
+  (interactive)
+  (dolist (buf (buffer-list))
+    (when-let ((spinner (buffer-local-value 'spinner-current buf)))
+      (spinner-stop spinner))))
+
 ;;Version control
 (defmacro advise-to-save-windows (func)
   `(progn
