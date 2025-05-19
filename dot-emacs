@@ -55,6 +55,11 @@
 (global-set-key (kbd "C-x C-c") 'server-edit)
 (global-set-key (kbd "M-`") 'other-frame)
 
+(with-eval-after-load 'help-mode
+  (define-key help-mode-map (kbd "B") 'help-go-back)
+  (define-key help-mode-map (kbd "F") 'help-go-forward))
+
+
 (require 'window-number)
 (window-number-define-keys window-number-mode-map "C-c ")
 (window-number-mode 1)
