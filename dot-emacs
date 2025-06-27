@@ -1620,7 +1620,7 @@ Otherwise, unindent."
               ruby-mode ruby-tools rust-mode rust-mode scala-mode seq
               svelte-mode swiper terraform-mode typescript-mode
               verilog-mode visual-fill-column visual-fill-column
-              web-mode window-number yaml-mode))
+              web-mode window-number yaml-mode zig-mode))
  '(safe-local-variable-values
    '((lsp-disabled-clients mspyls pylsp)
      (lsp-pylsp-plugins-yapf-enabled . t)
