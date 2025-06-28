@@ -1599,3 +1599,26 @@ Otherwise, unindent."
 (let ((local-config (expand-file-name "~/.elisp/local.el")))
   (when (file-exists-p local-config)
     (load local-config)))
+
+(defun my-remove-defunct-packages (&optional arg)
+  (interactive "P")
+  (let ((elpa-root (expand-file-name "~/.emacs.d/elpa/"))
+        (installed-names)
+        (disk-names))
+    (dolist (path load-path)
+      (let ((abspath (expand-file-name path)))
+        (when (string-prefix-p elpa-root abspath)
+          (push (string-remove-prefix elpa-root abspath) installed-names))))
+
+    (dolist (path (directory-files elpa-root t))
+      (let ((base (file-name-nondirectory path)))
+        (when (and (file-directory-p path)
+                   (not (string-prefix-p "." base))
+                   (not (string-equal base "archives")))
+          (push base disk-names))))
+
+    (dolist (victim (seq-difference disk-names installed-names))
+      (let ((abs (file-name-concat elpa-root victim)))
+        (if arg
+            (delete-directory abs t)
+          (message "Would delete: %s" abs))))))
