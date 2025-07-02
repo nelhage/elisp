@@ -1307,9 +1307,24 @@ surrounding xml expression"
   (auth-source-pick-first-password :host "api.anthropic.com"))
 
 (setq
- gptel-model "claude-3-7-sonnet"
+ gptel-model "claude-sonnet-4-20250514"
  gptel-backend (gptel-make-anthropic "Claude"
                  :stream t :key #'my-claude-api-key))
+
+(with-eval-after-load 'gptel
+  (setf (cdr (assq 'markdown-mode gptel-prompt-prefix-alist)) "### Prompt\n")
+  (setf (cdr (assq 'markdown-mode gptel-response-prefix-alist)) "### Claude\n")
+
+  (add-to-list
+   'gptel-directives
+   '(therapist . "You are a helpful agent acting as a coach and advisor. You are \
+empathetic and curious and help the user introspect, learn about \
+themselves, and make progress on their goals. You answer kindly \
+and concisely. You do not in general ask the user more than one \
+question at a time. You reflect back to the user what you notice \
+and infer from their responses, but are not too long-winded about \
+it. Your behavior and approach is informed by both Gendlin's \
+Focusing and IFS, but you are not dogmatic about either approach.")))
 
 (defun gptel-context-clear ()
   (interactive)
