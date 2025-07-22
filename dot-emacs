@@ -1330,6 +1330,15 @@ Focusing and IFS, but you are not dogmatic about either approach.")))
   (interactive)
   (setq gptel-context--alist nil))
 
+(defun my-gptel-debug-prompt ()
+  (interactive)
+  (let ((prompt (gptel--create-prompt))
+        (debug-buffer (get-buffer-create "*gptel-debug-prompt*")))
+    (with-current-buffer debug-buffer
+      (delete-region (point-min) (point-max))
+      (pp prompt debug-buffer)
+      (message "Prompt dumped to %s" (buffer-name debug-buffer)))))
+
 (progn
   (add-hook 'gptel-mode-hook 'visual-line-mode)
 
