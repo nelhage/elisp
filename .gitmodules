@@ -1,30 +1,3 @@
-[submodule "site/magit"]
-	path = site/magit
-	url = git://github.com/magit/magit.git
-[submodule "site/org-mode"]
-	path = site/org-mode
-	url = git://repo.or.cz/org-mode.git
-[submodule "site/swank-js"]
-	path = site/swank-js
-	url = git://github.com/swank-js/swank-js.git
-[submodule "site/emacs_chrome"]
-	path = site/emacs_chrome
-	url = git://github.com/stsquad/emacs_chrome.git
-[submodule "site/coffee-mode"]
-	path = site/coffee-mode
-	url = https://github.com/defunkt/coffee-mode.git
-[submodule "site/popwin-el"]
-	path = site/popwin-el
-	url = git://github.com/m2ym/popwin-el.git
-[submodule "site/bbdb"]
-	path = site/bbdb
-	url = git://git.savannah.nongnu.org/bbdb.git
-[submodule "site/mmm-mode"]
-	path = site/mmm-mode
-	url = git://github.com/purcell/mmm-mode.git
-[submodule "site/tla-tools"]
-	path = site/tla-tools
-	url = https://github.com/mrc/tla-tools
 [submodule "lean4-mode"]
 	path = lean4-mode
 	url = http://github.com/leanprover-community/lean4-mode.git
