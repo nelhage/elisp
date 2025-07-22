@@ -25,3 +25,6 @@
 [submodule "site/tla-tools"]
 	path = site/tla-tools
 	url = https://github.com/mrc/tla-tools
+[submodule "lean4-mode"]
+	path = lean4-mode
+	url = http://github.com/leanprover-community/lean4-mode.git

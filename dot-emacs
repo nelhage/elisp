@@ -1561,7 +1561,8 @@ Otherwise, unindent."
   (define-key obsidian-menu-map "u" '("Update" . obsidian-update))
   (define-key obsidian-menu-map "w" '("Wikilink" . obsidian-insert-wikilink)))
 
-
+;; lean4-mode
+(add-to-list 'load-path (expand-file-name "~/.elisp/lean4-mode/") nil 'string=)
 
 ;; SES mode
 (add-hook 'ses-mode-hook 'my-ses-mode-hook)
