@@ -1,6 +1,5 @@
 ;; -*- mode: emacs-lisp; indent-tabs-mode: nil; lexical-binding: t -*-
 ;;.emacs file for Nelson Elhage (nelhage@nelhage.com)
-;; Requires emacs 24 or higher
 
 (add-to-list 'load-path "~/.elisp")
 (add-to-list 'load-path "~/.emacs.d/home-manager/")
@@ -247,13 +246,13 @@
 
 (setq inhibit-startup-message t)
 
-(safe-funcall 'set-scroll-bar-mode nil)
-(safe-funcall 'tool-bar-mode -1)
-(safe-funcall 'auto-compression-mode 1)
-(safe-funcall 'column-number-mode 1)
-(safe-funcall 'fringe-mode '(0 . nil))
-(safe-funcall 'menu-bar-mode 0)
-(safe-funcall 'global-display-line-numbers-mode 1)
+(setopt menu-bar-mode (if (eq system-type 'darwin) t nil)
+        tool-bar-mode nil
+        auto-compression-mode t
+        column-number-mode t
+        fringe-mode (cons 0 nil)
+        scroll-bar-mode nil
+        global-display-line-numbers-mode t)
 
 ; (safe-funcall 'display-time-mode)
 ; (safe-funcall 'display-battery-mode)
@@ -1563,6 +1562,11 @@ Otherwise, unindent."
 
 ;; lean4-mode
 (add-to-list 'load-path (expand-file-name "~/.elisp/lean4-mode/") nil 'string=)
+(with-eval-after-load 'lean4-mode
+  (defun my-lean4-mode-hook ()
+    (lsp-ui-sideline-mode 1)
+    (setq-local lsp-ui-sideline-show-hover t))
+  (add-hook 'lean4-mode-hook 'my-lean4-mode-hook))
 
 ;; SES mode
 (add-hook 'ses-mode-hook 'my-ses-mode-hook)
