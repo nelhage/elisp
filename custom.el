@@ -15,26 +15,30 @@
               company-go company-rtags conda counsel csv csv-mode
               cuda-mode dash-at-point debian-changelog-mode
               docker-compose-mode dockerfile-mode edit-server ein
-              elixir-mode envrc erlang exec-path-from-shell f flycheck
-              flycheck-aspell flycheck-clangcheck flycheck-elixir
-              flycheck-julia flycheck-ocaml flycheck-rust fuzzy
-              git-link gnu-elpa-keyring-update gnuplot gnuplot-mode
-              gptel graphviz-dot-mode haskell-mode helm helm-git-files
-              helm-ls-git inf-ruby isortify ivy javaimp jinja2-mode
-              js2-mode julia-mode julia-repl ledger-mode lsp-pyright
+              eldev elixir-mode envrc erlang exec-path-from-shell f
+              flycheck flycheck-aspell flycheck-clangcheck
+              flycheck-elixir flycheck-julia flycheck-ocaml
+              flycheck-rust fuzzy git-link gnu-elpa-keyring-update
+              gnuplot gnuplot-mode gptel graphviz-dot-mode
+              haskell-mode helm helm-git-files helm-ls-git inf-ruby
+              isortify ivy javaimp jinja2-mode js2-mode jsonian
+              julia-mode julia-repl ledger-mode lsp-pyright
               lsp-python-ms lsp-ui lua-mode magit-gerrit
               magit-gh-pulls magit-popup mistty mode-line-bell
-              ninja-mode nix-mode obsidian polymode popwin prettier-js
+              ninja-mode nix-mode polymode popwin prettier-js
               protobuf-mode py-isort python-black reformatter rubocop ruby-electric
               ruby-mode ruby-tools rust-mode rust-mode scala-mode seq
               svelte-mode swiper terraform-mode typescript-mode
               verilog-mode visual-fill-column visual-fill-column
               web-mode window-number yaml-mode zig-mode))
+ '(safe-local-variable-directories
+   '("/Users/nelhage/code/obsidian.el/"))
  '(safe-local-variable-values
    '((lsp-disabled-clients mspyls pylsp)
      (lsp-pylsp-plugins-yapf-enabled . t)
      (lsp-enabled-clients '(pylsp)) (encoding . utf-8)
-     (gofmt-command . "gofmt") (gofmt-command . "goimports"))))
+     (gofmt-command . "gofmt") (gofmt-command . "goimports")))
+ '(warning-suppress-log-types '((lsp-mode))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

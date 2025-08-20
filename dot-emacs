@@ -1507,7 +1507,7 @@ Otherwise, unindent."
   (setq markdown-list-indent-width 2))
 
 ;; Obsidian
-(require 'obsidian)
+(require 'obsidian nil t)
 
 (with-eval-after-load 'obsidian
   (safe-require 'obsidian-scan)
