@@ -299,6 +299,11 @@
     (setq my-persistent-man-cache Man-completion-cache)))
 (ad-activate 'Man-completion-table)
 
+(when (and (eq system-type 'darwin)
+           (executable-find "gsed"))
+  (setopt Man-sed-command "gsed")
+  (Man-init-defvars))
+
 (defun chomp (str)
   "Chomp leading and tailing whitespace from STR."
   (while (string-match "\\`\n+\\|^\\s-+\\|\\s-+$\\|\n+\\'"
