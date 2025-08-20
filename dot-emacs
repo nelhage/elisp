@@ -634,7 +634,8 @@
 (add-to-list 'auto-mode-alist (cons "\\.ipy$" 'python-mode))
 
 (defun my-python-mode-hook ()
-  (setq lsp-diagnostic-filter my-lsp-filter-hints))
+  (setq lsp-diagnostic-filter my-lsp-filter-hints)
+  (apheleia-mode-maybe))
 (add-hook 'python-mode-hook 'my-python-mode-hook)
 
 (with-eval-after-load 'python
@@ -752,7 +753,6 @@
 
 ;; Javascript
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
-(add-to-list 'auto-mode-alist '("\\.json$" . js-mode))
 (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
 ; (add-hook 'js2-mode-hook 'js2-enter-mirror-mode)
 (add-hook 'js2-mode-hook 'my-js2-mode-hook)
@@ -1567,10 +1567,13 @@ Otherwise, unindent."
 
 ;; lean4-mode
 (add-to-list 'load-path (expand-file-name "~/.elisp/lean4-mode/") nil 'string=)
+(require 'lean4-mode)
+
 (with-eval-after-load 'lean4-mode
   (defun my-lean4-mode-hook ()
-    (lsp-ui-sideline-mode 1)
-    (setq-local lsp-ui-sideline-show-hover t))
+    ; (lsp-ui-sideline-mode 1)
+    ; (setq-local lsp-ui-sideline-show-hover t)
+  )
   (add-hook 'lean4-mode-hook 'my-lean4-mode-hook))
 
 ;; SES mode
