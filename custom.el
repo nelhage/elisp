@@ -25,7 +25,7 @@
               lsp-python-ms lsp-ui lua-mode magit-gerrit
               magit-gh-pulls magit-popup mistty mode-line-bell
               ninja-mode nix-mode obsidian polymode popwin prettier-js
-              py-isort python-black reformatter rubocop ruby-electric
+              protobuf-mode py-isort python-black reformatter rubocop ruby-electric
               ruby-mode ruby-tools rust-mode rust-mode scala-mode seq
               svelte-mode swiper terraform-mode typescript-mode
               verilog-mode visual-fill-column visual-fill-column
