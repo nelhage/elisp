@@ -1526,13 +1526,14 @@ Otherwise, unindent."
          (target (obsidian--get-alias choice (s-concat obsidian-directory "/" choice))))
       (find-file target)))
 
+  (setopt obsidian-use-update-timer nil)
+
   (let ((vault-dir (expand-file-name "~/Sync/Obsidian/nelhage/")))
     (when (file-directory-p vault-dir)
       (setopt obsidian-directory vault-dir
               obsidian-daily-notes-directory "Daily"
               obsidian-templates-directory "Templates"
-              obsidian-daily-note-template "Daily.md"
-              obsidian-use-update-timer nil)
+              obsidian-daily-note-template "Daily.md")
       (global-obsidian-mode t)))
 
   (add-hook 'obsidian-mode-hook 'auto-revert-mode)
