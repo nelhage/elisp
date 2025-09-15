@@ -476,17 +476,37 @@
        "\\|\\(?:\\`.+?[#~]\\'\\)"))
 
 (with-eval-after-load 'counsel
+  (defun my--ivy-prefix-sort (name candidates)
+    "Re-sort candidates by NAME.
+All CANDIDATES are assumed to match NAME.
+Prefix matches to NAME are put ahead of the list."
+    (if (or (string= name "")
+            (= (aref name 0) ?^))
+        candidates
+      (let ((re-prefix (concat "\\`" name))
+            res-prefix
+            res-noprefix)
+        (dolist (s candidates)
+          (push s (if (string-match-p re-prefix s)
+                      res-prefix
+                    res-noprefix)))
+        (nconc
+         (nreverse res-prefix)
+         (nreverse res-noprefix)))))
+
   (let ((done (where-is-internal #'ivy-done     ivy-minibuffer-map t))
         (alt  (where-is-internal #'ivy-alt-done ivy-minibuffer-map t)))
     (define-key counsel-find-file-map done #'ivy-alt-done)
-    (define-key counsel-find-file-map alt  #'ivy-done)
-    (setq ivy-sort-max-size 1000)
-    (add-to-list 'ivy-sort-matches-functions-alist
-                 (cons 'counsel-describe-function 'ivy--shorter-matches-first))
-    (add-to-list 'ivy-sort-matches-functions-alist
-                 (cons 'counsel-M-x 'ivy--shorter-matches-first))
-    (add-to-list 'ivy-sort-matches-functions-alist
-                 (cons 'help--symbol-completion-table 'ivy--shorter-matches-first))))
+    (define-key counsel-find-file-map alt  #'ivy-done))
+  (setq ivy-sort-max-size 1000)
+  (add-to-list 'ivy-sort-matches-functions-alist
+               (cons 'counsel-describe-function 'ivy--shorter-matches-first))
+  (add-to-list 'ivy-sort-matches-functions-alist
+               (cons 'counsel-M-x 'ivy--shorter-matches-first))
+  (add-to-list 'ivy-sort-matches-functions-alist
+               (cons 'help--symbol-completion-table 'ivy--shorter-matches-first))
+  (add-to-list 'ivy-sort-matches-functions-alist
+               (cons 'read-file-name-internal 'my--ivy-prefix-sort)))
 
 (defun my-find-file (arg)
   (interactive "P")
