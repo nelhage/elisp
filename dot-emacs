@@ -301,8 +301,7 @@
 
 (when (and (eq system-type 'darwin)
            (executable-find "gsed"))
-  (setopt Man-sed-command "gsed")
-  (Man-init-defvars))
+  (setopt Man-sed-command "gsed"))
 
 (defun chomp (str)
   "Chomp leading and tailing whitespace from STR."
