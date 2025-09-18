@@ -1315,33 +1315,70 @@ surrounding xml expression"
  gptel-backend (gptel-make-anthropic "Claude"
                  :stream t :key #'my-claude-api-key))
 
-(with-eval-after-load 'gptel
-  (setf (cdr (assq 'markdown-mode gptel-prompt-prefix-alist)) "### Prompt\n")
-  (setf (cdr (assq 'markdown-mode gptel-response-prefix-alist)) "### Claude\n")
-
-  (add-to-list
-   'gptel-directives
-   '(therapist . "You are a helpful agent acting as a coach and advisor. You are \
-empathetic and curious and help the user introspect, learn about \
-themselves, and make progress on their goals. You answer kindly \
-and concisely. You do not in general ask the user more than one \
-question at a time. You reflect back to the user what you notice \
-and infer from their responses, but are not too long-winded about \
-it. Your behavior and approach is informed by both Gendlin's \
-Focusing and IFS, but you are not dogmatic about either approach.")))
-
 (defun gptel-context-clear ()
   (interactive)
   (setq gptel-context--alist nil))
+
+(defun my--gptel-load-system-prompts ()
+    (let ((prompt-dir (expand-file-name "~/Sync/config/system-prompts/")))
+      (when (file-directory-p prompt-dir)
+        (mapcar
+         (lambda (name)
+           (cons (intern (file-name-sans-extension name))
+                 (with-temp-buffer
+                   (insert-file (f-join prompt-dir name))
+                   (string-trim (buffer-string)))))
+         (directory-files prompt-dir nil "^[^.].*\\.md$")))))
+
+(defun my-gptel-reload-prompts (&optional arg)
+  (interactive "p")
+  (let ((prompts (my--gptel-load-system-prompts)))
+    (dolist (prompt prompts)
+      (setq gptel-directives
+            (cons prompt (assq-delete-all (car prompt) gptel-directives))))
+    (when arg
+      (message "Loaded %d prompts (%d total)" (length prompts) (length gptel-directives)))))
+
+(defun my-gptel-restore-props ()
+  (interactive)
+  (if (not gptel-mode)
+      (error "gptel-mode must be active!"))
+  (if (not (derived-mode-p 'markdown-mode))
+      (error "Buffer is not a Markdown buffer"))
+  (save-excursion
+    (remove-text-properties (point-min) (point-max) '(gptel))
+    (goto-char (point-min))
+    (when (looking-at-p "^---")
+      (forward-line)
+      (re-search-forward "^---")
+      (put-text-property (point-min) (point) 'gptel 'ignore))
+    (let ((start (point))
+          (speaker nil))
+      (while (re-search-forward "^### " nil t)
+        (let ((bol (save-excursion (beginning-of-line) (point))))
+          (when (equalp speaker "Claude")
+            (put-text-property start bol 'gptel 'response))
+          (setq speaker (thing-at-point 'word t))
+          (forward-line 1)
+          (setq start (point)))))))
 
 (defun my-gptel-debug-prompt ()
   (interactive)
   (let ((prompt (gptel--create-prompt))
         (debug-buffer (get-buffer-create "*gptel-debug-prompt*")))
     (with-current-buffer debug-buffer
-      (delete-region (point-min) (point-max))
-      (pp prompt debug-buffer)
+      (emacs-lisp-mode)
+      (read-only-mode 1)
+      (let ((inhibit-read-only t))
+        (delete-region (point-min) (point-max))
+        (pp prompt debug-buffer))
       (message "Prompt dumped to %s" (buffer-name debug-buffer)))))
+
+(with-eval-after-load 'gptel
+  (setf (cdr (assq 'markdown-mode gptel-prompt-prefix-alist)) "### Prompt\n")
+  (setf (cdr (assq 'markdown-mode gptel-response-prefix-alist)) "### Claude\n")
+
+  (my-gptel-reload-prompts))
 
 (progn
   (add-hook 'gptel-mode-hook 'visual-line-mode)
@@ -1549,6 +1586,15 @@ Otherwise, unindent."
     (add-to-list 'flycheck-disabled-checkers 'markdown-aspell-dynamic))
 
   (add-hook 'obsidian-mode-hook 'my-obsidian-mode-hook)
+
+  (defun obsidian-insert-template (path)
+    (interactive (let ((template-dir (f-join obsidian-directory obsidian-templates-directory)))
+                   (list
+                    (f-join template-dir
+                            (completing-read
+                             "Insert template: "
+                             (directory-files template-dir nil "^[^.].*\\.md$"))))))
+    (obsidian-apply-template path))
 
   (defvar obsidian-menu-map (make-sparse-keymap "Obsidian"))
   (define-key global-map (kbd "C-x /") obsidian-menu-map)
