@@ -144,6 +144,7 @@
                 ruby-jruby
                 python-flake8
                 python-pylint
+                python-ruff
                 puppet-lint
                 emacs-lisp-checkdoc
                 rst))
