@@ -1604,6 +1604,7 @@ Otherwise, unindent."
   (define-key obsidian-menu-map "f" '("Follow link" . obsidian-follow-link-at-point))
   (define-key obsidian-menu-map "j" '("Jump" . my-obsidian-jump-or-create))
   (define-key obsidian-menu-map "l" '("Link" . obsidian-insert-link))
+  (define-key obsidian-menu-map "T" '("Template" . obsidian-insert-template))
   (define-key obsidian-menu-map "q" 'keyboard-quit)
   (define-key obsidian-menu-map (kbd "C-g") 'keyboard-quit)
   (define-key obsidian-menu-map "s" '("Search" . obsidian-search))
