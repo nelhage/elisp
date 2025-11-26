@@ -1418,18 +1418,19 @@ surrounding xml expression"
 ;; Org mode
 
 (setq org-directory "~/Sync/org")
+
 (setq org-hide-leading-stars t
       org-log-done 'time
       org-agenda-files (list (concat org-directory "/todo.org"))
+      org-default-notes-file (concat org-directory "/notes.org")
+      org-todo-keywords
+      '((sequence "TODO" "|" "DONE" "CANCELED"))
       org-agenda-window-setup 'current-window
       org-agenda-restore-windows-after-quit t
-      org-default-notes-file (concat org-directory "/notes.org")
       org-agenda-skip-deadline-if-done t
       org-agenda-skip-scheduled-if-done t
       org-agenda-todo-keyword-format "%-6s"
       org-agenda-todo-ignore-deadlines t
-      org-todo-keywords
-      '((sequence "TODO"  "|" "DONE"))
       org-deadline-warning-days 0
       org-return-follows-link t
       org-export-with-sub-superscripts nil
@@ -1448,12 +1449,18 @@ surrounding xml expression"
 (global-set-key (kbd "C-c r") 'org-remember)
 (global-set-key (kbd "C-c a") 'org-agenda)
 
+(defun my--org-timestamp ()
+  (interactive)
+  (org-timestamp-inactive '(16)))
+
 (with-eval-after-load 'org
   (add-to-list 'org-export-backends 'md)
   (define-key org-mode-map (kbd "C-c t") 'org-todo)
   (define-key org-mode-map (kbd "M-TAB") 'org-cycle)
   (define-key org-mode-map (kbd "M-p") 'outline-backward-same-level)
   (define-key org-mode-map (kbd "M-n") 'outline-forward-same-level)
+  (define-key org-mode-map (kbd "C-c L") 'org-toggle-link-display)
+  (define-key org-mode-map (kbd "C-c T") 'my--org-timestamp)
                                         ;(define-key org-mode-map (kbd "RET") 'org-meta-return)
   (set-face-foreground 'org-todo "#FF6666")
   (set-face-foreground 'org-done "#00FF00"))
