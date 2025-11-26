@@ -263,7 +263,7 @@
 (setq c-basic-offset 4
       mouse-wheel-follow-mouse nil
       mouse-wheel-progressive-speed nil
-      confirm-kill-emacs 'yes-or-no-p
+      ;; confirm-kill-emacs 'yes-or-no-p
       confirm-kill-processes nil
       select-enable-clipboard t
       uniquify-buffer-name-style 'post-forward-angle-brackets
