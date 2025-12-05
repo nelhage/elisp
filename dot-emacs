@@ -74,6 +74,7 @@
   (setq popwin:special-display-config tmp))
 
 (global-company-mode 1)
+(global-clipetty-mode 1)
 
 (setq company-tooltip-limit 20
       company-minimum-prefix-length 3
@@ -260,6 +261,8 @@
 
 (transient-mark-mode 0)
 
+(set-display-table-slot standard-display-table 'vertical-border ?│)
+
 (setq c-basic-offset 4
       mouse-wheel-follow-mouse nil
       mouse-wheel-progressive-speed nil
@@ -279,6 +282,7 @@
       create-lockfiles nil
       frame-inhibit-implied-resize t
       pixel-scroll-precision-mode t
+      mode-line-compact t
 
       gc-cons-threshold (max gc-cons-threshold 30000000)
       read-process-output-max (* 1024 1024))
