@@ -143,39 +143,16 @@
   "Calculate indentation for current line."
   (save-excursion
     (beginning-of-line)
-    (if (bobp)
-        0
-      (let ((not-indented t)
-            (cur-indent 0))
-        ;; Check if we're closing a paren
-        (if (looking-at "^[ \t]*)")
-            (progn
-              (save-excursion
-                (forward-char 1)
-                (backward-sexp 1)
-                (setq cur-indent (current-column))))
-          ;; Otherwise, calculate based on previous lines
-          (save-excursion
-            (while not-indented
-              (forward-line -1)
-              (cond
-               ;; Beginning of buffer
-               ((bobp)
-                (setq not-indented nil)
-                (setq cur-indent 0))
-               ;; Previous line has unclosed parens
-               ((looking-at "^[ \t]*(")
-                (setq cur-indent (+ (current-indentation) egglog-indent-offset))
-                (setq not-indented nil))
-               ;; Default: use previous line's indentation
-               ((not (looking-at "^[ \t]*$"))
-                (setq cur-indent (current-indentation))
-                (setq not-indented nil))))))
-        ;; Also consider syntax-ppss for paren depth
-        (let ((depth (car (syntax-ppss (point)))))
-          (if (> depth 0)
-              (* depth egglog-indent-offset)
-            cur-indent))))))
+    (skip-chars-forward " \t")
+    (let ((depth (car (syntax-ppss (point)))))
+      (cond
+       ;; Closing paren - align with opening paren
+       ((looking-at ")")
+        (forward-char 1)
+        (backward-sexp 1)
+        (current-column))
+       ;; Otherwise indent based on paren depth
+       (t (* depth egglog-indent-offset))))))
 
 ;;; Imenu ======================================================================
 
