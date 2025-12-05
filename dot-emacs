@@ -1708,6 +1708,13 @@ Otherwise, unindent."
 (defun my-ses-mode-hook ()
   (whitespace-mode -1))
 
+;; egglog
+(require 'egglog-mode)
+
+(defun my-egglog-mode-hook ()
+  (define-lisp-keys))
+(add-hook 'egglog-mode-hook 'my-egglog-mode-hook)
+
 ;; spellchecking
 (setq ispell-program-name "aspell")
 (setq ispell-silently-savep t)
