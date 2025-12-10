@@ -414,8 +414,26 @@
 
 (defun named-term (name directory)
   (interactive "MTerminal name: \nDIn directory: ")
-  (let ((default-directory directory))
-    (ansi-term (getenv "SHELL") name)))
+  (let ((default-directory directory)
+        (vterm-buffer-name (concat "*vterm: " name "*")))
+    (vterm)))
+
+(defun my-vterm-exit-copy-mode ()
+  (interactive)
+  (vterm-copy-mode -1))
+
+(defun my-vterm-copy-kill-and-exit ()
+  (interactive)
+  (call-interactively #'kill-ring-save)
+  (vterm-copy-mode -1))
+
+(with-eval-after-load 'vterm
+  (define-key vterm-copy-mode-map (kbd "RET") #'my-vterm-exit-copy-mode)
+  (define-key vterm-copy-mode-map [return] #'my-vterm-exit-copy-mode)
+  (define-key vterm-copy-mode-map (kbd "C-g") #'my-vterm-exit-copy-mode)
+  ; (define-key vterm-copy-mode-map (kbd "ESC") nil)
+  (define-key vterm-copy-mode-map (kbd "ESC ESC ESC") #'my-vterm-exit-copy-mode)
+  (define-key vterm-copy-mode-map (kbd "M-w") #'my-vterm-copy-kill-and-exit))
 
 (add-to-list 'auto-mode-alist (cons "/bash-fc" 'sh-mode))
 

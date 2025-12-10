@@ -30,8 +30,8 @@
               ruby-electric ruby-mode ruby-tools rust-mode rust-mode
               scala-mode seq svelte-mode swiper terraform-mode
               typescript-mode verilog-mode visual-fill-column
-              visual-fill-column web-mode window-number yaml-mode
-              zig-mode))
+              visual-fill-column vterm web-mode window-number
+              yaml-mode zig-mode))
  '(safe-local-variable-directories '("/Users/nelhage/code/obsidian.el/"))
  '(safe-local-variable-values
    '((lsp-disabled-clients mspyls pylsp)
