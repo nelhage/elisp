@@ -1544,7 +1544,9 @@ surrounding xml expression"
   (setq-local adaptive-fill-regexp "[ \t]*")
   (setq-local fill-column 90)
   (require 'flycheck-aspell)
-  (setq flycheck-checker 'markdown-aspell-dynamic))
+  (setq flycheck-checker 'markdown-aspell-dynamic)
+  (when (string-prefix-p "claude-prompt" (buffer-name))
+    (visual-line-mode)))
 (add-hook 'markdown-mode-hook 'my-markdown-mode-hook)
 (add-hook 'gfm-mode-hook 'my-markdown-mode-hook)
 
