@@ -189,7 +189,7 @@
 
 ;;Set up fonts and colors
 (when (fboundp 'global-font-lock-mode)
-  (setq base16-theme-256-color-source 'base16-shell)
+  (setq base16-theme-256-color-source 'colors)
   (load-theme 'base16-isotope t)
   (require 'font-lock)
   (require 'whitespace)
