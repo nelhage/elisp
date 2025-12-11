@@ -414,6 +414,7 @@
 
 (defun named-term (name directory)
   (interactive "MTerminal name: \nDIn directory: ")
+  (require 'vterm)
   (let ((default-directory directory)
         (vterm-buffer-name (concat "*vterm: " name "*")))
     (vterm)))
@@ -424,7 +425,7 @@
 
 (defun my-vterm-copy-kill-and-exit ()
   (interactive)
-  (call-interactively #'kill-ring-save)
+  (copy-region-as-kill nil nil t)
   (vterm-copy-mode -1))
 
 (with-eval-after-load 'vterm
@@ -433,7 +434,14 @@
   (define-key vterm-copy-mode-map (kbd "C-g") #'my-vterm-exit-copy-mode)
   ; (define-key vterm-copy-mode-map (kbd "ESC") nil)
   (define-key vterm-copy-mode-map (kbd "ESC ESC ESC") #'my-vterm-exit-copy-mode)
-  (define-key vterm-copy-mode-map (kbd "M-w") #'my-vterm-copy-kill-and-exit))
+  (define-key vterm-copy-mode-map (kbd "C-c C-c") #'my-vterm-exit-copy-mode)
+  (define-key vterm-copy-mode-map (kbd "M-w") #'my-vterm-copy-kill-and-exit)
+
+  (define-key vterm-mode-map (kbd "ESC") #'vterm-send-escape)
+  (define-key vterm-mode-map (kbd "C-c [") #'vterm-copy-mode)
+  (define-key vterm-mode-map (kbd "C-g") #'vterm--self-insert)
+
+  (add-to-list 'vterm-environment "EMACS=1" nil #'string=))
 
 (add-to-list 'auto-mode-alist (cons "/bash-fc" 'sh-mode))
 
