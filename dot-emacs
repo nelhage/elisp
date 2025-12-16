@@ -440,6 +440,7 @@
   (define-key vterm-mode-map (kbd "ESC") #'vterm-send-escape)
   (define-key vterm-mode-map (kbd "C-c [") #'vterm-copy-mode)
   (define-key vterm-mode-map (kbd "C-g") #'vterm--self-insert)
+  (define-key vterm-mode-map (kbd "C-c M-x") #'execute-extended-command)
 
   (add-to-list 'vterm-environment "EMACS=1" nil #'string=))
 
