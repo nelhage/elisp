@@ -199,6 +199,8 @@
   (setq whitespace-style '(face trailing tabs))
   (global-whitespace-mode 1)
   (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
+  (set-face-attribute 'mode-line nil :background "#0066ff" :foreground "#ffffff")
+  (set-face-attribute 'header-line nil :inherit nil :background "#404040" :foreground "#d0d0d0")
   (setq font-lock-maximum-decoration t
         font-lock-global-modes '(not magit-mode w3m-mode term-mode)
         font-lock-support-mode 'jit-lock-mode)
