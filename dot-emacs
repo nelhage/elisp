@@ -421,6 +421,16 @@
         (vterm-buffer-name (concat "*vterm: " name "*")))
     (vterm)))
 
+(defun claude-code (directory)
+  (interactive "DDirectory: ")
+  (require 'vterm)
+  (let* ((default-directory directory)
+         (dir-name (file-name-nondirectory (directory-file-name directory)))
+         (vterm-buffer-name (concat "*claude-code " dir-name "*")))
+    (vterm)
+    (with-current-buffer vterm-buffer-name
+      (vterm-insert "claude\n"))))
+
 (defun my-vterm-exit-copy-mode ()
   (interactive)
   (vterm-copy-mode -1))
