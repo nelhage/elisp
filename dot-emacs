@@ -471,11 +471,18 @@
       (setq window (get-buffer-window (current-buffer))))
   (set-window-dedicated-p window nil))
 
-(require 'dired-x)
-(add-hook 'dired-mode-hook 'my-dired-mode-hook)
-(defun my-dired-mode-hook ()
-  (dired-omit-mode 1))
-(setq dired-listing-switches "-l")
+(with-eval-after-load 'dired
+  (require 'dired-x)
+
+  (add-hook 'dired-mode-hook 'my-dired-mode-hook)
+  (defun my-dired-mode-hook ()
+    (dired-omit-mode 1))
+  (setq dired-listing-switches "-al")
+  (setq dired-omit-files
+        (rx (or (seq bol (? ".") "#")       ;; emacs autosave files
+                (seq bol ".")               ;; dot-files
+                (seq "~" eol))))            ;; backup files
+  (define-key dired-mode-map (kbd "M-o") 'dired-omit-mode))
 
 (when (and (eq system-type 'darwin)
            (executable-find "gls"))
