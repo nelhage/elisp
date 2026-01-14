@@ -422,15 +422,21 @@
         (vterm-buffer-name (concat "*vterm: " name "*")))
     (vterm)))
 
-(defun claude-code (directory)
-  (interactive "DDirectory: ")
+(defun claude-code (directory &optional args)
+  (interactive
+   (list (read-directory-name "Directory: ")
+         (when current-prefix-arg
+           (read-string "Claude arguments: "))))
   (require 'vterm)
   (let* ((default-directory directory)
          (dir-name (file-name-nondirectory (directory-file-name directory)))
-         (vterm-buffer-name (concat "*claude-code " dir-name "*")))
+         (vterm-buffer-name (concat "*claude-code " dir-name "*"))
+         (cmd (if (and args (not (string-empty-p args)))
+                  (concat "claude " args)
+                "claude")))
     (vterm)
     (with-current-buffer vterm-buffer-name
-      (vterm-insert "claude\n"))))
+      (vterm-insert (concat cmd "\n")))))
 
 (defun my-vterm-exit-copy-mode ()
   (interactive)
