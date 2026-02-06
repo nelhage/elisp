@@ -1577,6 +1577,7 @@ surrounding xml expression"
     (visual-line-mode)))
 (add-hook 'markdown-mode-hook 'my-markdown-mode-hook)
 (add-hook 'gfm-mode-hook 'my-markdown-mode-hook)
+(add-to-list 'auto-mode-alist (cons "\\.calca$" 'markdown-mode))
 
 (defun hugo-insert-shortcode (shortcode)
   (interactive "MShortcode: ")
