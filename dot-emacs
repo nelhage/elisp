@@ -41,6 +41,7 @@
 (global-set-key (kbd "C-m") 'magic-mode-newline-and-indent)
 (global-set-key (kbd "M-k") 'kill-word)
 (global-set-key (kbd "C-x c") 'compile)
+(global-set-key (kbd "C-x M-x") #'execute-extended-command)
 (global-set-key (kbd "C-a") 'beginning-of-line-dwim)
 ; (global-set-key "\C-co" 'other-window)
 (global-set-key (kbd "C-x .") 'browse-url-at-point)
