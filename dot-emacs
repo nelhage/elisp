@@ -457,7 +457,6 @@
   (define-key vterm-copy-mode-map (kbd "C-c C-c") #'my-vterm-exit-copy-mode)
   (define-key vterm-copy-mode-map (kbd "M-w") #'my-vterm-copy-kill-and-exit)
 
-  (define-key vterm-mode-map (kbd "ESC") #'vterm-send-escape)
   (define-key vterm-mode-map (kbd "C-c [") #'vterm-copy-mode)
   (define-key vterm-mode-map (kbd "C-g") #'vterm--self-insert)
   (define-key vterm-mode-map (kbd "C-c M-x") #'execute-extended-command)
