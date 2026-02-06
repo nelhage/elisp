@@ -22,7 +22,7 @@
               gnuplot gnuplot-mode gptel graphviz-dot-mode
               haskell-mode helm helm-git-files helm-ls-git inf-ruby
               isortify ivy javaimp jinja2-mode js2-mode jsonian
-              julia-mode julia-repl ledger-mode lsp-pyright
+              julia-mode julia-repl kkp ledger-mode lsp-pyright
               lsp-python-ms lsp-ui lua-mode magit-gerrit
               magit-gh-pulls magit-popup mistty mode-line-bell
               ninja-mode nix-mode polymode popwin prettier-js
