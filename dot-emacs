@@ -454,6 +454,7 @@
   (define-key vterm-copy-mode-map (kbd "RET") #'my-vterm-exit-copy-mode)
   (define-key vterm-copy-mode-map [return] #'my-vterm-exit-copy-mode)
   (define-key vterm-copy-mode-map (kbd "C-g") #'my-vterm-exit-copy-mode)
+  (define-key vterm-copy-mode-map (kbd "ESC <escape>") #'my-vterm-exit-copy-mode)
   ; (define-key vterm-copy-mode-map (kbd "ESC") nil)
   (define-key vterm-copy-mode-map (kbd "ESC ESC ESC") #'my-vterm-exit-copy-mode)
   (define-key vterm-copy-mode-map (kbd "C-c C-c") #'my-vterm-exit-copy-mode)
