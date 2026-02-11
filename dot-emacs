@@ -65,6 +65,8 @@
 (window-number-mode 1)
 (require 'popwin)
 
+(global-kkp-mode 1)
+
 (let ((tmp nil))
   (mapc (lambda (e)
           (if (not (or (and (consp e) (or (eq (car e) 'grep-mode)
