@@ -43,4 +43,16 @@ is already at the beginning of the text."
   (interactive "p")
   (increment-number-at-point (- (abs amount))))
 
+(defun kill-buffers-under (path)
+  "Kill all buffers visiting files under PATH."
+  (interactive "DKill buffers under directory: ")
+  (let ((path (file-truename (expand-file-name path)))
+        (killed 0))
+    (dolist (buf (buffer-list))
+      (when-let ((file (buffer-file-name buf)))
+        (when (string-prefix-p path (file-truename file))
+          (kill-buffer buf)
+          (cl-incf killed))))
+    (message "Killed %d buffer%s under %s" killed (if (= killed 1) "" "s") path)))
+
 (provide 'utils)
