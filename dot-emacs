@@ -438,6 +438,8 @@
          (cmd (if (and args (not (string-empty-p args)))
                   (concat "claude " args)
                 "claude")))
+    (when (get-buffer vterm-buffer-name)
+      (user-error "Buffer %s already exists" vterm-buffer-name))
     (vterm)
     (with-current-buffer vterm-buffer-name
       (vterm-insert (concat cmd "\n")))))
@@ -450,6 +452,9 @@
   (interactive)
   (copy-region-as-kill nil nil t)
   (vterm-copy-mode -1))
+
+(defun my-vterm-mode-hook ()
+  (display-line-numbers-mode -1))
 
 (with-eval-after-load 'vterm
   (define-key vterm-copy-mode-map (kbd "RET") #'my-vterm-exit-copy-mode)
@@ -465,7 +470,9 @@
   (define-key vterm-mode-map (kbd "C-g") #'vterm--self-insert)
   (define-key vterm-mode-map (kbd "C-c M-x") #'execute-extended-command)
 
-  (add-to-list 'vterm-environment "EMACS=1" nil #'string=))
+  (add-to-list 'vterm-environment "EMACS=1" nil #'string=)
+
+  (add-hook 'vterm-mode-hook #'my-vterm-mode-hook))
 
 (add-to-list 'auto-mode-alist (cons "/bash-fc" 'sh-mode))
 
