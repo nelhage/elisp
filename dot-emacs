@@ -80,6 +80,13 @@
 
 (global-company-mode 1)
 (global-clipetty-mode 1)
+;; When inside tmux, write OSC 52 to the frame's own tty (the tmux pane).
+;; tmux's `set-clipboard on' will forward it to the client. This avoids
+;; clipetty falling back to a stale $SSH_TTY from when the daemon started.
+(with-eval-after-load 'clipetty
+  (defun clipetty--tty-use-pane (orig ssh-tty tmux)
+    (if tmux (terminal-name) (funcall orig ssh-tty tmux)))
+  (advice-add 'clipetty--tty :around #'clipetty--tty-use-pane))
 
 (setq company-tooltip-limit 20
       company-minimum-prefix-length 3
