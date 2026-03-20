@@ -31,7 +31,6 @@
 (require 'uniquify)
 (require 'utils)
 (require 'structured)
-(require 'realize)
 
 ;;Global key bindings
 (global-set-key (kbd "<deletechar>") 'backward-delete-char)
