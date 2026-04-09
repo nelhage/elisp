@@ -1,0 +1,3 @@
+Since version 0.8:
+
+- Use `lexical-binding'.

@@ -4,7 +4,8 @@
 
 ;; Author: Tobias Zawada <i@tn-home.de>
 ;; Keywords: tools, matching, files, unix
-;; Version: 1.0.0
+;; Package-Version: 20230814.1215
+;; Package-Revision: 329eaf2e9e99
 ;; URL: https://github.com/TobiasZawada/elgrep
 ;; Package-Requires: ((emacs "26.2") (async "1.5"))
 

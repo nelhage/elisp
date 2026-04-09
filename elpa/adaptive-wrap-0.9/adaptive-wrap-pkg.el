@@ -1,0 +1,2 @@
+;; Generated package description from adaptive-wrap.el  -*- no-byte-compile: t; lexical-binding:t -*-
+(define-package "adaptive-wrap" "0.9" "Smart line-wrapping with wrap-prefix" '((emacs "24.1")) :commit "e929b38c12f17aa6f8d6270326301d61fbb09cab" :url "https://elpa.gnu.org/packages/adaptive-wrap.html" :authors '(("Stephen Berman" . "stephen.berman@gmx.net") ("Stefan Monnier" . "monnier@iro.umontreal.ca")) :maintainer '(("Stephen Berman" . "stephen.berman@gmx.net") ("Stefan Monnier" . "monnier@iro.umontreal.ca")))
