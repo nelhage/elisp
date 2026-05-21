@@ -9,3 +9,4 @@ local.el
 elpa/vterm-20251119.1653/build/
 *.so
 .claude/
+elpa/vterm-*/build
