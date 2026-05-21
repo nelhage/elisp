@@ -1713,7 +1713,7 @@ Otherwise, unindent."
 
   (setopt obsidian-use-update-timer nil)
 
-  (let ((vault-dir (expand-file-name "~/Sync/Obsidian/nelhage/")))
+  (let ((vault-dir (expand-file-name "~/Obsidian/nelhage/")))
     (when (file-directory-p vault-dir)
       (setopt obsidian-directory vault-dir
               obsidian-daily-notes-directory "Daily"
