@@ -711,11 +711,15 @@ Prefix matches to NAME are put ahead of the list."
 ; (require 'magit)
 (global-set-key (kbd "C-c g") 'magit-status)
 (global-set-key (kbd "C-x v") 'magit-file-dispatch)
-(setq vc-handled-backends (delq 'Git vc-handled-backends))
-(setq vc-handled-backends (delq 'git vc-handled-backends))
-(setq magit-completing-read 'magit-ido-completing-read)
-(setq magit-push-always-verify nil
-      magit-branch-arguments '())
+(setq vc-handled-backends
+      (->> vc-handled-backends
+           (delq 'Git)
+           (delq 'git)))
+
+(setq magit-completing-read 'magit-ido-completing-read
+      magit-push-always-verify nil
+      magit-branch-arguments '()
+      magit-diff-refine-hunk t)
 
 (with-eval-after-load 'magit
   (magit-auto-revert-mode 1))
