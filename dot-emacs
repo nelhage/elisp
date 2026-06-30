@@ -1759,7 +1759,7 @@ Otherwise, unindent."
 
 ;; lean4-mode
 (add-to-list 'load-path (expand-file-name "~/.elisp/lean4-mode/") nil 'string=)
-(require 'lean4-mode)
+(safe-require 'lean4-mode)
 
 (with-eval-after-load 'lean4-mode
   (defun my-lean4-mode-hook ()
