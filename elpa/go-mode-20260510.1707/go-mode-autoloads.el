@@ -11,8 +11,8 @@
 
 ;;; Generated autoloads from go-mode.el
 
-(autoload 'go-mode "go-mode" "\
-Major mode for editing Go source text.
+(autoload 'go-mode "go-mode"
+"Major mode for editing Go source text.
 
 This mode provides (not just) basic editing capabilities for
 working with Go code. It offers almost complete syntax
@@ -71,40 +71,50 @@ with goflymake (see URL `https://github.com/dougm/goflymake'), gocode
 (see URL `github.com/syohex/emacs-go-eldoc') and yasnippet-go
 (see URL `https://github.com/dominikh/yasnippet-go')
 
-(fn)" t)
+\\{go-mode-map}" t)
 (add-to-list 'auto-mode-alist (cons "\\.go\\'" 'go-mode))
-(autoload 'gofmt-before-save "go-mode" "\
-Add this to .emacs to run gofmt on the current buffer when saving:
+(autoload 'gofmt-before-save "go-mode"
+"Add this to .emacs to run gofmt on the current buffer when saving:
 (add-hook 'before-save-hook 'gofmt-before-save).
 
 Note that this will cause ‘go-mode’ to get loaded the first time
 you save any file, kind of defeating the point of autoloading." t)
-(autoload 'godoc "go-mode" "\
-Show Go documentation for QUERY, much like \\<go-mode-map>\\[man].
+(autoload 'godoc "go-mode"
+"Show Go documentation for QUERY, much like \\<go-mode-map>\\[man].
 
 (fn QUERY)" t)
-(autoload 'go-download-play "go-mode" "\
-Download a paste from the playground and insert it in a Go buffer.
+(autoload 'go-download-play "go-mode"
+"Download a paste from the playground and insert it in a Go buffer.
 Tries to look for a URL at point.
 
 (fn URL)" t)
-(autoload 'go-dot-mod-mode "go-mode" "\
-A major mode for editing go.mod files.
+(autoload 'go-dot-mod-mode "go-mode"
+"A major mode for editing go.mod files.
 
-(fn)" t)
+This mode runs the hook `go-dot-mod-mode-hook', as the final or
+penultimate step during initialization.
+
+\\{go-dot-mod-mode-map}" t)
 (add-to-list 'auto-mode-alist '("go\\.mod\\'" . go-dot-mod-mode))
-(autoload 'go-dot-work-mode "go-mode" "\
-A major mode for editor go.work files.
+(autoload 'go-dot-work-mode "go-mode"
+"A major mode for editor go.work files.
 
-(fn)" t)
+This mode runs the hook `go-dot-work-mode-hook', as the final or
+penultimate step during initialization.
+
+\\{go-dot-work-mode-map}" t)
 (add-to-list 'auto-mode-alist '("go\\.work\\'" . go-dot-work-mode))
-(autoload 'go-asm-mode "go-mode" "\
-Major mode for Go assembly (.s) files.
+(autoload 'go-asm-mode "go-mode"
+"Major mode for Go assembly (.s) files.
 
-(fn)" t)
+In addition to any hooks its parent mode `asm-mode' might have run,
+this mode runs the hook `go-asm-mode-hook', as the final or
+penultimate step during initialization.
+
+\\{go-asm-mode-map}" t)
 (add-to-list 'magic-mode-alist (cons #'go--is-go-asm #'go-asm-mode))
-(autoload 'go--is-go-asm "go-mode" "\
-Determine whether a file is (probably) a Go assembly file.")
+(autoload 'go--is-go-asm "go-mode"
+"Determine whether a file is (probably) a Go assembly file.")
 (register-definition-prefixes "go-mode" '("go-" "god" "gofmt"))
 
 ;;; End of scraped data
