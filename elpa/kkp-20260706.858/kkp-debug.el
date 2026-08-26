@@ -1,6 +1,6 @@
 ;;; kkp-debug.el --- Debugging helpers for Kitty Keyboard Protocol -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2025  Benjamin Orthen
+;; Copyright (C) 2026  Benjamin Orthen
 ;; Author: Benjamin Orthen <contact@orthen.net>
 ;; Maintainer: Benjamin Orthen <contact@orthen.net>
 ;; URL: https://github.com/benotn/kkp
@@ -181,58 +181,139 @@ The translation process is performed in the following stages:
 The resulting key sequence and its final command binding are displayed.
 Output is arranged in aligned columns for clarity."
   (interactive)
-  (let ((invoking-buffer (current-buffer)))
-    (with-help-window "*Key Translation Chain*"
-      (let* ((kkp-is-active (kkp--this-terminal-has-active-kkp-p)))
+  (with-help-window "*Key Translation Chain*"
+    (let* ((kkp-is-active (kkp--this-terminal-has-active-kkp-p)))
 
-        (if kkp-is-active
-            (with-current-buffer invoking-buffer
-              (let* ((events (kkp-debug--get-key-events-from-terminal))
-                     (raw-key (vconcat events))
-                     (input-decoded-keys (kkp-debug--translate-events-with-kkp-fallback events))
-                     ;; Check if the decoded key sequence already has a normal binding.
-                     (normal-binding (key-binding input-decoded-keys))
-                     ;; Stage 2: Apply local-function-key-map only if no normal binding exists.
-                     (local-result (if normal-binding
-                                       nil
-                                     (let ((temp (lookup-key local-function-key-map input-decoded-keys)))
-                                       (and (not (numberp temp)) temp))))
-                     (local-output (or local-result input-decoded-keys))
-                     ;; Stage 3: Always apply key-translation-map.
-                     (translation-result (let ((temp (lookup-key key-translation-map local-output)))
-                                           (and (not (numberp temp)) temp)))
-                     (prelim-final-output (or translation-result local-output))
-                     ;; (_ (debug))
-                     (prelim-final-binding (key-binding prelim-final-output))
-                     (prelim-final-output-has-shift (kkp-debug--key-sequence-has-shift prelim-final-output))
-                     (should-lowercase-binding (and (not prelim-final-binding) prelim-final-output-has-shift translate-upper-case-key-bindings))
-                     (lowercase-output (kkp-debug--remove-shift-from-keyseq prelim-final-output))
-                     (final-binding (if should-lowercase-binding
-                                        (key-binding lowercase-output)
-                                      prelim-final-binding)))
-                (princ (format "%-45s %s\n" "KKP is active:" (if kkp-is-active "YES" "NO")))
-                (princ (format "%-45s %s (key vector: %s)\n" "Raw key events:" (key-description raw-key) raw-key))
-                (princ (format "%-45s %s\n" "After input-decode-map:" (key-description input-decoded-keys)))
-                (princ (format "%-425s %s\n" "Normal binding (if any):" (or normal-binding "none")))
-                (princ (format "%-45s %s => %s\n" "After local-function-key-map:"
-                               (if normal-binding "not considered" (if local-result "found" "not found"))
-                               (key-description local-output)))
-                (princ (format "%-45s %s => %s\n" "After key-translation-map:"
-                               (if translation-result "found" "not found")
-                               (key-description prelim-final-output)))
-                (when (and should-lowercase-binding final-binding)
-                  (princ (format "%-45s %s => %s\n" "Uppercase to lowercase binding:" (key-description prelim-final-output) (key-description lowercase-output))))
-                (princ (format "%-45s %s\n" "Final command binding:" (or final-binding "undefined")))
-                (princ (format "%-45s %s\n" "Bindings evaluated in buffer:" (buffer-name invoking-buffer)))))
-
-
-          ;; KKP is not active
-          (let ((translated-keys (read-key-sequence-vector kkp-debug--key-prompt))
-                (raw-key (this-single-command-raw-keys)))
+      (if kkp-is-active
+          (let* ((events (kkp-debug--get-key-events-from-terminal))
+                 (raw-key (vconcat events))
+                 (input-decoded-keys (kkp-debug--translate-events-with-kkp-fallback events))
+                 ;; Check if the decoded key sequence already has a normal binding.
+                 (normal-binding (key-binding input-decoded-keys))
+                 ;; Stage 2: Apply local-function-key-map only if no normal binding exists.
+                 (local-result (if normal-binding
+                                   nil
+                                 (let ((temp (lookup-key local-function-key-map input-decoded-keys)))
+                                   (and (not (numberp temp)) temp))))
+                 (local-output (or local-result input-decoded-keys))
+                 ;; Stage 3: Always apply key-translation-map.
+                 (translation-result (let ((temp (lookup-key key-translation-map local-output)))
+                                       (and (not (numberp temp)) temp)))
+                 (prelim-final-output (or translation-result local-output))
+                 (prelim-final-binding (key-binding prelim-final-output))
+                 (prelim-final-output-has-shift (kkp-debug--key-sequence-has-shift prelim-final-output))
+                 (should-lowercase-binding (and (not prelim-final-binding) prelim-final-output-has-shift translate-upper-case-key-bindings))
+                 (lowercase-output (kkp-debug--remove-shift-from-keyseq prelim-final-output))
+                 (final-binding (if should-lowercase-binding
+                                    (key-binding lowercase-output)
+                                  prelim-final-binding)))
             (princ (format "%-45s %s\n" "KKP is active:" (if kkp-is-active "YES" "NO")))
             (princ (format "%-45s %s (key vector: %s)\n" "Raw key events:" (key-description raw-key) raw-key))
-            (princ (format "%-45s %s\n" "After all key translation maps:" (key-description translated-keys)))
-            (princ (format "%-45s %s\n" "Final command binding (in this help buffer):" (or (key-binding translated-keys) "undefined")))))))))
+            (princ (format "%-45s %s\n" "After input-decode-map:" (key-description input-decoded-keys)))
+            (princ (format "%-45s %s\n" "Normal binding (if any):" (or normal-binding "none")))
+            (princ (format "%-45s %s => %s\n" "After local-function-key-map:"
+                           (if normal-binding "not considered" (if local-result "found" "not found"))
+                           (key-description local-output)))
+            (princ (format "%-45s %s => %s\n" "After key-translation-map:"
+                           (if translation-result "found" "not found")
+                           (key-description prelim-final-output)))
+            (when (and should-lowercase-binding final-binding)
+              (princ (format "%-45s %s => %s\n" "Uppercase to lowercase binding:" (key-description prelim-final-output) (key-description lowercase-output))))
+            (princ (format "%-45s %s\n" "Final command binding (in this help buffer):" (or final-binding "undefined"))))
+
+
+        ;; KKP is not active
+        (let ((translated-keys (read-key-sequence-vector kkp-debug--key-prompt))
+              (raw-key (this-single-command-raw-keys)))
+          (princ (format "%-45s %s\n" "KKP is active:" (if kkp-is-active "YES" "NO")))
+          (princ (format "%-45s %s (key vector: %s)\n" "Raw key events:" (key-description raw-key) raw-key))
+          (princ (format "%-45s %s\n" "After all key translation maps:" (key-description translated-keys)))
+          (princ (format "%-45s %s\n" "Final command binding (in this help buffer):" (or (key-binding translated-keys) "undefined"))))))))
+
+(defun kkp-debug--princ-recorded-state (state)
+  "Print the recorded kkp STATE (a `kkp--state' or nil) to standard output."
+  (if (null state)
+      (princ "  (none -- KKP has not touched this terminal)\n")
+    (let ((flag (kkp--state-enhancements state)))
+      (princ (format "  %-30s %s%s\n" "active (enhancements):"
+                     (or flag "nil")
+                     (if flag
+                         (format "  (%s)"
+                                 (mapconcat #'symbol-name
+                                            (kkp--enhancements-from-flags flag)
+                                            " "))
+                       "")))
+      (princ (format "  %-30s %s\n" "setup-started:"
+                     (kkp--state-setup-started state)))
+      (princ (format "  %-30s %s\n" "setup-visited:"
+                     (kkp--state-setup-visited state)))
+      (princ (format "  %-30s %s\n" "suspended:"
+                     (kkp--state-suspended state)))
+      (princ (format "  %-30s %s\n" "legacy-active:"
+                     (kkp--state-legacy-active state)))
+      (princ (format "  %-30s %s\n" "function-keys-set:"
+                     (kkp--state-function-keys-set state)))
+      (princ (format "  %-30s %s\n" "previous-normal-erase:"
+                     (kkp--state-previous-normal-erase state))))))
+
+(defun kkp-debug--princ-terminal-state (terminal &optional live selected)
+  "Print the KKP state of TERMINAL to standard output.
+Always prints kkp's recorded `kkp--state'.  When LIVE is non-nil, also
+query TERMINAL and print what it reports right now, which is useful for
+spotting a desync between the two (e.g. while a `kkp-with-legacy-keys'
+region is active, or if an intermediary stripped the protocol).  A live
+query is only reliable for the selected, focused terminal.  SELECTED marks
+this terminal as the selected one in the header."
+  (princ (format "%-32s %s%s\n" "Terminal:" terminal
+                 (if selected "  <- selected" "")))
+  (princ (format "%-32s %s\n" "Graphic display:"
+                 (if (display-graphic-p terminal) "yes" "no")))
+  (when live
+    ;; A single live `?u' query answers both questions: its shape tells us
+    ;; whether the terminal supports KKP, and its flags byte carries the
+    ;; enabled enhancements.  Guard against errors so the report still
+    ;; renders (a non-replying terminal simply yields a nil reply).
+    (let* ((reply (ignore-errors (kkp--query-terminal-sync "?u" ?u)))
+           (supported-p (kkp--reply-indicates-support-p reply)))
+      (princ (format "%-32s %s\n" "Supports KKP (live query):"
+                     (if supported-p "yes" "no")))
+      (princ (format "%-32s %s\n" "Enabled enhancements (live):"
+                     (if supported-p
+                         (let ((e (kkp--reply-enhancements reply)))
+                           (if e (mapconcat #'symbol-name e " ") "(none)"))
+                       "(terminal does not support KKP)")))))
+  (princ "\nRecorded kkp--state:\n")
+  (kkp-debug--princ-recorded-state (kkp--terminal-state terminal)))
+
+;;;###autoload
+(defun kkp-debug-show-terminal-state ()
+  "Display KKP state for the selected terminal in a help buffer.
+Shows both what kkp has recorded (the `kkp--state' struct) and what the
+terminal reports live, which is useful for spotting a desync between the
+two (e.g. while a `kkp-with-legacy-keys' region is active, or if an
+intermediary stripped the protocol).
+
+Use `kkp-debug-show-all-terminal-states' for an overview of every
+terminal."
+  (interactive)
+  (with-help-window "*KKP Terminal State*"
+    (kkp-debug--princ-terminal-state (kkp--selected-terminal) t t)))
+
+;;;###autoload
+(defun kkp-debug-show-all-terminal-states ()
+  "Display the KKP state of every live terminal in a help buffer.
+The selected terminal is also queried live (as in
+`kkp-debug-show-terminal-state'); the others show only kkp's recorded
+`kkp--state', since a terminal that is not focused cannot be queried
+reliably."
+  (interactive)
+  (let ((selected (kkp--selected-terminal)))
+    (with-help-window "*KKP Terminal States*"
+      (dolist (terminal (terminal-list))
+        (kkp-debug--princ-terminal-state terminal
+                                         (eq terminal selected)   ; live: selected only
+                                         (eq terminal selected))
+        (princ "\n")))))
 
 (provide 'kkp-debug)
 ;;; kkp-debug.el ends here
