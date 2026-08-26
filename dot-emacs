@@ -728,6 +728,10 @@ Prefix matches to NAME are put ahead of the list."
       (add-to-list 'vc-handled-backends 'hg))
   ('file-error . nil))
 
+;; enable tree-sitter
+(setopt treesit-enabled-modes t
+        treesit-auto-install-grammar 'ask)
+
 ;;Perl configuration
 (defalias 'perl-mode 'cperl-mode)
 (add-hook 'cperl-mode-hook 'my-perl-mode-hook)
@@ -948,11 +952,11 @@ Prefix matches to NAME are put ahead of the list."
 (add-to-list 'auto-mode-alist '("\\.coffee$" . coffee-mode))
 (add-to-list 'auto-mode-alist '("Cakefile" . coffee-mode))
 
-(add-to-list 'auto-mode-alist '("\\.tsx$" . typescript-mode))
-(add-hook 'typescript-mode-hook 'lsp)
+(setq lsp-clients-typescript-prefer-use-project-ts-server t)
+(add-hook 'typescript-ts-mode-hook 'lsp)
 (defun my-typescript-hook ()
   )
-(add-hook 'typescript-mode-hook 'my-typescript-hook)
+(add-hook 'typescript-ts-mode-hook 'my-typescript-hook)
 
 ;;; prettier
 (setq prettier-js-command "npx"

@@ -31,8 +31,7 @@
               prettier-js protobuf-mode py-isort python-black
               reformatter rubocop ruby-electric ruby-mode ruby-tools
               rust-mode rust-mode scala-mode seq svelte-mode swiper
-              terraform-mode tree-sitter tree-sitter-langs
-              typescript-mode verilog-mode visual-fill-column
+              terraform-mode verilog-mode visual-fill-column
               visual-fill-column vterm web-mode window-number yaml
               yaml-mode zig-mode))
  '(safe-local-variable-directories '("/Users/nelhage/code/obsidian.el/"))
