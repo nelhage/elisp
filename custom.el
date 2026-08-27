@@ -30,10 +30,9 @@
               mode-line-bell ninja-mode nix-mode polymode popwin
               prettier-js protobuf-mode py-isort python-black
               reformatter rubocop ruby-electric ruby-mode ruby-tools
-              rust-mode rust-mode scala-mode seq svelte-mode swiper
-              terraform-mode verilog-mode visual-fill-column
-              visual-fill-column vterm web-mode window-number yaml
-              yaml-mode zig-mode))
+              scala-mode seq svelte-mode swiper terraform-mode
+              verilog-mode visual-fill-column visual-fill-column vterm
+              web-mode window-number yaml yaml-mode zig-mode))
  '(safe-local-variable-directories '("/Users/nelhage/code/obsidian.el/"))
  '(safe-local-variable-values
    '((lsp-disabled-clients mspyls pylsp)
