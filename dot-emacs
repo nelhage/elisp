@@ -1042,6 +1042,12 @@ Prefix matches to NAME are put ahead of the list."
   (define-key Info-mode-map "B" 'Info-history-back)
   (define-key Info-mode-map "F" 'Info-history-forward))
 
+;;; Typst
+
+;; (typst-ts-mc-install-grammar)
+;; (when (not (treesit-grammar-location 'typst))
+;;  (typst-ts-mc-install-grammar))
+
 ;;;Lisps
 ;;;Scheme
 
