@@ -4,29 +4,32 @@
 (add-to-list 'load-path "~/.elisp")
 (add-to-list 'load-path "~/.emacs.d/home-manager/")
 
-(let ((default-directory (expand-file-name "~")))
-  (when (and (file-exists-p ".emacs.d/elpa")
-             (not (file-symlink-p ".emacs.d/elpa")))
-    (rename-file ".emacs.d/elpa" ".emacs.d/elpa.bak"))
-  (unless (file-exists-p ".emacs.d/elpa")
-    (make-symbolic-link (expand-file-name "~/.elisp/elpa") ".emacs.d/elpa")))
+;; (let ((default-directory (expand-file-name "~")))
+;;   (when (and (file-exists-p ".emacs.d/elpa")
+;;              (not (file-symlink-p ".emacs.d/elpa")))
+;;     (rename-file ".emacs.d/elpa" ".emacs.d/elpa.bak"))
+;;   (unless (file-exists-p ".emacs.d/elpa")
+;;     (make-symbolic-link (expand-file-name "~/.elisp/elpa") ".emacs.d/elpa")))
+;;
+;; (require 'package)
+;; (add-to-list 'package-archives
+;;      '("marmalade" .
+;;       "http://marmalade-repo.org/packages/"))
+;; (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+;; (package-initialize)
 
-(require 'package)
-; (add-to-list 'package-archives
-;      '("marmalade" .
-;       "http://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-(when (fboundp 'async-bytecomp-package-mode)
-  (async-bytecomp-package-mode 1))
 (when (and (gnutls-available-p)
            (string-equal system-type "darwin"))
   (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
-(package-initialize)
 
-(exec-path-from-shell-initialize)
+
+(load (expand-file-name "~/.elisp/bootstrap-elpaca.el"))
+(load (expand-file-name "~/.elisp/packages.el"))
+
+(add-hook 'elpaca-after-init-hook 'exec-path-from-shell-initialize)
 
 ;; (direnv-mode t)
-(add-hook 'after-init-hook 'envrc-global-mode)
+(add-hook 'elpaca-after-init-hook 'envrc-global-mode)
 
 (require 'uniquify)
 (require 'utils)
@@ -37,7 +40,6 @@
 (global-set-key (kbd "ESC <deletechar>") 'backward-kill-word)
 (global-set-key (kbd "C-z") nil)
 (global-set-key (kbd "M-g") 'goto-line)
-(global-set-key (kbd "C-m") 'magic-mode-newline-and-indent)
 (global-set-key (kbd "M-k") 'kill-word)
 (global-set-key (kbd "C-x c") 'compile)
 (global-set-key (kbd "C-x M-x") #'execute-extended-command)
@@ -60,25 +62,6 @@
   (define-key help-mode-map (kbd "B") 'help-go-back)
   (define-key help-mode-map (kbd "F") 'help-go-forward))
 
-(require 'window-number)
-(window-number-define-keys window-number-mode-map "C-c ")
-(window-number-mode 1)
-(require 'popwin)
-
-(global-kkp-mode 1)
-
-(let ((tmp nil))
-  (mapc (lambda (e)
-          (if (not (or (and (consp e) (or (eq (car e) 'grep-mode)
-                                          (eq (car e) 'occur-mode)
-                                          (eq (car e) 'compilation-mode)))
-                       (equal e "*vc-diff*")))
-              (setq tmp (cons e tmp))))
-        popwin:special-display-config)
-  (setq popwin:special-display-config tmp))
-
-(global-company-mode 1)
-(global-clipetty-mode 1)
 ;; When inside tmux, write OSC 52 to the frame's own tty (the tmux pane).
 ;; tmux's `set-clipboard on' will forward it to the client. This avoids
 ;; clipetty falling back to a stale $SSH_TTY from when the daemon started.
@@ -86,14 +69,6 @@
   (defun clipetty--tty-use-pane (orig ssh-tty tmux)
     (if tmux (terminal-name) (funcall orig ssh-tty tmux)))
   (advice-add 'clipetty--tty :around #'clipetty--tty-use-pane))
-
-(setq company-tooltip-limit 20
-      company-minimum-prefix-length 3
-      company-idle-delay .3
-      company-echo-delay 0
-      company-begin-commands '(self-insert-command)
-      company-dabbrev-downcase nil)
-(mode-line-bell-mode 1)
 
 (setq display-time-24hr-format t)
 
@@ -149,7 +124,7 @@
   (let ((inhibit-read-only t))
     (ansi-color-apply-on-region (point-min) (point-max))))
 
-(add-hook 'after-init-hook #'global-flycheck-mode)
+(add-hook 'elpaca-after-init-hook #'global-flycheck-mode)
 (setq-default flycheck-disabled-checkers
               '(ruby-rubylint
                 ruby
@@ -239,23 +214,26 @@
       (complete-symbol nil))))
 
 ;;Set up fonts and colors
-(when (fboundp 'global-font-lock-mode)
-  (setq base16-theme-256-color-source 'colors)
-  (load-theme 'base16-isotope t)
-  (require 'font-lock)
-  (require 'whitespace)
-  (require 'jit-lock)
-  (when (facep 'whitespace-tab)
-    (set-face-background 'whitespace-tab "#111133"))
-  (setq whitespace-style '(face trailing tabs))
-  (global-whitespace-mode 1)
-  (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
-  (set-face-attribute 'mode-line nil :background "#0066ff" :foreground "#ffffff")
-  (set-face-attribute 'header-line nil :inherit nil :background "#404040" :foreground "#d0d0d0")
-  (setq font-lock-maximum-decoration t
-        font-lock-global-modes '(not magit-mode w3m-mode term-mode)
-        font-lock-support-mode 'jit-lock-mode)
-  (global-font-lock-mode 1))
+
+(defun my-setup-global-fonts ()
+  (when (fboundp 'global-font-lock-mode)
+    (setq base16-theme-256-color-source 'colors)
+    (load-theme 'base16-isotope t)
+    (require 'font-lock)
+    (require 'whitespace)
+    (require 'jit-lock)
+    (when (facep 'whitespace-tab)
+      (set-face-background 'whitespace-tab "#111133"))
+    (setq whitespace-style '(face trailing tabs))
+    (global-whitespace-mode 1)
+    (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
+    (set-face-attribute 'mode-line nil :background "#0066ff" :foreground "#ffffff")
+    (set-face-attribute 'header-line nil :inherit nil :background "#404040" :foreground "#d0d0d0")
+    (setq font-lock-maximum-decoration t
+          font-lock-global-modes '(not magit-mode w3m-mode term-mode)
+          font-lock-support-mode 'jit-lock-mode)
+    (global-font-lock-mode 1)))
+(add-to-list 'elpaca-after-init-hook 'my-setup-global-fonts)
 
 (defun safe-set-face-attribute (face frame &rest args)
   (when (facep face)
@@ -563,31 +541,8 @@
       (yank-pop arg)
     (counsel-yank-pop)))
 
-(global-set-key (kbd "M-x") #'counsel-M-x)
-(global-set-key (kbd "M-y") #'my-yank-pop)
-(global-set-key (kbd "C-M-y") #'counsel-yank-pop)
-(ivy-mode 1)
-
 (setq auto-mode-alist
       (cl-delete-if #'(lambda (p) (eq (cdr p) 'helm-ls-git-rebase-todo-mode)) auto-mode-alist))
-
-;; ;; number of result lines to display
-;; (setq ivy-height 10)
-;; ;; does not count candidates
-;; (setq ivy-count-format "")
-;; ;; no regexp by default
-;; (setq ivy-initial-inputs-alist nil)
-;; ;; configure regexp engine.
-(setq ivy-re-builders-alist
-      ;; allow input not in order
-      '((t   . ivy--regex-ignore-order))
-
-      counsel-find-file-ignore-regexp
-      (concat
-       ;; File names beginning with # or .
-       "\\(?:\\`[#.]\\)"
-       ;; File names ending with # or ~
-       "\\|\\(?:\\`.+?[#~]\\'\\)"))
 
 (with-eval-after-load 'counsel
   (defun my--ivy-prefix-sort (name candidates)
@@ -625,8 +580,6 @@ Prefix matches to NAME are put ahead of the list."
 (defun my-find-file (arg)
   (interactive "P")
   (call-interactively (if arg 'counsel-git 'counsel-find-file)))
-
-(global-set-key (kbd "C-x C-f") 'my-find-file)
 
 ;; used for quickly opening github links to line or region
 ;; configured to open in a browser right away
@@ -782,7 +735,6 @@ Prefix matches to NAME are put ahead of the list."
   (define-key python-mode-map (kbd "M-TAB") 'dabbrev-expand))
 
 (setq python-indent-offset 4)
-(require 'lsp-pyright)
 
 (with-eval-after-load 'apheleia
   (setf (alist-get 'python-mode apheleia-mode-alist)
@@ -947,10 +899,6 @@ Prefix matches to NAME are put ahead of the list."
       (progn (call-process flycheck-javascript-eslint-executable  nil "*ESLint Errors*" nil "--fix" buffer-file-name)
              (revert-buffer t t t))
     (message "ESLint not found.")))
-
-(require 'coffee-mode)
-(add-to-list 'auto-mode-alist '("\\.coffee$" . coffee-mode))
-(add-to-list 'auto-mode-alist '("Cakefile" . coffee-mode))
 
 (setq lsp-clients-typescript-prefer-use-project-ts-server t)
 (add-hook 'typescript-ts-mode-hook 'lsp)
@@ -1266,6 +1214,7 @@ Prefix matches to NAME are put ahead of the list."
     (newline-and-indent)
     (when shebang
       (normal-mode))))
+(global-set-key (kbd "C-m") 'magic-mode-newline-and-indent)
 
 ;; smerge-mode
 (with-eval-after-load "smerge-mode"
@@ -1456,10 +1405,11 @@ surrounding xml expression"
 (defun my-claude-api-key ()
   (auth-source-pick-first-password :host "api.anthropic.com"))
 
-(setq
- gptel-model 'claude-sonnet-4-5-20250929
- gptel-backend (gptel-make-anthropic "Claude"
-                 :stream t :key #'my-claude-api-key))
+(with-eval-after-load 'gptel
+  (setq
+   gptel-model 'claude-sonnet-4-5-20250929
+   gptel-backend (gptel-make-anthropic "Claude"
+                                       :stream t :key #'my-claude-api-key)))
 
 (defun gptel-context-clear ()
   (interactive)
@@ -1704,16 +1654,11 @@ Otherwise, unindent."
   (setq markdown-list-indent-width 2))
 
 ;; Obsidian
-(require 'obsidian nil t)
-
-(with-eval-after-load 'obsidian
-  (safe-require 'obsidian-scan)
-
-  (defun my-obsidian-jump-or-create ()
-    "Jump to or create Obsidian note."
-    (interactive)
-    (obsidian-update)
-    (let* ((files (obsidian-files))
+(defun my-obsidian-jump-or-create ()
+  "Jump to or create Obsidian note."
+  (interactive)
+  (obsidian-update)
+  (let* ((files (obsidian-files))
          (dict (make-hash-table :test 'equal))
          (_ (-map (lambda (f)
                     (puthash (file-relative-name f obsidian-directory) f dict))
@@ -1721,7 +1666,23 @@ Otherwise, unindent."
          (choices (-sort #'string< (-distinct (-concat (obsidian-aliases) (hash-table-keys dict)))))
          (choice (completing-read "Jump to: " choices))
          (target (obsidian--get-alias choice (s-concat obsidian-directory "/" choice))))
-      (find-file target)))
+    (find-file target)))
+
+(defun my-obsidian-mode-hook ()
+  (setq-local markdown-list-indent-width 4)
+  (add-to-list 'flycheck-disabled-checkers 'markdown-aspell-dynamic))
+
+(defun obsidian-insert-template (path)
+    (interactive (let ((template-dir (f-join obsidian-directory obsidian-templates-directory)))
+                   (list
+                    (f-join template-dir
+                            (completing-read
+                             "Insert template: "
+                             (directory-files template-dir nil "^[^.].*\\.md$"))))))
+    (obsidian-apply-template path))
+
+(with-eval-after-load 'obsidian
+  (safe-require 'obsidian-scan)
 
   (setopt obsidian-use-update-timer nil)
 
@@ -1735,21 +1696,7 @@ Otherwise, unindent."
 
   (add-hook 'obsidian-mode-hook 'auto-revert-mode)
   (add-hook 'obsidian-mode-hook 'visual-line-mode)
-
-  (defun my-obsidian-mode-hook ()
-    (setq-local markdown-list-indent-width 4)
-    (add-to-list 'flycheck-disabled-checkers 'markdown-aspell-dynamic))
-
   (add-hook 'obsidian-mode-hook 'my-obsidian-mode-hook)
-
-  (defun obsidian-insert-template (path)
-    (interactive (let ((template-dir (f-join obsidian-directory obsidian-templates-directory)))
-                   (list
-                    (f-join template-dir
-                            (completing-read
-                             "Insert template: "
-                             (directory-files template-dir nil "^[^.].*\\.md$"))))))
-    (obsidian-apply-template path))
 
   (defvar obsidian-menu-map (make-sparse-keymap "Obsidian"))
   (define-key global-map (kbd "C-x /") obsidian-menu-map)
@@ -1806,8 +1753,6 @@ Otherwise, unindent."
 (defun my-startup-hook ()
   (set-frame-font default-font t)
   (server-start)
-  (require 'edit-server)
-  (edit-server-start)
   (find-file-noselect "~/.elisp/dot-emacs"))
 
 ;;; Misc stuff
