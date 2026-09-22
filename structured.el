@@ -1,3 +1,5 @@
+;; -*- mode: emacs-lisp; lexical-binding: t -*-
+
 (defun insert-close (&optional char)
   "Insert the closing bracket CHAR, or else the value of
 `last-command-event'. If there is already one after

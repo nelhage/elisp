@@ -1,3 +1,5 @@
+;; -*- mode: emacs-lisp; lexical-binding: t -*-
+
 (defun replace-all (from to str)
   "Replace all instances of FROM with TO in STR, and return the
 result"
