@@ -1752,7 +1752,8 @@ Otherwise, unindent."
 
 (defun my-startup-hook ()
   (set-frame-font default-font t)
-  (server-start)
+  (unless (getenv "EMACS_NO_SERVER")
+    (server-start))
   (find-file-noselect "~/.elisp/dot-emacs"))
 
 ;;; Misc stuff
