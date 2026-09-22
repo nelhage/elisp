@@ -1,5 +1,7 @@
 ;; -*- mode: emacs-lisp; indent-tabs-mode: nil; lexical-binding: t -*-
 
+(setq elpaca-lock-file (expand-file-name "~/.elisp/elpaca.lock.el"))
+
 (elpaca ac-rtags)
 (elpaca adaptive-wrap)
 (elpaca apheleia)
