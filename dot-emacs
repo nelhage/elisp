@@ -55,7 +55,6 @@
 (global-set-key (kbd "C-M-y") 'yank-from-kill-ring)
 ; (global-set-key [up] 'increment-number-at-point)
 ; (global-set-key [down] 'decrement-number-at-point)
-(global-set-key (kbd "C-x C-c") 'server-edit)
 (global-set-key (kbd "M-`") 'other-frame)
 
 (with-eval-after-load 'help-mode
@@ -1753,7 +1752,8 @@ Otherwise, unindent."
 (defun my-startup-hook ()
   (set-frame-font default-font t)
   (unless (getenv "EMACS_NO_SERVER")
-    (server-start))
+    (server-start)
+    (global-set-key (kbd "C-x C-c") 'server-edit))
   (find-file-noselect "~/.elisp/dot-emacs"))
 
 ;;; Misc stuff
