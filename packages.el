@@ -1,6 +1,13 @@
 ;; -*- mode: emacs-lisp; indent-tabs-mode: nil; lexical-binding: t -*-
 
-(setq elpaca-lock-file (expand-file-name "~/.elisp/elpaca.lock.el"))
+(defvar my-lock-file (expand-file-name "~/.elisp/elpaca.lock.el"))
+(if (getenv "EMACS_NO_LOCKFILE")
+    (message "Elpaca: Skipping lockfile. Package versions may float.")
+  (setq elpaca-lock-file my-lock-file))
+
+(defun my-write-lock-file (lock-file)
+  (interactive (list my-lock-file))
+  (elpaca-write-lock-file lock-file))
 
 (elpaca ac-rtags)
 (elpaca adaptive-wrap)
@@ -68,7 +75,6 @@
 (elpaca flycheck-rust)
 (elpaca fuzzy)
 (elpaca git-link)
-(elpaca gnu-elpa-keyring-update)
 (elpaca gnuplot)
 (elpaca gnuplot-mode)
 (elpaca gptel)
