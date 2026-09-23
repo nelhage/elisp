@@ -75,8 +75,6 @@
 (elpaca flycheck-rust)
 (elpaca fuzzy)
 (elpaca git-link)
-(elpaca gnuplot)
-(elpaca gnuplot-mode)
 (elpaca gptel)
 (elpaca graphviz-dot-mode)
 (elpaca haskell-mode)
@@ -84,7 +82,6 @@
 ;; (elpaca helm-git-files)
 (elpaca helm-ls-git)
 (elpaca inf-ruby)
-(elpaca isortify)
 
 (elpaca ivy
   (ivy-mode 1)
@@ -106,7 +103,6 @@
          ;; File names ending with # or ~
          "\\|\\(?:\\`.+?[#~]\\'\\)")))
 
-(elpaca javaimp)
 (elpaca jinja2-mode)
 (elpaca js2-mode)
 (elpaca jsonian)
@@ -165,9 +161,7 @@
 (elpaca prettier-js)
 (elpaca protobuf-mode)
 (elpaca py-isort)
-(elpaca python-black)
 (elpaca reformatter)
-(elpaca rubocop)
 (elpaca ruby-electric)
 ;; (elpaca ruby-mode)
 ;; (elpaca ruby-tools)
